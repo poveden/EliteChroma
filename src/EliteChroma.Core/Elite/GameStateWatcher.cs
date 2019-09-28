@@ -1,0 +1,214 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using EliteChroma.Elite.Internal;
+using EliteFiles.Bindings;
+using EliteFiles.Graphics;
+using EliteFiles.Journal;
+using EliteFiles.Journal.Events;
+using EliteFiles.Status;
+
+namespace EliteChroma.Elite
+{
+    public sealed class GameStateWatcher : IDisposable
+    {
+        private readonly JournalWatcher _journalWatcher;
+        private readonly StatusWatcher _statusWatcher;
+        private readonly BindingsWatcher _bindingsWatcher;
+        private readonly GraphicsConfigWatcher _graphicsConfig;
+
+        private readonly ModifierKeysWatcher _modifierKeysWatcher;
+
+        private bool _running;
+        private int _dispatching;
+
+        private bool _disposed;
+
+        public GameStateWatcher(string gameInstallFolder, string gameOptionsFolder, string journalFolder)
+        {
+            _journalWatcher = new JournalWatcher(journalFolder);
+            _journalWatcher.Started += JournalWatcher_Started;
+            _journalWatcher.EntryAdded += JournalWatcher_EntryAdded;
+
+            _statusWatcher = new StatusWatcher(journalFolder);
+            _statusWatcher.Changed += StatusWatcher_Changed;
+
+            _bindingsWatcher = new BindingsWatcher(gameInstallFolder, gameOptionsFolder);
+            _bindingsWatcher.Changed += BindingsWatcher_Changed;
+
+            _graphicsConfig = new GraphicsConfigWatcher(gameInstallFolder, gameOptionsFolder);
+            _graphicsConfig.Changed += GraphicsConfig_Changed;
+
+            _modifierKeysWatcher = new ModifierKeysWatcher();
+            _modifierKeysWatcher.Changed += ModifierKeysWatcher_Changed;
+
+            GameState = new GameState();
+        }
+
+        public event EventHandler<EventArgs> Changed;
+
+        public GameState GameState { get; }
+
+        public void Start()
+        {
+            if (_running)
+            {
+                return;
+            }
+
+            _running = true;
+
+            _graphicsConfig.Start();
+            _bindingsWatcher.Start();
+            _statusWatcher.Start();
+            _modifierKeysWatcher.Start();
+            _journalWatcher.Start();
+        }
+
+        public void Stop()
+        {
+            if (!_running)
+            {
+                return;
+            }
+
+            _running = false;
+
+            _modifierKeysWatcher.Stop();
+            _journalWatcher.Stop();
+            _statusWatcher.Stop();
+            _bindingsWatcher.Stop();
+            _graphicsConfig.Stop();
+        }
+
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            Stop();
+
+            _journalWatcher.Dispose();
+            _statusWatcher.Dispose();
+            _bindingsWatcher.Dispose();
+            _graphicsConfig.Dispose();
+            _modifierKeysWatcher.Dispose();
+
+            _disposed = true;
+        }
+
+        private static IEnumerable<DeviceKey> GetAllModifiers(IEnumerable<Binding> bindings)
+        {
+            var res = new HashSet<DeviceKey>();
+
+            foreach (var binding in bindings)
+            {
+                foreach (var modifier in binding.Primary.Modifiers)
+                {
+                    res.Add(modifier);
+                }
+
+                foreach (var modifier in binding.Secondary.Modifiers)
+                {
+                    res.Add(modifier);
+                }
+            }
+
+            return res;
+        }
+
+        private void JournalWatcher_Started(object sender, EventArgs e)
+        {
+            OnChanged();
+        }
+
+        private void JournalWatcher_EntryAdded(object sender, JournalEntry e)
+        {
+            switch (e)
+            {
+                case FileHeader _:
+                    GameState.IsRunning = true;
+                    break;
+
+                case Shutdown _:
+                    GameState.IsRunning = false;
+                    break;
+
+                case StartJump fsdJump:
+                    GameState.FsdJumpType = fsdJump.JumpType;
+                    GameState.FsdJumpChange = DateTimeOffset.UtcNow;
+                    break;
+
+                case Music music:
+                    GameState.MusicTrack = music.MusicTrack;
+                    break;
+
+                default:
+                    switch (e.Event)
+                    {
+                        case "FSDJump": // Happens when entering a new system from hyperspace.
+                        case "SupercruiseEntry": // Happens when entering supercruise
+                            GameState.FsdJumpType = StartJump.FsdJumpType.None;
+                            GameState.FsdJumpChange = DateTimeOffset.UtcNow;
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    break;
+            }
+
+            OnChanged();
+        }
+
+        private void StatusWatcher_Changed(object sender, StatusEntry e)
+        {
+            GameState.Status = e;
+            OnChanged();
+        }
+
+        private void BindingsWatcher_Changed(object sender, BindingPreset e)
+        {
+            _modifierKeysWatcher.Watch(GetAllModifiers(e.Bindings.Values));
+            GameState.Bindings = e.Bindings;
+            OnChanged();
+        }
+
+        private void GraphicsConfig_Changed(object sender, GraphicsConfig e)
+        {
+            GameState.GuiColour = e.GuiColour.Default;
+            OnChanged();
+        }
+
+        private void ModifierKeysWatcher_Changed(object sender, DeviceKeySet e)
+        {
+            GameState.PressedModifiers = e;
+            OnChanged();
+        }
+
+        private void OnChanged()
+        {
+            if (!_journalWatcher.IsWatching)
+            {
+                return;
+            }
+
+            if (Interlocked.Exchange(ref _dispatching, 1) == 1)
+            {
+                return;
+            }
+
+            try
+            {
+                Changed?.Invoke(this, EventArgs.Empty);
+            }
+            finally
+            {
+                Interlocked.Exchange(ref _dispatching, 0);
+            }
+        }
+    }
+}

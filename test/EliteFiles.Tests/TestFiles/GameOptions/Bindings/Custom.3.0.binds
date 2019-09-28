@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Root PresetName="Custom" MajorVersion="3" MinorVersion="0">
+	<KeyboardLayout>es-ES</KeyboardLayout>
+	<HyperSuperCombination>
+		<Primary Device="Keyboard" Key="Key_J" />
+		<Secondary Device="{NoDevice}" Key="" />
+	</HyperSuperCombination>
+	<Supercruise>
+		<Primary Device="Keyboard" Key="Key_J">
+			<Modifier Device="Keyboard" Key="Key_LeftShift" />
+			<Modifier Device="Keyboard" Key="Key_LeftAlt" />
+		</Primary>
+		<Secondary Device="Keyboard" Key="Key_J">
+			<Modifier Device="Keyboard" Key="Key_RightShift" />
+		</Secondary>
+	</Supercruise>
+</Root>

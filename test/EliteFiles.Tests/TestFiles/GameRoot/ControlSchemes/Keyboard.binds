@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Root PresetName="Keyboard" SortOrder="0">
+	<HyperSuperCombination>
+		<Primary Device="Keyboard" Key="Key_J" />
+		<Secondary Device="{NoDevice}" Key="" />
+	</HyperSuperCombination>
+	<Supercruise>
+		<Primary Device="{NoDevice}" Key="" />
+		<Secondary Device="{NoDevice}" Key="" />
+	</Supercruise>
+</Root>

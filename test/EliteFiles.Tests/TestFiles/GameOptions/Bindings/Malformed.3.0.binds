@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Root>
+	<MalformedBinding1>
+		<Primary>
+			<Modifier />
+		</Primary>
+	</MalformedBinding1>
+	<MalformedBinding2>
+		<Primary>
+			<Modifier />
+		</Primary>
+	</MalformedBinding2>
+	<MalformedBinding2>
+		<Secondary>
+			<Modifier />
+		</Secondary>
+	</MalformedBinding2>
+</Root>
