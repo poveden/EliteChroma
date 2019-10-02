@@ -12,6 +12,7 @@ namespace EliteFiles.Journal
     /// </summary>
     public sealed class JournalWatcher : IDisposable
     {
+        private readonly JournalFolder _journalFolder;
         private readonly EliteFileSystemWatcher _journalFilesWatcher;
         private readonly System.Timers.Timer _journalReadTimer;
 
@@ -27,14 +28,11 @@ namespace EliteFiles.Journal
         /// with the given player journal folder path.
         /// </summary>
         /// <param name="journalFolder">The path to the player journal folder.</param>
-        public JournalWatcher(string journalFolder)
+        public JournalWatcher(JournalFolder journalFolder)
         {
-            if (!Folders.IsValidJournalFolder(journalFolder))
-            {
-                throw new ArgumentException($"'{journalFolder}' is not a valid Elite:Dangerous journal folder.", nameof(journalFolder));
-            }
+            _journalFolder = JournalFolder.AssertValid(journalFolder);
 
-            _journalFilesWatcher = new EliteFileSystemWatcher(journalFolder, Folders.JournalFilesFilter);
+            _journalFilesWatcher = new EliteFileSystemWatcher(journalFolder.FullName, JournalFolder.JournalFilesFilter);
             _journalFilesWatcher.Changed += JournalFilesWatcher_Changed;
 
             _journalReadTimer = new System.Timers.Timer
@@ -180,12 +178,11 @@ namespace EliteFiles.Journal
         private string GetLatestJournalFile()
         {
             var matches =
-                from file in Directory.EnumerateFiles(_journalFilesWatcher.Path, _journalFilesWatcher.Filter)
-                let filename = Path.GetFileName(file)
-                let m = Regex.Match(filename, @"^Journal\.(.+)\.log$", RegexOptions.IgnoreCase)
+                from file in _journalFolder.EnumerateFiles(_journalFilesWatcher.Filter)
+                let m = Regex.Match(file.Name, @"^Journal\.(.+)\.log$", RegexOptions.IgnoreCase)
                 where m.Success
                 orderby m.Groups[1].Value descending
-                select file;
+                select file.FullName;
 
             return matches.FirstOrDefault();
         }

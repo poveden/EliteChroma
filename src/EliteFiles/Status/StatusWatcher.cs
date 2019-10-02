@@ -9,7 +9,7 @@ namespace EliteFiles.Status
     /// </summary>
     public sealed class StatusWatcher : IDisposable
     {
-        private readonly string _statusFile;
+        private readonly FileInfo _statusFile;
         private readonly EliteFileSystemWatcher _watcher;
 
         /// <summary>
@@ -17,15 +17,12 @@ namespace EliteFiles.Status
         /// with the given player journal folder path.
         /// </summary>
         /// <param name="journalFolder">The path to the player journal folder.</param>
-        public StatusWatcher(string journalFolder)
+        public StatusWatcher(JournalFolder journalFolder)
         {
-            if (!Folders.IsValidJournalFolder(journalFolder))
-            {
-                throw new ArgumentException($"'{journalFolder}' is not a valid Elite:Dangerous journal folder.", nameof(journalFolder));
-            }
+            JournalFolder.AssertValid(journalFolder);
 
-            _statusFile = Path.Combine(journalFolder, Folders.JournalStatusFile);
-            _watcher = new EliteFileSystemWatcher(journalFolder, Folders.JournalStatusFile);
+            _statusFile = journalFolder.Status;
+            _watcher = new EliteFileSystemWatcher(journalFolder.FullName, journalFolder.Status.Name);
             _watcher.Changed += StatusWatcher_Changed;
         }
 
@@ -67,7 +64,7 @@ namespace EliteFiles.Status
 
         private void Reload()
         {
-            var status = StatusEntry.FromFile(_statusFile);
+            var status = StatusEntry.FromFile(_statusFile.FullName);
 
             if (status == null)
             {

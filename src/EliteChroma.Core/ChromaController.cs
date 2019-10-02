@@ -31,7 +31,7 @@ namespace EliteChroma.Core
 
         [ExcludeFromCodeCoverage]
         public ChromaController(string gameInstallFolder)
-            : this(gameInstallFolder, Folders.GetDefaultGameOptionsFolder(), Folders.GetDefaultJournalFolder())
+            : this(gameInstallFolder, GameOptionsFolder.DefaultPath, JournalFolder.DefaultPath)
         {
         }
 

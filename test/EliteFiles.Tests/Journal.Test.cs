@@ -16,10 +16,17 @@ namespace EliteFiles.Tests
         private const string _journalFolder = @"TestFiles\Journal";
         private const string _journalFile1 = "Journal.190101020000.01.log";
 
+        private readonly JournalFolder _jf;
+
+        public JournalTest()
+        {
+            _jf = new JournalFolder(_journalFolder);
+        }
+
         [Fact]
         public void ReadsJournalEntriesFromAJournalFile()
         {
-            var file = Path.GetFullPath(Path.Combine(_journalFolder, _journalFile1));
+            var file = Path.GetFullPath(Path.Combine(_jf.FullName, _journalFile1));
 
             var entries = new List<JournalEntry>();
 
@@ -62,7 +69,7 @@ namespace EliteFiles.Tests
         [Fact]
         public async Task WatcherRaisesEventsForHistoricalEntriesOnStart()
         {
-            using var watcher = new JournalWatcher(_journalFolder);
+            using var watcher = new JournalWatcher(_jf);
             var ecEntries = new EventCollector<JournalEntry>(h => watcher.EntryAdded += h, h => watcher.EntryAdded -= h);
             var ecReady = new EventCollector<EventArgs>(h => watcher.Started += h, h => watcher.Started -= h);
 
@@ -91,8 +98,8 @@ namespace EliteFiles.Tests
         [Fact]
         public async Task WatcherRaisesEventsForNewJournalEntries()
         {
-            using var dir = new TestFolder(_journalFolder);
-            using var watcher = new JournalWatcher(dir.Name);
+            using var dir = new TestFolder(_jf.FullName);
+            using var watcher = new JournalWatcher(new JournalFolder(dir.Name));
             var ecEntries = new EventCollector<JournalEntry>(h => watcher.EntryAdded += h, h => watcher.EntryAdded -= h);
             var ecReady = new EventCollector<EventArgs>(h => watcher.Started += h, h => watcher.Started -= h);
 
@@ -117,14 +124,16 @@ namespace EliteFiles.Tests
         [Fact]
         public void WatcherThrowsWhenTheJournalFolderIsNotAValidJournalFolder()
         {
-            var ex = Assert.Throws<ArgumentException>(() => { using var x = new JournalWatcher(@"TestFiles"); });
+            Assert.Throws<ArgumentNullException>(() => { using var x = new JournalWatcher(null); });
+
+            var ex = Assert.Throws<ArgumentException>(() => { using var x = new JournalWatcher(new JournalFolder(@"TestFiles")); });
             Assert.Contains("' is not a valid Elite:Dangerous journal folder.", ex.Message, StringComparison.Ordinal);
         }
 
         [Fact]
         public void WatcherDoesNotThrowWhenDisposingTwice()
         {
-            var watcher = new JournalWatcher(_journalFolder);
+            var watcher = new JournalWatcher(_jf);
 #pragma warning disable IDISP016, IDISP017
             watcher.Dispose();
             watcher.Dispose();

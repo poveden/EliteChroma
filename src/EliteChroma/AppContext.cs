@@ -94,13 +94,13 @@ namespace EliteChroma
             if (firstTimeRun)
             {
                 gameInstall = GetPossibleGameInstallFolders().FirstOrDefault(Directory.Exists);
-                gameOptions = Folders.GetDefaultGameOptionsFolder();
-                journal = Folders.GetDefaultJournalFolder();
+                gameOptions = GameOptionsFolder.DefaultPath;
+                journal = JournalFolder.DefaultPath;
             }
 
-            var allValid = Folders.IsValidGameInstallFolder(gameInstall)
-                && Folders.IsValidGameOptionsFolder(gameOptions)
-                && Folders.IsValidJournalFolder(journal);
+            var allValid = new GameInstallFolder(gameInstall).IsValid
+                && new GameOptionsFolder(gameOptions).IsValid
+                && new JournalFolder(journal).IsValid;
 
             if (!allValid)
             {
@@ -136,7 +136,7 @@ namespace EliteChroma
 
         private static IEnumerable<string> GetPossibleGameInstallFolders()
         {
-            foreach (var folder in Folders.GetDefaultGameInstallFolders())
+            foreach (var folder in GameInstallFolder.DefaultPaths)
             {
                 yield return folder;
             }

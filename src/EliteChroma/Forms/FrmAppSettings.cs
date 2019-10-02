@@ -61,7 +61,7 @@ namespace EliteChroma.Forms
 
         private void TxtGameInstall_Validating(object sender, CancelEventArgs e)
         {
-            if (!Folders.IsValidGameInstallFolder(txtGameInstall.Text))
+            if (!new GameInstallFolder(txtGameInstall.Text).IsValid)
             {
                 e.Cancel = true;
                 errorProvider.SetError(txtGameInstall, "Invalid game install folder");
@@ -75,7 +75,7 @@ namespace EliteChroma.Forms
 
         private void TxtGameOptions_Validating(object sender, CancelEventArgs e)
         {
-            if (!Folders.IsValidGameOptionsFolder(txtGameOptions.Text))
+            if (!new GameInstallFolder(txtGameOptions.Text).IsValid)
             {
                 e.Cancel = true;
                 errorProvider.SetError(txtGameOptions, "Invalid game options folder");
@@ -89,7 +89,7 @@ namespace EliteChroma.Forms
 
         private void TxtJournal_Validating(object sender, CancelEventArgs e)
         {
-            if (!Folders.IsValidJournalFolder(txtJournal.Text))
+            if (!new JournalFolder(txtJournal.Text).IsValid)
             {
                 e.Cancel = true;
                 errorProvider.SetError(txtJournal, "Invalid journal folder");
