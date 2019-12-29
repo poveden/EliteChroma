@@ -27,7 +27,7 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
-        public async Task Bla()
+        public async Task RazerChromaApiGetsCalledOnGameEvents()
         {
             const string statusFile = "Status.json";
             const string journalFile = "Journal.190101020000.01.log";
@@ -35,31 +35,30 @@ namespace EliteChroma.Core.Tests
             var chromaApi = new ChromaApiMock();
             var evs = new EventCollector<ChromaApiMock.MockCall>(h => chromaApi.Called += h, h => chromaApi.Called -= h);
 
-            using (TestFolder
+            using TestFolder
                 dirRoot = new TestFolder(_gameRootFolder),
                 dirOpts = new TestFolder(_gameOptionsFolder),
-                dirJournal = new TestFolder())
+                dirJournal = new TestFolder();
+
+            dirJournal.WriteText(statusFile, EventSequence.BuildEvent("Status", new { Flags = 0 }));
+            dirJournal.WriteText(journalFile, EventSequence.BuildEvent("Fileheader", new { part = 1, language = @"English\UK", gameversion = "3.5.0.200 EDH", build = "r210198/r0 " }));
+
+            using var cc = new ChromaController(dirRoot.Name, dirOpts.Name, dirJournal.Name)
             {
-                dirJournal.WriteText(statusFile, EventSequence.BuildEvent("Status", new { Flags = 0 }));
-                dirJournal.WriteText(journalFile, EventSequence.BuildEvent("Fileheader", new { part = 1, language = @"English\UK", gameversion = "3.5.0.200 EDH", build = "r210198/r0 " }));
+                ChromaApi = chromaApi,
+                AnimationFrameRate = 0
+            };
 
-                using (var cc = new ChromaController(dirRoot.Name, dirOpts.Name, dirJournal.Name))
-                {
-                    cc.ChromaApi = chromaApi;
-                    cc.AnimationFrameRate = 0;
+            var mcs = await evs.WaitAsync(5, cc.Start, 1000);
+            Assert.Equal("InitializeAsync", mcs[0].Method);
+            Assert.Equal("CreateKeyboardEffectAsync", mcs[1].Method);
 
-                    var mcs = await evs.WaitAsync(5, cc.Start, 1000);
-                    Assert.Equal("InitializeAsync", mcs[0].Method);
-                    Assert.Equal("CreateKeyboardEffectAsync", mcs[1].Method);
+            var seq = BuildEventSequence();
+            mcs = await evs.WaitAsync(seq.Count, () => seq.Play(dirJournal, journalFile, statusFile), 200 * seq.Count);
+            Assert.Equal(seq.Count, mcs.Count);
 
-                    var seq = BuildEventSequence();
-                    mcs = await evs.WaitAsync(seq.Count, () => seq.Play(dirJournal, journalFile, statusFile), 200 * seq.Count);
-                    Assert.Equal(seq.Count, mcs.Count);
-
-                    var mc = await evs.WaitAsync(cc.Stop, 1000);
-                    Assert.Equal("UninitializeAsync", mc.Method);
-                }
-            }
+            var mc = await evs.WaitAsync(cc.Stop, 1000);
+            Assert.Equal("UninitializeAsync", mc.Method);
         }
 
         [Fact]
@@ -160,7 +159,7 @@ namespace EliteChroma.Core.Tests
 
                 var entryJson = JsonConvert.SerializeObject(data);
 
-                var json = $"{tsJson.Substring(0, tsJson.Length - 1)},{entryJson.Substring(1)}";
+                var json = $"{tsJson[0..^1]},{entryJson.Substring(1)}";
 
                 return $"{json}\r\n";
             }

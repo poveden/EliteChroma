@@ -28,7 +28,7 @@ If a picture is worth a thousand words, then perhaps a video will be better stil
 
 ## Application requirements
 
-- [Microsoft .NET Core Runtime 3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0#runtime-3.0.0)
+- [Microsoft .NET Core Desktop Runtime 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1#runtime-desktop-3.1.0)
 - [Razer Synapse 3](https://www.razer.com/synapse-3) or the [Razer Chroma SDK](https://developer.razer.com/works-with-chroma/download/)
 - A Razer Chroma keyboard (tested with Razer Cynosa Chroma)
 
