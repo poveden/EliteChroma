@@ -1,0 +1,21 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="GenerateChromaAppInfo" BeforeTargets="AssignTargetPaths">
+    <Copy SourceFiles="ChromaAppInfo.xml" DestinationFolder="$(IntermediateOutputPath)">
+      <Output TaskParameter="DestinationFiles" PropertyName="GeneratedChromaAppInfoFile" />
+    </Copy>
+
+    <XmlPoke XmlInputPath="$(GeneratedChromaAppInfoFile)" Query="/application/title" Value="$(PackageId)" />
+    <XmlPoke XmlInputPath="$(GeneratedChromaAppInfoFile)" Query="/application/description" Value="$(Description)" />
+    <XmlPoke XmlInputPath="$(GeneratedChromaAppInfoFile)" Query="/application/author/@name" Value="$(Authors)" />
+    <XmlPoke XmlInputPath="$(GeneratedChromaAppInfoFile)" Query="/application/author/@contact" Value="$(PackageProjectUrl)" />
+
+    <ItemGroup>
+      <None Include="$(GeneratedChromaAppInfoFile)">
+        <Link>ChromaAppInfo.xml</Link>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+  </Target>
+
+</Project>

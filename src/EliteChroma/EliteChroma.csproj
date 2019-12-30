@@ -54,4 +54,12 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ChromaAppInfo.xml">
+      <DependentUpon>ChromaAppInfo.targets</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <Import Project="ChromaAppInfo.targets" />
+
 </Project>
