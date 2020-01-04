@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace EliteChroma.Forms
 {
-    partial class FrmAboutBox : Form
+    public partial class FrmAboutBox : Form
     {
         public FrmAboutBox()
         {

@@ -14,4 +14,9 @@ dotnet test -c Release -l "trx;LogFileName=TestResults.xml" /p:CollectCoverage=t
 dotnet reportgenerator --reports:coverage\cobertura.xml --targetdir:coverage\report
 popd
 
+pushd test\EliteChroma.Tests
+dotnet test -c Release -l "trx;LogFileName=TestResults.xml" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage\cobertura.xml /p:ExcludeByFile=\"%ROOT%/src/EliteFiles/**,%ROOT%/src/EliteChroma.Core/**\"
+dotnet reportgenerator --reports:coverage\cobertura.xml --targetdir:coverage\report
+popd
+
 popd

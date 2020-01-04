@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EliteFiles.Tests", "test\El
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EliteChroma.Core.Tests", "test\EliteChroma.Core.Tests\EliteChroma.Core.Tests.csproj", "{D67C02E2-8CCC-4867-8806-A9AF3619F6C5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EliteChroma.Tests", "test\EliteChroma.Tests\EliteChroma.Tests.csproj", "{F9E84EAC-77EE-423D-BD4C-3ADF69B2F380}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{D67C02E2-8CCC-4867-8806-A9AF3619F6C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D67C02E2-8CCC-4867-8806-A9AF3619F6C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D67C02E2-8CCC-4867-8806-A9AF3619F6C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9E84EAC-77EE-423D-BD4C-3ADF69B2F380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9E84EAC-77EE-423D-BD4C-3ADF69B2F380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9E84EAC-77EE-423D-BD4C-3ADF69B2F380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9E84EAC-77EE-423D-BD4C-3ADF69B2F380}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{D25F56A5-49FC-4B52-8465-B296ECF10CAE} = {D121ADAF-389A-4906-AC13-99A8B4973C9C}
 		{0CD88E57-527E-4EEE-B48B-83AB2E11E893} = {140A3D09-123F-49F0-A523-48C46834E416}
 		{D67C02E2-8CCC-4867-8806-A9AF3619F6C5} = {140A3D09-123F-49F0-A523-48C46834E416}
+		{F9E84EAC-77EE-423D-BD4C-3ADF69B2F380} = {140A3D09-123F-49F0-A523-48C46834E416}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF2DC2A6-1A37-4240-A1B4-925B0B8310FE}
