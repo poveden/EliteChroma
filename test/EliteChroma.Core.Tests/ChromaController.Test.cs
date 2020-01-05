@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Text;
 using System.Threading;
@@ -12,6 +13,7 @@ using Xunit;
 
 namespace EliteChroma.Core.Tests
 {
+    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
     public class ChromaControllerTest
     {
         private const string _gameRootFolder = @"TestFiles\GameRoot";
@@ -46,18 +48,18 @@ namespace EliteChroma.Core.Tests
             using var cc = new ChromaController(dirRoot.Name, dirOpts.Name, dirJournal.Name)
             {
                 ChromaApi = chromaApi,
-                AnimationFrameRate = 0
+                AnimationFrameRate = 0,
             };
 
-            var mcs = await evs.WaitAsync(5, cc.Start, 1000);
+            var mcs = await evs.WaitAsync(5, cc.Start, 1000).ConfigureAwait(false);
             Assert.Equal("InitializeAsync", mcs[0].Method);
             Assert.Equal("CreateKeyboardEffectAsync", mcs[1].Method);
 
             var seq = BuildEventSequence();
-            mcs = await evs.WaitAsync(seq.Count, () => seq.Play(dirJournal, journalFile, statusFile), 200 * seq.Count);
+            mcs = await evs.WaitAsync(seq.Count, () => seq.Play(dirJournal, journalFile, statusFile), 200 * seq.Count).ConfigureAwait(false);
             Assert.Equal(seq.Count, mcs.Count);
 
-            var mc = await evs.WaitAsync(cc.Stop, 1000);
+            var mc = await evs.WaitAsync(cc.Stop, 1000).ConfigureAwait(false);
             Assert.Equal("UninitializeAsync", mc.Method);
         }
 
@@ -65,8 +67,10 @@ namespace EliteChroma.Core.Tests
         public void DoesNotThrowWhenDisposingTwice()
         {
             var watcher = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
+#pragma warning disable IDISP016, IDISP017
             watcher.Dispose();
             watcher.Dispose();
+#pragma warning restore IDISP016, IDISP017
         }
 
         private static EventSequence BuildEventSequence()
@@ -75,7 +79,7 @@ namespace EliteChroma.Core.Tests
             {
                 { "Music", new { MusicTrack = "MainMenu" } },
                 { Flags.Docked | Flags.FsdMassLocked | Flags.InMainShip | Flags.LandingGearDeployed | Flags.ShieldsUp },
-                { "Undocked", new{ StationType = "Coriolis" } },
+                { "Undocked", new { StationType = "Coriolis" } },
                 { Flags.InMainShip | Flags.ShieldsUp },
                 { Flags.InMainShip | Flags.ShieldsUp, GuiFocus.GalaxyMap },
                 { Flags.InMainShip | Flags.ShieldsUp },
@@ -84,16 +88,31 @@ namespace EliteChroma.Core.Tests
                 { Flags.FsdJump | Flags.InMainShip | Flags.ShieldsUp },
                 { "FSDJump", new { StarSystem = "Wolf 1301" } },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
-                { "SupercruiseExit", new{ BodyType = "Station" } },
+                { "SupercruiseExit", new { BodyType = "Station" } },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LightsOn | Flags.NightVision | Flags.CargoScoopDeployed | Flags.HardpointsDeployed | Flags.LandingGearDeployed },
             };
         }
 
-        private sealed class EventSequence : IReadOnlyCollection<(bool IsStatus, string Json)>
+        private sealed class EventSequence : IReadOnlyCollection<(bool isStatus, string json)>
         {
             private readonly List<(bool IsStatus, string Json)> _events = new List<(bool IsStatus, string Json)>();
 
             public int Count => _events.Count;
+
+            public static string BuildEvent(string eventName, object data)
+            {
+                var tsJson = JsonConvert.SerializeObject(new
+                {
+                    timestamp = DateTimeOffset.UtcNow,
+                    @event = eventName,
+                });
+
+                var entryJson = JsonConvert.SerializeObject(data);
+
+                var json = $"{tsJson[0..^1]},{entryJson.Substring(1)}";
+
+                return $"{json}\r\n";
+            }
 
             public void Add(string eventName, object data)
             {
@@ -118,11 +137,11 @@ namespace EliteChroma.Core.Tests
             {
                 var journalBuf = new StringBuilder();
 
-                foreach (var (IsStatus, Json) in this)
+                foreach (var (isStatus, json) in this)
                 {
-                    if (!IsStatus)
+                    if (!isStatus)
                     {
-                        journalBuf.Append(Json);
+                        journalBuf.Append(json);
                         continue;
                     }
 
@@ -133,7 +152,7 @@ namespace EliteChroma.Core.Tests
                         Thread.Sleep(100);
                     }
 
-                    journalFolder.WriteText(statusFile, Json, false);
+                    journalFolder.WriteText(statusFile, json, false);
                     Thread.Sleep(100);
                 }
 
@@ -145,24 +164,9 @@ namespace EliteChroma.Core.Tests
                 }
             }
 
-            public IEnumerator<(bool IsStatus, string Json)> GetEnumerator() => _events.GetEnumerator();
+            public IEnumerator<(bool isStatus, string json)> GetEnumerator() => _events.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-            public static string BuildEvent(string eventName, object data)
-            {
-                var tsJson = JsonConvert.SerializeObject(new
-                {
-                    timestamp = DateTimeOffset.UtcNow,
-                    @event = eventName,
-                });
-
-                var entryJson = JsonConvert.SerializeObject(data);
-
-                var json = $"{tsJson[0..^1]},{entryJson.Substring(1)}";
-
-                return $"{json}\r\n";
-            }
         }
     }
 }

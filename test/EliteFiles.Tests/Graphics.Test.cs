@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using EliteFiles.Graphics;
@@ -7,6 +8,7 @@ using Xunit;
 
 namespace EliteFiles.Tests
 {
+    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
     public sealed class GraphicsTest
     {
         private const string _gameRootFolder = @"TestFiles\GameRoot";
@@ -43,96 +45,88 @@ namespace EliteFiles.Tests
         [Fact]
         public void ReturnsNullWhenTheGraphicsConfigFileIsMissingOrEmpty()
         {
-            using (var dir = new TestFolder())
-            {
-                var status = GraphicsConfig.FromFile(dir.Resolve("NonExistingFile.xml"));
-                Assert.Null(status);
+            using var dir = new TestFolder();
+            var status = GraphicsConfig.FromFile(dir.Resolve("NonExistingFile.xml"));
+            Assert.Null(status);
 
-                dir.WriteText("EmptyConfig.xml", string.Empty);
+            dir.WriteText("EmptyConfig.xml", string.Empty);
 
-                status = GraphicsConfig.FromFile(dir.Resolve("EmptyConfig.xml"));
-                Assert.Null(status);
-            }
+            status = GraphicsConfig.FromFile(dir.Resolve("EmptyConfig.xml"));
+            Assert.Null(status);
         }
 
         [Fact]
         public void DeserializesMinimalGraphicsConfigFiles()
         {
-            using (var dir = new TestFolder())
-            {
-                dir.WriteText("MinimalConfig.xml", _minimalConfig);
+            using var dir = new TestFolder();
+            dir.WriteText("MinimalConfig.xml", _minimalConfig);
 
-                var status = GraphicsConfig.FromFile(dir.Resolve("MinimalConfig.xml"));
-                Assert.Null(status.GuiColour);
-            }
+            var status = GraphicsConfig.FromFile(dir.Resolve("MinimalConfig.xml"));
+            Assert.Null(status.GuiColour);
         }
 
         [Fact]
         public async Task WatcherRaisesTheChangedEventOnStart()
         {
-            using (var watcher = new GraphicsConfigWatcher(_gameRootFolder, _gameOptionsFolder))
+            using var watcher = new GraphicsConfigWatcher(_gameRootFolder, _gameOptionsFolder);
+            var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h);
+
+            var config = await evs.WaitAsync(() =>
             {
-                var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h);
+                watcher.Start();
+                watcher.Stop();
+            }).ConfigureAwait(false);
 
-                var config = await evs.WaitAsync(() =>
-                {
-                    watcher.Start();
-                    watcher.Stop();
-                });
-
-                Assert.Null(config.GuiColour.Default.LocalisationName);
-            }
+            Assert.Null(config.GuiColour.Default.LocalisationName);
         }
 
         [Fact]
         public async Task WatchesForChangesInTheGraphicsConfigurationFiles()
         {
-            using (var dirMain = new TestFolder(_gameRootFolder))
-            using (var dirOpts = new TestFolder(_gameOptionsFolder))
-            {
-                using (var watcher = new GraphicsConfigWatcher(dirMain.Name, dirOpts.Name))
-                {
-                    watcher.Start();
+            using var dirMain = new TestFolder(_gameRootFolder);
+            using var dirOpts = new TestFolder(_gameOptionsFolder);
+            using var watcher = new GraphicsConfigWatcher(dirMain.Name, dirOpts.Name);
+            watcher.Start();
 
-                    var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h);
+            var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h);
 
-                    var xmlMain = dirMain.ReadText(_mainFile);
+            var xmlMain = dirMain.ReadText(_mainFile);
 
-                    var config = await evs.WaitAsync(() => dirMain.WriteText(_mainFile, string.Empty), 100);
-                    Assert.Null(config);
+            var config = await evs.WaitAsync(() => dirMain.WriteText(_mainFile, string.Empty), 100).ConfigureAwait(false);
+            Assert.Null(config);
 
-                    config = await evs.WaitAsync(() => dirMain.WriteText(_mainFile, xmlMain));
-                    Assert.Equal(0, config.GuiColour.Default[0, 0]);
+            config = await evs.WaitAsync(() => dirMain.WriteText(_mainFile, xmlMain)).ConfigureAwait(false);
+            Assert.Equal(0, config.GuiColour.Default[0, 0]);
 
-                    config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, string.Empty), 100);
-                    Assert.Null(config);
+            config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, string.Empty), 100).ConfigureAwait(false);
+            Assert.Null(config);
 
-                    config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, _minimalConfig));
-                    Assert.Equal(1, config.GuiColour.Default[0, 0]);
-                }
-            }
+            config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, _minimalConfig)).ConfigureAwait(false);
+            Assert.Equal(1, config.GuiColour.Default[0, 0]);
         }
 
         [Fact]
         public void WatcherThrowsWhenTheGameInstallFolderIsNotAValidInstallFolder()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new GraphicsConfigWatcher(@"TestFiles", _gameOptionsFolder));
-            Assert.Contains("' is not a valid Elite:Dangerous game install folder.", ex.Message);
+            var ex = Assert.Throws<ArgumentException>(() => { using var x = new GraphicsConfigWatcher(@"TestFiles", _gameOptionsFolder); });
+            Assert.Contains("' is not a valid Elite:Dangerous game install folder.", ex.Message, StringComparison.Ordinal);
         }
 
         [Fact]
         public void WatcherThrowsWhenTheGameOptionsFolderIsNotAValidOptionsFolder()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new GraphicsConfigWatcher(_gameRootFolder, @"TestFiles"));
-            Assert.Contains("' is not a valid Elite:Dangerous game options folder.", ex.Message);
+            var ex = Assert.Throws<ArgumentException>(() => { using var x = new GraphicsConfigWatcher(_gameRootFolder, @"TestFiles"); });
+            Assert.Contains("' is not a valid Elite:Dangerous game options folder.", ex.Message, StringComparison.Ordinal);
         }
 
         [Fact]
         public void WatcherDoesNotThrowWhenDisposingTwice()
         {
             var watcher = new GraphicsConfigWatcher(_gameRootFolder, _gameOptionsFolder);
+#pragma warning disable IDISP016, IDISP017
             watcher.Dispose();
             watcher.Dispose();
+#pragma warning restore IDISP016, IDISP017
         }
     }
 }

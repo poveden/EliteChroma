@@ -6,6 +6,13 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <Import Project="$(MSBuildThisFileDirectory)..\..\Common.props" />
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn),1573,1591,1712,SA1600</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="2.7.0">
       <PrivateAssets>all</PrivateAssets>
