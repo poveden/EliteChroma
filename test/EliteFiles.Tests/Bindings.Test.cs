@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,7 +12,8 @@ using Xunit;
 
 namespace EliteFiles.Tests
 {
-    public sealed class Bindings
+    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
+    public sealed class BindingsTest
     {
         private const string _gameRootFolder = @"TestFiles\GameRoot";
         private const string _gameOptionsFolder = @"TestFiles\GameOptions";
@@ -41,13 +43,11 @@ namespace EliteFiles.Tests
         [Fact]
         public void ReturnsNullWhenTheBindingPresetsFileIsEmpty()
         {
-            using (var dir = new TestFolder())
-            {
-                dir.WriteText("Empty.binds", string.Empty);
+            using var dir = new TestFolder();
+            dir.WriteText("Empty.binds", string.Empty);
 
-                var binds = BindingPreset.FromFile(dir.Resolve("Empty.binds"));
-                Assert.Null(binds);
-            }
+            var binds = BindingPreset.FromFile(dir.Resolve("Empty.binds"));
+            Assert.Null(binds);
         }
 
         [Fact]
@@ -82,56 +82,50 @@ namespace EliteFiles.Tests
         [Fact]
         public async Task WatcherRaisesTheChangedEventOnStart()
         {
-            using (var watcher = new BindingsWatcher(_gameRootFolder, _gameOptionsFolder))
+            using var watcher = new BindingsWatcher(_gameRootFolder, _gameOptionsFolder);
+            var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h);
+
+            var binds = await evs.WaitAsync(() =>
             {
-                var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h);
+                watcher.Start();
+                watcher.Stop();
+            }).ConfigureAwait(false);
 
-                var binds = await evs.WaitAsync(() =>
-                {
-                    watcher.Start();
-                    watcher.Stop();
-                });
+            Assert.Equal("Custom", binds.PresetName);
+            Assert.Equal(new Version(3, 0), binds.Version);
+            Assert.Equal("es-ES", binds.KeyboardLayout);
 
-                Assert.Equal("Custom", binds.PresetName);
-                Assert.Equal(new Version(3, 0), binds.Version);
-                Assert.Equal("es-ES", binds.KeyboardLayout);
-
-                var k = binds.Bindings["Supercruise"].Primary;
-                Assert.Equal("Keyboard", k.Device);
-                Assert.Equal("Key_J", k.Key);
-                Assert.Equal(2, k.Modifiers.Count);
-                var modifiers = k.Modifiers.OrderBy(x => x.Key).ToList();
-                Assert.Equal("Keyboard", modifiers[0].Device);
-                Assert.Equal("Key_LeftAlt", modifiers[0].Key);
-                Assert.Equal("Keyboard", modifiers[1].Device);
-                Assert.Equal("Key_LeftShift", modifiers[1].Key);
-            }
+            var k = binds.Bindings["Supercruise"].Primary;
+            Assert.Equal("Keyboard", k.Device);
+            Assert.Equal("Key_J", k.Key);
+            Assert.Equal(2, k.Modifiers.Count);
+            var modifiers = k.Modifiers.OrderBy(x => x.Key).ToList();
+            Assert.Equal("Keyboard", modifiers[0].Device);
+            Assert.Equal("Key_LeftAlt", modifiers[0].Key);
+            Assert.Equal("Keyboard", modifiers[1].Device);
+            Assert.Equal("Key_LeftShift", modifiers[1].Key);
         }
 
         [Fact]
         public async Task WatchesForChangesInTheBidingsFiles()
         {
-            using (var dirMain = new TestFolder(_gameRootFolder))
-            using (var dirOpts = new TestFolder(_gameOptionsFolder))
-            {
-                using (var watcher = new BindingsWatcher(dirMain.Name, dirOpts.Name))
-                {
-                    watcher.Start();
+            using var dirMain = new TestFolder(_gameRootFolder);
+            using var dirOpts = new TestFolder(_gameOptionsFolder);
+            using var watcher = new BindingsWatcher(dirMain.Name, dirOpts.Name);
+            watcher.Start();
 
-                    var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h);
+            var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h);
 
-                    var bindsCustom = dirOpts.ReadText(_customFile);
+            var bindsCustom = dirOpts.ReadText(_customFile);
 
-                    var binds = await evs.WaitAsync(() => dirOpts.WriteText(_customFile, string.Empty), 100);
-                    Assert.Null(binds);
+            var binds = await evs.WaitAsync(() => dirOpts.WriteText(_customFile, string.Empty), 100).ConfigureAwait(false);
+            Assert.Null(binds);
 
-                    binds = await evs.WaitAsync(() => dirOpts.WriteText(_customFile, bindsCustom));
-                    Assert.NotNull(binds);
+            binds = await evs.WaitAsync(() => dirOpts.WriteText(_customFile, bindsCustom)).ConfigureAwait(false);
+            Assert.NotNull(binds);
 
-                    binds = await evs.WaitAsync(() => dirOpts.WriteText(_startPresetFile, "Keyboard"));
-                    Assert.NotNull(binds);
-                }
-            }
+            binds = await evs.WaitAsync(() => dirOpts.WriteText(_startPresetFile, "Keyboard")).ConfigureAwait(false);
+            Assert.NotNull(binds);
         }
 
         [Fact]
@@ -155,23 +149,25 @@ namespace EliteFiles.Tests
         [Fact]
         public void WatcherThrowsWhenTheGameInstallFolderIsNotAValidInstallFolder()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new BindingsWatcher(@"TestFiles", _gameOptionsFolder));
-            Assert.Contains("' is not a valid Elite:Dangerous game install folder.", ex.Message);
+            var ex = Assert.Throws<ArgumentException>(() => { using var x = new BindingsWatcher(@"TestFiles", _gameOptionsFolder); });
+            Assert.Contains("' is not a valid Elite:Dangerous game install folder.", ex.Message, StringComparison.Ordinal);
         }
 
         [Fact]
         public void WatcherThrowsWhenTheGameOptionsFolderIsNotAValidOptionsFolder()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new BindingsWatcher(_gameRootFolder, @"TestFiles"));
-            Assert.Contains("' is not a valid Elite:Dangerous game options folder.", ex.Message);
+            var ex = Assert.Throws<ArgumentException>(() => { using var x = new BindingsWatcher(_gameRootFolder, @"TestFiles"); });
+            Assert.Contains("' is not a valid Elite:Dangerous game options folder.", ex.Message, StringComparison.Ordinal);
         }
 
         [Fact]
         public void WatcherDoesNotThrowWhenDisposingTwice()
         {
             var watcher = new BindingsWatcher(_gameRootFolder, _gameOptionsFolder);
+#pragma warning disable IDISP016, IDISP017
             watcher.Dispose();
             watcher.Dispose();
+#pragma warning restore IDISP016, IDISP017
         }
 
         [Fact]

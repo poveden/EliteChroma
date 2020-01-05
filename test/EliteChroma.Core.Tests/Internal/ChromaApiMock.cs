@@ -23,7 +23,8 @@ namespace EliteChroma.Core.Tests.Internal
             throw new NotImplementedException();
         }
 
-        public Task<Guid> CreateChromaLinkEffectAsync<T>(ChromaLinkEffect effect, T data) where T : struct
+        public Task<Guid> CreateChromaLinkEffectAsync<T>(ChromaLinkEffect effect, T data)
+            where T : struct
         {
             throw new NotImplementedException();
         }
@@ -33,7 +34,8 @@ namespace EliteChroma.Core.Tests.Internal
             throw new NotImplementedException();
         }
 
-        public Task<Guid> CreateDeviceEffectAsync<T>(Guid deviceId, Effect effect, T data) where T : struct
+        public Task<Guid> CreateDeviceEffectAsync<T>(Guid deviceId, Effect effect, T data)
+            where T : struct
         {
             throw new NotImplementedException();
         }
@@ -43,7 +45,8 @@ namespace EliteChroma.Core.Tests.Internal
             throw new NotImplementedException();
         }
 
-        public Task<Guid> CreateHeadsetEffectAsync<T>(HeadsetEffect effect, T data) where T : struct
+        public Task<Guid> CreateHeadsetEffectAsync<T>(HeadsetEffect effect, T data)
+            where T : struct
         {
             throw new NotImplementedException();
         }
@@ -53,7 +56,8 @@ namespace EliteChroma.Core.Tests.Internal
             throw new NotImplementedException();
         }
 
-        public Task<Guid> CreateKeyboardEffectAsync<T>(KeyboardEffect effect, T data) where T : struct
+        public Task<Guid> CreateKeyboardEffectAsync<T>(KeyboardEffect effect, T data)
+            where T : struct
         {
             Called?.Invoke(this, new MockCall(nameof(CreateKeyboardEffectAsync), data));
             return Task.FromResult(Guid.NewGuid());
@@ -64,7 +68,8 @@ namespace EliteChroma.Core.Tests.Internal
             throw new NotImplementedException();
         }
 
-        public Task<Guid> CreateKeypadEffectAsync<T>(KeypadEffect effect, T data) where T : struct
+        public Task<Guid> CreateKeypadEffectAsync<T>(KeypadEffect effect, T data)
+            where T : struct
         {
             throw new NotImplementedException();
         }
@@ -74,7 +79,8 @@ namespace EliteChroma.Core.Tests.Internal
             throw new NotImplementedException();
         }
 
-        public Task<Guid> CreateMouseEffectAsync<T>(MouseEffect effect, T data) where T : struct
+        public Task<Guid> CreateMouseEffectAsync<T>(MouseEffect effect, T data)
+            where T : struct
         {
             throw new NotImplementedException();
         }
@@ -84,7 +90,8 @@ namespace EliteChroma.Core.Tests.Internal
             throw new NotImplementedException();
         }
 
-        public Task<Guid> CreateMousepadEffectAsync<T>(MousepadEffect effect, T data) where T : struct
+        public Task<Guid> CreateMousepadEffectAsync<T>(MousepadEffect effect, T data)
+            where T : struct
         {
             throw new NotImplementedException();
         }

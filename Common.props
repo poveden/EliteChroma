@@ -34,4 +34,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <!-- Test project settings -->
+
+  <PropertyGroup Condition="'$(IsTestProject)' != ''">
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory)Common.runsettings</RunSettingsFilePath>
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+    <CoverletOutput>coverage\cobertura.xml</CoverletOutput>
+  </PropertyGroup>
+
 </Project>

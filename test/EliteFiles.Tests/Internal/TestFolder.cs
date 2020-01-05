@@ -40,10 +40,8 @@ namespace EliteFiles.Tests.Internal
 
         public void WriteText(string path, string contents, bool append = false)
         {
-            using (var sw = new StreamWriter(Resolve(path), append))
-            {
-                sw.Write(contents);
-            }
+            using var sw = new StreamWriter(Resolve(path), append);
+            sw.Write(contents);
         }
 
         public void DeleteFile(string path)

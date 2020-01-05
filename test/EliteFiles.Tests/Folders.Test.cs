@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using EliteFiles.Tests.Internal;
@@ -7,6 +8,7 @@ using Xunit;
 
 namespace EliteFiles.Tests
 {
+    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
     public sealed class FoldersTest
     {
         [Fact]
@@ -15,7 +17,7 @@ namespace EliteFiles.Tests
             var list = Folders.GetDefaultGameInstallFolders().ToList();
 
             Assert.Equal(4, list.Count);
-            Assert.All(list, x => x.EndsWith(@"\Products\elite-dangerous-64"));
+            Assert.All(list, x => x.EndsWith(@"\Products\elite-dangerous-64", StringComparison.Ordinal));
         }
 
         [Fact]
@@ -23,7 +25,7 @@ namespace EliteFiles.Tests
         {
             var folder = Folders.GetDefaultGameOptionsFolder();
 
-            Assert.EndsWith(@"\Frontier Developments\Elite Dangerous\Options", folder);
+            Assert.EndsWith(@"\Frontier Developments\Elite Dangerous\Options", folder, StringComparison.Ordinal);
         }
 
         [Fact]
@@ -31,7 +33,7 @@ namespace EliteFiles.Tests
         {
             var folder = Folders.GetDefaultJournalFolder();
 
-            Assert.EndsWith(@"\Saved Games\Frontier Developments\Elite Dangerous", folder);
+            Assert.EndsWith(@"\Saved Games\Frontier Developments\Elite Dangerous", folder, StringComparison.Ordinal);
         }
 
         [Fact]
@@ -87,20 +89,16 @@ namespace EliteFiles.Tests
 
         private static void DeleteFileAndAssertFalse(string templatePath, string fileToDelete, Func<string, bool> testFunc)
         {
-            using (var dir = new TestFolder(templatePath))
-            {
-                dir.DeleteFile(fileToDelete);
-                Assert.False(testFunc(dir.Name));
-            }
+            using var dir = new TestFolder(templatePath);
+            dir.DeleteFile(fileToDelete);
+            Assert.False(testFunc(dir.Name));
         }
 
         private static void DeleteFolderAndAssertFalse(string templatePath, string folderToDelete, Func<string, bool> testFunc)
         {
-            using (var dir = new TestFolder(templatePath))
-            {
-                dir.DeleteFolder(folderToDelete);
-                Assert.False(testFunc(dir.Name));
-            }
+            using var dir = new TestFolder(templatePath);
+            dir.DeleteFolder(folderToDelete);
+            Assert.False(testFunc(dir.Name));
         }
     }
 }

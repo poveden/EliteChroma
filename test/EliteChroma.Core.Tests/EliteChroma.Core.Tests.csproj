@@ -6,8 +6,15 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <Import Project="$(MSBuildThisFileDirectory)..\..\Common.props" />
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn),1573,1591,1712,SA1600</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="2.7.0">
+    <PackageReference Include="coverlet.msbuild" Version="2.8.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -18,10 +25,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <DotNetCliToolReference Include="dotnet-reportgenerator-cli" Version="4.2.20" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,5 +43,10 @@
     <None Remove="coverage\**" />
     <None Remove="TestResults\**" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Coverlet: Exclude assemblies from code coverage -->
+    <Exclude>[EliteChroma.Core]*</Exclude>
+  </PropertyGroup>
 
 </Project>

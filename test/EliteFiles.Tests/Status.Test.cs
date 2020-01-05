@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using EliteFiles.Status;
@@ -7,6 +8,7 @@ using Xunit;
 
 namespace EliteFiles.Tests
 {
+    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
     public sealed class StatusTest
     {
         private const string _journalFolder = @"TestFiles\Journal";
@@ -29,69 +31,63 @@ namespace EliteFiles.Tests
         [Fact]
         public void ReturnsNullWhenTheStatusFileIsEmpty()
         {
-            using (var dir = new TestFolder())
-            {
-                dir.WriteText("Status.json", string.Empty);
+            using var dir = new TestFolder();
+            dir.WriteText("Status.json", string.Empty);
 
-                var status = StatusEntry.FromFile(dir.Resolve("Status.json"));
+            var status = StatusEntry.FromFile(dir.Resolve("Status.json"));
 
-                Assert.Null(status);
-            }
+            Assert.Null(status);
         }
 
         [Fact]
         public async Task WatcherRaisesTheChangedEventOnStart()
         {
-            using (var watcher = new StatusWatcher(_journalFolder))
+            using var watcher = new StatusWatcher(_journalFolder);
+            var ecs = new EventCollector<StatusEntry>(h => watcher.Changed += h, h => watcher.Changed -= h);
+
+            var status = await ecs.WaitAsync(() =>
             {
-                var ecs = new EventCollector<StatusEntry>(h => watcher.Changed += h, h => watcher.Changed -= h);
+                watcher.Start();
+                watcher.Stop();
+            }).ConfigureAwait(false);
 
-                var status = await ecs.WaitAsync(() =>
-                {
-                    watcher.Start();
-                    watcher.Stop();
-                });
-
-                Assert.Equal("Status", status.Event);
-            }
+            Assert.Equal("Status", status.Event);
         }
 
         [Fact]
         public async Task WatchesForChangesInTheStatusFile()
         {
-            using (var dir = new TestFolder(_journalFolder))
-            {
-                using (var watcher = new StatusWatcher(dir.Name))
-                {
-                    watcher.Start();
+            using var dir = new TestFolder(_journalFolder);
+            using var watcher = new StatusWatcher(dir.Name);
+            watcher.Start();
 
-                    var ec = new EventCollector<StatusEntry>(h => watcher.Changed += h, h => watcher.Changed -= h);
+            var ec = new EventCollector<StatusEntry>(h => watcher.Changed += h, h => watcher.Changed -= h);
 
-                    var status = await ec.WaitAsync(() => dir.WriteText("Status.json", "{\"event\":\"One\"}\r\n"));
-                    Assert.Equal("One", status.Event);
+            var status = await ec.WaitAsync(() => dir.WriteText("Status.json", "{\"event\":\"One\"}\r\n")).ConfigureAwait(false);
+            Assert.Equal("One", status.Event);
 
-                    status = await ec.WaitAsync(() => dir.WriteText("Status.json", string.Empty), 100);
-                    Assert.Null(status);
+            status = await ec.WaitAsync(() => dir.WriteText("Status.json", string.Empty), 100).ConfigureAwait(false);
+            Assert.Null(status);
 
-                    status = await ec.WaitAsync(() => dir.WriteText("Status.json", "{\"event\":\"Two\"}\r\n"));
-                    Assert.Equal("Two", status.Event);
-                }
-            }
+            status = await ec.WaitAsync(() => dir.WriteText("Status.json", "{\"event\":\"Two\"}\r\n")).ConfigureAwait(false);
+            Assert.Equal("Two", status.Event);
         }
 
         [Fact]
         public void WatcherThrowsWhenTheStatusFolderIsNotAValidJournalFolder()
         {
-            var ex = Assert.Throws<ArgumentException>(() => new StatusWatcher(@"TestFiles"));
-            Assert.Contains("' is not a valid Elite:Dangerous journal folder.", ex.Message);
+            var ex = Assert.Throws<ArgumentException>(() => { using var x = new StatusWatcher(@"TestFiles"); });
+            Assert.Contains("' is not a valid Elite:Dangerous journal folder.", ex.Message, StringComparison.Ordinal);
         }
 
         [Fact]
         public void WatcherDoesNotThrowWhenDisposingTwice()
         {
             var watcher = new StatusWatcher(_journalFolder);
+#pragma warning disable IDISP016, IDISP017
             watcher.Dispose();
             watcher.Dispose();
+#pragma warning restore IDISP016, IDISP017
         }
     }
 }

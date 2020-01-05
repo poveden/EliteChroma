@@ -22,16 +22,16 @@ namespace EliteFiles.Tests.Internal
 
             using (var ss = new SemaphoreSlim(0, 1))
             {
-                void handler(object _, T e)
+                void Handler(object sender, T e)
                 {
                     res = e;
                     ss.Release();
                 }
 
-                _attach(handler);
+                _attach(Handler);
                 trigger();
-                await ss.WaitAsync(timeout);
-                _detach(handler);
+                await ss.WaitAsync(timeout).ConfigureAwait(false);
+                _detach(Handler);
             }
 
             return res;
@@ -43,16 +43,16 @@ namespace EliteFiles.Tests.Internal
 
             using (var ce = new CountdownEvent(count))
             {
-                void handler(object _, T e)
+                void Handler(object sender, T e)
                 {
                     res.Add(e);
                     ce.Signal();
                 }
 
-                _attach(handler);
+                _attach(Handler);
                 trigger();
-                await Task.Run(() => ce.Wait(timeout));
-                _detach(handler);
+                await Task.Run(() => ce.Wait(timeout)).ConfigureAwait(false);
+                _detach(Handler);
             }
 
             return res;
