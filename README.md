@@ -48,6 +48,8 @@ Once installed, just run the `EliteChroma.exe` program. You may then control the
 
 Contributions are welcome! Please read on [how to contribute](https://github.com/poveden/EliteChroma/blob/master/CONTRIBUTING.md).
 
+For non-developer stuff, a [Frontier Forums thread](https://forums.frontier.co.uk/threads/elitechroma.534200/) is available so you can leave any comments or suggestions.
+
 ## Code of conduct
 
 We follow the [Contributor Covenant Code of Conduct](https://github.com/poveden/EliteChroma/blob/master/CODE_OF_CONDUCT.md).
