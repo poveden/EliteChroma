@@ -22,17 +22,26 @@ namespace EliteFiles.Tests
         private const string _mainFile = @"ControlSchemes\Keyboard.binds";
         private const string _customFile = @"Bindings\Custom.3.0.binds";
 
+        private readonly GameInstallFolder _gif;
+        private readonly GameOptionsFolder _gof;
+
+        public BindingsTest()
+        {
+            _gif = new GameInstallFolder(_gameRootFolder);
+            _gof = new GameOptionsFolder(_gameOptionsFolder);
+        }
+
         [Fact]
         public void DeserializesBindingPresetsFiles()
         {
-            var binds = BindingPreset.FromFile(Path.Combine(_gameRootFolder, _mainFile));
+            var binds = BindingPreset.FromFile(Path.Combine(_gif.FullName, _mainFile));
 
             Assert.NotNull(binds);
             Assert.Equal("Keyboard", binds.PresetName);
             Assert.Null(binds.Version);
             Assert.Null(binds.KeyboardLayout);
 
-            binds = BindingPreset.FromFile(Path.Combine(_gameOptionsFolder, _customFile));
+            binds = BindingPreset.FromFile(Path.Combine(_gof.FullName, _customFile));
 
             Assert.NotNull(binds);
             Assert.Equal("Custom", binds.PresetName);
@@ -53,7 +62,7 @@ namespace EliteFiles.Tests
         [Fact]
         public void ToleratesMalformedBindingPresets()
         {
-            var file = Path.Combine(_gameOptionsFolder, @"Bindings\Malformed.3.0.binds");
+            var file = Path.Combine(_gof.FullName, @"Bindings\Malformed.3.0.binds");
             var binds = BindingPreset.FromFile(file);
 
             Assert.Null(binds.PresetName);
@@ -82,7 +91,7 @@ namespace EliteFiles.Tests
         [Fact]
         public async Task WatcherRaisesTheChangedEventOnStart()
         {
-            using var watcher = new BindingsWatcher(_gameRootFolder, _gameOptionsFolder);
+            using var watcher = new BindingsWatcher(_gif, _gof);
             var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h);
 
             var binds = await evs.WaitAsync(() =>
@@ -109,9 +118,9 @@ namespace EliteFiles.Tests
         [Fact]
         public async Task WatchesForChangesInTheBidingsFiles()
         {
-            using var dirMain = new TestFolder(_gameRootFolder);
-            using var dirOpts = new TestFolder(_gameOptionsFolder);
-            using var watcher = new BindingsWatcher(dirMain.Name, dirOpts.Name);
+            using var dirMain = new TestFolder(_gif.FullName);
+            using var dirOpts = new TestFolder(_gof.FullName);
+            using var watcher = new BindingsWatcher(new GameInstallFolder(dirMain.Name), new GameOptionsFolder(dirOpts.Name));
             watcher.Start();
 
             var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h);
@@ -149,21 +158,21 @@ namespace EliteFiles.Tests
         [Fact]
         public void WatcherThrowsWhenTheGameInstallFolderIsNotAValidInstallFolder()
         {
-            var ex = Assert.Throws<ArgumentException>(() => { using var x = new BindingsWatcher(@"TestFiles", _gameOptionsFolder); });
+            var ex = Assert.Throws<ArgumentException>(() => { using var x = new BindingsWatcher(new GameInstallFolder(@"TestFiles"), _gof); });
             Assert.Contains("' is not a valid Elite:Dangerous game install folder.", ex.Message, StringComparison.Ordinal);
         }
 
         [Fact]
         public void WatcherThrowsWhenTheGameOptionsFolderIsNotAValidOptionsFolder()
         {
-            var ex = Assert.Throws<ArgumentException>(() => { using var x = new BindingsWatcher(_gameRootFolder, @"TestFiles"); });
+            var ex = Assert.Throws<ArgumentException>(() => { using var x = new BindingsWatcher(_gif, new GameOptionsFolder(@"TestFiles")); });
             Assert.Contains("' is not a valid Elite:Dangerous game options folder.", ex.Message, StringComparison.Ordinal);
         }
 
         [Fact]
         public void WatcherDoesNotThrowWhenDisposingTwice()
         {
-            var watcher = new BindingsWatcher(_gameRootFolder, _gameOptionsFolder);
+            var watcher = new BindingsWatcher(_gif, _gof);
 #pragma warning disable IDISP016, IDISP017
             watcher.Dispose();
             watcher.Dispose();

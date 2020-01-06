@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using EliteFiles.Internal;
 
 namespace EliteFiles.Bindings
@@ -11,8 +9,8 @@ namespace EliteFiles.Bindings
     /// </summary>
     public sealed class BindingsWatcher : IDisposable
     {
-        private readonly string _presetsPath;
-        private readonly string _customBindingsPath;
+        private readonly GameInstallFolder _gameInstallFolder;
+        private readonly GameOptionsFolder _gameOptionsFolder;
 
         private readonly EliteFileSystemWatcher _startPresetWatcher;
         private readonly EliteFileSystemWatcher _customBindsWatcher;
@@ -23,25 +21,17 @@ namespace EliteFiles.Bindings
         /// </summary>
         /// <param name="gameInstallFolder">The path to the game installation folder.</param>
         /// <param name="gameOptionsFolder">The path to the game options folder.</param>
-        public BindingsWatcher(string gameInstallFolder, string gameOptionsFolder)
+        public BindingsWatcher(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder)
         {
-            if (!Folders.IsValidGameInstallFolder(gameInstallFolder))
-            {
-                throw new ArgumentException($"'{gameInstallFolder}' is not a valid Elite:Dangerous game install folder.", nameof(gameInstallFolder));
-            }
+            _gameInstallFolder = GameInstallFolder.AssertValid(gameInstallFolder);
+            _gameOptionsFolder = GameOptionsFolder.AssertValid(gameOptionsFolder);
 
-            if (!Folders.IsValidGameOptionsFolder(gameOptionsFolder))
-            {
-                throw new ArgumentException($"'{gameOptionsFolder}' is not a valid Elite:Dangerous game options folder.", nameof(gameOptionsFolder));
-            }
+            var customBindingsPath = gameOptionsFolder.Bindings.FullName;
 
-            _presetsPath = Path.Combine(gameInstallFolder, Folders.ControlSchemesFolder);
-            _customBindingsPath = Path.Combine(gameOptionsFolder, Folders.GameOptionsBindingsFolder);
-
-            _startPresetWatcher = new EliteFileSystemWatcher(_customBindingsPath, Folders.GameOptionsBindingsStartPresetFile);
+            _startPresetWatcher = new EliteFileSystemWatcher(customBindingsPath, gameOptionsFolder.BindingsStartPreset.Name);
             _startPresetWatcher.Changed += Bindings_Changed;
 
-            _customBindsWatcher = new EliteFileSystemWatcher(_customBindingsPath);
+            _customBindsWatcher = new EliteFileSystemWatcher(customBindingsPath);
             _customBindsWatcher.Changed += Bindings_Changed;
         }
 
@@ -77,19 +67,6 @@ namespace EliteFiles.Bindings
             _customBindsWatcher.Dispose();
         }
 
-        private static string TryGetBindingsFilePath(string path, string bindsName)
-        {
-            var matches =
-                from file in Directory.EnumerateFiles(path, $"{bindsName}.*")
-                let filename = Path.GetFileName(file)
-                let m = Regex.Match(filename, @"(?:\.(\d\.\d))?\.binds$")
-                where m.Success
-                orderby Version.Parse(m.Groups[1].Length != 0 ? m.Groups[1].Value : "1.0") descending
-                select file;
-
-            return matches.FirstOrDefault();
-        }
-
         private void Bindings_Changed(object sender, FileSystemEventArgs e)
         {
             Reload();
@@ -97,24 +74,7 @@ namespace EliteFiles.Bindings
 
         private void Reload()
         {
-            string bindsName;
-
-            using (var fs = File.Open(Path.Combine(_customBindingsPath, Folders.GameOptionsBindingsStartPresetFile), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                using (var sr = new StreamReader(fs))
-                {
-                    bindsName = sr.ReadToEnd();
-                }
-            }
-
-            var bindsFile = TryGetBindingsFilePath(_customBindingsPath, bindsName);
-
-            var isCustom = bindsFile != null;
-
-            if (!isCustom)
-            {
-                bindsFile = TryGetBindingsFilePath(_presetsPath, bindsName);
-            }
+            var bindsFile = BindingPreset.FindActivePresetFile(_gameInstallFolder, _gameOptionsFolder, out var isCustom);
 
             var bindingPreset = BindingPreset.FromFile(bindsFile);
 

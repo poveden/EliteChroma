@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using EliteChroma.Elite.Internal;
+using EliteFiles;
 using EliteFiles.Bindings;
 using EliteFiles.Graphics;
 using EliteFiles.Journal;
@@ -26,17 +27,21 @@ namespace EliteChroma.Elite
 
         public GameStateWatcher(string gameInstallFolder, string gameOptionsFolder, string journalFolder)
         {
-            _journalWatcher = new JournalWatcher(journalFolder);
+            var gif = new GameInstallFolder(gameInstallFolder);
+            var gof = new GameOptionsFolder(gameOptionsFolder);
+            var jf = new JournalFolder(journalFolder);
+
+            _journalWatcher = new JournalWatcher(jf);
             _journalWatcher.Started += JournalWatcher_Started;
             _journalWatcher.EntryAdded += JournalWatcher_EntryAdded;
 
-            _statusWatcher = new StatusWatcher(journalFolder);
+            _statusWatcher = new StatusWatcher(jf);
             _statusWatcher.Changed += StatusWatcher_Changed;
 
-            _bindingsWatcher = new BindingsWatcher(gameInstallFolder, gameOptionsFolder);
+            _bindingsWatcher = new BindingsWatcher(gif, gof);
             _bindingsWatcher.Changed += BindingsWatcher_Changed;
 
-            _graphicsConfig = new GraphicsConfigWatcher(gameInstallFolder, gameOptionsFolder);
+            _graphicsConfig = new GraphicsConfigWatcher(gif, gof);
             _graphicsConfig.Changed += GraphicsConfig_Changed;
 
             _modifierKeysWatcher = new ModifierKeysWatcher();

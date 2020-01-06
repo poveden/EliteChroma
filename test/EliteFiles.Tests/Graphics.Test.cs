@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Threading.Tasks;
 using EliteFiles.Graphics;
 using EliteFiles.Tests.Internal;
@@ -19,10 +18,19 @@ namespace EliteFiles.Tests
 
         private const string _minimalConfig = "<?xml version=\"1.0\" ?>\r\n<GraphicsConfig />";
 
+        private readonly GameInstallFolder _gif;
+        private readonly GameOptionsFolder _gof;
+
+        public GraphicsTest()
+        {
+            _gif = new GameInstallFolder(_gameRootFolder);
+            _gof = new GameOptionsFolder(_gameOptionsFolder);
+        }
+
         [Fact]
         public void DeserializesGraphicsConfigFiles()
         {
-            var config = GraphicsConfig.FromFile(Path.Combine(_gameRootFolder, _mainFile));
+            var config = GraphicsConfig.FromFile(_gif.GraphicsConfiguration.FullName);
 
             Assert.NotNull(config);
             Assert.Equal(3, config.GuiColour.Count);
@@ -68,7 +76,7 @@ namespace EliteFiles.Tests
         [Fact]
         public async Task WatcherRaisesTheChangedEventOnStart()
         {
-            using var watcher = new GraphicsConfigWatcher(_gameRootFolder, _gameOptionsFolder);
+            using var watcher = new GraphicsConfigWatcher(_gif, _gof);
             var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h);
 
             var config = await evs.WaitAsync(() =>
@@ -83,9 +91,9 @@ namespace EliteFiles.Tests
         [Fact]
         public async Task WatchesForChangesInTheGraphicsConfigurationFiles()
         {
-            using var dirMain = new TestFolder(_gameRootFolder);
-            using var dirOpts = new TestFolder(_gameOptionsFolder);
-            using var watcher = new GraphicsConfigWatcher(dirMain.Name, dirOpts.Name);
+            using var dirMain = new TestFolder(_gif.FullName);
+            using var dirOpts = new TestFolder(_gof.FullName);
+            using var watcher = new GraphicsConfigWatcher(new GameInstallFolder(dirMain.Name), new GameOptionsFolder(dirOpts.Name));
             watcher.Start();
 
             var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h);
@@ -108,21 +116,25 @@ namespace EliteFiles.Tests
         [Fact]
         public void WatcherThrowsWhenTheGameInstallFolderIsNotAValidInstallFolder()
         {
-            var ex = Assert.Throws<ArgumentException>(() => { using var x = new GraphicsConfigWatcher(@"TestFiles", _gameOptionsFolder); });
+            Assert.Throws<ArgumentNullException>(() => { using var x = new GraphicsConfigWatcher(null, _gof); });
+
+            var ex = Assert.Throws<ArgumentException>(() => { using var x = new GraphicsConfigWatcher(new GameInstallFolder(@"TestFiles"), _gof); });
             Assert.Contains("' is not a valid Elite:Dangerous game install folder.", ex.Message, StringComparison.Ordinal);
         }
 
         [Fact]
         public void WatcherThrowsWhenTheGameOptionsFolderIsNotAValidOptionsFolder()
         {
-            var ex = Assert.Throws<ArgumentException>(() => { using var x = new GraphicsConfigWatcher(_gameRootFolder, @"TestFiles"); });
+            Assert.Throws<ArgumentNullException>(() => { using var x = new GraphicsConfigWatcher(_gif, null); });
+
+            var ex = Assert.Throws<ArgumentException>(() => { using var x = new GraphicsConfigWatcher(_gif, new GameOptionsFolder(@"TestFiles")); });
             Assert.Contains("' is not a valid Elite:Dangerous game options folder.", ex.Message, StringComparison.Ordinal);
         }
 
         [Fact]
         public void WatcherDoesNotThrowWhenDisposingTwice()
         {
-            var watcher = new GraphicsConfigWatcher(_gameRootFolder, _gameOptionsFolder);
+            var watcher = new GraphicsConfigWatcher(_gif, _gof);
 #pragma warning disable IDISP016, IDISP017
             watcher.Dispose();
             watcher.Dispose();

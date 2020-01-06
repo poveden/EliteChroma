@@ -9,8 +9,8 @@ namespace EliteFiles.Graphics
     /// </summary>
     public sealed class GraphicsConfigWatcher : IDisposable
     {
-        private readonly string _mainFile;
-        private readonly string _overrideFile;
+        private readonly FileInfo _mainFile;
+        private readonly FileInfo _overrideFile;
 
         private readonly EliteFileSystemWatcher _mainWatcher;
         private readonly EliteFileSystemWatcher _overrideWatcher;
@@ -21,25 +21,17 @@ namespace EliteFiles.Graphics
         /// </summary>
         /// <param name="gameInstallFolder">The path to the game installation folder.</param>
         /// <param name="gameOptionsFolder">The path to the game options folder.</param>
-        public GraphicsConfigWatcher(string gameInstallFolder, string gameOptionsFolder)
+        public GraphicsConfigWatcher(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder)
         {
-            if (!Folders.IsValidGameInstallFolder(gameInstallFolder))
-            {
-                throw new ArgumentException($"'{gameInstallFolder}' is not a valid Elite:Dangerous game install folder.", nameof(gameInstallFolder));
-            }
+            GameInstallFolder.AssertValid(gameInstallFolder);
+            GameOptionsFolder.AssertValid(gameOptionsFolder);
 
-            if (!Folders.IsValidGameOptionsFolder(gameOptionsFolder))
-            {
-                throw new ArgumentException($"'{gameOptionsFolder}' is not a valid Elite:Dangerous game options folder.", nameof(gameOptionsFolder));
-            }
-
-            _mainFile = Path.Combine(gameInstallFolder, Folders.GraphicsConfigMainFile);
-            _mainWatcher = new EliteFileSystemWatcher(gameInstallFolder, Folders.GraphicsConfigMainFile);
+            _mainFile = gameInstallFolder.GraphicsConfiguration;
+            _mainWatcher = new EliteFileSystemWatcher(_mainFile);
             _mainWatcher.Changed += GraphicsConfig_Changed;
 
-            var overridePath = Path.Combine(gameOptionsFolder, Folders.GameOptionsGraphicsFolder);
-            _overrideFile = Path.Combine(overridePath, Folders.GraphicsConfigOverrideFile);
-            _overrideWatcher = new EliteFileSystemWatcher(overridePath, Folders.GraphicsConfigOverrideFile);
+            _overrideFile = gameOptionsFolder.GraphicsConfigurationOverride;
+            _overrideWatcher = new EliteFileSystemWatcher(_overrideFile);
             _overrideWatcher.Changed += GraphicsConfig_Changed;
         }
 
@@ -88,15 +80,15 @@ namespace EliteFiles.Graphics
 
         private void Reload()
         {
-            var gcMain = GraphicsConfig.FromFile(_mainFile);
-            var gcOverride = GraphicsConfig.FromFile(_overrideFile);
+            var gcMain = GraphicsConfig.FromFile(_mainFile.FullName);
+            var gcOverride = GraphicsConfig.FromFile(_overrideFile.FullName);
 
             if (gcMain == null)
             {
                 return;
             }
 
-            if (gcOverride == null && File.Exists(_overrideFile))
+            if (gcOverride == null && _overrideFile.Exists)
             {
                 return;
             }

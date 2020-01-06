@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace EliteFiles.Bindings
@@ -80,6 +82,52 @@ namespace EliteFiles.Bindings
             }
 
             return res;
+        }
+
+        /// <summary>
+        /// Gets the path of the currently active binding preset file.
+        /// </summary>
+        /// <param name="gameInstallFolder">The path to the game installation folder.</param>
+        /// <param name="gameOptionsFolder">The path to the game options folder.</param>
+        /// <param name="isCustom"><c>true</c> if the returned file is a custom preset; <c>false</c> if it's a game preset file.</param>
+        /// <returns>The path to the file, or <c>null</c> if no active preset could be found.</returns>
+        public static string FindActivePresetFile(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder, out bool isCustom)
+        {
+            GameInstallFolder.AssertValid(gameInstallFolder);
+            GameOptionsFolder.AssertValid(gameOptionsFolder);
+
+            string bindsName;
+
+            using (var fs = gameOptionsFolder.BindingsStartPreset.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (var sr = new StreamReader(fs))
+                {
+                    bindsName = sr.ReadToEnd();
+                }
+            }
+
+            var customBindsFile = TryGetBindingsFilePath(gameOptionsFolder.Bindings, bindsName);
+
+            if (customBindsFile != null)
+            {
+                isCustom = true;
+                return customBindsFile;
+            }
+
+            isCustom = false;
+            return TryGetBindingsFilePath(gameInstallFolder.ControlSchemes, bindsName);
+        }
+
+        private static string TryGetBindingsFilePath(DirectoryInfo path, string bindsName)
+        {
+            var matches =
+                from file in path.EnumerateFiles($"{bindsName}.*")
+                let m = Regex.Match(file.Name, @"(?:\.(\d\.\d))?\.binds$")
+                where m.Success
+                orderby Version.Parse(m.Groups[1].Length != 0 ? m.Groups[1].Value : "1.0") descending
+                select file.FullName;
+
+            return matches.FirstOrDefault();
         }
     }
 }

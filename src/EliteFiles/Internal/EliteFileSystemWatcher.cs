@@ -16,6 +16,11 @@ namespace EliteFiles.Internal
         {
         }
 
+        public EliteFileSystemWatcher(FileInfo file)
+            : this(file.DirectoryName, file.Name)
+        {
+        }
+
         public EliteFileSystemWatcher(string path, string filter)
         {
             _watcher = new FileSystemWatcher(path, filter)
@@ -29,8 +34,6 @@ namespace EliteFiles.Internal
         }
 
         public event EventHandler<FileSystemEventArgs> Changed;
-
-        public string Path => _watcher.Path;
 
         public string Filter
         {
