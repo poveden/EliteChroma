@@ -75,7 +75,7 @@ namespace EliteChroma.Forms
 
         private void TxtGameOptions_Validating(object sender, CancelEventArgs e)
         {
-            if (!new GameInstallFolder(txtGameOptions.Text).IsValid)
+            if (!new GameOptionsFolder(txtGameOptions.Text).IsValid)
             {
                 e.Cancel = true;
                 errorProvider.SetError(txtGameOptions, "Invalid game options folder");
