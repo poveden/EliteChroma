@@ -129,4 +129,13 @@
 
 Please choose the right folders in the following window.</value>
   </data>
+  <data name="Url_GameInstallFoldersHelp" xml:space="preserve">
+    <value>https://support.frontier.co.uk/kb/faq.php?id=108</value>
+  </data>
+  <data name="Url_GameOptionsFolderHelp" xml:space="preserve">
+    <value>https://support.frontier.co.uk/kb/faq.php?id=424</value>
+  </data>
+  <data name="Url_JournalFolderHelp" xml:space="preserve">
+    <value>https://support.frontier.co.uk/kb/faq.php?id=372</value>
+  </data>
 </root>

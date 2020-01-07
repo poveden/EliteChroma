@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased](https://github.com/poveden/EliteChroma/compare/v1.0.1...HEAD)
 
+### Fixed
+
+- Settings dialog box now validates correctly the selected game options folder
+
 ### Added
 
 - Add `ChromaAppInfo.xml`
+- Add help links to game folder settings dialog box
 
 ## [1.0.1](https://github.com/poveden/EliteChroma/compare/v1.0.0...v1.0.1) — 2019-12-29
 

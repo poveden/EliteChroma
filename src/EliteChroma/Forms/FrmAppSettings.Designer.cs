@@ -43,6 +43,7 @@
             this.btnJournal = new System.Windows.Forms.Button();
             this.txtJournal = new System.Windows.Forms.TextBox();
             this.lblJournal = new System.Windows.Forms.Label();
+            this.linkGameFolders = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.grpEDFolders.SuspendLayout();
             this.SuspendLayout();
@@ -55,7 +56,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(454, 201);
+            this.btnCancel.Location = new System.Drawing.Point(454, 231);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 24);
@@ -66,7 +67,7 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(373, 201);
+            this.btnOK.Location = new System.Drawing.Point(373, 231);
             this.btnOK.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 24);
@@ -94,10 +95,11 @@
             this.grpEDFolders.Controls.Add(this.txtGameInstall);
             this.grpEDFolders.Controls.Add(this.lblGameInstall);
             this.grpEDFolders.Location = new System.Drawing.Point(12, 12);
+            this.grpEDFolders.Controls.Add(this.linkGameFolders);
             this.grpEDFolders.Margin = new System.Windows.Forms.Padding(3, 3, 3, 6);
             this.grpEDFolders.Name = "grpEDFolders";
             this.grpEDFolders.Padding = new System.Windows.Forms.Padding(6, 3, 6, 3);
-            this.grpEDFolders.Size = new System.Drawing.Size(517, 178);
+            this.grpEDFolders.Size = new System.Drawing.Size(517, 208);
             this.grpEDFolders.TabIndex = 0;
             this.grpEDFolders.TabStop = false;
             this.grpEDFolders.Text = "Elite:Dangerous folders";
@@ -210,14 +212,28 @@
             this.lblJournal.TabIndex = 7;
             this.lblJournal.Text = "&Journal folder:";
             // 
-            // AppSettings
+            // linkGameFolders
+            // 
+            this.linkGameFolders.AutoSize = true;
+            this.linkGameFolders.LinkColor = System.Drawing.Color.Blue;
+            this.linkGameFolders.Location = new System.Drawing.Point(9, 173);
+            this.linkGameFolders.Name = "linkGameFolders";
+            this.linkGameFolders.Size = new System.Drawing.Size(388, 26);
+            this.linkGameFolders.TabIndex = 12;
+            this.linkGameFolders.TabStop = true;
+            this.linkGameFolders.Text = "Default {game install}, {options} and {journal} locations";
+            this.linkGameFolders.UseMnemonic = false;
+            this.linkGameFolders.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.linkGameFolders.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGameFolders_LinkClicked);
+            // 
+            // FrmAppSettings
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(541, 238);
+            this.ClientSize = new System.Drawing.Size(541, 268);
             this.Controls.Add(this.grpEDFolders);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
@@ -225,7 +241,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "AppSettings";
+            this.Name = "FrmAppSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Configuration";
             this.Load += new System.EventHandler(this.AppSettings_Load);
@@ -252,5 +268,6 @@
         private System.Windows.Forms.Button btnGameInstall;
         internal System.Windows.Forms.TextBox txtGameInstall;
         private System.Windows.Forms.Label lblGameInstall;
+        private System.Windows.Forms.LinkLabel linkGameFolders;
     }
 }
