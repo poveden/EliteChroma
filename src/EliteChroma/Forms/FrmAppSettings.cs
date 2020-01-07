@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EliteChroma.Properties;
 using EliteFiles;
 
 namespace EliteChroma.Forms
@@ -16,6 +18,37 @@ namespace EliteChroma.Forms
         public FrmAppSettings()
         {
             InitializeComponent();
+
+            ApplyLinks(linkGameFolders, new[]
+            {
+                Resources.Url_GameInstallFoldersHelp,
+                Resources.Url_GameOptionsFolderHelp,
+                Resources.Url_JournalFolderHelp,
+            });
+        }
+
+        private static void ApplyLinks(LinkLabel linkLabel, IEnumerable<string> urls)
+        {
+            var template = linkLabel.Text;
+            var finalTxt = new StringBuilder(template.Length);
+            var j = -1;
+
+            foreach (var url in urls)
+            {
+                var i = template.IndexOf('{', j + 1);
+                finalTxt.Append(template, j + 1, i - j - 1);
+
+                j = template.IndexOf('}', i + 1);
+                var l = j - i - 1;
+                var linkTxt = template.Substring(i + 1, l);
+
+                linkLabel.Links.Add(new LinkLabel.Link(finalTxt.Length, l, url));
+                finalTxt.Append(linkTxt);
+            }
+
+            finalTxt.Append(template, j + 1, template.Length - j - 1);
+
+            linkLabel.Text = finalTxt.ToString();
         }
 
         private void AppSettings_Load(object sender, EventArgs e)
@@ -37,7 +70,7 @@ namespace EliteChroma.Forms
 
         private void BtnGameOptions_Click(object sender, EventArgs e)
         {
-            folderBrowser.Description = "Select the folder where Elite:Dangerous stores user-related game options.\r\nxxxxx";
+            folderBrowser.Description = "Select the folder where Elite:Dangerous stores user-related game options:";
             folderBrowser.SelectedPath = txtGameOptions.Text;
 
             if (folderBrowser.ShowDialog() == DialogResult.OK)
@@ -49,7 +82,7 @@ namespace EliteChroma.Forms
 
         private void BtnJournal_Click(object sender, EventArgs e)
         {
-            folderBrowser.Description = "Select the folder where Elite:Dangerous stores the player journal.\r\nxxxxx";
+            folderBrowser.Description = "Select the folder where Elite:Dangerous stores the player journal:";
             folderBrowser.SelectedPath = txtJournal.Text;
 
             if (folderBrowser.ShowDialog() == DialogResult.OK)
@@ -108,6 +141,18 @@ namespace EliteChroma.Forms
                 DialogResult = DialogResult.OK;
                 Close();
             }
+        }
+
+        private void linkGameFolders_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // Reference: https://stackoverflow.com/a/53245993/400347
+            var ps = new ProcessStartInfo((string)e.Link.LinkData)
+            {
+                UseShellExecute = true,
+                Verb = "open",
+            };
+
+            Process.Start(ps);
         }
     }
 }

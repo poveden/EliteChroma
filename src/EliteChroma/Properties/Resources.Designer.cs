@@ -90,5 +90,32 @@ namespace EliteChroma.Properties {
                 return ResourceManager.GetString("MsgBox_UnableToIdentifyFolders", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://support.frontier.co.uk/kb/faq.php?id=108.
+        /// </summary>
+        internal static string Url_GameInstallFoldersHelp {
+            get {
+                return ResourceManager.GetString("Url_GameInstallFoldersHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://support.frontier.co.uk/kb/faq.php?id=424.
+        /// </summary>
+        internal static string Url_GameOptionsFolderHelp {
+            get {
+                return ResourceManager.GetString("Url_GameOptionsFolderHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://support.frontier.co.uk/kb/faq.php?id=372.
+        /// </summary>
+        internal static string Url_JournalFolderHelp {
+            get {
+                return ResourceManager.GetString("Url_JournalFolderHelp", resourceCulture);
+            }
+        }
     }
 }
