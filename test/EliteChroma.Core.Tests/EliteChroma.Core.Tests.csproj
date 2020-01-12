@@ -46,7 +46,7 @@
 
   <PropertyGroup>
     <!-- Coverlet: Exclude assemblies from code coverage -->
-    <Exclude>[EliteChroma.Core]*</Exclude>
+    <Exclude>[EliteFiles]*</Exclude>
   </PropertyGroup>
 
 </Project>
