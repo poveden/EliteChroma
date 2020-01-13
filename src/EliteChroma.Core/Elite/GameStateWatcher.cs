@@ -17,6 +17,7 @@ namespace EliteChroma.Elite
         private readonly StatusWatcher _statusWatcher;
         private readonly BindingsWatcher _bindingsWatcher;
         private readonly GraphicsConfigWatcher _graphicsConfig;
+        private readonly GameProcessWatcher _gameProcessWatcher;
 
         private readonly ModifierKeysWatcher _modifierKeysWatcher;
 
@@ -47,12 +48,17 @@ namespace EliteChroma.Elite
             _modifierKeysWatcher = new ModifierKeysWatcher();
             _modifierKeysWatcher.Changed += ModifierKeysWatcher_Changed;
 
+            _gameProcessWatcher = new GameProcessWatcher(gif);
+            _gameProcessWatcher.Changed += GameProcessWatcher_Changed;
+
             GameState = new GameState();
         }
 
         public event EventHandler<EventArgs> Changed;
 
         public GameState GameState { get; }
+
+        public bool DetectForegroundProcess { get; set; } = true;
 
         public void Start()
         {
@@ -68,6 +74,11 @@ namespace EliteChroma.Elite
             _statusWatcher.Start();
             _modifierKeysWatcher.Start();
             _journalWatcher.Start();
+
+            if (DetectForegroundProcess)
+            {
+                _gameProcessWatcher.Start();
+            }
         }
 
         public void Stop()
@@ -84,6 +95,7 @@ namespace EliteChroma.Elite
             _statusWatcher.Stop();
             _bindingsWatcher.Stop();
             _graphicsConfig.Stop();
+            _gameProcessWatcher.Stop();
         }
 
         public void Dispose()
@@ -100,6 +112,7 @@ namespace EliteChroma.Elite
             _bindingsWatcher.Dispose();
             _graphicsConfig.Dispose();
             _modifierKeysWatcher.Dispose();
+            _gameProcessWatcher.Dispose();
 
             _disposed = true;
         }
@@ -133,11 +146,11 @@ namespace EliteChroma.Elite
         {
             switch (e)
             {
-                case FileHeader _:
+                case FileHeader _ when !DetectForegroundProcess:
                     GameState.IsRunning = true;
                     break;
 
-                case Shutdown _:
+                case Shutdown _ when !DetectForegroundProcess:
                     GameState.IsRunning = false;
                     break;
 
@@ -191,6 +204,12 @@ namespace EliteChroma.Elite
         private void ModifierKeysWatcher_Changed(object sender, DeviceKeySet e)
         {
             GameState.PressedModifiers = e;
+            OnChanged();
+        }
+
+        private void GameProcessWatcher_Changed(object sender, EventArgs e)
+        {
+            GameState.IsRunning = _gameProcessWatcher.GameInForeground;
             OnChanged();
         }
 

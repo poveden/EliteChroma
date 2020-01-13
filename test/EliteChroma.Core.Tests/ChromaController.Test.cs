@@ -49,6 +49,7 @@ namespace EliteChroma.Core.Tests
             {
                 ChromaApi = chromaApi,
                 AnimationFrameRate = 0,
+                DetectGameInForeground = false,
             };
 
             var mcs = await evs.WaitAsync(5, cc.Start, 1000).ConfigureAwait(false);

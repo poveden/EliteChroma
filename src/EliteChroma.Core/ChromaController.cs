@@ -75,6 +75,12 @@ namespace EliteChroma.Core
             }
         }
 
+        public bool DetectGameInForeground
+        {
+            get => _watcher.DetectForegroundProcess;
+            set => _watcher.DetectForegroundProcess = value;
+        }
+
         public static bool IsChromaSdkAvailable()
         {
             bool is64Bit = Environment.Is64BitProcess && Environment.Is64BitOperatingSystem;
