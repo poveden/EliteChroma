@@ -17,6 +17,7 @@ namespace EliteChroma.Core
     public sealed class ChromaController : IDisposable
     {
         private const int _defaultFps = 25;
+        private const int _chromaWarmupDuration = 1000;
 
         private readonly GameStateWatcher _watcher;
         private readonly LayeredEffect _effect;
@@ -26,6 +27,7 @@ namespace EliteChroma.Core
         private IChroma _chroma;
         private int _rendering;
         private int _fps;
+        private DateTimeOffset _chromaWarmupUntil;
 
         private bool _disposed;
 
@@ -71,6 +73,12 @@ namespace EliteChroma.Core
                     _animation.Interval = 1000 / _fps;
                 }
             }
+        }
+
+        public bool DetectGameInForeground
+        {
+            get => _watcher.DetectForegroundProcess;
+            set => _watcher.DetectForegroundProcess = value;
         }
 
         public static bool IsChromaSdkAvailable()
@@ -125,7 +133,7 @@ namespace EliteChroma.Core
                 }
 
                 _chroma = await ColoreProvider.CreateAsync(ChromaAppInfo, ChromaApi).ConfigureAwait(false);
-                await Task.Delay(500).ConfigureAwait(false); // HACK: It seems that Chroma takes a while to get up and running
+                _chromaWarmupUntil = DateTimeOffset.UtcNow.AddMilliseconds(_chromaWarmupDuration);
             }
             finally
             {
@@ -189,7 +197,8 @@ namespace EliteChroma.Core
                     _chromaLock.Release();
                 }
 
-                _animation.Enabled = AnimationFrameRate > 0 && _effect.Layers.Cast<LayerBase>().Any(x => x.Animated);
+                _animation.Enabled = AnimationFrameRate > 0
+                    && (_chromaWarmupUntil > DateTimeOffset.UtcNow || _effect.Layers.OfType<LayerBase>().Any(x => x.Animated));
             }
             finally
             {

@@ -42,6 +42,8 @@ namespace EliteFiles.Tests
             Assert.False(IsValidFolder("Non-Existing-Path"));
             Assert.False(IsValidFolder("TestFiles"));
 
+            DeleteFileAndAssertFalse(templateFolder, "EliteDangerous64.exe", IsValidFolder);
+
             DeleteFileAndAssertFalse(templateFolder, "GraphicsConfiguration.xml", IsValidFolder);
 
             DeleteFolderAndAssertFalse(templateFolder, "ControlSchemes", IsValidFolder);

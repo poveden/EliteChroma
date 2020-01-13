@@ -10,6 +10,9 @@ namespace EliteFiles
     /// </summary>
     public sealed class GameInstallFolder
     {
+        /// <summary>«GameInstallFolder»\EliteDangerous64.exe.</summary>
+        private const string MainExecutableFileName = "EliteDangerous64.exe";
+
         /// <summary>«GameInstallFolder»\GraphicsConfiguration.xml.</summary>
         private const string GraphicsConfigMainFileName = "GraphicsConfiguration.xml";
 
@@ -40,10 +43,12 @@ namespace EliteFiles
         public GameInstallFolder(string path)
         {
             _di = new DirectoryInfo(path);
+            MainExecutable = new FileInfo(Path.Combine(path, MainExecutableFileName));
             GraphicsConfiguration = new FileInfo(Path.Combine(path, GraphicsConfigMainFileName));
             ControlSchemes = new DirectoryInfo(Path.Combine(path, ControlSchemesFolderName));
 
             IsValid = _di.Exists
+                && MainExecutable.Exists
                 && GraphicsConfiguration.Exists
                 && ControlSchemes.Exists
                 && ControlSchemes.EnumerateFiles("*.binds").Any();
@@ -67,6 +72,11 @@ namespace EliteFiles
         /// Gets the full path of the game install folder.
         /// </summary>
         public string FullName => _di.FullName;
+
+        /// <summary>
+        /// Gets the file information for the main executable file.
+        /// </summary>
+        public FileInfo MainExecutable { get; }
 
         /// <summary>
         /// Gets the file information for the <c>GraphicsConfiguration.xml</c> file.
