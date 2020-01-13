@@ -76,6 +76,11 @@ namespace EliteFiles.Bindings
         {
             var bindsFile = BindingPreset.FindActivePresetFile(_gameInstallFolder, _gameOptionsFolder, out var isCustom);
 
+            if (bindsFile == null)
+            {
+                return;
+            }
+
             var bindingPreset = BindingPreset.FromFile(bindsFile);
 
             if (isCustom)

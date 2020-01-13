@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Settings dialog box now validates correctly the selected game options folder
+- Fix crash while switching bindings in game
 
 ### Added
 
