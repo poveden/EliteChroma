@@ -152,6 +152,8 @@ namespace EliteChroma
                 yield return Path.Combine(launcherPath, @"Products\elite-dangerous-64");
                 yield return Path.Combine(launcherPath, @"Products\FORC-FDEV-D-1002");
             }
+
+            yield return Path.GetDirectoryName(Application.ExecutablePath);
         }
     }
 }
