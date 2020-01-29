@@ -93,7 +93,9 @@ namespace EliteChroma
 
             if (firstTimeRun)
             {
-                gameInstall = GetPossibleGameInstallFolders().FirstOrDefault(Directory.Exists);
+                var possibleInstallFolders = GetPossibleGameInstallFolders().ToList();
+                
+                gameInstall = possibleInstallFolders.FirstOrDefault(Directory.Exists) ?? possibleInstallFolders[0];
                 gameOptions = GameOptionsFolder.DefaultPath;
                 journal = JournalFolder.DefaultPath;
             }
