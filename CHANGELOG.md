@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Fix silent crash when the game install folder cannot be found
+- Fix main process not exiting when `ValidateFolders()` returns `false`
 
 ## [1.1.0](https://github.com/poveden/EliteChroma/compare/v1.0.1...v1.1.0) — 2020-01-13
 

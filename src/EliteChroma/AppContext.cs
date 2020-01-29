@@ -34,12 +34,16 @@ namespace EliteChroma
             ContextMenu.Items.Add("&About...", null, About_Click);
             ContextMenu.Items.Add("-");
             ContextMenu.Items.Add("E&xit", null, Exit_Click);
+
+            Ready = true;
         }
+
+        public bool Ready { get; }
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            _cc.Dispose();
+            _cc?.Dispose();
         }
 
         private void Settings_Click(object sender, EventArgs eventArgs)
