@@ -34,7 +34,7 @@ If a picture is worth a thousand words, then perhaps a video will be better stil
 
 ## How to use
 
-A proper installer is in the works. In the meantime, you may download a ZIP file with the binaries from the [Releases](https://github.com/poveden/EliteChroma/releases) page.
+A proper installer is in the works. In the meantime, you may download a ZIP file with the binaries from the [Releases](https://github.com/poveden/EliteChroma/releases) page, and then extract its contents into any folder of your liking.
 
 Once installed, just run the `EliteChroma.exe` program. You may then control the program from the icon in the system tray.
 
