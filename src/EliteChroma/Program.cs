@@ -14,7 +14,13 @@ namespace EliteChroma
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AppContext());
+
+            using var appContext = new AppContext();
+
+            if (appContext.Ready)
+            {
+                Application.Run(appContext);
+            }
         }
     }
 }
