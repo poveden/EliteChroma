@@ -97,9 +97,8 @@ namespace EliteChroma
 
             if (firstTimeRun)
             {
-                var possibleInstallFolders = GetPossibleGameInstallFolders().ToList();
-                
-                gameInstall = possibleInstallFolders.FirstOrDefault(Directory.Exists) ?? possibleInstallFolders[0];
+                gameInstall = GetPossibleGameInstallFolders().FirstOrDefault(Directory.Exists)
+                    ?? GameInstallFolder.DefaultPaths.First();
                 gameOptions = GameOptionsFolder.DefaultPath;
                 journal = JournalFolder.DefaultPath;
             }
@@ -156,7 +155,6 @@ namespace EliteChroma
             if (launcherPath != null)
             {
                 yield return Path.Combine(launcherPath, @"Products\elite-dangerous-64");
-                yield return Path.Combine(launcherPath, @"Products\FORC-FDEV-D-1002");
             }
         }
     }

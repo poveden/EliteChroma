@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using EliteFiles.Internal;
 
 namespace EliteFiles
 {
@@ -24,13 +25,18 @@ namespace EliteFiles
             var programFilesFolder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
             var localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-            return new[]
+            var res = new List<string>
             {
                 Path.Combine(programFilesFolder, @"Frontier\Products\elite-dangerous-64"),
                 Path.Combine(programFilesFolder, @"Steam\steamapps\common\Elite Dangerous\Products\elite-dangerous-64"),
                 Path.Combine(programFilesFolder, @"Oculus\Software\frontier-developments-plc-elite-dangerous"),
                 Path.Combine(localAppDataFolder, @"Frontier_Developments\Products\elite-dangerous-64"),
             };
+
+            var steamLibraryFolders = SteamLibraryFolders.FromFile(SteamLibraryFolders.DefaultPath);
+            res.AddRange(steamLibraryFolders ?? Enumerable.Empty<string>());
+
+            return res.ToArray();
         });
 
         private readonly DirectoryInfo _di;
