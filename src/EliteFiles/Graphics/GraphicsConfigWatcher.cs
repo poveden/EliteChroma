@@ -9,6 +9,8 @@ namespace EliteFiles.Graphics
     /// </summary>
     public sealed class GraphicsConfigWatcher : IDisposable
     {
+        private const int _reloadRetries = 2;
+
         private readonly FileInfo _mainFile;
         private readonly FileInfo _overrideFile;
 
@@ -80,8 +82,13 @@ namespace EliteFiles.Graphics
 
         private void Reload()
         {
-            var gcMain = GraphicsConfig.FromFile(_mainFile.FullName);
-            var gcOverride = GraphicsConfig.FromFile(_overrideFile.FullName);
+            var gcMain = FileOperations.RetryIfNull(
+                () => GraphicsConfig.FromFile(_mainFile.FullName),
+                _reloadRetries);
+
+            var gcOverride = FileOperations.RetryIfNull(
+                () => GraphicsConfig.FromFile(_overrideFile.FullName),
+                _reloadRetries);
 
             if (gcMain == null)
             {

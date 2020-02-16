@@ -9,6 +9,8 @@ namespace EliteFiles.Status
     /// </summary>
     public sealed class StatusWatcher : IDisposable
     {
+        private const int _reloadRetries = 2;
+
         private readonly FileInfo _statusFile;
         private readonly EliteFileSystemWatcher _watcher;
 
@@ -64,7 +66,9 @@ namespace EliteFiles.Status
 
         private void Reload()
         {
-            var status = StatusEntry.FromFile(_statusFile.FullName);
+            var status = FileOperations.RetryIfNull(
+                () => StatusEntry.FromFile(_statusFile.FullName),
+                _reloadRetries);
 
             if (status == null)
             {

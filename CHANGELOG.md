@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased](https://github.com/poveden/EliteChroma/compare/v1.1.1...HEAD)
+
+### Fixed
+
+- Add file reload retries to (hopefully) fix occassional skipping of game events
+
 ## [1.1.1](https://github.com/poveden/EliteChroma/compare/v1.1.0...v1.1.1) — 2020-01-30
 
 ### Fixed
