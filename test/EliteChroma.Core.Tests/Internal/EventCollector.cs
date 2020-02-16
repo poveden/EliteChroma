@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace EliteChroma.Core.Tests.Internal
 {
@@ -30,8 +29,13 @@ namespace EliteChroma.Core.Tests.Internal
 
                 _attach(Handler);
                 trigger();
-                ss.Wait(timeout);
+                var ok = ss.Wait(timeout);
                 _detach(Handler);
+
+                if (!ok)
+                {
+                    throw new TimeoutException();
+                }
             }
 
             return res;
@@ -51,8 +55,13 @@ namespace EliteChroma.Core.Tests.Internal
 
                 _attach(Handler);
                 trigger();
-                ce.Wait(timeout);
+                var ok = ce.Wait(timeout);
                 _detach(Handler);
+
+                if (!ok)
+                {
+                    throw new TimeoutException();
+                }
             }
 
             return res;

@@ -60,6 +60,8 @@ namespace EliteChroma.Elite
 
         public bool DetectForegroundProcess { get; set; } = true;
 
+        public bool RaisePreStartupEvents { get; set; }
+
         public void Start()
         {
             if (_running)
@@ -215,7 +217,7 @@ namespace EliteChroma.Elite
 
         private void OnChanged()
         {
-            if (!_journalWatcher.IsWatching)
+            if (!_journalWatcher.IsWatching && !RaisePreStartupEvents)
             {
                 return;
             }

@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite;
 using Xunit;
@@ -17,7 +16,11 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void RaisesEventsForEachGameStateChange()
         {
-            using var watcher = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, _journalFolder);
+            using var watcher = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, _journalFolder)
+            {
+                RaisePreStartupEvents = true,
+            };
+
             var evs = new EventCollector<EventArgs>(h => watcher.Changed += h, h => watcher.Changed -= h);
 
             evs.Wait(10, watcher.Start, 5000);

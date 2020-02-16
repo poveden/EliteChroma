@@ -2,10 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Dynamic;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using EliteChroma.Core.Tests.Internal;
 using EliteFiles.Status;
 using Newtonsoft.Json;
@@ -52,7 +50,7 @@ namespace EliteChroma.Core.Tests
                 DetectGameInForeground = false,
             };
 
-            var mcs = evs.Wait(5, cc.Start, 1000);
+            var mcs = evs.Wait(2, cc.Start, 1000);
             Assert.Equal("InitializeAsync", mcs[0].Method);
             Assert.Equal("CreateKeyboardEffectAsync", mcs[1].Method);
 
