@@ -59,3 +59,4 @@ We follow the [Contributor Covenant Code of Conduct](https://github.com/poveden/
 - [Frontier Developments](https://www.frontier.co.uk/), creators of such a wonderful game.
 - [Colore .NET library](https://github.com/chroma-sdk/Colore), a powerful and elegant C# library for Razer Chroma's SDK.
 - Heavy inspiration from the [EliteAPI .NET library](https://github.com/EliteAPI/EliteAPI).
+- [Small DLLs](https://github.com/katahiromz/smalldll) for CI testing.

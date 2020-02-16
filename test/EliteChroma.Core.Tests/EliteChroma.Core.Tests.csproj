@@ -35,6 +35,13 @@
     <None Include="TestFiles\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <Target Name="CopyRazerChromaSdkMocks" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <RazerChromaSdkMocks Include="Mocks\**" />
+    </ItemGroup>
+    <Copy SourceFiles="@(RazerChromaSdkMocks)" DestinationFolder="$(OutputPath)" />
+  </Target>
+  
   <ItemGroup>
     <Compile Remove="coverage\**" />
     <Compile Remove="TestResults\**" />
