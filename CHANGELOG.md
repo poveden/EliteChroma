@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Add file reload retries to (hopefully) fix occassional skipping of game events
+- `ChromaController` will now create a `NativeApi` instance only if no `IChromaApi` instance has been provided
 
 ## [1.1.1](https://github.com/poveden/EliteChroma/compare/v1.1.0...v1.1.1) — 2020-01-30
 
