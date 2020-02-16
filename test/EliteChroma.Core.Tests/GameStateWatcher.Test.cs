@@ -15,12 +15,12 @@ namespace EliteChroma.Core.Tests
         private const string _journalFolder = @"TestFiles\Journal";
 
         [Fact]
-        public async Task RaisesEventsForEachGameStateChange()
+        public void RaisesEventsForEachGameStateChange()
         {
             using var watcher = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, _journalFolder);
             var evs = new EventCollector<EventArgs>(h => watcher.Changed += h, h => watcher.Changed -= h);
 
-            await evs.WaitAsync(10, watcher.Start, 5000).ConfigureAwait(false);
+            evs.Wait(10, watcher.Start, 5000);
             watcher.Stop();
         }
 

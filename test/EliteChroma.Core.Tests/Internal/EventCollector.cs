@@ -16,7 +16,7 @@ namespace EliteChroma.Core.Tests.Internal
             _detach = detach;
         }
 
-        public async Task<T> WaitAsync(Action trigger, int timeout = Timeout.Infinite)
+        public T Wait(Action trigger, int timeout = Timeout.Infinite)
         {
             T res = default;
 
@@ -30,14 +30,14 @@ namespace EliteChroma.Core.Tests.Internal
 
                 _attach(Handler);
                 trigger();
-                await ss.WaitAsync(timeout).ConfigureAwait(false);
+                ss.Wait(timeout);
                 _detach(Handler);
             }
 
             return res;
         }
 
-        public async Task<IList<T>> WaitAsync(int count, Action trigger, int timeout = Timeout.Infinite)
+        public IList<T> Wait(int count, Action trigger, int timeout = Timeout.Infinite)
         {
             var res = new List<T>();
 
@@ -51,7 +51,7 @@ namespace EliteChroma.Core.Tests.Internal
 
                 _attach(Handler);
                 trigger();
-                await Task.Run(() => ce.Wait(timeout)).ConfigureAwait(false);
+                ce.Wait(timeout);
                 _detach(Handler);
             }
 
