@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using EliteFiles.Internal;
 using EliteFiles.Tests.Internal;
 using Xunit;
 
@@ -12,8 +13,37 @@ namespace EliteFiles.Tests
         [Fact]
         public void GetsTheListOfDefaultGameInstallFolders()
         {
-            Assert.Equal(4, GameInstallFolder.DefaultPaths.Count);
+            Assert.True(GameInstallFolder.DefaultPaths.Count >= 4);
             Assert.All(GameInstallFolder.DefaultPaths, x => x.EndsWith(@"\Products\elite-dangerous-64", StringComparison.Ordinal));
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("\"UnrecognizedHeader\"\n{\n}\n")]
+        [InlineData("\"LibraryFolders\"")]
+        [InlineData("\"LibraryFolders\"\n{ \"1\" \"Path\" }\n")]
+        public void SteamLibraryFoldersFromFileReturnsNullOnMissingOrInvalidFile(string contents)
+        {
+            using var tf = new TestFolder();
+            string filename = $"libraryfolders.vdf";
+
+            if (contents != null)
+            {
+                tf.WriteText(filename, contents);
+            }
+
+            Assert.Null(SteamLibraryFolders.FromFile(tf.Resolve(filename)));
+        }
+
+        [Fact]
+        public void SteamLibraryFoldersFromFileGetsTheListOfFolders()
+        {
+            var slf = SteamLibraryFolders.FromFile(@"TestFiles\libraryfolders.vdf");
+
+            Assert.Equal(2, slf.Count);
+            Assert.Equal(@"C:\Games\Path1", slf[0]);
+            Assert.Equal("D:", slf[1]);
         }
 
         [Fact]
