@@ -9,6 +9,8 @@ namespace EliteFiles.Bindings
     /// </summary>
     public sealed class BindingsWatcher : IDisposable
     {
+        private const int _reloadRetries = 2;
+
         private readonly GameInstallFolder _gameInstallFolder;
         private readonly GameOptionsFolder _gameOptionsFolder;
 
@@ -74,14 +76,20 @@ namespace EliteFiles.Bindings
 
         private void Reload()
         {
-            var bindsFile = BindingPreset.FindActivePresetFile(_gameInstallFolder, _gameOptionsFolder, out var isCustom);
+            var isCustom = false;
+
+            var bindsFile = FileOperations.RetryIfNull(
+                () => BindingPreset.FindActivePresetFile(_gameInstallFolder, _gameOptionsFolder, out isCustom),
+                _reloadRetries);
 
             if (bindsFile == null)
             {
                 return;
             }
 
-            var bindingPreset = BindingPreset.FromFile(bindsFile);
+            var bindingPreset = FileOperations.RetryIfNull(
+                () => BindingPreset.FromFile(bindsFile),
+                _reloadRetries);
 
             if (isCustom)
             {

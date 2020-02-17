@@ -2,10 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Dynamic;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using EliteChroma.Core.Tests.Internal;
 using EliteFiles.Status;
 using Newtonsoft.Json;
@@ -29,7 +27,7 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
-        public async Task RazerChromaApiGetsCalledOnGameEvents()
+        public void RazerChromaApiGetsCalledOnGameEvents()
         {
             const string statusFile = "Status.json";
             const string journalFile = "Journal.190101020000.01.log";
@@ -52,15 +50,15 @@ namespace EliteChroma.Core.Tests
                 DetectGameInForeground = false,
             };
 
-            var mcs = await evs.WaitAsync(5, cc.Start, 1000).ConfigureAwait(false);
+            var mcs = evs.Wait(2, cc.Start, 1000);
             Assert.Equal("InitializeAsync", mcs[0].Method);
             Assert.Equal("CreateKeyboardEffectAsync", mcs[1].Method);
 
             var seq = BuildEventSequence();
-            mcs = await evs.WaitAsync(seq.Count, () => seq.Play(dirJournal, journalFile, statusFile), 200 * seq.Count).ConfigureAwait(false);
+            mcs = evs.Wait(seq.Count, () => seq.Play(dirJournal, journalFile, statusFile), 200 * seq.Count);
             Assert.Equal(seq.Count, mcs.Count);
 
-            var mc = await evs.WaitAsync(cc.Stop, 1000).ConfigureAwait(false);
+            var mc = evs.Wait(cc.Stop, 1000);
             Assert.Equal("UninitializeAsync", mc.Method);
         }
 

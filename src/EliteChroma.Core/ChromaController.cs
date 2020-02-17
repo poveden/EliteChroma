@@ -53,7 +53,7 @@ namespace EliteChroma.Core
             _effect = InitChromaEffect(_watcher.GameState);
         }
 
-        public IChromaApi ChromaApi { get; set; } = new NativeApi();
+        public IChromaApi ChromaApi { get; set; }
 
         public AppInfo ChromaAppInfo { get; set; }
 
@@ -132,7 +132,9 @@ namespace EliteChroma.Core
                     return;
                 }
 
-                _chroma = await ColoreProvider.CreateAsync(ChromaAppInfo, ChromaApi).ConfigureAwait(false);
+                var chromaApi = ChromaApi ?? new NativeApi();
+
+                _chroma = await ColoreProvider.CreateAsync(ChromaAppInfo, chromaApi).ConfigureAwait(false);
                 _chromaWarmupUntil = DateTimeOffset.UtcNow.AddMilliseconds(_chromaWarmupDuration);
             }
             finally
