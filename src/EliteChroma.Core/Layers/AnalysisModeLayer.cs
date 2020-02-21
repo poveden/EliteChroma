@@ -34,7 +34,7 @@ namespace EliteChroma.Core.Layers
 
                 Color hColor = color;
 
-                if (Game.Status.HasFlag(Flags.HardpointsDeployed))
+                if (Game.Status.HasFlag(Flags.HardpointsDeployed) && !Game.Status.HasFlag(Flags.Supercruise))
                 {
                     StartAnimation();
                     hColor = PulseColor(Color.Black, color, TimeSpan.FromSeconds(1));
