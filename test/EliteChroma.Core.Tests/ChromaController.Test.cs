@@ -52,9 +52,13 @@ namespace EliteChroma.Core.Tests
             using var cc = new ChromaController(dirRoot.Name, dirOpts.Name, dirJournal.Name)
             {
                 ChromaApi = chromaApi.Object,
+                ChromaAppInfo = null,
                 AnimationFrameRate = 0,
                 DetectGameInForeground = false,
             };
+
+            Assert.Null(cc.ChromaAppInfo);
+            Assert.False(cc.DetectGameInForeground);
 
             using var ceIA = new CountdownEvent(1);
             mockIA.Callback(() => ceIA.Signal());
@@ -80,6 +84,13 @@ namespace EliteChroma.Core.Tests
             cc.Stop();
 
             Assert.True(ceUA.Wait(1000));
+        }
+
+        [Fact]
+        public void CannotSetANegativeAnimationFrameRate()
+        {
+            using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
+            Assert.Throws<ArgumentOutOfRangeException>("AnimationFrameRate", () => cc.AnimationFrameRate = -1);
         }
 
         [Fact]

@@ -25,11 +25,22 @@ namespace EliteFiles.Tests
             var status = StatusEntry.FromFile(_jf.Status.FullName);
 
             Assert.NotNull(status);
+            Assert.Equal(new DateTimeOffset(2019, 1, 1, 0, 0, 39, TimeSpan.Zero), status.Timestamp);
             Assert.Equal("Status", status.Event);
             Assert.True(status.HasFlag(Flags.Docked));
             Assert.Equal(4, status.Pips.Sys);
             Assert.Equal(8, status.Pips.Eng);
             Assert.Equal(0, status.Pips.Wep);
+            Assert.Equal((byte)0, status.FireGroup);
+            Assert.Equal(GuiFocus.None, status.GuiFocus);
+            Assert.Equal(32, status.Fuel.FuelMain);
+            Assert.Equal(0.63, status.Fuel.FuelReservoir);
+            Assert.Equal(0, status.Cargo);
+            Assert.Equal(LegalState.Clean, status.LegalState);
+            Assert.Equal(-12.955701, status.Latitude);
+            Assert.Equal(6.249895, status.Longitude);
+            Assert.Equal(0, status.Heading);
+            Assert.Equal(0, status.Altitude);
             Assert.Equal(1, status.AdditionalFields.Count);
             Assert.Equal("AdditionalValue1", status.AdditionalFields["AdditionalField1"]);
         }
