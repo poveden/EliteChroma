@@ -33,7 +33,8 @@ namespace EliteFiles
                 Path.Combine(localAppDataFolder, @"Frontier_Developments\Products\elite-dangerous-64"),
             };
 
-            var steamLibraryFolders = SteamLibraryFolders.FromFile(SteamLibraryFolders.DefaultPath);
+            var steamLibraryFolders = SteamLibraryFolders.FromFile(SteamLibraryFolders.DefaultPath)
+                .Select(folder => Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-64"));
             res.AddRange(steamLibraryFolders ?? Enumerable.Empty<string>());
 
             return res.ToArray();
