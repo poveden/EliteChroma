@@ -4,8 +4,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
+using Colore.Api;
+using Colore.Data;
+using Colore.Effects.Keyboard;
 using EliteChroma.Core.Tests.Internal;
 using EliteFiles.Status;
+using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -32,8 +36,10 @@ namespace EliteChroma.Core.Tests
             const string statusFile = "Status.json";
             const string journalFile = "Journal.190101020000.01.log";
 
-            var chromaApi = new ChromaApiMock();
-            var evs = new EventCollector<ChromaApiMock.MockCall>(h => chromaApi.Called += h, h => chromaApi.Called -= h);
+            var chromaApi = new Mock<IChromaApi> { DefaultValue = DefaultValue.Mock };
+            var mockIA = chromaApi.Setup(x => x.InitializeAsync(It.IsAny<AppInfo>()));
+            var mockCKEA = chromaApi.Setup(x => x.CreateKeyboardEffectAsync(It.IsAny<KeyboardEffect>(), It.IsAny<It.IsValueType>()));
+            var mockUA = chromaApi.Setup(x => x.UninitializeAsync());
 
             using TestFolder
                 dirRoot = new TestFolder(_gameRootFolder),
@@ -45,21 +51,35 @@ namespace EliteChroma.Core.Tests
 
             using var cc = new ChromaController(dirRoot.Name, dirOpts.Name, dirJournal.Name)
             {
-                ChromaApi = chromaApi,
+                ChromaApi = chromaApi.Object,
                 AnimationFrameRate = 0,
                 DetectGameInForeground = false,
             };
 
-            var mcs = evs.Wait(2, cc.Start, 1000);
-            Assert.Equal("InitializeAsync", mcs[0].Method);
-            Assert.Equal("CreateKeyboardEffectAsync", mcs[1].Method);
+            using var ceIA = new CountdownEvent(1);
+            mockIA.Callback(() => ceIA.Signal());
+
+            using var ceCKEA = new CountdownEvent(1);
+            mockCKEA.Callback(() => ceCKEA.Signal());
+
+            cc.Start();
+
+            Assert.True(ceIA.Wait(1000));
+            Assert.True(ceCKEA.Wait(1000));
 
             var seq = BuildEventSequence();
-            mcs = evs.Wait(seq.Count, () => seq.Play(dirJournal, journalFile, statusFile), 200 * seq.Count);
-            Assert.Equal(seq.Count, mcs.Count);
+            ceCKEA.Reset(seq.Count);
 
-            var mc = evs.Wait(cc.Stop, 1000);
-            Assert.Equal("UninitializeAsync", mc.Method);
+            seq.Play(dirJournal, journalFile, statusFile);
+
+            Assert.True(ceCKEA.Wait(200 * seq.Count));
+
+            using var ceUA = new CountdownEvent(1);
+            mockUA.Callback(() => ceUA.Signal());
+
+            cc.Stop();
+
+            Assert.True(ceUA.Wait(1000));
         }
 
         [Fact]
