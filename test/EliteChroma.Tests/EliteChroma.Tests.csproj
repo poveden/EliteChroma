@@ -32,6 +32,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\Common\TestFiles\**" CopyToOutputDirectory="PreserveNewest">
+      <Link>TestFiles\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="coverage\**" />
     <Compile Remove="TestResults\**" />
     <EmbeddedResource Remove="coverage\**" />
@@ -43,6 +49,7 @@
   <PropertyGroup>
     <!-- Coverlet: Exclude assemblies from code coverage -->
     <Exclude>[EliteChroma.Core]*,[EliteFiles]*</Exclude>
+    <ExcludeByAttribute>GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
   </PropertyGroup>
 
 </Project>

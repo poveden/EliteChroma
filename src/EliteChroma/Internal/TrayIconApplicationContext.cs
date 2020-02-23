@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace EliteChroma.Internal
 {
+    [ExcludeFromCodeCoverage]
     internal abstract class TrayIconApplicationContext : ApplicationContext
     {
         protected TrayIconApplicationContext()
