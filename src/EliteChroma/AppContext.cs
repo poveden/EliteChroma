@@ -109,9 +109,11 @@ namespace EliteChroma
 
             if (!allValid)
             {
+                var ai = new AssemblyInfo();
+
                 MessageBox.Show(
                     Resources.MsgBox_UnableToIdentifyFolders,
-                    FrmAboutBox.AssemblyTitle,
+                    ai.Title,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation);
 

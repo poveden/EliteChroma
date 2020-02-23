@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Xml.Linq;
-using EliteChroma.Forms;
+using EliteChroma.Internal;
 using Xunit;
 
 namespace EliteChroma.Tests
@@ -14,17 +14,17 @@ namespace EliteChroma.Tests
         {
             var appInfo = LoadChromaAppInfo();
 
-            using var frm = new FrmAboutBox();
+            var assemblyInfo = new AssemblyInfo();
 
-            Assert.Equal(FrmAboutBox.AssemblyTitle, appInfo.Element("title").Value);
-            Assert.Equal(frm.AssemblyDescription, appInfo.Element("description").Value);
+            Assert.Equal(assemblyInfo.Title, appInfo.Element("title").Value);
+            Assert.Equal(assemblyInfo.Description, appInfo.Element("description").Value);
             Assert.Equal("Jorge Poveda Coma", appInfo.Element("author").Attribute("name").Value);
-            Assert.Equal(frm.AssemblyCompany, appInfo.Element("author").Attribute("contact").Value);
+            Assert.Equal(assemblyInfo.Company, appInfo.Element("author").Attribute("contact").Value);
         }
 
         private static XElement LoadChromaAppInfo()
         {
-            var a = typeof(Forms.FrmAboutBox).Assembly;
+            var a = typeof(AssemblyInfo).Assembly;
             var xmlFile = Path.Combine(Path.GetDirectoryName(a.Location), "ChromaAppInfo.xml");
             var xml = XDocument.Load(xmlFile);
             return xml.Root;
