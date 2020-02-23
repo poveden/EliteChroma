@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased](https://github.com/poveden/EliteChroma/compare/v1.2.0...HEAD)
+
+### Fixed
+
+- Fix wrong game install paths returned for Steam Libraries
+- Stop "hardpoints deployed" pulse during supercruise
+
 ## [1.2.0](https://github.com/poveden/EliteChroma/compare/v1.1.1...v1.2.0) — 2020-02-18
 
 ### Fixed

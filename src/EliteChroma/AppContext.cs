@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -8,7 +7,6 @@ using EliteChroma.Forms;
 using EliteChroma.Internal;
 using EliteChroma.Properties;
 using EliteFiles;
-using Microsoft.Win32;
 
 namespace EliteChroma
 {
@@ -97,7 +95,9 @@ namespace EliteChroma
 
             if (firstTimeRun)
             {
-                gameInstall = GetPossibleGameInstallFolders().FirstOrDefault(Directory.Exists)
+                gameInstall = GameInstallFolder.DefaultPaths
+                    .Concat(GameInstallFolder.GetAlternatePaths())
+                    .FirstOrDefault(Directory.Exists)
                     ?? GameInstallFolder.DefaultPaths.First();
                 gameOptions = GameOptionsFolder.DefaultPath;
                 journal = JournalFolder.DefaultPath;
@@ -137,25 +137,6 @@ namespace EliteChroma
             settings.Save();
 
             return true;
-        }
-
-        private static IEnumerable<string> GetPossibleGameInstallFolders()
-        {
-            foreach (var folder in GameInstallFolder.DefaultPaths)
-            {
-                yield return folder;
-            }
-
-            // Reference: https://github.com/Bemoliph/Elite-Dangerous-Downloader/blob/master/downloader.py
-            var launcherPath = (string)Registry.GetValue(
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{696F8871-C91D-4CB1-825D-36BE18065575}_is1",
-                "InstallLocation",
-                null);
-
-            if (launcherPath != null)
-            {
-                yield return Path.Combine(launcherPath, @"Products\elite-dangerous-64");
-            }
         }
     }
 }

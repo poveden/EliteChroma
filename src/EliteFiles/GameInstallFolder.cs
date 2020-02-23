@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using EliteFiles.Internal;
+using Microsoft.Win32;
 
 namespace EliteFiles
 {
@@ -25,18 +26,13 @@ namespace EliteFiles
             var programFilesFolder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
             var localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-            var res = new List<string>
+            return new[]
             {
                 Path.Combine(programFilesFolder, @"Frontier\Products\elite-dangerous-64"),
                 Path.Combine(programFilesFolder, @"Steam\steamapps\common\Elite Dangerous\Products\elite-dangerous-64"),
                 Path.Combine(programFilesFolder, @"Oculus\Software\frontier-developments-plc-elite-dangerous"),
                 Path.Combine(localAppDataFolder, @"Frontier_Developments\Products\elite-dangerous-64"),
             };
-
-            var steamLibraryFolders = SteamLibraryFolders.FromFile(SteamLibraryFolders.DefaultPath);
-            res.AddRange(steamLibraryFolders ?? Enumerable.Empty<string>());
-
-            return res.ToArray();
         });
 
         private readonly DirectoryInfo _di;
@@ -93,6 +89,38 @@ namespace EliteFiles
         /// Gets the directory information for the <c>ControlSchemes</c> folder.
         /// </summary>
         public DirectoryInfo ControlSchemes { get; }
+
+        /// <summary>
+        /// Gets the set of non-default folder paths where Elite:Dangerous may be installed.
+        /// </summary>
+        /// <returns>The set of alternate paths.</returns>
+        /// <remarks>
+        /// This method looks into the Windows Registry to locate a non-default installation location.
+        /// Additionally, it will include results from any Steam Libraries found.
+        /// </remarks>
+        public static IEnumerable<string> GetAlternatePaths()
+        {
+            // Reference: https://github.com/Bemoliph/Elite-Dangerous-Downloader/blob/master/downloader.py
+            var launcherPath = (string)Registry.GetValue(
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{696F8871-C91D-4CB1-825D-36BE18065575}_is1",
+                "InstallLocation",
+                null);
+
+            if (launcherPath != null)
+            {
+                yield return Path.Combine(launcherPath, @"Products\elite-dangerous-64");
+            }
+
+            var steamLibraryFolders = SteamLibraryFolders.FromFile(SteamLibraryFolders.DefaultPath);
+
+            if (steamLibraryFolders != null)
+            {
+                foreach (var folder in steamLibraryFolders)
+                {
+                    yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-64");
+                }
+            }
+        }
 
         /// <summary>
         /// Asserts that the provided folder is a valid Elite:Dangerous game install folder.
