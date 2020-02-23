@@ -32,7 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="TestFiles\**" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\Common\TestFiles\**" CopyToOutputDirectory="PreserveNewest">
+      <Link>TestFiles\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

@@ -33,12 +33,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="TestFiles\**" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\Common\TestFiles\**" CopyToOutputDirectory="PreserveNewest">
+      <Link>TestFiles\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </None>
   </ItemGroup>
 
   <Target Name="CopyRazerChromaSdkMocks" AfterTargets="AfterBuild">
     <ItemGroup>
-      <RazerChromaSdkMocks Include="Mocks\**" />
+      <RazerChromaSdkMocks Include="..\Common\Mocks\**" />
     </ItemGroup>
     <Copy SourceFiles="@(RazerChromaSdkMocks)" DestinationFolder="$(OutputPath)" />
   </Target>
