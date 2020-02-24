@@ -38,6 +38,7 @@
 
   <PropertyGroup Condition="'$(IsTestProject)' != ''">
     <RunSettingsFilePath>$(MSBuildThisFileDirectory)Common.runsettings</RunSettingsFilePath>
+    <IsPublishable>false</IsPublishable>
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutputFormat>cobertura</CoverletOutputFormat>
     <CoverletOutput>coverage\cobertura.xml</CoverletOutput>
