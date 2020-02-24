@@ -1,5 +1,0 @@
-{ "timestamp":"2019-01-01T00:00:00Z", "event":"Fileheader", "part":1, "language":"English\\UK", "gameversion":"3.5.0.200 EDH", "build":"r210198/r0 " }
-{ "timestamp":"2019-01-01T00:00:00Z", "event":"Music", "MusicTrack":"NoTrack" }
-{ "timestamp":"2019-01-01T00:04:09Z", "event":"StartJump", "JumpType":"Hyperspace", "StarSystem":"Wolf 1301", "SystemAddress":1458242032322, "StarClass":"G" }
-{ "timestamp":"2019-01-01T00:04:11Z", "event":"ReceiveText", "From":"Barba Ring", "Message":"$STATION_NoFireZone_exited;", "Message_Localised":"No fire zone left.", "Channel":"npc" }
-{ "timestamp":"2019-01-01T00:19:04Z", "event":"Shutdown", "AdditionalField1": "AdditionalValue1" }

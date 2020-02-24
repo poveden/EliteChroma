@@ -1,29 +1,23 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 using EliteChroma.Core;
 using EliteChroma.Forms;
 using EliteChroma.Internal;
 using EliteChroma.Properties;
-using EliteFiles;
 
 namespace EliteChroma
 {
+    [ExcludeFromCodeCoverage]
     internal class AppContext : TrayIconApplicationContext
     {
+        private readonly string _appSettingsPath;
+        
         private ChromaController _cc;
 
-        public AppContext()
+        public AppContext(string appSettingsPath = null)
         {
-            if (!ValidateFolders())
-            {
-                return;
-            }
-
-            var settings = AppSettings.Default;
-            _cc = new ChromaController(settings.GameInstallFolder, settings.GameOptionsFolder, settings.JournalFolder);
-            _cc.Start();
+            _appSettingsPath = appSettingsPath ?? AppSettings.GetDefaultPath();
 
             this.TrayIcon.Icon = Resources.EliteChromaIcon;
 
@@ -32,11 +26,41 @@ namespace EliteChroma
             ContextMenu.Items.Add("&About...", null, About_Click);
             ContextMenu.Items.Add("-");
             ContextMenu.Items.Add("E&xit", null, Exit_Click);
-
-            Ready = true;
         }
 
-        public bool Ready { get; }
+        public bool Start()
+        {
+            if (!ChromaController.IsChromaSdkAvailable())
+            {
+                MessageBox.Show(
+                    Resources.MsgBox_RazerChromaSdkNotFound,
+                    new AssemblyInfo().Title,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+
+                return false;
+            }
+
+            var settings = AppSettings.Load(_appSettingsPath);
+
+            if (!settings.IsValid())
+            {
+                MessageBox.Show(
+                    Resources.MsgBox_UnableToIdentifyFolders,
+                    new AssemblyInfo().Title,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+
+                if (!EditSettingsDialog(settings))
+                {
+                    return false;
+                }
+            }
+
+            settings.Save(_appSettingsPath);
+            CycleChromaController(settings);
+            return true;
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -46,27 +70,16 @@ namespace EliteChroma
 
         private void Settings_Click(object sender, EventArgs eventArgs)
         {
-            using var frm = new FrmAppSettings();
-            
-            var settings = AppSettings.Default;
+            var settings = AppSettings.Load(_appSettingsPath);
 
-            frm.txtGameInstall.Text = settings.GameInstallFolder;
-            frm.txtGameOptions.Text = settings.GameOptionsFolder;
-            frm.txtJournal.Text = settings.JournalFolder;
-
-            if (frm.ShowDialog(ContextMenu) == DialogResult.OK)
+            if (!EditSettingsDialog(settings))
             {
-                _cc.Dispose();
-
-                settings.GameInstallFolder = frm.txtGameInstall.Text;
-                settings.GameOptionsFolder = frm.txtGameOptions.Text;
-                settings.JournalFolder = frm.txtJournal.Text;
-
-                settings.Save();
-
-                _cc = new ChromaController(settings.GameInstallFolder, settings.GameOptionsFolder, settings.JournalFolder);
-                _cc.Start();
+                return;
             }
+
+            settings.Save(_appSettingsPath);
+
+            CycleChromaController(settings);
         }
 
         private void About_Click(object sender, EventArgs eventArgs)
@@ -81,62 +94,31 @@ namespace EliteChroma
             ExitThread();
         }
 
-        private bool ValidateFolders()
+        private bool EditSettingsDialog(AppSettings settings)
         {
-            var settings = AppSettings.Default;
+            using var frm = new FrmAppSettings();
 
-            var gameInstall = settings.GameInstallFolder;
-            var gameOptions = settings.GameOptionsFolder;
-            var journal = settings.JournalFolder;
+            frm.txtGameInstall.Text = settings.GameInstallFolder;
+            frm.txtGameOptions.Text = settings.GameOptionsFolder;
+            frm.txtJournal.Text = settings.JournalFolder;
 
-            var firstTimeRun = string.IsNullOrEmpty(gameInstall)
-                && string.IsNullOrEmpty(gameOptions)
-                && string.IsNullOrEmpty(journal);
-
-            if (firstTimeRun)
+            if (frm.ShowDialog(ContextMenu) != DialogResult.OK)
             {
-                gameInstall = GameInstallFolder.DefaultPaths
-                    .Concat(GameInstallFolder.GetAlternatePaths())
-                    .FirstOrDefault(Directory.Exists)
-                    ?? GameInstallFolder.DefaultPaths.First();
-                gameOptions = GameOptionsFolder.DefaultPath;
-                journal = JournalFolder.DefaultPath;
+                return false;
             }
 
-            var allValid = new GameInstallFolder(gameInstall).IsValid
-                && new GameOptionsFolder(gameOptions).IsValid
-                && new JournalFolder(journal).IsValid;
-
-            if (!allValid)
-            {
-                MessageBox.Show(
-                    Resources.MsgBox_UnableToIdentifyFolders,
-                    FrmAboutBox.AssemblyTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
-
-                using var frm = new FrmAppSettings();
-                
-                frm.txtGameInstall.Text = gameInstall;
-                frm.txtGameOptions.Text = gameOptions;
-                frm.txtJournal.Text = journal;
-
-                if (frm.ShowDialog(ContextMenu) != DialogResult.OK)
-                {
-                    return false;
-                }
-
-                gameInstall = frm.txtGameInstall.Text;
-                gameOptions = frm.txtGameOptions.Text;
-                journal = frm.txtJournal.Text;
-            }
-
-            settings.GameInstallFolder = gameInstall;
-            settings.GameOptionsFolder = gameOptions;
-            settings.JournalFolder = journal;
-            settings.Save();
+            settings.GameInstallFolder = frm.txtGameInstall.Text;
+            settings.GameOptionsFolder = frm.txtGameOptions.Text;
+            settings.JournalFolder = frm.txtJournal.Text;
 
             return true;
+        }
+
+        private void CycleChromaController(AppSettings settings)
+        {
+            _cc?.Dispose();
+            _cc = new ChromaController(settings.GameInstallFolder, settings.GameOptionsFolder, settings.JournalFolder);
+            _cc.Start();
         }
     }
 }

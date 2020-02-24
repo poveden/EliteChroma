@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace EliteChroma
 {
+    [ExcludeFromCodeCoverage]
     static class Program
     {
         /// <summary>
@@ -17,7 +19,7 @@ namespace EliteChroma
 
             using var appContext = new AppContext();
 
-            if (appContext.Ready)
+            if (appContext.Start())
             {
                 Application.Run(appContext);
             }
