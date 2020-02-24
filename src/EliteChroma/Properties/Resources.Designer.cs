@@ -81,6 +81,17 @@ namespace EliteChroma.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EliteChroma was unable to find the Razer Chroma SDK.
+        ///
+        ///The application will now exit..
+        /// </summary>
+        internal static string MsgBox_RazerChromaSdkNotFound {
+            get {
+                return ResourceManager.GetString("MsgBox_RazerChromaSdkNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to EliteChroma was unable to identify all Elite:Dangerous-related folders.
         ///
         ///Please choose the right folders in the following window..

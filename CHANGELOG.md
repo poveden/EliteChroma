@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Fix wrong game install paths returned for Steam Libraries
 - Stop "hardpoints deployed" pulse during supercruise
 
+### Added
+
+- Add Razer Chroma SDK check during startup
+
 ## [1.2.0](https://github.com/poveden/EliteChroma/compare/v1.1.1...v1.2.0) — 2020-02-18
 
 ### Fixed

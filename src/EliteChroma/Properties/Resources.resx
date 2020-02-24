@@ -124,6 +124,11 @@
   <data name="EliteChromaLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EliteChroma.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MsgBox_RazerChromaSdkNotFound" xml:space="preserve">
+    <value>EliteChroma was unable to find the Razer Chroma SDK.
+
+The application will now exit.</value>
+  </data>
   <data name="MsgBox_UnableToIdentifyFolders" xml:space="preserve">
     <value>EliteChroma was unable to identify all Elite:Dangerous-related folders.
 

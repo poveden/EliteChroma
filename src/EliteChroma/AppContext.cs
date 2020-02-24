@@ -30,6 +30,17 @@ namespace EliteChroma
 
         public bool Start()
         {
+            if (!ChromaController.IsChromaSdkAvailable())
+            {
+                MessageBox.Show(
+                    Resources.MsgBox_RazerChromaSdkNotFound,
+                    new AssemblyInfo().Title,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+
+                return false;
+            }
+
             var settings = AppSettings.Load(_appSettingsPath);
 
             if (!settings.IsValid())
