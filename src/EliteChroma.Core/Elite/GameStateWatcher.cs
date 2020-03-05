@@ -149,11 +149,11 @@ namespace EliteChroma.Elite
             switch (e)
             {
                 case FileHeader _ when !DetectForegroundProcess:
-                    GameState.IsRunning = true;
+                    GameState.ProcessState = GameProcessState.InForeground;
                     break;
 
                 case Shutdown _ when !DetectForegroundProcess:
-                    GameState.IsRunning = false;
+                    GameState.ProcessState = GameProcessState.NotRunning;
                     break;
 
                 case StartJump fsdJump:
@@ -211,7 +211,7 @@ namespace EliteChroma.Elite
 
         private void GameProcessWatcher_Changed(object sender, EventArgs e)
         {
-            GameState.IsRunning = _gameProcessWatcher.GameInForeground;
+            GameState.ProcessState = _gameProcessWatcher.ProcessState;
             OnChanged();
         }
 

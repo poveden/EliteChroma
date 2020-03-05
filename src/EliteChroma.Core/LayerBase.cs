@@ -17,6 +17,8 @@ namespace EliteChroma.Core
 
         protected DateTimeOffset AnimationStart { get; private set; }
 
+        protected TimeSpan AnimationElapsed => DateTimeOffset.UtcNow - AnimationStart;
+
         protected void StartAnimation()
         {
             if (Animated)
@@ -41,7 +43,7 @@ namespace EliteChroma.Core
         protected Color PulseColor(Color c1, Color c2, TimeSpan period)
         {
             var max = period.TotalSeconds;
-            var t = ((DateTimeOffset.UtcNow - AnimationStart).TotalSeconds % max) / max;
+            var t = (AnimationElapsed.TotalSeconds % max) / max;
 
             var x = t <= 0.5 ? t * 2 : (1 - t) * 2;
 
