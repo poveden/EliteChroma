@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace EliteChroma.Elite.Internal
 {
@@ -199,6 +200,13 @@ namespace EliteChroma.Elite.Internal
             VK_OEM_CLEAR = 0xFE,
         }
 
+        // Reference: https://docs.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights
+        public enum ProcessAccess
+        {
+            VM_READ = 0x00000010,
+            QUERY_INFORMATION = 0x00000400,
+        }
+
         [DllImport("user32.dll")]
         public static extern short GetAsyncKeyState(VirtualKey vKey);
 
@@ -214,5 +222,17 @@ namespace EliteChroma.Elite.Internal
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern int GetWindowThreadProcessId(IntPtr hWnd, out int processId);
+
+        [DllImport("psapi.dll", SetLastError = true)]
+        public static extern bool EnumProcesses([MarshalAs(UnmanagedType.LPArray)] [Out] int[] lpidProcess, int cb, out int lpcbNeeded);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern SafeProcessHandle OpenProcess(ProcessAccess dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
+        [DllImport("psapi.dll", SetLastError = true)]
+        public static extern bool EnumProcessModules(SafeProcessHandle hProcess, [MarshalAs(UnmanagedType.LPArray)] [Out] IntPtr[] lphModule, int cb, out int lpcbNeeded);
+
+        [DllImport("psapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern int GetModuleFileNameEx(SafeProcessHandle hProcess, IntPtr hModule, [Out] char[] lpFilename, int nSize);
     }
 }

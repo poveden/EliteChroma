@@ -181,7 +181,7 @@ namespace EliteChroma.Core
 
             try
             {
-                if (!_watcher.GameState.IsRunning)
+                if (_watcher.GameState.ProcessState == GameProcessState.NotRunning)
                 {
                     await ChromaStop().ConfigureAwait(false);
                     return;

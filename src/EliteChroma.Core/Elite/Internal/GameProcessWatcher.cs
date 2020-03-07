@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Timers;
 using EliteFiles;
 
@@ -7,16 +6,25 @@ namespace EliteChroma.Elite.Internal
 {
     internal sealed class GameProcessWatcher : IDisposable
     {
+        private const int _gameForegroundCheckInterval = 200;
+        private const int _processCheckInterval = 2000;
+        private const int _processCheckWaitCycles = _processCheckInterval / _gameForegroundCheckInterval;
+
         private readonly string _mainExePath;
         private readonly Timer _timer;
+        private readonly GameProcessTracker _gameProcessTracker;
+
+        private int _checking;
+        private int _processCheckCycle;
 
         public GameProcessWatcher(GameInstallFolder gameInstallFolder)
         {
             _mainExePath = gameInstallFolder.MainExecutable.FullName;
+            _gameProcessTracker = new GameProcessTracker(_mainExePath);
 
             _timer = new Timer
             {
-                Interval = 200,
+                Interval = _gameForegroundCheckInterval,
                 AutoReset = true,
                 Enabled = false,
             };
@@ -25,11 +33,11 @@ namespace EliteChroma.Elite.Internal
 
         public event EventHandler<EventArgs> Changed;
 
-        public bool GameInForeground { get; private set; }
+        public GameProcessState ProcessState { get; private set; }
 
         public void Start()
         {
-            GameInForeground = CheckGameForegroundState();
+            ProcessState = GetProcessState();
             _timer.Start();
         }
 
@@ -43,23 +51,6 @@ namespace EliteChroma.Elite.Internal
             _timer?.Dispose();
         }
 
-        private static string TryGetProcessFileName(int processId)
-        {
-            try
-            {
-                using (var p = Process.GetProcessById(processId))
-                {
-                    return p.MainModule.FileName;
-                }
-            }
-#pragma warning disable CA1031
-            catch
-            {
-                return null;
-            }
-#pragma warning restore CA1031
-        }
-
         private bool CheckGameForegroundState()
         {
             var hWnd = NativeMethods.GetForegroundWindow();
@@ -70,23 +61,56 @@ namespace EliteChroma.Elite.Internal
                 return false;
             }
 
-            var fgFileName = TryGetProcessFileName(processId);
+            return _gameProcessTracker.IsGameProcess(processId);
+        }
 
-            return _mainExePath.Equals(fgFileName, StringComparison.OrdinalIgnoreCase);
+        private bool CheckGameRunningState()
+        {
+            _processCheckCycle = (_processCheckCycle + 1) % _processCheckWaitCycles;
+            var fullScan = _processCheckCycle == 0;
+
+            return _gameProcessTracker.IsGameRunning(fullScan);
+        }
+
+        private GameProcessState GetProcessState()
+        {
+            if (CheckGameForegroundState())
+            {
+                return GameProcessState.InForeground;
+            }
+
+            if (CheckGameRunningState())
+            {
+                return GameProcessState.InBackground;
+            }
+
+            return GameProcessState.NotRunning;
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            var newFG = CheckGameForegroundState();
-
-            if (newFG == GameInForeground)
+            if (System.Threading.Interlocked.Exchange(ref _checking, 1) == 1)
             {
                 return;
             }
 
-            GameInForeground = newFG;
+            try
+            {
+                var newState = GetProcessState();
 
-            Changed?.Invoke(this, EventArgs.Empty);
+                if (newState == ProcessState)
+                {
+                    return;
+                }
+
+                ProcessState = newState;
+
+                Changed?.Invoke(this, EventArgs.Empty);
+            }
+            finally
+            {
+                System.Threading.Interlocked.Exchange(ref _checking, 0);
+            }
         }
     }
 }

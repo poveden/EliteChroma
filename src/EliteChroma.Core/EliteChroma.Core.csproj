@@ -12,11 +12,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702;1591;SA1600</NoWarn>
+    <NoWarn>1701;1702;1591;SA1600;SA1602</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;1591;SA1600</NoWarn>
+    <NoWarn>1701;1702;1591;SA1600;SA1602</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +25,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EliteFiles\EliteFiles.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>EliteChroma.Core.Tests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 
 </Project>

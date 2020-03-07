@@ -14,7 +14,7 @@ namespace EliteChroma.Elite
         {
         }
 
-        public bool IsRunning { get; internal set; }
+        public GameProcessState ProcessState { get; internal set; }
 
         public IReadOnlyDictionary<string, Binding> Bindings { get; internal set; }
 
