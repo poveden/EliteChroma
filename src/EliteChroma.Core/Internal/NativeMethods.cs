@@ -1,11 +1,19 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
-namespace EliteChroma.Elite.Internal
+namespace EliteChroma.Core.Internal
 {
-    internal static class NativeMethods
+    [ExcludeFromCodeCoverage]
+    internal sealed class NativeMethods : INativeMethods
     {
+        public static readonly INativeMethods Instance = new NativeMethods();
+
+        private NativeMethods()
+        {
+        }
+
         // Reference: https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
         public enum VirtualKey : int
         {
@@ -207,32 +215,62 @@ namespace EliteChroma.Elite.Internal
             QUERY_INFORMATION = 0x00000400,
         }
 
-        [DllImport("user32.dll")]
-        public static extern short GetAsyncKeyState(VirtualKey vKey);
+        public short GetAsyncKeyState(VirtualKey vKey) =>
+            Impl.GetAsyncKeyState(vKey);
 
-        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr LoadLibrary(string lpFileName);
+        public IntPtr LoadLibrary(string lpFileName) =>
+            Impl.LoadLibrary(lpFileName);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool FreeLibrary(IntPtr hModule);
+        public bool FreeLibrary(IntPtr hModule) =>
+            Impl.FreeLibrary(hModule);
 
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetForegroundWindow();
+        public IntPtr GetForegroundWindow() =>
+            Impl.GetForegroundWindow();
 
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern int GetWindowThreadProcessId(IntPtr hWnd, out int processId);
+        public int GetWindowThreadProcessId(IntPtr hWnd, out int processId) =>
+            Impl.GetWindowThreadProcessId(hWnd, out processId);
 
-        [DllImport("psapi.dll", SetLastError = true)]
-        public static extern bool EnumProcesses([MarshalAs(UnmanagedType.LPArray)] [Out] int[] lpidProcess, int cb, out int lpcbNeeded);
+        public bool EnumProcesses(int[] lpidProcess, int cb, out int lpcbNeeded) =>
+            Impl.EnumProcesses(lpidProcess, cb, out lpcbNeeded);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern SafeProcessHandle OpenProcess(ProcessAccess dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+        public SafeProcessHandle OpenProcess(ProcessAccess dwDesiredAccess, bool bInheritHandle, int dwProcessId) =>
+            Impl.OpenProcess(dwDesiredAccess, bInheritHandle, dwProcessId);
 
-        [DllImport("psapi.dll", SetLastError = true)]
-        public static extern bool EnumProcessModules(SafeProcessHandle hProcess, [MarshalAs(UnmanagedType.LPArray)] [Out] IntPtr[] lphModule, int cb, out int lpcbNeeded);
+        public bool EnumProcessModules(SafeProcessHandle hProcess, IntPtr[] lphModule, int cb, out int lpcbNeeded) =>
+            Impl.EnumProcessModules(hProcess, lphModule, cb, out lpcbNeeded);
 
-        [DllImport("psapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern int GetModuleFileNameEx(SafeProcessHandle hProcess, IntPtr hModule, [Out] char[] lpFilename, int nSize);
+        public int GetModuleFileNameEx(SafeProcessHandle hProcess, IntPtr hModule, char[] lpFilename, int nSize) =>
+            Impl.GetModuleFileNameEx(hProcess, hModule, lpFilename, nSize);
+
+        private static class Impl
+        {
+            [DllImport("user32.dll")]
+            public static extern short GetAsyncKeyState(VirtualKey vKey);
+
+            [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
+            public static extern IntPtr LoadLibrary(string lpFileName);
+
+            [DllImport("kernel32.dll", SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool FreeLibrary(IntPtr hModule);
+
+            [DllImport("user32.dll")]
+            public static extern IntPtr GetForegroundWindow();
+
+            [DllImport("user32.dll", SetLastError = true)]
+            public static extern int GetWindowThreadProcessId(IntPtr hWnd, out int processId);
+
+            [DllImport("psapi.dll", SetLastError = true)]
+            public static extern bool EnumProcesses([MarshalAs(UnmanagedType.LPArray)] [Out] int[] lpidProcess, int cb, out int lpcbNeeded);
+
+            [DllImport("kernel32.dll", SetLastError = true)]
+            public static extern SafeProcessHandle OpenProcess(ProcessAccess dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
+            [DllImport("psapi.dll", SetLastError = true)]
+            public static extern bool EnumProcessModules(SafeProcessHandle hProcess, [MarshalAs(UnmanagedType.LPArray)] [Out] IntPtr[] lphModule, int cb, out int lpcbNeeded);
+
+            [DllImport("psapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+            public static extern int GetModuleFileNameEx(SafeProcessHandle hProcess, IntPtr hModule, [Out] char[] lpFilename, int nSize);
+        }
     }
 }

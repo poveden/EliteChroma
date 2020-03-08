@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using static EliteChroma.Elite.Internal.NativeMethods;
+using EliteChroma.Core.Internal;
+using static EliteChroma.Core.Internal.NativeMethods;
 
 namespace EliteChroma.Elite.Internal
 {
-    internal sealed class GameProcessTracker
+    internal sealed class GameProcessTracker : NativeMethodsAccessor
     {
         private readonly string _gameExePath;
         private readonly HashSet<int> _clearedProcessIds;
@@ -15,12 +16,13 @@ namespace EliteChroma.Elite.Internal
 
         private int _gameProcessId;
 
-        public GameProcessTracker(string gameExePath)
+        public GameProcessTracker(string gameExePath, INativeMethods nativeMethods)
+            : base(nativeMethods)
         {
             _gameExePath = gameExePath;
             _clearedProcessIds = new HashSet<int>();
-            _plCurr = new ProcessList();
-            _plPrev = new ProcessList();
+            _plCurr = new ProcessList(nativeMethods);
+            _plPrev = new ProcessList(nativeMethods);
             _buf = new char[1024];
         }
 
@@ -121,7 +123,7 @@ namespace EliteChroma.Elite.Internal
 
         private string TryGetProcessFileName(int processId)
         {
-            using (var p = OpenProcess(ProcessAccess.QUERY_INFORMATION | ProcessAccess.VM_READ, false, processId))
+            using (var p = NativeMethods.OpenProcess(ProcessAccess.QUERY_INFORMATION | ProcessAccess.VM_READ, false, processId))
             {
                 if (p.IsInvalid)
                 {
@@ -131,12 +133,12 @@ namespace EliteChroma.Elite.Internal
                 var buf = new IntPtr[1]; // We are only interested in the main module
                 var bufSize = buf.Length * IntPtr.Size;
 
-                if (!EnumProcessModules(p, buf, bufSize, out var retSize) || retSize < bufSize)
+                if (!NativeMethods.EnumProcessModules(p, buf, bufSize, out var retSize) || retSize < bufSize)
                 {
                     return null;
                 }
 
-                var n = GetModuleFileNameEx(p, buf[0], _buf, _buf.Length);
+                var n = NativeMethods.GetModuleFileNameEx(p, buf[0], _buf, _buf.Length);
 
                 if (n == 0)
                 {

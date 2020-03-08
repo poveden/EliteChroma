@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using EliteFiles.Bindings.Devices;
-using static EliteChroma.Elite.Internal.NativeMethods;
+using static EliteChroma.Core.Internal.NativeMethods;
 
 namespace EliteChroma.Elite.Internal
 {

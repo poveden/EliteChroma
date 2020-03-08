@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using EliteChroma.Core.Internal;
 using EliteChroma.Elite.Internal;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void RefreshReturnsAnOrderedListOfUniqueProcessIds()
         {
-            var pl = new ProcessList();
+            var pl = new ProcessList(NativeMethods.Instance);
             pl.Refresh();
 
             var n = (int)_fiN.GetValue(pl);
@@ -148,7 +149,7 @@ namespace EliteChroma.Core.Tests
 
         private static ProcessList InitProcessList(IEnumerable<int> values)
         {
-            var res = new ProcessList();
+            var res = new ProcessList(NativeMethods.Instance);
             var buf = (int[])_fiBuf.GetValue(res);
             var n = 0;
 

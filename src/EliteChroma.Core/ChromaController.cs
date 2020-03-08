@@ -8,8 +8,8 @@ using Colore.Api;
 using Colore.Data;
 using Colore.Native;
 using EliteChroma.Chroma;
+using EliteChroma.Core.Internal;
 using EliteChroma.Elite;
-using EliteChroma.Elite.Internal;
 using EliteFiles;
 
 namespace EliteChroma.Core
@@ -81,21 +81,7 @@ namespace EliteChroma.Core
             set => _watcher.DetectForegroundProcess = value;
         }
 
-        public static bool IsChromaSdkAvailable()
-        {
-            bool is64Bit = Environment.Is64BitProcess && Environment.Is64BitOperatingSystem;
-            var dllName = is64Bit ? "RzChromaSDK64.dll" : "RzChromaSDK.dll";
-
-            var hModule = NativeMethods.LoadLibrary(dllName);
-
-            if (hModule != IntPtr.Zero)
-            {
-                NativeMethods.FreeLibrary(hModule);
-                return true;
-            }
-
-            return false;
-        }
+        public static bool IsChromaSdkAvailable() => IsChromaSdkAvailable(NativeMethods.Instance);
 
         public void Start()
         {
@@ -120,6 +106,22 @@ namespace EliteChroma.Core
             _animation?.Dispose();
             _chromaLock.Dispose();
             _disposed = true;
+        }
+
+        internal static bool IsChromaSdkAvailable(INativeMethods nativeMethods)
+        {
+            bool is64Bit = Environment.Is64BitProcess && Environment.Is64BitOperatingSystem;
+            var dllName = is64Bit ? "RzChromaSDK64.dll" : "RzChromaSDK.dll";
+
+            var hModule = nativeMethods.LoadLibrary(dllName);
+
+            if (hModule != IntPtr.Zero)
+            {
+                nativeMethods.FreeLibrary(hModule);
+                return true;
+            }
+
+            return false;
         }
 
         private async Task ChromaStart()

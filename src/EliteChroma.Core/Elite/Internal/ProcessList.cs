@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using EliteChroma.Core.Internal;
 
 namespace EliteChroma.Elite.Internal
 {
-    internal sealed class ProcessList
+    internal sealed class ProcessList : NativeMethodsAccessor
     {
         private readonly int[] _buf;
         private readonly int _capacityBytes;
 
         private int _n;
 
-        public ProcessList()
+        public ProcessList(INativeMethods nativeMethods)
+            : base(nativeMethods)
         {
             _buf = new int[5000];
             _capacityBytes = _buf.Length * Marshal.SizeOf<int>();

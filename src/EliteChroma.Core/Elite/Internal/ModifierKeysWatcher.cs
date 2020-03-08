@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
+using EliteChroma.Core.Internal;
 using EliteFiles.Bindings;
 using EliteFiles.Bindings.Devices;
-using static EliteChroma.Elite.Internal.NativeMethods;
+using static EliteChroma.Core.Internal.NativeMethods;
 
 namespace EliteChroma.Elite.Internal
 {
-    internal sealed class ModifierKeysWatcher : IDisposable
+    internal sealed class ModifierKeysWatcher : NativeMethodsAccessor, IDisposable
     {
         private readonly Dictionary<VirtualKey, DeviceKey> _watch;
         private readonly Timer _timer;
 
         private DeviceKeySet _currPressed;
 
-        public ModifierKeysWatcher()
+        public ModifierKeysWatcher(INativeMethods nativeMethods)
+            : base(nativeMethods)
         {
             _watch = new Dictionary<VirtualKey, DeviceKey>();
 
@@ -72,7 +74,7 @@ namespace EliteChroma.Elite.Internal
         {
             foreach (var kv in _watch)
             {
-                if ((GetAsyncKeyState(kv.Key) & 0x8000) != 0)
+                if ((NativeMethods.GetAsyncKeyState(kv.Key) & 0x8000) != 0)
                 {
                     yield return kv.Value;
                 }

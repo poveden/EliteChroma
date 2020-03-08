@@ -7,6 +7,7 @@ using System.Threading;
 using Colore.Api;
 using Colore.Data;
 using Colore.Effects.Keyboard;
+using EliteChroma.Core.Internal;
 using EliteChroma.Core.Tests.Internal;
 using EliteFiles.Status;
 using Moq;
@@ -25,7 +26,7 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void ChecksIfChromaSdkIsAvailable()
         {
-            var available = ChromaController.IsChromaSdkAvailable();
+            var available = ChromaController.IsChromaSdkAvailable(NativeMethods.Instance);
 
             Assert.True(available);
         }
