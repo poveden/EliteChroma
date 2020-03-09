@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using EliteChroma.Core.Internal;
+using System.Runtime.InteropServices;
+using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite.Internal;
 using Xunit;
 
@@ -18,18 +19,16 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void RefreshReturnsAnOrderedListOfUniqueProcessIds()
         {
-            var pl = new ProcessList(NativeMethods.Instance);
+            var nm = new NativeMethodsMock { ProcessIds = new[] { 4, 3, 2, 1 } };
+            var pl = new ProcessList(nm);
+
             pl.Refresh();
 
             var n = (int)_fiN.GetValue(pl);
-            Assert.True(n > 1);
+            Assert.Equal(4, n);
 
-            var buf = (int[])_fiBuf.GetValue(pl);
-
-            for (var i = 1; i < n; i++)
-            {
-                Assert.True(buf[i - 1] < buf[i]);
-            }
+            var buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
+            Assert.Equal(new[] { 1, 2, 3, 4 }, buf);
         }
 
         [Theory]
@@ -37,8 +36,13 @@ namespace EliteChroma.Core.Tests
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Theory data")]
         public void ExceptReturnsExpectedValues(int[] first, int[] second)
         {
-            var pl1 = InitProcessList(first);
-            var pl2 = InitProcessList(second);
+            var nm1 = new NativeMethodsMock { ProcessIds = first };
+            var pl1 = new ProcessList(nm1);
+            pl1.Refresh();
+
+            var nm2 = new NativeMethodsMock { ProcessIds = second };
+            var pl2 = new ProcessList(nm2);
+            pl2.Refresh();
 
             var expectedAdded = second.Except(first).ToList();
             var expectedRemoved = first.Except(second).ToList();
@@ -53,6 +57,50 @@ namespace EliteChroma.Core.Tests
             Assert.Equal<int>(expectedAll, all);
             Assert.Equal(expectedAdded, added);
             Assert.Equal(expectedRemoved, removed);
+        }
+
+        [Fact]
+        public void RefreshWillNotChangeTheInternalCollectionWhenEnumProcessesFails()
+        {
+            var ids = new[] { 1, 2, 3, 4 };
+            var nm = new NativeMethodsMock { ProcessIds = ids };
+
+            var pl = new ProcessList(nm);
+            pl.Refresh();
+
+            var n = (int)_fiN.GetValue(pl);
+            Assert.Equal(ids.Length, n);
+
+            nm.ProcessIds = null;
+            pl.Refresh();
+
+            var buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
+            Assert.Equal(ids, buf);
+        }
+
+        [Fact]
+        public void CanRemoveEntries()
+        {
+            var ids = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var nm = new NativeMethodsMock { ProcessIds = ids };
+
+            var pl = new ProcessList(nm);
+            pl.Refresh();
+
+            Assert.False(pl.Remove(11));
+
+            Assert.True(pl.Remove(3));
+
+            var n = (int)_fiN.GetValue(pl);
+            Assert.Equal(8, n);
+
+            var buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
+            Assert.Equal(new[] { 1, 2, 4, 5, 6, 7, 8, 9 }, buf);
+
+            nm.ProcessIds = new[] { 1 };
+            pl.Refresh();
+
+            Assert.True(pl.Remove(1));
         }
 
         [SuppressMessage("OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Theory data")]
@@ -147,28 +195,29 @@ namespace EliteChroma.Core.Tests
             };
         }
 
-        private static ProcessList InitProcessList(IEnumerable<int> values)
-        {
-            var res = new ProcessList(NativeMethods.Instance);
-            var buf = (int[])_fiBuf.GetValue(res);
-            var n = 0;
-
-            foreach (var value in values)
-            {
-                buf[n++] = value;
-            }
-
-            Array.Sort(buf, 0, n);
-            _fiN.SetValue(res, n);
-
-            return res;
-        }
-
         private static IEnumerable<int> GetSequence(int from, int to)
         {
             for (var i = from; i <= to; i++)
             {
                 yield return i;
+            }
+        }
+
+        private sealed class NativeMethodsMock : NativeMethodsStub
+        {
+            public IList<int> ProcessIds { get; set; }
+
+            public override bool EnumProcesses(int[] lpidProcess, int cb, out int lpcbNeeded)
+            {
+                if (ProcessIds == null)
+                {
+                    lpcbNeeded = 0;
+                    return false;
+                }
+
+                ProcessIds.CopyTo(lpidProcess, 0);
+                lpcbNeeded = ProcessIds.Count * Marshal.SizeOf<int>();
+                return true;
             }
         }
     }

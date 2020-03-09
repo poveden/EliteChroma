@@ -85,5 +85,23 @@ namespace EliteChroma.Elite.Internal
                 yield return (other._buf[j++], false);
             }
         }
+
+        public bool Remove(int processId)
+        {
+            var i = Array.BinarySearch(_buf, 0, _n, processId);
+
+            if (i < 0)
+            {
+                return false;
+            }
+
+            var n = _n - 1;
+
+            Array.Copy(_buf, i + 1, _buf, i, n - i);
+
+            _n = n;
+
+            return true;
+        }
     }
 }

@@ -51,8 +51,14 @@ namespace EliteChroma.Elite.Internal
                 return false;
             }
 
-            if (!TestIfGameProcessId(processId))
+            if (!TestIfGameProcessId(processId, out var failure))
             {
+                if (failure)
+                {
+                    _clearedProcessIds.Remove(processId);
+                    _plCurr.Remove(processId);
+                }
+
                 return false;
             }
 
@@ -64,9 +70,15 @@ namespace EliteChroma.Elite.Internal
         {
             if (_gameProcessId != 0)
             {
-                if (TestIfGameProcessId(_gameProcessId))
+                if (TestIfGameProcessId(_gameProcessId, out var failure))
                 {
                     return true;
+                }
+
+                if (failure)
+                {
+                    _clearedProcessIds.Remove(_gameProcessId);
+                    _plCurr.Remove(_gameProcessId);
                 }
 
                 _gameProcessId = 0;
@@ -89,22 +101,22 @@ namespace EliteChroma.Elite.Internal
 
             _plCurr.Refresh();
 
-            int na = 0, nd = 0;
             foreach (var (processId, added) in _plCurr.Diff(_plPrev))
             {
                 if (added)
                 {
-                    na++;
-                    _clearedProcessIds.Add(processId);
-
-                    if (TestIfGameProcessId(processId))
+                    if (TestIfGameProcessId(processId, out var failure))
                     {
                         _gameProcessId = processId;
+                    }
+
+                    if (!failure)
+                    {
+                        _clearedProcessIds.Add(processId);
                     }
                 }
                 else
                 {
-                    nd++;
                     _clearedProcessIds.Remove(processId);
 
                     if (processId == _gameProcessId)
@@ -115,9 +127,10 @@ namespace EliteChroma.Elite.Internal
             }
         }
 
-        private bool TestIfGameProcessId(int processId)
+        private bool TestIfGameProcessId(int processId, out bool failure)
         {
             var filename = TryGetProcessFileName(processId);
+            failure = filename == null;
             return _gameExePath.Equals(filename, StringComparison.OrdinalIgnoreCase);
         }
 
