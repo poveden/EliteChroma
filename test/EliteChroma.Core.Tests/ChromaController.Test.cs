@@ -22,12 +22,16 @@ namespace EliteChroma.Core.Tests
         private const string _gameOptionsFolder = @"TestFiles\GameOptions";
         private const string _journalFolder = @"TestFiles\Journal";
 
-        [Fact]
-        public void ChecksIfChromaSdkIsAvailable()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ChecksIfChromaSdkIsAvailable(bool sdkAvailable)
         {
-            var available = ChromaController.IsChromaSdkAvailable();
+            var nm = new NativeMethodsMock(sdkAvailable);
 
-            Assert.True(available);
+            var available = ChromaController.IsChromaSdkAvailable(nm);
+
+            Assert.Equal(sdkAvailable, available);
         }
 
         [Fact]
@@ -197,6 +201,27 @@ namespace EliteChroma.Core.Tests
             public IEnumerator<(bool isStatus, string json)> GetEnumerator() => _events.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        }
+
+        private sealed class NativeMethodsMock : NativeMethodsStub
+        {
+            private readonly bool _sdkAvailable;
+
+            public NativeMethodsMock(bool sdkAvailable)
+            {
+                _sdkAvailable = sdkAvailable;
+            }
+
+            public override IntPtr LoadLibrary(string lpFileName)
+            {
+                Assert.Contains(lpFileName, new[] { "RzChromaSDK64.dll", "RzChromaSDK.dll" });
+                return _sdkAvailable ? new IntPtr(1234) : IntPtr.Zero;
+            }
+
+            public override bool FreeLibrary(IntPtr hModule)
+            {
+                return true;
+            }
         }
     }
 }

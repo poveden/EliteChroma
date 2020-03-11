@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using EliteChroma.Core.Internal;
 using EliteChroma.Elite.Internal;
 using EliteFiles;
 using EliteFiles.Bindings;
@@ -27,6 +28,11 @@ namespace EliteChroma.Elite
         private bool _disposed;
 
         public GameStateWatcher(string gameInstallFolder, string gameOptionsFolder, string journalFolder)
+            : this(gameInstallFolder, gameOptionsFolder, journalFolder, NativeMethods.Instance)
+        {
+        }
+
+        internal GameStateWatcher(string gameInstallFolder, string gameOptionsFolder, string journalFolder, INativeMethods nativeMethods)
         {
             var gif = new GameInstallFolder(gameInstallFolder);
             var gof = new GameOptionsFolder(gameOptionsFolder);
@@ -45,10 +51,10 @@ namespace EliteChroma.Elite
             _graphicsConfig = new GraphicsConfigWatcher(gif, gof);
             _graphicsConfig.Changed += GraphicsConfig_Changed;
 
-            _modifierKeysWatcher = new ModifierKeysWatcher();
+            _modifierKeysWatcher = new ModifierKeysWatcher(nativeMethods);
             _modifierKeysWatcher.Changed += ModifierKeysWatcher_Changed;
 
-            _gameProcessWatcher = new GameProcessWatcher(gif);
+            _gameProcessWatcher = new GameProcessWatcher(gif, nativeMethods);
             _gameProcessWatcher.Changed += GameProcessWatcher_Changed;
 
             GameState = new GameState();

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Timers;
+using EliteChroma.Core.Internal;
 using EliteFiles;
 
 namespace EliteChroma.Elite.Internal
 {
-    internal sealed class GameProcessWatcher : IDisposable
+    internal sealed class GameProcessWatcher : NativeMethodsAccessor, IDisposable
     {
         private const int _gameForegroundCheckInterval = 200;
         private const int _processCheckInterval = 2000;
@@ -17,10 +18,11 @@ namespace EliteChroma.Elite.Internal
         private int _checking;
         private int _processCheckCycle;
 
-        public GameProcessWatcher(GameInstallFolder gameInstallFolder)
+        public GameProcessWatcher(GameInstallFolder gameInstallFolder, INativeMethods nativeMethods)
+            : base(nativeMethods)
         {
             _mainExePath = gameInstallFolder.MainExecutable.FullName;
-            _gameProcessTracker = new GameProcessTracker(_mainExePath);
+            _gameProcessTracker = new GameProcessTracker(_mainExePath, nativeMethods);
 
             _timer = new Timer
             {
