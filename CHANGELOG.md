@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Add game process tracking while in background
+- Add Chroma SDK device access grant tracking
 
 ## [1.3.0](https://github.com/poveden/EliteChroma/compare/v1.2.0...v1.3.0) — 2020-02-24
 

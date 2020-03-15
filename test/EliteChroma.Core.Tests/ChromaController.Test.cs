@@ -41,6 +41,8 @@ namespace EliteChroma.Core.Tests
             const string statusFile = "Status.json";
             const string journalFile = "Journal.190101020000.01.log";
 
+            using var cpl = ColoreProviderLock.GetLock();
+
             var chromaApi = new Mock<IChromaApi> { DefaultValue = DefaultValue.Mock };
             var mockIA = chromaApi.Setup(x => x.InitializeAsync(It.IsAny<AppInfo>()));
             var mockCKEA = chromaApi.Setup(x => x.CreateKeyboardEffectAsync(It.IsAny<KeyboardEffect>(), It.IsAny<It.IsValueType>()));
