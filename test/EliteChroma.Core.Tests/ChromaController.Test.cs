@@ -7,6 +7,7 @@ using System.Threading;
 using Colore.Api;
 using Colore.Data;
 using Colore.Effects.Keyboard;
+using EliteChroma.Core.Internal;
 using EliteChroma.Core.Tests.Internal;
 using EliteFiles.Status;
 using Moq;
@@ -40,6 +41,8 @@ namespace EliteChroma.Core.Tests
             const string statusFile = "Status.json";
             const string journalFile = "Journal.190101020000.01.log";
 
+            using var cpl = ColoreProviderLock.GetLock();
+
             var chromaApi = new Mock<IChromaApi> { DefaultValue = DefaultValue.Mock };
             var mockIA = chromaApi.Setup(x => x.InitializeAsync(It.IsAny<AppInfo>()));
             var mockCKEA = chromaApi.Setup(x => x.CreateKeyboardEffectAsync(It.IsAny<KeyboardEffect>(), It.IsAny<It.IsValueType>()));
@@ -55,13 +58,15 @@ namespace EliteChroma.Core.Tests
 
             using var cc = new ChromaController(dirRoot.Name, dirOpts.Name, dirJournal.Name)
             {
-                ChromaApi = chromaApi.Object,
-                ChromaAppInfo = null,
+                ChromaFactory = new ChromaFactory
+                {
+                    ChromaApi = chromaApi.Object,
+                    ChromaAppInfo = null,
+                },
                 AnimationFrameRate = 0,
                 DetectGameInForeground = false,
             };
 
-            Assert.Null(cc.ChromaAppInfo);
             Assert.False(cc.DetectGameInForeground);
 
             using var ceIA = new CountdownEvent(1);
