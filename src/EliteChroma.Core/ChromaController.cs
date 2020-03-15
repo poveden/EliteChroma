@@ -17,7 +17,6 @@ namespace EliteChroma.Core
     public sealed class ChromaController : IDisposable
     {
         private const int _defaultFps = 25;
-        private const int _chromaWarmupDuration = 1000;
 
         private readonly GameStateWatcher _watcher;
         private readonly LayeredEffect _effect;
@@ -53,9 +52,7 @@ namespace EliteChroma.Core
             _effect = InitChromaEffect(_watcher.GameState);
         }
 
-        public IChromaApi ChromaApi { get; set; }
-
-        public AppInfo ChromaAppInfo { get; set; }
+        public IChromaFactory ChromaFactory { get; set; } = new ChromaFactory();
 
         public int AnimationFrameRate
         {
@@ -134,10 +131,8 @@ namespace EliteChroma.Core
                     return;
                 }
 
-                var chromaApi = ChromaApi ?? new NativeApi();
-
-                _chroma = await ColoreProvider.CreateAsync(ChromaAppInfo, chromaApi).ConfigureAwait(false);
-                _chromaWarmupUntil = DateTimeOffset.UtcNow.AddMilliseconds(_chromaWarmupDuration);
+                _chroma = await ChromaFactory.CreateAsync().ConfigureAwait(false);
+                _chromaWarmupUntil = DateTimeOffset.UtcNow.Add(ChromaFactory.WarmupDelay);
             }
             finally
             {

@@ -7,6 +7,7 @@ using System.Threading;
 using Colore.Api;
 using Colore.Data;
 using Colore.Effects.Keyboard;
+using EliteChroma.Core.Internal;
 using EliteChroma.Core.Tests.Internal;
 using EliteFiles.Status;
 using Moq;
@@ -55,13 +56,15 @@ namespace EliteChroma.Core.Tests
 
             using var cc = new ChromaController(dirRoot.Name, dirOpts.Name, dirJournal.Name)
             {
-                ChromaApi = chromaApi.Object,
-                ChromaAppInfo = null,
+                ChromaFactory = new ChromaFactory
+                {
+                    ChromaApi = chromaApi.Object,
+                    ChromaAppInfo = null,
+                },
                 AnimationFrameRate = 0,
                 DetectGameInForeground = false,
             };
 
-            Assert.Null(cc.ChromaAppInfo);
             Assert.False(cc.DetectGameInForeground);
 
             using var ceIA = new CountdownEvent(1);
