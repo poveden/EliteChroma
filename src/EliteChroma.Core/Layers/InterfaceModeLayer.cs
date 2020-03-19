@@ -19,6 +19,11 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
+            if (Game.Status.GuiFocus == GuiFocus.FssMode)
+            {
+                return;
+            }
+
             var k = canvas.Keyboard;
             k[Key.Escape] = Color.White;
 

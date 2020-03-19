@@ -46,6 +46,7 @@ namespace EliteChroma.Elite
                 {
                     case GuiFocus.GalaxyMap:
                     case GuiFocus.SystemMap:
+                    case GuiFocus.FssMode:
                     case GuiFocus.Codex:
                         return false;
                 }

@@ -127,6 +127,8 @@ namespace EliteChroma.Core.Tests
                 { Flags.FsdJump | Flags.InMainShip | Flags.ShieldsUp },
                 { "FSDJump", new { StarSystem = "Wolf 1301" } },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
+                { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise, GuiFocus.FssMode },
+                { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
                 { "SupercruiseExit", new { BodyType = "Station" } },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LightsOn | Flags.NightVision | Flags.CargoScoopDeployed | Flags.HardpointsDeployed | Flags.LandingGearDeployed },
             };
