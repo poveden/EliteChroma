@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Colore.Data;
 using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
@@ -11,6 +12,15 @@ namespace EliteChroma.Core
 {
     public abstract class LayerBase : EffectLayer
     {
+        [SuppressMessage("Design", "CA1027:Mark enums with FlagsAttribute", Justification = "No flags")]
+        protected enum PulseColorType
+        {
+            Triangle = 0,
+            Square = 1,
+
+            Default = Triangle,
+        }
+
         public bool Animated { get; private set; }
 
         protected GameState Game { get; private set; }
@@ -48,12 +58,23 @@ namespace EliteChroma.Core
             Animated = false;
         }
 
-        protected Color PulseColor(Color c1, Color c2, TimeSpan period)
+        protected Color PulseColor(Color c1, Color c2, TimeSpan period, PulseColorType pulseType = PulseColorType.Triangle)
         {
             var max = period.TotalSeconds;
             var t = (AnimationElapsed.TotalSeconds % max) / max;
 
-            var x = t <= 0.5 ? t * 2 : (1 - t) * 2;
+            double x;
+
+            switch (pulseType)
+            {
+                case PulseColorType.Square:
+                    x = t <= 0.5 ? 1 : 0;
+                    break;
+                case PulseColorType.Triangle:
+                default:
+                    x = t <= 0.5 ? t * 2 : (1 - t) * 2;
+                    break;
+            }
 
             var r = (c1.R / 255.0 * (1 - x)) + (c2.R / 255.0 * x);
             var g = (c1.G / 255.0 * (1 - x)) + (c2.G / 255.0 * x);

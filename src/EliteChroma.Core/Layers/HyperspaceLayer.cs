@@ -5,6 +5,8 @@ using System.Diagnostics.CodeAnalysis;
 using Colore.Data;
 using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
+using EliteFiles.Bindings.Binds;
+using EliteFiles.Journal;
 using static EliteFiles.Journal.Events.StartJump;
 
 namespace EliteChroma.Core.Layers
@@ -25,6 +27,15 @@ namespace EliteChroma.Core.Layers
 
         private readonly Stars _stars = new Stars();
 
+        private HazardLevel _hazardLevel;
+
+        private enum HazardLevel
+        {
+            Low = 0,
+            Medium = 1,
+            High = 2,
+        }
+
         public override int Order => 100;
 
         protected override void OnRender(ChromaCanvas canvas)
@@ -35,6 +46,11 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
+            if (!Animated && Game.FsdJumpType == FsdJumpType.Hyperspace)
+            {
+                _hazardLevel = GetHazardLevel(Game.FsdJumpStarClass);
+            }
+
             StartAnimation();
 
             var kbd = canvas.Keyboard;
@@ -43,12 +59,56 @@ namespace EliteChroma.Core.Layers
 
             _stars.Add(1, _dimColor, _dimLifespan);
 
-            if (Game.FsdJumpType == FsdJumpType.Hyperspace && (DateTimeOffset.UtcNow - AnimationStart).TotalSeconds > 5)
+            if (Game.InWitchSpace)
             {
                 _stars.Add(1, _brightColor, _brightLifespan);
             }
 
             DrawStars(_stars, kbd);
+
+            if (!Game.InWitchSpace)
+            {
+                return;
+            }
+
+            var hazardColor = Color.Green;
+            var period = TimeSpan.FromSeconds(1);
+            var pulseType = PulseColorType.Triangle;
+
+            switch (_hazardLevel)
+            {
+                case HazardLevel.Medium:
+                    hazardColor = Color.Yellow;
+                    pulseType = PulseColorType.Square;
+                    break;
+
+                case HazardLevel.High:
+                    hazardColor = Color.Red;
+                    period = TimeSpan.FromSeconds(0.67);
+                    pulseType = PulseColorType.Square;
+                    break;
+            }
+
+            var color = PulseColor(Color.Black, hazardColor, period, pulseType);
+            ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.HyperSuperCombination, color);
+            ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Hyperspace, color);
+        }
+
+        private static HazardLevel GetHazardLevel(string starClass)
+        {
+            switch (StarClass.GetKind(starClass, out _))
+            {
+                case StarClass.Kind.MainSequence:
+                    return HazardLevel.Low;
+
+                case StarClass.Kind.Neutron:
+                case StarClass.Kind.WhiteDwarf:
+                case StarClass.Kind.BlackHole:
+                    return HazardLevel.High;
+
+                default:
+                    return HazardLevel.Medium;
+            }
         }
 
         private void DrawStars(Stars stars, KeyboardCustom keyboard)

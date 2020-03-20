@@ -25,6 +25,7 @@ If a picture is worth a thousand words, then perhaps a video will be better stil
   - Supercruise/hyperspace jumps
   - Landing gear deployed
   - Cargo scoop deployed
+  - Hyperspace jump destination hazard level indicator
 
 ## Application requirements
 
