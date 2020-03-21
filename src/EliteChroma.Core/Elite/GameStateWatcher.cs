@@ -22,6 +22,8 @@ namespace EliteChroma.Elite
 
         private readonly ModifierKeysWatcher _modifierKeysWatcher;
 
+        private readonly GameState _gameState;
+
         private bool _running;
         private int _dispatching;
 
@@ -57,12 +59,10 @@ namespace EliteChroma.Elite
             _gameProcessWatcher = new GameProcessWatcher(gif, nativeMethods);
             _gameProcessWatcher.Changed += GameProcessWatcher_Changed;
 
-            GameState = new GameState();
+            _gameState = new GameState();
         }
 
         public event EventHandler<EventArgs> Changed;
-
-        public GameState GameState { get; }
 
         public bool DetectForegroundProcess { get; set; } = true;
 
@@ -104,6 +104,14 @@ namespace EliteChroma.Elite
             _bindingsWatcher.Stop();
             _graphicsConfig.Stop();
             _gameProcessWatcher.Stop();
+        }
+
+        public GameState GetGameStateSnapshot()
+        {
+            lock (_gameState)
+            {
+                return _gameState.Copy();
+            }
         }
 
         public void Dispose()
@@ -155,20 +163,20 @@ namespace EliteChroma.Elite
             switch (e)
             {
                 case FileHeader _ when !DetectForegroundProcess:
-                    GameState.ProcessState = GameProcessState.InForeground;
+                    _gameState.ProcessState = GameProcessState.InForeground;
                     break;
 
                 case Shutdown _ when !DetectForegroundProcess:
-                    GameState.ProcessState = GameProcessState.NotRunning;
+                    _gameState.ProcessState = GameProcessState.NotRunning;
                     break;
 
                 case StartJump fsdJump:
-                    GameState.FsdJumpType = fsdJump.JumpType;
-                    GameState.FsdJumpChange = DateTimeOffset.UtcNow;
+                    _gameState.FsdJumpType = fsdJump.JumpType;
+                    _gameState.FsdJumpChange = DateTimeOffset.UtcNow;
                     break;
 
                 case Music music:
-                    GameState.MusicTrack = music.MusicTrack;
+                    _gameState.MusicTrack = music.MusicTrack;
                     break;
 
                 default:
@@ -176,8 +184,8 @@ namespace EliteChroma.Elite
                     {
                         case "FSDJump": // Happens when entering a new system from hyperspace.
                         case "SupercruiseEntry": // Happens when entering supercruise
-                            GameState.FsdJumpType = StartJump.FsdJumpType.None;
-                            GameState.FsdJumpChange = DateTimeOffset.UtcNow;
+                            _gameState.FsdJumpType = StartJump.FsdJumpType.None;
+                            _gameState.FsdJumpChange = DateTimeOffset.UtcNow;
                             break;
 
                         default:
@@ -192,32 +200,32 @@ namespace EliteChroma.Elite
 
         private void StatusWatcher_Changed(object sender, StatusEntry e)
         {
-            GameState.Status = e;
+            _gameState.Status = e;
             OnChanged();
         }
 
         private void BindingsWatcher_Changed(object sender, BindingPreset e)
         {
             _modifierKeysWatcher.Watch(GetAllModifiers(e.Bindings.Values));
-            GameState.Bindings = e.Bindings;
+            _gameState.Bindings = e.Bindings;
             OnChanged();
         }
 
         private void GraphicsConfig_Changed(object sender, GraphicsConfig e)
         {
-            GameState.GuiColour = e.GuiColour.Default;
+            _gameState.GuiColour = e.GuiColour.Default;
             OnChanged();
         }
 
         private void ModifierKeysWatcher_Changed(object sender, DeviceKeySet e)
         {
-            GameState.PressedModifiers = e;
+            _gameState.PressedModifiers = e;
             OnChanged();
         }
 
-        private void GameProcessWatcher_Changed(object sender, EventArgs e)
+        private void GameProcessWatcher_Changed(object sender, GameProcessState e)
         {
-            GameState.ProcessState = _gameProcessWatcher.ProcessState;
+            _gameState.ProcessState = e;
             OnChanged();
         }
 

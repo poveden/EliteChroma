@@ -49,7 +49,7 @@ namespace EliteChroma.Core
             _animation.Elapsed += Animation_Elapsed;
             AnimationFrameRate = _defaultFps;
 
-            _effect = InitChromaEffect(_watcher.GameState);
+            _effect = InitChromaEffect();
         }
 
         public IChromaFactory ChromaFactory { get; set; } = new ChromaFactory();
@@ -178,7 +178,9 @@ namespace EliteChroma.Core
 
             try
             {
-                if (_watcher.GameState.ProcessState == GameProcessState.NotRunning)
+                var game = _watcher.GetGameStateSnapshot();
+
+                if (game.ProcessState == GameProcessState.NotRunning)
                 {
                     await ChromaStop().ConfigureAwait(false);
                     return;
@@ -189,7 +191,7 @@ namespace EliteChroma.Core
                 await _chromaLock.WaitAsync().ConfigureAwait(false);
                 try
                 {
-                    await _effect.Render(_chroma).ConfigureAwait(false);
+                    await _effect.Render(_chroma, game).ConfigureAwait(false);
                 }
                 finally
                 {
@@ -205,7 +207,7 @@ namespace EliteChroma.Core
             }
         }
 
-        private LayeredEffect InitChromaEffect(GameState game)
+        private LayeredEffect InitChromaEffect()
         {
             var layers =
                 from type in typeof(LayerBase).Assembly.GetTypes()
@@ -216,7 +218,6 @@ namespace EliteChroma.Core
 
             foreach (var layer in layers)
             {
-                layer.Game = game;
                 res.Layers.Add(layer);
             }
 

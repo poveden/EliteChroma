@@ -6,8 +6,8 @@ namespace EliteChroma.Chroma
     {
         public virtual int Order => 500;
 
-        internal void Render(ChromaCanvas canvas) => OnRender(canvas);
+        internal void Render(ChromaCanvas canvas, object state) => OnRender(canvas, state);
 
-        protected abstract void OnRender(ChromaCanvas canvas);
+        protected abstract void OnRender(ChromaCanvas canvas, object state);
     }
 }

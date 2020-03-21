@@ -13,11 +13,19 @@ namespace EliteChroma.Core
     {
         public bool Animated { get; private set; }
 
-        protected internal GameState Game { get; internal set; }
+        protected GameState Game { get; private set; }
 
         protected DateTimeOffset AnimationStart { get; private set; }
 
         protected TimeSpan AnimationElapsed => DateTimeOffset.UtcNow - AnimationStart;
+
+        protected override void OnRender(ChromaCanvas canvas, object state)
+        {
+            Game = (GameState)state;
+            OnRender(canvas);
+        }
+
+        protected abstract void OnRender(ChromaCanvas canvas);
 
         protected void StartAnimation()
         {

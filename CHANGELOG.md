@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fix wrong game install paths returned for Steam Libraries
 - Stop "hardpoints deployed" pulse during supercruise
+- Fix game state concurrency issues during rendering
 
 ### Added
 
