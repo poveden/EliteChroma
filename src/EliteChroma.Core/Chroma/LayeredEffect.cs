@@ -15,13 +15,13 @@ namespace EliteChroma.Chroma
 
         public SortedSet<EffectLayer> Layers { get; }
 
-        public async Task Render(IChroma chroma)
+        public async Task Render(IChroma chroma, object state)
         {
             var canvas = new ChromaCanvas();
 
             foreach (var layer in Layers)
             {
-                layer.Render(canvas);
+                layer.Render(canvas, state);
             }
 
             await canvas.SetEffect(chroma).ConfigureAwait(false);

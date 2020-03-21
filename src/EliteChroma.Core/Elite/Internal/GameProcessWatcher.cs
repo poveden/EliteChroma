@@ -15,6 +15,7 @@ namespace EliteChroma.Elite.Internal
         private readonly Timer _timer;
         private readonly GameProcessTracker _gameProcessTracker;
 
+        private GameProcessState? _processState;
         private int _checking;
         private int _processCheckCycle;
 
@@ -33,13 +34,16 @@ namespace EliteChroma.Elite.Internal
             _timer.Elapsed += Timer_Elapsed;
         }
 
-        public event EventHandler<EventArgs> Changed;
-
-        public GameProcessState ProcessState { get; private set; }
+        public event EventHandler<GameProcessState> Changed;
 
         public void Start()
         {
-            ProcessState = GetProcessState();
+            if (_timer.Enabled)
+            {
+                return;
+            }
+
+            _processState = null;
             _timer.Start();
         }
 
@@ -100,14 +104,14 @@ namespace EliteChroma.Elite.Internal
             {
                 var newState = GetProcessState();
 
-                if (newState == ProcessState)
+                if (newState == _processState)
                 {
                     return;
                 }
 
-                ProcessState = newState;
+                _processState = newState;
 
-                Changed?.Invoke(this, EventArgs.Empty);
+                Changed?.Invoke(this, newState);
             }
             finally
             {

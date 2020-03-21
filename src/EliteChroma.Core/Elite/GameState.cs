@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using EliteFiles.Bindings;
 using EliteFiles.Graphics;
-using EliteFiles.Journal;
 using EliteFiles.Journal.Events;
 using EliteFiles.Status;
 
@@ -63,5 +62,7 @@ namespace EliteChroma.Elite
         public bool InWitchSpace =>
             FsdJumpType == StartJump.FsdJumpType.Hyperspace
             && (DateTimeOffset.UtcNow - FsdJumpChange).TotalSeconds >= 5;
+
+        public GameState Copy() => (GameState)MemberwiseClone();
     }
 }

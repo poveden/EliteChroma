@@ -34,18 +34,22 @@ namespace EliteChroma.Core.Tests
             };
 
             using var gpw = new GameProcessWatcher(_gif, nm);
-            Assert.Equal(GameProcessState.NotRunning, gpw.ProcessState);
+            var evs = new EventCollector<GameProcessState>(h => gpw.Changed += h, h => gpw.Changed -= h);
 
-            InvokeTimerElapsed(gpw);
-            Assert.Equal(GameProcessState.NotRunning, gpw.ProcessState);
+            var pss = evs.Wait(3, () =>
+            {
+                InvokeTimerElapsed(gpw);
 
-            nm.ForegroundWindow = new IntPtr(2000);
-            InvokeTimerElapsed(gpw);
-            Assert.Equal(GameProcessState.InForeground, gpw.ProcessState);
+                nm.ForegroundWindow = new IntPtr(2000);
+                InvokeTimerElapsed(gpw);
 
-            nm.ForegroundWindow = new IntPtr(1000);
-            InvokeTimerElapsed(gpw);
-            Assert.Equal(GameProcessState.InBackground, gpw.ProcessState);
+                nm.ForegroundWindow = new IntPtr(1000);
+                InvokeTimerElapsed(gpw);
+            });
+
+            Assert.Equal(GameProcessState.NotRunning, pss[0]);
+            Assert.Equal(GameProcessState.InForeground, pss[1]);
+            Assert.Equal(GameProcessState.InBackground, pss[2]);
         }
 
         private static void InvokeTimerElapsed(GameProcessWatcher instance)
