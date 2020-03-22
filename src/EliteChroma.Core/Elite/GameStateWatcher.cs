@@ -191,7 +191,8 @@ namespace EliteChroma.Elite
                             break;
 
                         default:
-                            break;
+                            // Event won't affect gamestate.
+                            return;
                     }
 
                     break;

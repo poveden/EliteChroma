@@ -23,7 +23,7 @@ namespace EliteChroma.Core.Tests
 
             var evs = new EventCollector<EventArgs>(h => watcher.Changed += h, h => watcher.Changed -= h);
 
-            evs.Wait(10, watcher.Start, 5000);
+            evs.Wait(8, watcher.Start, 5000);
             watcher.Stop();
         }
 

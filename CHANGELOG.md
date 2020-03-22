@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Add game process tracking while in background
 - Add Chroma SDK device access grant tracking
+- Reduce strain on Razer devices
 
 ### Added
 
