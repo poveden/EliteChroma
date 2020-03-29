@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Add installer
 - Add Full System Spectrum (FSS) Scanner support
 - Add jump destination system hazard level indicator
+- Add star glare on hyperspace exit
 
 ## [1.3.0](https://github.com/poveden/EliteChroma/compare/v1.2.0...v1.3.0) — 2020-02-24
 

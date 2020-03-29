@@ -26,6 +26,7 @@ If a picture is worth a thousand words, then perhaps a video will be better stil
   - Landing gear deployed
   - Cargo scoop deployed
   - Hyperspace jump destination hazard level indicator
+  - Star glare on hyperspace jump exit
 
 ## Application requirements
 

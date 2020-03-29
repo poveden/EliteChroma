@@ -10,10 +10,11 @@ namespace EliteChroma.Core.Layers
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class BackgroundLayer : LayerBase
     {
+        internal static readonly Color BackgroundColor = Color.FromRgb(0x050100);
+
         private const int _fadeSeconds = 1;
 
         private static readonly Color EliteOrange = new Color(1.0, 0.2, 0);
-        private static readonly Color BackgroundColor = EliteOrange.Transform(0.05);
 
         private static readonly IReadOnlyDictionary<Elite.GameProcessState, Color> _stateColors =
             new Dictionary<Elite.GameProcessState, Color>
@@ -52,7 +53,6 @@ namespace EliteChroma.Core.Layers
             if (!Game.InMainMenu)
             {
                 cLogo = cLogo.Transform(Game.GuiColour);
-                cBack = cBack.Transform(Game.GuiColour);
             }
 
             canvas.Keyboard.Set(cBack);
