@@ -35,6 +35,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EliteChroma.Core.Tests", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EliteChroma.Tests", "test\EliteChroma.Tests\EliteChroma.Tests.csproj", "{F9E84EAC-77EE-423D-BD4C-3ADF69B2F380}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "setup", "setup", "{4DEF564B-3AEC-40D2-BCFE-410571296E8C}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "EliteChromaSetup", "setup\EliteChromaSetup.wixproj", "{EC3ED46B-3FA6-4035-A42C-C01192CFC3B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,8 @@ Global
 		{F9E84EAC-77EE-423D-BD4C-3ADF69B2F380}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9E84EAC-77EE-423D-BD4C-3ADF69B2F380}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9E84EAC-77EE-423D-BD4C-3ADF69B2F380}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC3ED46B-3FA6-4035-A42C-C01192CFC3B7}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{EC3ED46B-3FA6-4035-A42C-C01192CFC3B7}.Release|Any CPU.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{0CD88E57-527E-4EEE-B48B-83AB2E11E893} = {140A3D09-123F-49F0-A523-48C46834E416}
 		{D67C02E2-8CCC-4867-8806-A9AF3619F6C5} = {140A3D09-123F-49F0-A523-48C46834E416}
 		{F9E84EAC-77EE-423D-BD4C-3ADF69B2F380} = {140A3D09-123F-49F0-A523-48C46834E416}
+		{EC3ED46B-3FA6-4035-A42C-C01192CFC3B7} = {4DEF564B-3AEC-40D2-BCFE-410571296E8C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF2DC2A6-1A37-4240-A1B4-925B0B8310FE}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?include Config.wxi?>
+
+  <Product Id="*" Name="$(var.ProductName)" Language="1033" Version="!(bind.FileVersion.elitechroma.exe)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Description="$(var.ProductName)" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="ProductFeature" Title="EliteChroma" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="ProductShortcuts" />
+    </Feature>
+
+    <UIRef Id="WixUI_Minimal" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+    <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="Banner.png" />
+    <WixVariable Id="WixUIDialogBmp" Value="Dialog.png" />
+
+    <Icon Id="EliteChroma.ico" SourceFile="EliteChroma.exe" />
+    <Property Id="ARPPRODUCTICON" Value="EliteChroma.ico" />
+    <Property Id="ARPURLINFOABOUT" Value="$(var.ProjectUrl)" />
+    <Property Id="ARPURLUPDATEINFO" Value="$(var.ReleasesUrl)" />
+    <Property Id="ARPHELPLINK" Value="$(var.HelpUrl)" />
+    <Property Id="ARPREADME" Value="$(var.ReadmeUrl)" />
+    <Property Id="ARPCONTACT" Value="$(var.Manufacturer)" />
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="INSTALLFOLDER" Name="$(var.ProductName)" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="$(var.ProductName)" />
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <ComponentGroupRef Id="SourceComponentGroup" />
+      <Component Id="MainExe" Guid="ab12a6d5-a26f-4c3c-96ab-8beb137cd011">
+        <File Id="elitechroma.exe" Source="EliteChroma.exe" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductShortcuts">
+      <Component Id="StartMenuShortcut" Directory="ApplicationProgramsFolder">
+        <Shortcut Id="ApplicationStartMenuShortcut" Name="$(var.ProductName)" Target="[#elitechroma.exe]" WorkingDirectory="APPLICATIONROOTDIRECTORY" />
+        <RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="$(var.InstalledRegKey)" Name="StartMenu" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

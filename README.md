@@ -28,15 +28,15 @@ If a picture is worth a thousand words, then perhaps a video will be better stil
 
 ## Application requirements
 
-- [Microsoft .NET Core Desktop Runtime 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1#runtime-desktop-3.1.0) (_x64_ version highly recommended)
+- [Microsoft .NET Core Desktop Runtime 3.1](https://dotnet.microsoft.com/download/dotnet-core/current/runtime) (_x64_ version)
 - [Razer Synapse 3](https://www.razer.com/synapse-3) or the [Razer Chroma SDK](https://developer.razer.com/works-with-chroma/download/)
 - A Razer Chroma keyboard (tested with Razer Cynosa Chroma)
 
 ## How to use
 
-A proper installer is in the works. In the meantime, you may download a ZIP file with the binaries from the [Releases](https://github.com/poveden/EliteChroma/releases) page, and then extract its contents into any folder of your liking.
+Download and run the MSI installer from the [Releases](https://github.com/poveden/EliteChroma/releases) page.
 
-Once installed, just run the `EliteChroma.exe` program. You may then control the program from the icon in the system tray.
+Once installed, just run EliteChroma from the start menu. You may then control the program from the icon in the system tray.
 
 ## Application development requirements
 
@@ -59,3 +59,4 @@ We follow the [Contributor Covenant Code of Conduct](https://github.com/poveden/
 - [Frontier Developments](https://www.frontier.co.uk/), creators of such a wonderful game.
 - [Colore .NET library](https://github.com/chroma-sdk/Colore), a powerful and elegant C# library for Razer Chroma's SDK.
 - Heavy inspiration from the [EliteAPI .NET library](https://github.com/EliteAPI/EliteAPI).
+- [WiX Toolset](https://wixtoolset.org/) used for creating Windows Installer packages.
