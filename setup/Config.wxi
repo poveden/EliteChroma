@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+
+  <?define ProductName = "EliteChroma" ?>
+  <?define Manufacturer = "Jorge Poveda Coma (CMDR Elrith)" ?>
+  <?define ProjectUrl = "https://github.com/poveden/EliteChroma" ?>
+  <?define HelpUrl = "https://github.com/poveden/EliteChroma/issues" ?>
+  <?define ReleasesUrl = "https://github.com/poveden/EliteChroma/releases" ?>
+  <?define ReadmeUrl = "https://github.com/poveden/EliteChroma/blob/master/README.md" ?>
+
+  <?define InstalledRegKey = "Software\EliteChroma\Installed" ?>
+
+  <!-- upgrade code never changes -->
+  <?define UpgradeCode = "d4eae42c-e473-4b9a-aad9-a111e9317ee1" ?>
+
+</Include>

@@ -1,0 +1,36 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="BeforeBuild">
+    <PropertyGroup>
+      <DotNetPublishPath>%(ProjectReference.RootDir)%(ProjectReference.Directory)bin\$(Configuration)\%(ProjectReference.TargetFrameworkIdentifier)\%(ProjectReference.Runtime)\publish</DotNetPublishPath>
+    </PropertyGroup>
+
+    <RemoveDir Directories="$(DotNetPublishPath)" />
+    
+    <Exec Condition="'%(ProjectReference.IsDotnetSDKProject)' == 'True'"
+      WorkingDirectory="%(ProjectReference.RootDir)%(ProjectReference.Directory)"
+      Command="dotnet publish -f %(ProjectReference.TargetFrameworkIdentifier) -c $(Configuration) -r %(ProjectReference.Runtime) --no-self-contained" />
+
+    <ItemGroup>
+      <LinkerBindInputPaths Include="$(DotNetPublishPath)" />
+    </ItemGroup>
+
+    <HeatDirectory Condition="'%(ProjectReference.IsDotnetSDKProject)' == 'True'"
+      DirectoryRefId="INSTALLFOLDER"
+      OutputFile="obj\$(Configuration)\%(ProjectReference.Name).wxs"
+      Directory="$(DotNetPublishPath)"
+      ComponentGroupName="SourceComponentGroup"
+      ToolPath="$(WixToolPath)"
+      AutogenerateGuids="true"
+      SuppressCom="True"
+      SuppressRegistry="True"
+      SuppressFragments="true"
+      SuppressRootDirectory="true"
+      Transforms="DotNetPublish.xsl" />
+
+    <ItemGroup>
+      <Compile Include="obj\$(Configuration)\%(ProjectReference.Name).wxs" Condition="'%(ProjectReference.IsDotnetSDKProject)' == 'True'" />
+    </ItemGroup>
+  </Target>
+
+</Project>
