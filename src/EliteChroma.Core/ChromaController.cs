@@ -16,7 +16,7 @@ namespace EliteChroma.Core
 {
     public sealed class ChromaController : IDisposable
     {
-        private const int _defaultFps = 25;
+        private const int _defaultFps = 20; // Razer devices seem to choke at more than 20 fps.
 
         private readonly GameStateWatcher _watcher;
         private readonly LayeredEffect _effect;
@@ -161,6 +161,12 @@ namespace EliteChroma.Core
 
         private void GameState_Changed(object sender, EventArgs e)
         {
+            if (_animation.Enabled)
+            {
+                // No need to add extra frames while animating.
+                return;
+            }
+
             Task.Run(RenderEffect);
         }
 

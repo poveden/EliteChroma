@@ -9,6 +9,8 @@ namespace EliteChroma.Elite
 {
     public sealed class GameState
     {
+        private static readonly TimeSpan _jumpCountdownDelay = TimeSpan.FromSeconds(5);
+
         internal GameState()
         {
         }
@@ -26,6 +28,8 @@ namespace EliteChroma.Elite
         public string MusicTrack { get; internal set; }
 
         public StartJump.FsdJumpType FsdJumpType { get; internal set; }
+
+        public string FsdJumpStarClass { get; internal set; }
 
         public DateTimeOffset FsdJumpChange { get; internal set; }
 
@@ -46,6 +50,7 @@ namespace EliteChroma.Elite
                 {
                     case GuiFocus.GalaxyMap:
                     case GuiFocus.SystemMap:
+                    case GuiFocus.FssMode:
                     case GuiFocus.Codex:
                         return false;
                 }
@@ -61,7 +66,7 @@ namespace EliteChroma.Elite
 
         public bool InWitchSpace =>
             FsdJumpType == StartJump.FsdJumpType.Hyperspace
-            && (DateTimeOffset.UtcNow - FsdJumpChange).TotalSeconds >= 5;
+            && (DateTimeOffset.UtcNow - FsdJumpChange) >= _jumpCountdownDelay;
 
         public GameState Copy() => (GameState)MemberwiseClone();
     }

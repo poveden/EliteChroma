@@ -5,7 +5,9 @@ using EliteFiles.Bindings.Devices;
 
 namespace EliteChroma.Core.Internal
 {
-    // Reference: <EliteRoot>\Products\elite-dangerous-64\ControlSchemes\Help.txt
+    // References:
+    // - <EliteRoot>\Products\elite-dangerous-64\ControlSchemes\Help.txt
+    // - https://developer.razer.com/works-with-chroma/razer-chroma-led-profiles/
     internal static class KeyMappings
     {
         private static readonly Dictionary<string, Key> _keys = new Dictionary<string, Key>(StringComparer.Ordinal)
@@ -46,6 +48,7 @@ namespace EliteChroma.Core.Internal
             { Keyboard.J, Key.J },
             { Keyboard.K, Key.K },
             { Keyboard.L, Key.L },
+            { Keyboard.Apostrophe, Key.OemApostrophe },
             { Keyboard.LeftShift, Key.LeftShift },
             { Keyboard.Z, Key.Z },
             { Keyboard.X, Key.X },

@@ -172,6 +172,7 @@ namespace EliteChroma.Elite
 
                 case StartJump fsdJump:
                     _gameState.FsdJumpType = fsdJump.JumpType;
+                    _gameState.FsdJumpStarClass = fsdJump.StarClass;
                     _gameState.FsdJumpChange = DateTimeOffset.UtcNow;
                     break;
 
@@ -185,11 +186,13 @@ namespace EliteChroma.Elite
                         case "FSDJump": // Happens when entering a new system from hyperspace.
                         case "SupercruiseEntry": // Happens when entering supercruise
                             _gameState.FsdJumpType = StartJump.FsdJumpType.None;
+                            _gameState.FsdJumpStarClass = null;
                             _gameState.FsdJumpChange = DateTimeOffset.UtcNow;
                             break;
 
                         default:
-                            break;
+                            // Event won't affect gamestate.
+                            return;
                     }
 
                     break;

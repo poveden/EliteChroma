@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using Colore.Api;
@@ -81,7 +82,7 @@ namespace EliteChroma.Core.Tests
             Assert.True(ceCKEA.Wait(1000));
 
             var seq = BuildEventSequence();
-            ceCKEA.Reset(seq.Count);
+            ceCKEA.Reset(seq.Count(x => x.ChangesGameState));
 
             seq.Play(dirJournal, journalFile, statusFile);
 
@@ -116,25 +117,27 @@ namespace EliteChroma.Core.Tests
         {
             return new EventSequence
             {
-                { "Music", new { MusicTrack = "MainMenu" } },
+                { "Music", new { MusicTrack = "MainMenu" }, true },
                 { Flags.Docked | Flags.FsdMassLocked | Flags.InMainShip | Flags.LandingGearDeployed | Flags.ShieldsUp },
-                { "Undocked", new { StationType = "Coriolis" } },
+                { "Undocked", new { StationType = "Coriolis" }, false },
                 { Flags.InMainShip | Flags.ShieldsUp },
                 { Flags.InMainShip | Flags.ShieldsUp, GuiFocus.GalaxyMap },
                 { Flags.InMainShip | Flags.ShieldsUp },
                 { Flags.FsdCharging | Flags.InMainShip | Flags.ShieldsUp },
-                { "StartJump", new { JumpType = "Hyperspace", StarClass = "G" } },
+                { "StartJump", new { JumpType = "Hyperspace", StarClass = "G" }, true },
                 { Flags.FsdJump | Flags.InMainShip | Flags.ShieldsUp },
-                { "FSDJump", new { StarSystem = "Wolf 1301" } },
+                { "FSDJump", new { StarSystem = "Wolf 1301" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
-                { "SupercruiseExit", new { BodyType = "Station" } },
+                { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise, GuiFocus.FssMode },
+                { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
+                { "SupercruiseExit", new { BodyType = "Station" }, false },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LightsOn | Flags.NightVision | Flags.CargoScoopDeployed | Flags.HardpointsDeployed | Flags.LandingGearDeployed },
             };
         }
 
-        private sealed class EventSequence : IReadOnlyCollection<(bool isStatus, string json)>
+        private sealed class EventSequence : IReadOnlyCollection<Event>
         {
-            private readonly List<(bool IsStatus, string Json)> _events = new List<(bool IsStatus, string Json)>();
+            private readonly List<Event> _events = new List<Event>();
 
             public int Count => _events.Count;
 
@@ -153,10 +156,10 @@ namespace EliteChroma.Core.Tests
                 return $"{json}\r\n";
             }
 
-            public void Add(string eventName, object data)
+            public void Add(string eventName, object data, bool changesGameState)
             {
                 var json = BuildEvent(eventName, data);
-                _events.Add((eventName == "Status", json));
+                _events.Add(new Event(eventName == "Status", json, changesGameState));
             }
 
             public void Add(Flags flags, GuiFocus guiFocus = GuiFocus.None)
@@ -169,18 +172,18 @@ namespace EliteChroma.Core.Tests
                     GuiFocus = guiFocus,
                 };
 
-                Add("Status", data);
+                Add("Status", data, true);
             }
 
             public void Play(TestFolder journalFolder, string journalFile, string statusFile)
             {
                 var journalBuf = new StringBuilder();
 
-                foreach (var (isStatus, json) in this)
+                foreach (var e in this)
                 {
-                    if (!isStatus)
+                    if (!e.IsStatus)
                     {
-                        journalBuf.Append(json);
+                        journalBuf.Append(e.Json);
                         continue;
                     }
 
@@ -191,7 +194,7 @@ namespace EliteChroma.Core.Tests
                         Thread.Sleep(100);
                     }
 
-                    journalFolder.WriteText(statusFile, json, false);
+                    journalFolder.WriteText(statusFile, e.Json, false);
                     Thread.Sleep(100);
                 }
 
@@ -203,9 +206,25 @@ namespace EliteChroma.Core.Tests
                 }
             }
 
-            public IEnumerator<(bool isStatus, string json)> GetEnumerator() => _events.GetEnumerator();
+            public IEnumerator<Event> GetEnumerator() => _events.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        }
+
+        private sealed class Event
+        {
+            public Event(bool isStatus, string json, bool changesGameState)
+            {
+                IsStatus = isStatus;
+                Json = json;
+                ChangesGameState = changesGameState;
+            }
+
+            public bool IsStatus { get; }
+
+            public string Json { get; }
+
+            public bool ChangesGameState { get; }
         }
 
         private sealed class NativeMethodsMock : NativeMethodsStub

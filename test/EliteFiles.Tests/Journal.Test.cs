@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EliteFiles.Journal;
 using EliteFiles.Journal.Events;
 using EliteFiles.Tests.Internal;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace EliteFiles.Tests
@@ -62,6 +63,50 @@ namespace EliteFiles.Tests
             Assert.IsType<Shutdown>(entries[4]);
             Assert.Equal(new DateTimeOffset(2019, 1, 1, 0, 19, 4, TimeSpan.Zero), entries[4].Timestamp);
             Assert.Equal("AdditionalValue1", entries[4].AdditionalFields["AdditionalField1"]);
+        }
+
+        [Theory]
+        [InlineData("", null, StarClass.Kind.Unknown)]
+        [InlineData("DUMMY-CLASS", null, StarClass.Kind.Unknown)]
+        [InlineData("O", StarClass.O, StarClass.Kind.MainSequence)]
+        [InlineData("B", StarClass.B, StarClass.Kind.MainSequence)]
+        [InlineData("A", StarClass.A, StarClass.Kind.MainSequence)]
+        [InlineData("F", StarClass.F, StarClass.Kind.MainSequence)]
+        [InlineData("G", StarClass.G, StarClass.Kind.MainSequence)]
+        [InlineData("K", StarClass.K, StarClass.Kind.MainSequence)]
+        [InlineData("M", StarClass.M, StarClass.Kind.MainSequence)]
+        [InlineData("K_OrangeGiant", StarClass.K, StarClass.Kind.MainSequence)]
+        [InlineData("L", StarClass.L, StarClass.Kind.BrownDwarf)]
+        [InlineData("T", StarClass.T, StarClass.Kind.BrownDwarf)]
+        [InlineData("Y", StarClass.Y, StarClass.Kind.BrownDwarf)]
+        [InlineData("AeBe", StarClass.HerbigAeBe, StarClass.Kind.Protostar)]
+        [InlineData("TTS", StarClass.TTauri, StarClass.Kind.Protostar)]
+        [InlineData("C", StarClass.C, StarClass.Kind.Carbon)]
+        [InlineData("CH", StarClass.C, StarClass.Kind.Carbon)]
+        [InlineData("CHd", StarClass.C, StarClass.Kind.Carbon)]
+        [InlineData("MS", StarClass.MS, StarClass.Kind.Carbon)]
+        [InlineData("S", StarClass.S, StarClass.Kind.Carbon)]
+        [InlineData("W", StarClass.W, StarClass.Kind.WolfRayet)]
+        [InlineData("WC", StarClass.W, StarClass.Kind.WolfRayet)]
+        [InlineData("WNC", StarClass.W, StarClass.Kind.WolfRayet)]
+        [InlineData("H", StarClass.BlackHole, StarClass.Kind.BlackHole)]
+        [InlineData("SupermassiveBlackHole", StarClass.BlackHole, StarClass.Kind.BlackHole)]
+        [InlineData("N", StarClass.Neutron, StarClass.Kind.Neutron)]
+        [InlineData("D", StarClass.D, StarClass.Kind.WhiteDwarf)]
+        [InlineData("DA", StarClass.D, StarClass.Kind.WhiteDwarf)]
+        [InlineData("DAB", StarClass.D, StarClass.Kind.WhiteDwarf)]
+        [InlineData("X", StarClass.Exotic, StarClass.Kind.Other)]
+        [InlineData("RoguePlanet", StarClass.RoguePlanet, StarClass.Kind.Other)]
+        [InlineData("Nebula", StarClass.Nebula, StarClass.Kind.Other)]
+        [InlineData("StellarRemnantNebula", StarClass.StellarRemnantNebula, StarClass.Kind.Other)]
+        public void StarClassIsParsedCorrectly(string starClass, string expectedBaseClass, StarClass.Kind expectedKind)
+        {
+            var entry = (StartJump)JsonConvert.DeserializeObject<JournalEntry>($"{{ \"event\":\"StartJump\", \"StarClass\":\"{starClass}\" }}");
+            Assert.Equal(starClass, entry.StarClass);
+
+            var kind = StarClass.GetKind(entry.StarClass, out var baseClass);
+            Assert.Equal(expectedBaseClass, baseClass);
+            Assert.Equal(expectedKind, kind);
         }
 
         [Fact]

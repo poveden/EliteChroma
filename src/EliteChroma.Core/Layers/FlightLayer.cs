@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Colore.Data;
@@ -44,10 +45,24 @@ namespace EliteChroma.Core.Layers
             if (Game.Status.HasFlag(Flags.Supercruise))
             {
                 ApplyColorToBinding(canvas.Keyboard, SupercruiseMiscellaneous, Color.Blue);
+                ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.Enter, Color.Green);
             }
             else
             {
                 ApplyColorToBinding(canvas.Keyboard, Miscellaneous.All, Color.Blue);
+            }
+
+            if (Game.Status.HasFlag(Flags.FsdCharging))
+            {
+                StartAnimation();
+                var jumpColor = PulseColor(Color.Pink, Color.Black, TimeSpan.FromSeconds(1));
+                ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.HyperSuperCombination, jumpColor);
+                ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Supercruise, jumpColor);
+                ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Hyperspace, jumpColor);
+            }
+            else
+            {
+                StopAnimation();
             }
         }
     }
