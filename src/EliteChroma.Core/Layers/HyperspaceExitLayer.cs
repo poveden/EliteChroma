@@ -82,6 +82,7 @@ namespace EliteChroma.Core.Layers
             var c = PulseColor(BackgroundLayer.BackgroundColor, _starClassColor, _flashTotalLength);
 
             canvas.Keyboard.Set(c);
+            canvas.ChromaLink.Set(c);
         }
 
         private static Color GetStarClassColor(string starClass)

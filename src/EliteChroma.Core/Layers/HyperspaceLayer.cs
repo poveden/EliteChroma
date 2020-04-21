@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Colore.Data;
+using Colore.Effects.ChromaLink;
 using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
@@ -54,8 +55,10 @@ namespace EliteChroma.Core.Layers
             StartAnimation();
 
             var kbd = canvas.Keyboard;
+            var cl = canvas.ChromaLink;
 
             kbd.Set(Color.Black);
+            cl.Set(Color.Black);
 
             _stars.Add(1, _dimColor, _dimLifespan);
 
@@ -64,7 +67,7 @@ namespace EliteChroma.Core.Layers
                 _stars.Add(1, _brightColor, _brightLifespan);
             }
 
-            DrawStars(_stars, kbd);
+            DrawStars(_stars, kbd, cl);
 
             if (!Game.InWitchSpace)
             {
@@ -111,7 +114,7 @@ namespace EliteChroma.Core.Layers
             }
         }
 
-        private void DrawStars(Stars stars, KeyboardCustom keyboard)
+        private void DrawStars(Stars stars, KeyboardCustom keyboard, ChromaLinkCustom chromaLink)
         {
             var t = (DateTimeOffset.UtcNow - Game.FsdJumpChange).TotalSeconds;
 
@@ -139,6 +142,11 @@ namespace EliteChroma.Core.Layers
                 if (Game.FsdJumpType == FsdJumpType.Hyperspace && t >= 4 && t <= 5)
                 {
                     c = c.Combine(Color.White, t - 4);
+                }
+
+                if (y == 0 && x >= 1 && x < 5)
+                {
+                    chromaLink[x] = c;
                 }
 
                 keyboard[y, x] = c;
