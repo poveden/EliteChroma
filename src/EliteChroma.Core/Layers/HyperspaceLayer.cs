@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Colore.Data;
-using Colore.Effects.ChromaLink;
-using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
+using EliteChroma.Elite;
 using EliteFiles.Bindings.Binds;
 using EliteFiles.Journal;
 using static EliteFiles.Journal.Events.StartJump;
@@ -13,22 +11,15 @@ using static EliteFiles.Journal.Events.StartJump;
 namespace EliteChroma.Core.Layers
 {
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
-    internal sealed class HyperspaceLayer : LayerBase
+    internal sealed partial class HyperspaceLayer : LayerBase
     {
-        private const double _xScale = KeyboardConstants.MaxColumns / 2.0;
-        private const double _yScale = KeyboardConstants.MaxRows / 2.0;
-        private const double _x0 = (KeyboardConstants.MaxColumns - 1) / 2.0;
-        private const double _y0 = (KeyboardConstants.MaxRows - 1) / 2.0;
+        private static readonly TimeSpan _jumpTunnelThreshold = GameState.JumpCountdownDelay.Subtract(TimeSpan.FromSeconds(1));
 
-        private static readonly Color _dimColor = Color.Blue;
-        private static readonly Color _brightColor = new Color(160, 255, 255);
+        private readonly ParticleField _particleField = new ParticleField();
 
-        private static readonly TimeSpan _dimLifespan = TimeSpan.FromMilliseconds(500);
-        private static readonly TimeSpan _brightLifespan = TimeSpan.FromMilliseconds(1000);
-
-        private readonly Stars _stars = new Stars();
-
+        private DateTimeOffset? _lastTick;
         private HazardLevel _hazardLevel;
+        private IReadOnlyCollection<ParticlePopulation> _population;
 
         private enum HazardLevel
         {
@@ -37,64 +28,69 @@ namespace EliteChroma.Core.Layers
             High = 2,
         }
 
+        private enum JumpPhase
+        {
+            PreJump = 0,
+            Tunnel,
+            Jump,
+        }
+
         public override int Order => 100;
+
+        protected override bool StartAnimation()
+        {
+            if (!base.StartAnimation())
+            {
+                return false;
+            }
+
+            if (Game.FsdJumpType == FsdJumpType.Hyperspace)
+            {
+                _hazardLevel = GetHazardLevel(Game.FsdJumpStarClass);
+            }
+
+            _population = Game.FsdJumpType == FsdJumpType.Hyperspace
+                ? ParticlePopulation.Hyperspace
+                : ParticlePopulation.Supercruise;
+
+            return true;
+        }
 
         protected override void OnRender(ChromaCanvas canvas)
         {
             if (Game.FsdJumpType == FsdJumpType.None)
             {
                 StopAnimation();
+                _particleField.Clear();
+                _lastTick = null;
                 return;
-            }
-
-            if (!Animated && Game.FsdJumpType == FsdJumpType.Hyperspace)
-            {
-                _hazardLevel = GetHazardLevel(Game.FsdJumpStarClass);
             }
 
             StartAnimation();
 
-            var kbd = canvas.Keyboard;
-            var cl = canvas.ChromaLink;
+            var deltaT = Now - (_lastTick ?? Now);
+            _lastTick = Now;
 
-            kbd.Set(Color.Black);
-            cl.Set(Color.Black);
+            JumpPhase phase = GetJumpPhase();
 
-            _stars.Add(1, _dimColor, Now, _dimLifespan);
-
-            if (Game.InWitchSpace)
+            foreach (var p in _population)
             {
-                _stars.Add(1, _brightColor, Now, _brightLifespan);
+                if (p.JumpPhase != phase)
+                {
+                    continue;
+                }
+
+                _particleField.Add(p.SpawnsPerSecond * deltaT.TotalSeconds, p.Color, p.ZSpeedPerSecond);
             }
 
-            DrawStars(_stars, kbd, cl);
+            _particleField.MoveAndDraw(deltaT, canvas);
 
             if (!Game.InWitchSpace)
             {
                 return;
             }
 
-            var hazardColor = Color.Green;
-            var period = TimeSpan.FromSeconds(1);
-            var pulseType = PulseColorType.Triangle;
-
-            switch (_hazardLevel)
-            {
-                case HazardLevel.Medium:
-                    hazardColor = Color.Yellow;
-                    pulseType = PulseColorType.Square;
-                    break;
-
-                case HazardLevel.High:
-                    hazardColor = Color.Red;
-                    period = TimeSpan.FromSeconds(0.67);
-                    pulseType = PulseColorType.Square;
-                    break;
-            }
-
-            var color = PulseColor(Color.Black, hazardColor, period, pulseType);
-            ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.HyperSuperCombination, color);
-            ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Hyperspace, color);
+            RenderHazardLevel(canvas);
         }
 
         private static HazardLevel GetHazardLevel(string starClass)
@@ -114,99 +110,53 @@ namespace EliteChroma.Core.Layers
             }
         }
 
-        private void DrawStars(Stars stars, KeyboardCustom keyboard, ChromaLinkCustom chromaLink)
+        private JumpPhase GetJumpPhase()
         {
-            var t = (Now - Game.FsdJumpChange).TotalSeconds;
+            var tJump = Now - Game.FsdJumpChange;
 
-            stars.Clean(Now);
-
-            foreach (var star in stars)
+            if (tJump < _jumpTunnelThreshold)
             {
-                var r = Math.Pow((Now - star.Birth).TotalMilliseconds / star.Lifespan.TotalMilliseconds, 2);
-
-                var x = (int)Math.Round(_x0 + (star.VX * r * _xScale));
-                var y = (int)Math.Round(_y0 + (star.Y * _yScale));
-
-                if (x < 0 || x >= KeyboardConstants.MaxColumns)
-                {
-                    continue;
-                }
-
-                if (y < 0 || y >= KeyboardConstants.MaxRows)
-                {
-                    continue;
-                }
-
-                var c = keyboard[y, x].Combine(star.Color.Transform(r * 1, 1.5));
-
-                if (Game.FsdJumpType == FsdJumpType.Hyperspace && t >= 4 && t <= 5)
-                {
-                    c = c.Combine(Color.White, t - 4);
-                }
-
-                if (y == 0 && x >= 1 && x < ChromaLinkConstants.MaxLeds)
-                {
-                    chromaLink[x] = c;
-                }
-
-                keyboard[y, x] = c;
+                return JumpPhase.PreJump;
             }
+
+            if (tJump < GameState.JumpCountdownDelay)
+            {
+                return JumpPhase.Tunnel;
+            }
+
+            return JumpPhase.Jump;
         }
 
-        private sealed class Stars : IEnumerable<Star>
+        private void RenderHazardLevel(ChromaCanvas canvas)
         {
-            private readonly Queue<Star> _stars = new Queue<Star>();
+            Color hazardColor;
+            TimeSpan period;
+            PulseColorType pulseType;
 
-            public void Add(int stars, Color color, DateTimeOffset birth, TimeSpan lifespan)
+            switch (_hazardLevel)
             {
-                while (stars > 0)
-                {
-                    _stars.Enqueue(new Star(color, birth, lifespan));
-                    stars--;
-                }
+                case HazardLevel.Medium:
+                    hazardColor = Color.Yellow;
+                    period = TimeSpan.FromSeconds(1);
+                    pulseType = PulseColorType.Square;
+                    break;
+
+                case HazardLevel.High:
+                    hazardColor = Color.Red;
+                    period = TimeSpan.FromSeconds(0.67);
+                    pulseType = PulseColorType.Square;
+                    break;
+
+                default:
+                    hazardColor = Color.Green;
+                    period = TimeSpan.FromSeconds(1);
+                    pulseType = PulseColorType.Triangle;
+                    break;
             }
 
-            public void Clean(DateTimeOffset now)
-            {
-                while (_stars.Count != 0 && _stars.Peek().Death < now)
-                {
-                    _stars.Dequeue();
-                }
-            }
-
-            public IEnumerator<Star> GetEnumerator() => _stars.GetEnumerator();
-
-            IEnumerator IEnumerable.GetEnumerator() => _stars.GetEnumerator();
-        }
-
-        private sealed class Star
-        {
-            private static readonly Random _rnd = new Random();
-
-            public Star(Color color, DateTimeOffset birth, TimeSpan lifespan)
-            {
-                Color = color;
-                Birth = birth;
-                Lifespan = lifespan;
-                Death = Birth + lifespan;
-
-                var v = (_rnd.NextDouble() * 2) - 1;
-
-                VX = _rnd.Next(2) != 0 ? 1 : -1;
-                Y = _rnd.Next(2) != 0 ? v : -v;
-            }
-
-            public Color Color { get; }
-
-            public DateTimeOffset Birth { get; }
-
-            public TimeSpan Lifespan { get; }
-
-            public DateTimeOffset Death { get; }
-
-            public double VX { get; }
-
-            public double Y { get; }
+            var color = PulseColor(Color.Black, hazardColor, period, pulseType);
+            ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.HyperSuperCombination, color);
+            ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Hyperspace, color);
         }
     }
 }

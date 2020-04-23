@@ -39,25 +39,27 @@ namespace EliteChroma.Core
 
         protected abstract void OnRender(ChromaCanvas canvas);
 
-        protected void StartAnimation()
+        protected virtual bool StartAnimation()
         {
             if (Animated)
             {
-                return;
+                return false;
             }
 
             Animated = true;
             AnimationStart = Now;
+            return true;
         }
 
-        protected void StopAnimation()
+        protected virtual bool StopAnimation()
         {
             if (!Animated)
             {
-                return;
+                return false;
             }
 
             Animated = false;
+            return true;
         }
 
         protected Color PulseColor(Color c1, Color c2, TimeSpan period, PulseColorType pulseType = PulseColorType.Triangle)

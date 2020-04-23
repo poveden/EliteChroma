@@ -106,7 +106,7 @@ namespace EliteChroma.Core.Tests
             await le.Render(chroma.Object, game).ConfigureAwait(false);
             Assert.False(game.InWitchSpace);
 
-            game.Now += TimeSpan.FromSeconds(5);
+            game.Now += GameState.JumpCountdownDelay;
             await le.Render(chroma.Object, game).ConfigureAwait(false);
             Assert.True(game.InWitchSpace);
             Assert.Equal(colors[0], keyboard[hyperJumpKey]);
