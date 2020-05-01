@@ -144,7 +144,7 @@ namespace EliteChroma.Core.Layers
                     c = c.Combine(Color.White, t - 4);
                 }
 
-                if (y == 0 && x >= 1 && x < 5)
+                if (y == 0 && x >= 1 && x < ChromaLinkConstants.MaxLeds)
                 {
                     chromaLink[x] = c;
                 }
