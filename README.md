@@ -4,7 +4,7 @@
 
 # EliteChroma
 
-A tool to make [Razer Chroma](https://www.razer.com/chroma) devices react to [Elite:Dangerous](https://www.elitedangerous.com/) in-game events.
+A tool to make [Razer Chroma](https://www.razer.com/chroma) devices and [Chroma-connected devices](https://www.razer.com/chroma-workshop/connected-devices) react to [Elite:Dangerous](https://www.elitedangerous.com/) in-game events.
 
 If a picture is worth a thousand words, then perhaps a video will be better still:
 
@@ -33,6 +33,7 @@ If a picture is worth a thousand words, then perhaps a video will be better stil
 - [Microsoft .NET Core Desktop Runtime 3.1](https://dotnet.microsoft.com/download/dotnet-core/current/runtime) (_x64_ version)
 - [Razer Synapse 3](https://www.razer.com/synapse-3) or the [Razer Chroma SDK](https://developer.razer.com/works-with-chroma/download/)
 - A Razer Chroma keyboard (tested with Razer Cynosa Chroma)
+- Optional: Any Razer Chroma connected device (tested with LIFX Chroma Connector—thanks [@mcargille](https://github.com/mcargille)!)
 
 ## How to use
 
@@ -44,7 +45,7 @@ Once installed, just run EliteChroma from the start menu. You may then control t
 
 - [Visual Studio Community 2019](https://visualstudio.microsoft.com/vs/) with the _.NET desktop development workload_ installed
 - [Razer Synapse 3](https://www.razer.com/synapse-3) or the [Razer Chroma SDK](https://developer.razer.com/works-with-chroma/download/)
-- A Razer Chroma device
+- A Razer Chroma device or the [Razer Chroma Emulator](https://developer.razer.com/works-with-chroma/download/#emulator)
 
 ## Contributing
 
