@@ -15,6 +15,8 @@ namespace EliteChroma.Elite
         {
         }
 
+        public DateTimeOffset Now { get; internal set; }
+
         public GameProcessState ProcessState { get; internal set; }
 
         public IReadOnlyDictionary<string, Binding> Bindings { get; internal set; }
@@ -66,7 +68,7 @@ namespace EliteChroma.Elite
 
         public bool InWitchSpace =>
             FsdJumpType == StartJump.FsdJumpType.Hyperspace
-            && (DateTimeOffset.UtcNow - FsdJumpChange) >= _jumpCountdownDelay;
+            && (Now - FsdJumpChange) >= _jumpCountdownDelay;
 
         public GameState Copy() => (GameState)MemberwiseClone();
     }
