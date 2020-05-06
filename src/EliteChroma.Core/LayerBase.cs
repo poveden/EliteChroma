@@ -25,9 +25,11 @@ namespace EliteChroma.Core
 
         protected GameState Game { get; private set; }
 
+        protected DateTimeOffset Now => Game.Now;
+
         protected DateTimeOffset AnimationStart { get; private set; }
 
-        protected TimeSpan AnimationElapsed => DateTimeOffset.UtcNow - AnimationStart;
+        protected TimeSpan AnimationElapsed => Now - AnimationStart;
 
         protected override void OnRender(ChromaCanvas canvas, object state)
         {
@@ -45,7 +47,7 @@ namespace EliteChroma.Core
             }
 
             Animated = true;
-            AnimationStart = DateTimeOffset.UtcNow;
+            AnimationStart = Now;
         }
 
         protected void StopAnimation()
@@ -68,11 +70,11 @@ namespace EliteChroma.Core
             switch (pulseType)
             {
                 case PulseColorType.Square:
-                    x = t <= 0.5 ? 1 : 0;
+                    x = t < 0.5 ? 1 : 0;
                     break;
                 case PulseColorType.Triangle:
                 default:
-                    x = t <= 0.5 ? t * 2 : (1 - t) * 2;
+                    x = t < 0.5 ? t * 2 : (1 - t) * 2;
                     break;
             }
 

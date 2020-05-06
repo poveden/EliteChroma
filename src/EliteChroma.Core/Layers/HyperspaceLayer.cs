@@ -60,11 +60,11 @@ namespace EliteChroma.Core.Layers
             kbd.Set(Color.Black);
             cl.Set(Color.Black);
 
-            _stars.Add(1, _dimColor, _dimLifespan);
+            _stars.Add(1, _dimColor, Now, _dimLifespan);
 
             if (Game.InWitchSpace)
             {
-                _stars.Add(1, _brightColor, _brightLifespan);
+                _stars.Add(1, _brightColor, Now, _brightLifespan);
             }
 
             DrawStars(_stars, kbd, cl);
@@ -116,13 +116,13 @@ namespace EliteChroma.Core.Layers
 
         private void DrawStars(Stars stars, KeyboardCustom keyboard, ChromaLinkCustom chromaLink)
         {
-            var t = (DateTimeOffset.UtcNow - Game.FsdJumpChange).TotalSeconds;
+            var t = (Now - Game.FsdJumpChange).TotalSeconds;
 
-            stars.Clean();
+            stars.Clean(Now);
 
             foreach (var star in stars)
             {
-                var r = Math.Pow((DateTimeOffset.UtcNow - star.Birth).TotalMilliseconds / star.Lifespan.TotalMilliseconds, 2);
+                var r = Math.Pow((Now - star.Birth).TotalMilliseconds / star.Lifespan.TotalMilliseconds, 2);
 
                 var x = (int)Math.Round(_x0 + (star.VX * r * _xScale));
                 var y = (int)Math.Round(_y0 + (star.Y * _yScale));
@@ -157,18 +157,18 @@ namespace EliteChroma.Core.Layers
         {
             private readonly Queue<Star> _stars = new Queue<Star>();
 
-            public void Add(int stars, Color color, TimeSpan lifespan)
+            public void Add(int stars, Color color, DateTimeOffset birth, TimeSpan lifespan)
             {
                 while (stars > 0)
                 {
-                    _stars.Enqueue(new Star(color, lifespan));
+                    _stars.Enqueue(new Star(color, birth, lifespan));
                     stars--;
                 }
             }
 
-            public void Clean()
+            public void Clean(DateTimeOffset now)
             {
-                while (_stars.Count != 0 && _stars.Peek().Death < DateTimeOffset.UtcNow)
+                while (_stars.Count != 0 && _stars.Peek().Death < now)
                 {
                     _stars.Dequeue();
                 }
@@ -183,10 +183,10 @@ namespace EliteChroma.Core.Layers
         {
             private static readonly Random _rnd = new Random();
 
-            public Star(Color color, TimeSpan lifespan)
+            public Star(Color color, DateTimeOffset birth, TimeSpan lifespan)
             {
                 Color = color;
-                Birth = DateTimeOffset.UtcNow;
+                Birth = birth;
                 Lifespan = lifespan;
                 Death = Birth + lifespan;
 

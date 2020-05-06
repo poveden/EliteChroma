@@ -197,6 +197,7 @@ namespace EliteChroma.Core
                 await _chromaLock.WaitAsync().ConfigureAwait(false);
                 try
                 {
+                    game.Now = DateTimeOffset.UtcNow;
                     await _effect.Render(_chroma, game).ConfigureAwait(false);
                 }
                 finally
