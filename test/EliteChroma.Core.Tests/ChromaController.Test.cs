@@ -5,13 +5,17 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Colore.Api;
 using Colore.Data;
 using Colore.Effects.Keyboard;
+using EliteChroma.Chroma;
 using EliteChroma.Core.Internal;
 using EliteChroma.Core.Tests.Internal;
+using EliteChroma.Elite;
 using EliteFiles.Status;
 using Moq;
+using Moq.Protected;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -111,6 +115,56 @@ namespace EliteChroma.Core.Tests
             watcher.Dispose();
             watcher.Dispose();
 #pragma warning restore IDISP016, IDISP017
+        }
+
+        [Fact]
+        public void RenderEffectIsNotReentrant()
+        {
+            using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder)
+            {
+                ChromaFactory = new ChromaFactory
+                {
+                    ChromaApi = new Mock<IChromaApi>().Object,
+                    ChromaAppInfo = null,
+                },
+            };
+
+            var game = cc.GetPrivateField<GameStateWatcher>("_watcher")
+                .GetPrivateField<GameState>("_gameState");
+
+            var effect = cc.GetPrivateField<LayeredEffect>("_effect");
+
+            var nRenderCalls = 0;
+            using var mre = new ManualResetEventSlim();
+
+            var layer = new Mock<EffectLayer>();
+
+            layer.Protected()
+                .Setup("OnRender", ItExpr.IsAny<ChromaCanvas>(), ItExpr.IsAny<object>())
+                .Callback(() =>
+                {
+                    Interlocked.Increment(ref nRenderCalls);
+                    mre.Wait();
+                });
+
+            effect.Layers.Clear();
+            effect.Layers.Add(layer.Object);
+
+            game.ProcessState = GameProcessState.InForeground;
+
+            async Task RenderEffect()
+            {
+                await cc.InvokePrivateMethod<Task>("RenderEffect").ConfigureAwait(false);
+                mre.Set();
+            }
+
+            Task.WaitAll(new[]
+            {
+                Task.Run(RenderEffect),
+                Task.Run(RenderEffect),
+            });
+
+            Assert.Equal(1, nRenderCalls);
         }
 
         private static EventSequence BuildEventSequence()
