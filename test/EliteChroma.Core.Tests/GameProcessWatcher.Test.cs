@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite;
@@ -50,6 +52,46 @@ namespace EliteChroma.Core.Tests
             Assert.Equal(GameProcessState.NotRunning, pss[0]);
             Assert.Equal(GameProcessState.InForeground, pss[1]);
             Assert.Equal(GameProcessState.InBackground, pss[2]);
+        }
+
+        [Fact]
+        public void OnChangedIsNotReentrant()
+        {
+            var nm = new NativeMethodsMock()
+            {
+                Processes =
+                {
+                    [0] = "System",
+                    [1000] = "Process 1000",
+                    [2000] = _gif.MainExecutable.FullName,
+                },
+            };
+
+            using var gpw = new GameProcessWatcher(_gif, nm);
+
+            var nOnChangedCalls = 0;
+            using var mre = new ManualResetEventSlim();
+
+            gpw.Changed += (sender, e) =>
+            {
+                Interlocked.Increment(ref nOnChangedCalls);
+                mre.Wait();
+            };
+
+            void TimerElapsed(int pid)
+            {
+                nm.ForegroundWindow = new IntPtr(pid);
+                InvokeTimerElapsed(gpw);
+                mre.Set();
+            }
+
+            Task.WaitAll(new[]
+            {
+                Task.Run(() => TimerElapsed(1000)),
+                Task.Run(() => TimerElapsed(2000)),
+            });
+
+            Assert.Equal(1, nOnChangedCalls);
         }
 
         private static void InvokeTimerElapsed(GameProcessWatcher instance)

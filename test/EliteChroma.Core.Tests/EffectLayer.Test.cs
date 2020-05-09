@@ -36,6 +36,26 @@ namespace EliteChroma.Core.Tests
             _gif = new GameInstallFolder(_gameRootFolder);
         }
 
+        [Fact]
+        public void LayerComparerComparesCorrectly()
+        {
+            var comparer = new LayeredEffect().Layers.Comparer;
+
+            var l1 = new Mock<EffectLayer>();
+            l1.Setup(x => x.Order).Returns(500);
+
+            var l2 = new Mock<EffectLayer>();
+            l2.Setup(x => x.Order).Returns(500);
+
+            Assert.Equal(0, comparer.Compare(l1.Object, l1.Object));
+
+            var h1 = l1.Object.GetHashCode();
+            var h2 = l2.Object.GetHashCode();
+
+            Assert.Equal(h1.CompareTo(h2), comparer.Compare(l1.Object, l2.Object));
+            Assert.Equal(h2.CompareTo(h1), comparer.Compare(l2.Object, l1.Object));
+        }
+
         [Theory]
         [InlineData(StarClass.O, 0.25, new[] { 0x000000, 0x007F00, 0x00FF00, 0x007F00, 0x000000 })]
         [InlineData(StarClass.HerbigAeBe, 0.25, new[] { 0xFFFF00, 0xFFFF00, 0x000000, 0x000000 })]

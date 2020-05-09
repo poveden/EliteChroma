@@ -31,9 +31,14 @@ namespace EliteChroma.Chroma
         {
             public override int Compare(EffectLayer x, EffectLayer y)
             {
+                if (x == y)
+                {
+                    return 0;
+                }
+
                 var ord = x.Order.CompareTo(y.Order);
 
-                return (ord != 0) ? ord : 1;
+                return (ord != 0) ? ord : x.GetHashCode().CompareTo(y.GetHashCode());
             }
         }
     }
