@@ -147,8 +147,8 @@ namespace EliteChroma.Core.Tests
                     mre.Wait();
                 });
 
-            effect.Layers.Clear();
-            effect.Layers.Add(layer.Object);
+            effect.Clear();
+            effect.Add(layer.Object);
 
             game.ProcessState = GameProcessState.InForeground;
 

@@ -8,20 +8,34 @@ namespace EliteChroma.Chroma
     {
         private static readonly LayerComparer _comparer = new LayerComparer();
 
-        public LayeredEffect()
+        private readonly List<EffectLayer> _layers = new List<EffectLayer>();
+
+        public IReadOnlyList<EffectLayer> Layers => _layers;
+
+        public bool Add(EffectLayer layer)
         {
-            Layers = new SortedSet<EffectLayer>(_comparer);
+            var i = _layers.BinarySearch(layer, _comparer);
+
+            if (i >= 0)
+            {
+                return false;
+            }
+
+            _layers.Insert(~i, layer);
+            return true;
         }
 
-        public SortedSet<EffectLayer> Layers { get; }
+        public void Clear() => _layers.Clear();
+
+        public bool Remove(EffectLayer layer) => _layers.Remove(layer);
 
         public async Task Render(IChroma chroma, object state)
         {
             var canvas = new ChromaCanvas();
 
-            foreach (var layer in Layers)
+            for (var i = 0; i < _layers.Count; i++)
             {
-                layer.Render(canvas, state);
+                _layers[i].Render(canvas, state);
             }
 
             await canvas.SetEffect(chroma).ConfigureAwait(false);
