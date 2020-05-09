@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
 using Colore;
 using Colore.Data;
@@ -39,7 +39,9 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void LayerComparerComparesCorrectly()
         {
-            var comparer = new LayeredEffect().Layers.Comparer;
+            var comparer = (IComparer<EffectLayer>)typeof(LayeredEffect)
+                .GetField("_comparer", BindingFlags.NonPublic | BindingFlags.Static)
+                .GetValue(null);
 
             var l1 = new Mock<EffectLayer>();
             l1.Setup(x => x.Order).Returns(500);
@@ -56,6 +58,19 @@ namespace EliteChroma.Core.Tests
             Assert.Equal(h2.CompareTo(h1), comparer.Compare(l2.Object, l1.Object));
         }
 
+        [Fact]
+        public void DuplicatedLayerObjectsAreNotAddedToTheCollection()
+        {
+            var le = new LayeredEffect();
+            var layer = new InterfaceModeLayer();
+
+            Assert.True(le.Add(layer));
+            Assert.False(le.Add(layer));
+            Assert.Single(le.Layers);
+            Assert.True(le.Remove(layer));
+            Assert.False(le.Remove(layer));
+        }
+
         [Theory]
         [InlineData(StarClass.O, 0.25, new[] { 0x000000, 0x007F00, 0x00FF00, 0x007F00, 0x000000 })]
         [InlineData(StarClass.HerbigAeBe, 0.25, new[] { 0xFFFF00, 0xFFFF00, 0x000000, 0x000000 })]
@@ -69,7 +84,7 @@ namespace EliteChroma.Core.Tests
 
             var hyperspaceLayer = new HyperspaceLayer();
             var le = new LayeredEffect();
-            le.Layers.Add(hyperspaceLayer);
+            le.Add(hyperspaceLayer);
 
             var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
 

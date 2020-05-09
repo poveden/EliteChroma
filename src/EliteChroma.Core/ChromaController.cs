@@ -225,7 +225,7 @@ namespace EliteChroma.Core
 
             foreach (var layer in layers)
             {
-                res.Layers.Add(layer);
+                res.Add(layer);
             }
 
             return res;
