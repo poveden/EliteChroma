@@ -25,6 +25,15 @@ namespace EliteChroma.Chroma
             return new Color(r, g, b);
         }
 
+        public static Color Max(this Color c1, Color c2)
+        {
+            var r = Math.Max(c1.R, c2.R);
+            var g = Math.Max(c1.G, c2.G);
+            var b = Math.Max(c1.B, c2.B);
+
+            return new Color(r, g, b);
+        }
+
         public static Color Transform(this Color color, IRgbTransformMatrix transform)
         {
             if (transform == null)

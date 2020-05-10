@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Add Chroma Link support (thanks [@mcargille](https://github.com/mcargille)!)
 
+### Changed
+
+- Improve hyperspace lighting
+
 ## [1.4.0](https://github.com/poveden/EliteChroma/compare/v1.3.0...v1.4.0) — 2020-04-05
 
 ### Changed

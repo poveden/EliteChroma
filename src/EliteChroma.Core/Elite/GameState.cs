@@ -9,7 +9,7 @@ namespace EliteChroma.Elite
 {
     public sealed class GameState
     {
-        private static readonly TimeSpan _jumpCountdownDelay = TimeSpan.FromSeconds(5);
+        public static readonly TimeSpan JumpCountdownDelay = TimeSpan.FromSeconds(5);
 
         internal GameState()
         {
@@ -68,7 +68,7 @@ namespace EliteChroma.Elite
 
         public bool InWitchSpace =>
             FsdJumpType == StartJump.FsdJumpType.Hyperspace
-            && (Now - FsdJumpChange) >= _jumpCountdownDelay;
+            && (Now - FsdJumpChange) >= JumpCountdownDelay;
 
         public GameState Copy() => (GameState)MemberwiseClone();
     }
