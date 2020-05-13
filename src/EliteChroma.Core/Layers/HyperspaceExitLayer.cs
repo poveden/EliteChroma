@@ -46,7 +46,7 @@ namespace EliteChroma.Core.Layers
         private bool _enteredHyperspace;
         private Color _starClassColor;
 
-        public override int Order => 101;
+        public override int Order => 700;
 
         protected override void OnRender(ChromaCanvas canvas)
         {
@@ -81,8 +81,8 @@ namespace EliteChroma.Core.Layers
 
             var c = PulseColor(BackgroundLayer.BackgroundColor, _starClassColor, _flashTotalLength);
 
-            canvas.Keyboard.Set(c);
-            canvas.ChromaLink.Set(c);
+            canvas.Keyboard.Max(c);
+            canvas.ChromaLink.Max(c);
         }
 
         private static Color GetStarClassColor(string starClass)
