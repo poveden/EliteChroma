@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Improve hyperspace lighting
+- Make hyperspace exit glare wash over existing colors
 
 ## [1.4.0](https://github.com/poveden/EliteChroma/compare/v1.3.0...v1.4.0) — 2020-04-05
 
