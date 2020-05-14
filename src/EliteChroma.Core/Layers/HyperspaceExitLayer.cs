@@ -82,6 +82,7 @@ namespace EliteChroma.Core.Layers
             var c = PulseColor(BackgroundLayer.BackgroundColor, _starClassColor, _flashTotalLength);
 
             canvas.Keyboard.Max(c);
+            canvas.Mouse.Max(c);
             canvas.ChromaLink.Max(c);
         }
 

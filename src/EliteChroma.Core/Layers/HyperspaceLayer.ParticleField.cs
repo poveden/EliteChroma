@@ -33,6 +33,7 @@ namespace EliteChroma.Core.Layers
             public void MoveAndDraw(TimeSpan deltaT, ChromaCanvas canvas)
             {
                 canvas.Keyboard.Set(Color.Black);
+                canvas.Mouse.Set(Color.Black);
                 canvas.ChromaLink.Set(Color.Black);
 
                 Trim();
