@@ -1,6 +1,7 @@
 ﻿using Colore.Data;
 using Colore.Effects.ChromaLink;
 using Colore.Effects.Keyboard;
+using Colore.Effects.Mouse;
 
 namespace EliteChroma.Chroma
 {
@@ -17,6 +18,16 @@ namespace EliteChroma.Chroma
             }
 
             return keyboard;
+        }
+
+        public static MouseCustom Max(this MouseCustom mouse, Color c)
+        {
+            for (var i = 0; i < MouseConstants.MaxLeds; i++)
+            {
+                mouse[i] = mouse[i].Max(c);
+            }
+
+            return mouse;
         }
 
         public static ChromaLinkCustom Max(this ChromaLinkCustom chromaLink, Color c)
