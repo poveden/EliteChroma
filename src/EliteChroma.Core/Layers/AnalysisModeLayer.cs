@@ -34,6 +34,7 @@ namespace EliteChroma.Core.Layers
 
                 Color hColor = color;
                 Color mColor = color;
+                Color bColor = color.Transform(0.5);
 
                 if (Game.Status.HasFlag(Flags.HardpointsDeployed) && !Game.Status.HasFlag(Flags.Supercruise))
                 {
@@ -43,11 +44,12 @@ namespace EliteChroma.Core.Layers
                 else
                 {
                     StopAnimation();
-                    mColor = color.Transform(0.5);
+                    mColor = bColor;
                 }
 
                 ApplyColorToBinding(canvas.Keyboard, Weapons.DeployHardpointToggle, hColor);
                 canvas.Mouse.Set(mColor);
+                canvas.ChromaLink.Set(bColor);
             }
         }
     }
