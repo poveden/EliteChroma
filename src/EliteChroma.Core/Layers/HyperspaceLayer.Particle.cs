@@ -31,11 +31,21 @@ namespace EliteChroma.Core.Layers
                 var lastZ = Z;
                 Z += _zps * deltaT.TotalSeconds;
 
-                var lastC = _color.Transform(1 / (0.1 + Math.Abs(lastZ)));
-                var c = _color.Transform(1 / (0.1 + Math.Abs(Z)));
+                Color c;
+                if (lastZ > 0 && Z < 0)
+                {
+                    // Particle just zoomed by. We apply full brightness.
+                    c = _color;
+                }
+                else
+                {
+                    // We take the brightness from the nearest point in the light streak.
+                    var nearestZ = Math.Min(Math.Abs(lastZ), Math.Abs(Z));
+                    c = _color.Transform(1 / (0.1 + nearestZ));
+                }
 
                 Render(canvas.Keyboard, c, lastZ);
-                Render(canvas.Mouse, lastC, lastZ);
+                Render(canvas.Mouse, c, lastZ);
                 Render(canvas.ChromaLink, c);
             }
 
