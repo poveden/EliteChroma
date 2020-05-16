@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Add Chroma Link support (thanks [@mcargille](https://github.com/mcargille)!)
 - Add mouse support
+- Add mousepad support
 
 ### Changed
 

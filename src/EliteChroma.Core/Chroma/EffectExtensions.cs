@@ -2,6 +2,7 @@
 using Colore.Effects.ChromaLink;
 using Colore.Effects.Keyboard;
 using Colore.Effects.Mouse;
+using Colore.Effects.Mousepad;
 
 namespace EliteChroma.Chroma
 {
@@ -28,6 +29,16 @@ namespace EliteChroma.Chroma
             }
 
             return mouse;
+        }
+
+        public static MousepadCustom Max(this MousepadCustom mousepad, Color c)
+        {
+            for (var i = 0; i < MousepadConstants.MaxLeds; i++)
+            {
+                mousepad[i] = mousepad[i].Max(c);
+            }
+
+            return mousepad;
         }
 
         public static ChromaLinkCustom Max(this ChromaLinkCustom chromaLink, Color c)

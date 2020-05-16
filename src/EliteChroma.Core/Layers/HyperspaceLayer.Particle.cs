@@ -4,6 +4,7 @@ using Colore.Data;
 using Colore.Effects.ChromaLink;
 using Colore.Effects.Keyboard;
 using Colore.Effects.Mouse;
+using Colore.Effects.Mousepad;
 using EliteChroma.Chroma;
 
 namespace EliteChroma.Core.Layers
@@ -46,6 +47,7 @@ namespace EliteChroma.Core.Layers
 
                 Render(canvas.Keyboard, c, lastZ);
                 Render(canvas.Mouse, c, lastZ);
+                Render(canvas.Mousepad, c);
                 Render(canvas.ChromaLink, c);
             }
 
@@ -168,6 +170,24 @@ namespace EliteChroma.Core.Layers
                     mouse[yi, 0] = mouse[yi, 0].Max(c);
                     mouse[yi, xMax] = mouse[yi, 0];
                 }
+            }
+
+            private void Render(MousepadCustom mousepad, Color c)
+            {
+                if (_angle > 180)
+                {
+                    return;
+                }
+
+                var ia = _angle % MousepadConstants.MaxLeds;
+                var ib = (ia + 1) % MousepadConstants.MaxLeds;
+                var ic = (ia + 2) % MousepadConstants.MaxLeds;
+
+                var cf = c.Transform(0.25);
+
+                mousepad[ia] = mousepad[ia].Max(cf);
+                mousepad[ib] = mousepad[ib].Max(c);
+                mousepad[ic] = mousepad[ic].Max(cf);
             }
 
             private void Render(ChromaLinkCustom chromaLink, Color c)
