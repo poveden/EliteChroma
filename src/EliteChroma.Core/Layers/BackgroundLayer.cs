@@ -10,7 +10,7 @@ namespace EliteChroma.Core.Layers
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class BackgroundLayer : LayerBase
     {
-        internal static readonly Color BackgroundColor = Color.FromRgb(0x050100);
+        internal static readonly Color BackgroundColor = Color.FromRgb(0x0A0200);
 
         private const int _fadeSeconds = 1;
 
