@@ -121,6 +121,23 @@ namespace EliteChroma.Core
             return false;
         }
 
+        private static LayeredEffect InitChromaEffect()
+        {
+            var layers =
+                from type in typeof(LayerBase).Assembly.GetTypes()
+                where type.IsSubclassOf(typeof(LayerBase)) && !type.IsAbstract
+                select (LayerBase)Activator.CreateInstance(type);
+
+            var res = new LayeredEffect();
+
+            foreach (var layer in layers)
+            {
+                res.Add(layer);
+            }
+
+            return res;
+        }
+
         private async Task ChromaStart()
         {
             await _chromaLock.WaitAsync().ConfigureAwait(false);
@@ -212,23 +229,6 @@ namespace EliteChroma.Core
             {
                 Interlocked.Exchange(ref _rendering, 0);
             }
-        }
-
-        private LayeredEffect InitChromaEffect()
-        {
-            var layers =
-                from type in typeof(LayerBase).Assembly.GetTypes()
-                where type.IsSubclassOf(typeof(LayerBase)) && !type.IsAbstract
-                select (LayerBase)Activator.CreateInstance(type);
-
-            var res = new LayeredEffect();
-
-            foreach (var layer in layers)
-            {
-                res.Add(layer);
-            }
-
-            return res;
         }
     }
 }
