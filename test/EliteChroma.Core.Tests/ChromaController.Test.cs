@@ -80,6 +80,9 @@ namespace EliteChroma.Core.Tests
             using var ceCKEA = new CountdownEvent(1);
             mockCKEA.Callback(() => ceCKEA.Signal());
 
+            using var ceUA = new CountdownEvent(1);
+            mockUA.Callback(() => ceUA.Signal());
+
             cc.Start();
 
             Assert.True(ceIA.Wait(1000));
@@ -91,9 +94,6 @@ namespace EliteChroma.Core.Tests
             seq.Play(dirJournal, journalFile, statusFile);
 
             Assert.True(ceCKEA.Wait(200 * seq.Count));
-
-            using var ceUA = new CountdownEvent(1);
-            mockUA.Callback(() => ceUA.Signal());
 
             cc.Stop();
 
