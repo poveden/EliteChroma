@@ -24,6 +24,8 @@ namespace EliteChroma.Core.Layers
             Color.White,
         };
 
+        public override int Order => 600;
+
         protected override void OnRender(ChromaCanvas canvas)
         {
             if (!Game.InCockpit || Game.Status.HasFlag(Flags.Docked) || Game.FsdJumpType != FsdJumpType.None)
