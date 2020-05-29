@@ -16,6 +16,7 @@ namespace EliteFiles.Tests
     {
         private const string _journalFolder = @"TestFiles\Journal";
         private const string _journalFile1 = "Journal.190101020000.01.log";
+        private const int _journalFile1Count = 5;
 
         private readonly JournalFolder _jf;
 
@@ -29,7 +30,7 @@ namespace EliteFiles.Tests
         {
             var file = Path.GetFullPath(Path.Combine(_jf.FullName, _journalFile1));
 
-            var entries = new List<JournalEntry>();
+            var entries = new Queue<JournalEntry>();
 
             using (var jr = new JournalReader(file))
             {
@@ -38,31 +39,32 @@ namespace EliteFiles.Tests
                 JournalEntry entry;
                 while ((entry = jr.ReadEntry()) != null)
                 {
-                    entries.Add(entry);
+                    entries.Enqueue(entry);
                 }
             }
 
-            Assert.Equal(5, entries.Count);
+            Assert.Equal(_journalFile1Count, entries.Count);
 
-            var e0 = Assert.IsType<FileHeader>(entries[0]);
-            Assert.Equal(1, e0.Part);
-            Assert.Equal("English\\UK", e0.Language);
-            Assert.Equal("3.5.0.200 EDH", e0.GameVersion);
-            Assert.Equal("r210198/r0 ", e0.Build);
+            var fh = Assert.IsType<FileHeader>(entries.Dequeue());
+            Assert.Equal(1, fh.Part);
+            Assert.Equal("English\\UK", fh.Language);
+            Assert.Equal("3.5.0.200 EDH", fh.GameVersion);
+            Assert.Equal("r210198/r0 ", fh.Build);
 
-            var e1 = Assert.IsType<Music>(entries[1]);
-            Assert.Equal("NoTrack", e1.MusicTrack);
+            var mu = Assert.IsType<Music>(entries.Dequeue());
+            Assert.Equal("NoTrack", mu.MusicTrack);
 
-            var e2 = Assert.IsType<StartJump>(entries[2]);
-            Assert.Equal(StartJump.FsdJumpType.Hyperspace, e2.JumpType);
-            Assert.Equal("Wolf 1301", e2.StarSystem);
-            Assert.Equal(1458242032322, e2.SystemAddress);
-            Assert.Equal("G", e2.StarClass);
+            var sj = Assert.IsType<StartJump>(entries.Dequeue());
+            Assert.Equal(StartJump.FsdJumpType.Hyperspace, sj.JumpType);
+            Assert.Equal("Wolf 1301", sj.StarSystem);
+            Assert.Equal(1458242032322, sj.SystemAddress);
+            Assert.Equal("G", sj.StarClass);
 
-            Assert.IsType<JournalEntry>(entries[3]);
-            Assert.IsType<Shutdown>(entries[4]);
-            Assert.Equal(new DateTimeOffset(2019, 1, 1, 0, 19, 4, TimeSpan.Zero), entries[4].Timestamp);
-            Assert.Equal("AdditionalValue1", entries[4].AdditionalFields["AdditionalField1"]);
+            Assert.IsType<JournalEntry>(entries.Dequeue());
+
+            var sd = Assert.IsType<Shutdown>(entries.Dequeue());
+            Assert.Equal(new DateTimeOffset(2019, 1, 1, 0, 19, 4, TimeSpan.Zero), sd.Timestamp);
+            Assert.Equal("AdditionalValue1", sd.AdditionalFields["AdditionalField1"]);
         }
 
         [Theory]
@@ -133,11 +135,11 @@ namespace EliteFiles.Tests
             var ecReady = new EventCollector<EventArgs>(h => watcher.Started += h, h => watcher.Started -= h);
 
             var readyTask = ecReady.WaitAsync(() => { });
-            var entries = await ecEntries.WaitAsync(5, () =>
+            var entries = new Queue<JournalEntry>(await ecEntries.WaitAsync(_journalFile1Count, () =>
             {
                 watcher.Start();
                 Assert.False(watcher.IsWatching);
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(false));
 
             var ready = await readyTask.ConfigureAwait(false);
             Assert.NotNull(ready);
@@ -146,12 +148,12 @@ namespace EliteFiles.Tests
             watcher.Stop();
             Assert.False(watcher.IsWatching);
 
-            Assert.Equal(5, entries.Count);
-            Assert.IsType<FileHeader>(entries[0]);
-            Assert.IsType<Music>(entries[1]);
-            Assert.IsType<StartJump>(entries[2]);
-            Assert.IsType<JournalEntry>(entries[3]);
-            Assert.IsType<Shutdown>(entries[4]);
+            Assert.Equal(_journalFile1Count, entries.Count);
+            Assert.IsType<FileHeader>(entries.Dequeue());
+            Assert.IsType<Music>(entries.Dequeue());
+            Assert.IsType<StartJump>(entries.Dequeue());
+            Assert.IsType<JournalEntry>(entries.Dequeue());
+            Assert.IsType<Shutdown>(entries.Dequeue());
         }
 
         [Fact]
