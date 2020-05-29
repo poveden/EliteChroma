@@ -180,6 +180,11 @@ namespace EliteChroma.Elite
                     _gameState.MusicTrack = music.MusicTrack;
                     break;
 
+                case UnderAttack underAttack:
+                    _gameState.AttackTarget = underAttack.Target;
+                    _gameState.AttackTargetChange = DateTimeOffset.UtcNow;
+                    break;
+
                 default:
                     switch (e.Event)
                     {

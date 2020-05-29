@@ -16,7 +16,7 @@ namespace EliteFiles.Tests
     {
         private const string _journalFolder = @"TestFiles\Journal";
         private const string _journalFile1 = "Journal.190101020000.01.log";
-        private const int _journalFile1Count = 5;
+        private const int _journalFile1Count = 6;
 
         private readonly JournalFolder _jf;
 
@@ -53,6 +53,9 @@ namespace EliteFiles.Tests
 
             var mu = Assert.IsType<Music>(entries.Dequeue());
             Assert.Equal("NoTrack", mu.MusicTrack);
+
+            var ua = Assert.IsType<UnderAttack>(entries.Dequeue());
+            Assert.Equal(UnderAttack.AttackTarget.You, ua.Target);
 
             var sj = Assert.IsType<StartJump>(entries.Dequeue());
             Assert.Equal(StartJump.FsdJumpType.Hyperspace, sj.JumpType);
@@ -151,6 +154,7 @@ namespace EliteFiles.Tests
             Assert.Equal(_journalFile1Count, entries.Count);
             Assert.IsType<FileHeader>(entries.Dequeue());
             Assert.IsType<Music>(entries.Dequeue());
+            Assert.IsType<UnderAttack>(entries.Dequeue());
             Assert.IsType<StartJump>(entries.Dequeue());
             Assert.IsType<JournalEntry>(entries.Dequeue());
             Assert.IsType<Shutdown>(entries.Dequeue());

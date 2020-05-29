@@ -27,6 +27,7 @@ If a picture is worth a thousand words, then perhaps a video will be better stil
   - Cargo scoop deployed
   - Hyperspace jump destination hazard level indicator
   - Star glare on hyperspace jump exit
+  - Ship in danger, under attack or overheating
 
 ## Application requirements
 
