@@ -85,6 +85,7 @@ namespace EliteChroma.Core.Layers
             canvas.Mouse.Max(c);
             canvas.Mousepad.Max(c);
             canvas.Keypad.Max(c);
+            canvas.Headset.Max(c);
             canvas.ChromaLink.Max(c);
         }
 

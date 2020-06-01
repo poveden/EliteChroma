@@ -1,5 +1,6 @@
 ﻿using Colore.Data;
 using Colore.Effects.ChromaLink;
+using Colore.Effects.Headset;
 using Colore.Effects.Keyboard;
 using Colore.Effects.Keypad;
 using Colore.Effects.Mouse;
@@ -50,6 +51,16 @@ namespace EliteChroma.Chroma
             }
 
             return keypad;
+        }
+
+        public static HeadsetCustom Max(this HeadsetCustom headset, Color c)
+        {
+            for (var i = 0; i < HeadsetConstants.MaxLeds; i++)
+            {
+                headset[i] = headset[i].Max(c);
+            }
+
+            return headset;
         }
 
         public static ChromaLinkCustom Max(this ChromaLinkCustom chromaLink, Color c)

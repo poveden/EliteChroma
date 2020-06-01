@@ -36,6 +36,7 @@ namespace EliteChroma.Core.Layers
                 canvas.Mouse.Set(Color.Black);
                 canvas.Mousepad.Set(Color.Black);
                 canvas.Keypad.Set(Color.Black);
+                canvas.Headset.Set(Color.Black);
                 canvas.ChromaLink.Set(Color.Black);
 
                 Trim();

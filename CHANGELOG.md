@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Add danger layer
 - Add keypad support
+- Add headset support
 
 ## [1.5.0](https://github.com/poveden/EliteChroma/compare/v1.4.0...v1.5.0) — 2020-05-16
 

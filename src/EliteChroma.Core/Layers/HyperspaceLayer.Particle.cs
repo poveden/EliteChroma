@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Colore.Data;
 using Colore.Effects.ChromaLink;
+using Colore.Effects.Headset;
 using Colore.Effects.Keyboard;
 using Colore.Effects.Keypad;
 using Colore.Effects.Mouse;
@@ -50,6 +51,7 @@ namespace EliteChroma.Core.Layers
                 Render(canvas.Mouse, c, lastZ);
                 Render(canvas.Mousepad, c);
                 Render(canvas.Keypad, c, lastZ);
+                Render(canvas.Headset, c);
                 Render(canvas.ChromaLink, c);
             }
 
@@ -260,6 +262,17 @@ namespace EliteChroma.Core.Layers
                 {
                     MaxNoThumb(y, xi, c);
                 }
+            }
+
+            private void Render(HeadsetCustom headset, Color c)
+            {
+                if (_angle > 90)
+                {
+                    return;
+                }
+
+                var i = _angle % HeadsetConstants.MaxLeds;
+                headset[i] = headset[i].Max(c);
             }
 
             private void Render(ChromaLinkCustom chromaLink, Color c)
