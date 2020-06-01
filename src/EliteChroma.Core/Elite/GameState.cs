@@ -39,6 +39,10 @@ namespace EliteChroma.Elite
 
         public bool InGalacticPowers => MusicTrack == "GalacticPowers";
 
+        public UnderAttack.AttackTarget AttackTarget { get; internal set; }
+
+        public DateTimeOffset AttackTargetChange { get; internal set; }
+
         public bool InCockpit
         {
             get
