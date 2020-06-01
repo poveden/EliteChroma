@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Colore.Data;
 using Colore.Effects.ChromaLink;
 using Colore.Effects.Keyboard;
+using Colore.Effects.Keypad;
 using Colore.Effects.Mouse;
 using Colore.Effects.Mousepad;
 using EliteChroma.Chroma;
@@ -48,6 +49,7 @@ namespace EliteChroma.Core.Layers
                 Render(canvas.Keyboard, c, lastZ);
                 Render(canvas.Mouse, c, lastZ);
                 Render(canvas.Mousepad, c);
+                Render(canvas.Keypad, c, lastZ);
                 Render(canvas.ChromaLink, c);
             }
 
@@ -188,6 +190,76 @@ namespace EliteChroma.Core.Layers
                 mousepad[ia] = mousepad[ia].Max(cf);
                 mousepad[ib] = mousepad[ib].Max(c);
                 mousepad[ic] = mousepad[ic].Max(cf);
+            }
+
+            private void Render(KeypadCustom keypad, Color c, double lastZ)
+            {
+                // Particles are drawn as stretched lines, as with keyboard.
+                const int xMax = KeypadConstants.MaxColumns - 1;
+                const double xScale = KeypadConstants.MaxColumns;
+
+                const int thumbKey = KeypadConstants.MaxKeys - 1;
+                const int thumbKeyColumn = KeypadConstants.MaxColumns - 1;
+                const int thumbKeyRow = KeypadConstants.MaxRows - 1;
+
+                if (_angle >= 180)
+                {
+                    return;
+                }
+
+                var y = _angle % (KeypadConstants.MaxRows + 1);
+
+                if (y == KeypadConstants.MaxRows)
+                {
+                    keypad[thumbKey] = keypad[thumbKey].Max(c);
+                    return;
+                }
+
+                if (Z >= 0)
+                {
+                    return;
+                }
+
+                void MaxNoThumb(int row, int column, Color color)
+                {
+                    if (row == thumbKeyRow && column == thumbKeyColumn)
+                    {
+                        return;
+                    }
+
+                    keypad[row, column] = keypad[row, column].Max(color);
+                }
+
+                Debug.Assert(lastZ >= Z, "Z always decreases");
+                var xPrev = (lastZ < 0 ? Math.Max(1 / lastZ, -2) : -2) * xScale;
+                var xCurr = Math.Max(1 / Z, -2) * xScale;
+
+                var x0 = xMax - (xScale + xCurr);
+                var x1 = xMax - (xScale + xPrev);
+
+                // First pixel
+                var xi = (int)Math.Floor(x0);
+                if (xi >= 0 && xi <= xMax)
+                {
+                    var caa = c.Transform(1 - (x0 - xi));
+                    MaxNoThumb(y, xi, caa);
+                }
+
+                // Last pixel
+                var xj = (int)Math.Ceiling(x1);
+                if (xj >= 0 && xj <= xMax)
+                {
+                    var caa = c.Transform(1 - (xj - x1));
+                    MaxNoThumb(y, xj, caa);
+                }
+
+                // Middle pixels
+                xi = Math.Max(0, xi + 1);
+                xj = Math.Min(xj, xMax);
+                for (; xi <= xj; xi++)
+                {
+                    MaxNoThumb(y, xi, c);
+                }
             }
 
             private void Render(ChromaLinkCustom chromaLink, Color c)
