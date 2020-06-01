@@ -58,6 +58,7 @@ namespace EliteChroma.Core.Layers
             canvas.Keyboard.Set(cBack);
             canvas.Mouse.Set(cBack);
             canvas.Mousepad.Set(cBack);
+            canvas.Keypad.Set(cBack);
             canvas.ChromaLink.Set(cBack);
             var k = canvas.Keyboard;
             k[Key.Logo] = cLogo;

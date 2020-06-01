@@ -65,6 +65,7 @@ namespace EliteChroma.Core.Layers
 
                 canvas.Mouse.Set(c);
                 canvas.Mousepad.Set(c);
+                canvas.Keypad.Set(c);
                 canvas.ChromaLink.Set(c);
             }
 
