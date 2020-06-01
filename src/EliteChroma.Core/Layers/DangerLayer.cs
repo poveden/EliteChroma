@@ -21,7 +21,7 @@ namespace EliteChroma.Core.Layers
         private DateTimeOffset _lastUnderAttack;
         private DateTimeOffset _underAttackFade;
 
-        public override int Order => 200;
+        public override int Order => 700;
 
         protected override void OnRender(ChromaCanvas canvas)
         {
@@ -60,8 +60,12 @@ namespace EliteChroma.Core.Layers
                 var c = PulseColor(hiColor, _alertColorLow, _fastPulse);
 
                 var cLogo = k[Key.Logo];
-                canvas.Keyboard.Set(c);
+                canvas.Keyboard.Max(c);
                 k[Key.Logo] = cLogo;
+
+                canvas.Mouse.Set(c);
+                canvas.Mousepad.Set(c);
+                canvas.ChromaLink.Set(c);
             }
 
             if (inDanger)
