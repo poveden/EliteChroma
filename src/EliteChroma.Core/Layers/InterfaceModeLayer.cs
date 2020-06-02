@@ -14,12 +14,7 @@ namespace EliteChroma.Core.Layers
 
         protected override void OnRender(ChromaCanvas canvas)
         {
-            if (Game.InCockpit && !Game.Status.HasFlag(Flags.Docked) && Game.Status.GuiFocus == GuiFocus.None)
-            {
-                return;
-            }
-
-            if (Game.Status.GuiFocus == GuiFocus.FssMode)
+            if (Game.AtHelm && !Game.DockedOrLanded && Game.Status.GuiFocus == GuiFocus.None)
             {
                 return;
             }

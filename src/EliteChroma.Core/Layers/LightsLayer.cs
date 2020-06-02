@@ -22,7 +22,7 @@ namespace EliteChroma.Core.Layers
             var lColor = Game.Status.HasFlag(Flags.LightsOn) ? Color.White : Color.Blue;
             ApplyColorToBinding(canvas.Keyboard, Miscellaneous.ShipSpotLightToggle, lColor);
 
-            if (!Game.Status.HasFlag(Flags.Docked))
+            if (!Game.DockedOrLanded)
             {
                 var nColor = Game.Status.HasFlag(Flags.NightVision) ? Color.White : Color.Blue;
                 ApplyColorToBinding(canvas.Keyboard, Miscellaneous.NightVisionToggle, nColor);

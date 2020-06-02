@@ -39,6 +39,8 @@ namespace EliteChroma.Elite
 
         public bool InGalacticPowers => MusicTrack == "GalacticPowers";
 
+        public bool InSquadronsView => MusicTrack == "Squadrons";
+
         public UnderAttack.AttackTarget AttackTarget { get; internal set; }
 
         public DateTimeOffset AttackTargetChange { get; internal set; }
@@ -47,32 +49,41 @@ namespace EliteChroma.Elite
         {
             get
             {
-                if (Status.Flags == Flags.None)
+                return (Status.HasFlag(Flags.InMainShip) || Status.HasFlag(Flags.InFighter))
+                    && AtHelm;
+            }
+        }
+
+        public bool AtHelm
+        {
+            get
+            {
+                if ((Status.Flags & (Flags.InMainShip | Flags.InFighter | Flags.InSrv)) == Flags.None)
                 {
                     return false;
                 }
 
                 switch (Status.GuiFocus)
                 {
-                    case GuiFocus.GalaxyMap:
-                    case GuiFocus.SystemMap:
-                    case GuiFocus.FssMode:
-                    case GuiFocus.Codex:
+                    case GuiFocus.None:
+                    case GuiFocus.InternalPanel:
+                    case GuiFocus.ExternalPanel:
+                    case GuiFocus.CommsPanel:
+                    case GuiFocus.RolePanel:
+                    case GuiFocus.StationServices:
+                        return !InGalacticPowers && !InSquadronsView;
+
+                    default:
                         return false;
                 }
-
-                if (InGalacticPowers)
-                {
-                    return false;
-                }
-
-                return true;
             }
         }
 
         public bool InWitchSpace =>
             FsdJumpType == StartJump.FsdJumpType.Hyperspace
             && (Now - FsdJumpChange) >= JumpCountdownDelay;
+
+        public bool DockedOrLanded => (Status.Flags & (Flags.Docked | Flags.Landed)) != Flags.None;
 
         public GameState Copy() => (GameState)MemberwiseClone();
     }
