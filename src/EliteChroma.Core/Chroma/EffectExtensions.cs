@@ -23,6 +23,14 @@ namespace EliteChroma.Chroma
             return keyboard;
         }
 
+        public static KeyboardCustom MaxAt(this KeyboardCustom keyboard, int row, int column, Color c)
+        {
+            var key = GetKeyAt(row, column);
+            keyboard[key] = keyboard[key].Max(c);
+
+            return keyboard;
+        }
+
         public static MouseCustom Max(this MouseCustom mouse, Color c)
         {
             for (var i = 0; i < MouseConstants.MaxLeds; i++)
@@ -73,7 +81,7 @@ namespace EliteChroma.Chroma
             return chromaLink;
         }
 
-        // We weill be using this as an alternative to call keyboard[int index].
+        // We will be using this as an alternative to call keyboard[int index].
         // Since keyboard[Key key] sets KeyboardConstants.KeyFlag while keyboard[int index]
         // does not, wrong key colors get read when reading by index.
         private static Key[] GetAllKeys()
@@ -85,11 +93,13 @@ namespace EliteChroma.Chroma
             {
                 for (var col = 0; col < KeyboardConstants.MaxColumns; col++)
                 {
-                    res[i++] = (Key)((row << 8) + col);
+                    res[i++] = GetKeyAt(row, col);
                 }
             }
 
             return res;
         }
+
+        private static Key GetKeyAt(int row, int column) => (Key)((row << 8) + column);
     }
 }
