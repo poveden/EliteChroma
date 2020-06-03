@@ -50,7 +50,6 @@ namespace EliteChroma.Core.Layers
                 ApplyColorToBinding(canvas.Keyboard, Weapons.DeployHardpointToggle, hColor);
                 canvas.Mouse.Set(mColor);
                 canvas.Mousepad.Set(mColor);
-                canvas.Keypad.Set(bColor);
                 canvas.Headset.Set(mColor);
                 canvas.ChromaLink.Set(bColor);
             }
