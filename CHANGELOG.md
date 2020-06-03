@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Stop applying analysis mode color to keypad
 
+### Added
+
+- Add fuel scoop layer
+
 ## [1.6.0](https://github.com/poveden/EliteChroma/compare/v1.5.0...v1.6.0) — 2020-06-01
 
 ### Fixed

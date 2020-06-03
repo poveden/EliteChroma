@@ -62,10 +62,11 @@ namespace EliteChroma.Core
             return true;
         }
 
-        protected Color PulseColor(Color c1, Color c2, TimeSpan period, PulseColorType pulseType = PulseColorType.Triangle)
+        protected Color PulseColor(Color c1, Color c2, TimeSpan period, PulseColorType pulseType = PulseColorType.Triangle, double offsetPct = 0)
         {
             var max = period.TotalSeconds;
-            var t = (AnimationElapsed.TotalSeconds % max) / max;
+            var offset = max * (offsetPct - Math.Floor(offsetPct));
+            var t = ((AnimationElapsed.TotalSeconds + offset) % max) / max;
 
             double x;
 

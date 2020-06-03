@@ -177,6 +177,8 @@ namespace EliteChroma.Core.Tests
                 { Flags.InMainShip | Flags.ShieldsUp },
                 { Flags.InMainShip | Flags.ShieldsUp, GuiFocus.GalaxyMap },
                 { Flags.InMainShip | Flags.ShieldsUp },
+                { Flags.InMainShip | Flags.ShieldsUp | Flags.ScoopingFuel },
+                { Flags.InMainShip | Flags.ShieldsUp },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.IsInDanger },
                 { "UnderAttack", new { Target = "You" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp },
