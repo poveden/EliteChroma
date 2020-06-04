@@ -191,6 +191,13 @@ namespace EliteChroma.Core.Tests
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
                 { "SupercruiseExit", new { BodyType = "Station" }, false },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LightsOn | Flags.NightVision | Flags.CargoScoopDeployed | Flags.HardpointsDeployed | Flags.LandingGearDeployed },
+                { Flags.FsdCharging | Flags.InMainShip | Flags.ShieldsUp },
+                { "StartJump", new { JumpType = "Supercruise" }, true },
+                { Flags.FsdJump | Flags.InMainShip | Flags.ShieldsUp },
+                { "SupercruiseExit", new { BodyType = "Planet" }, false },
+                { Flags.InMainShip | Flags.ShieldsUp | Flags.LandingGearDeployed },
+                { "Touchdown", new { PlayerControlled = true }, false },
+                { Flags.InMainShip | Flags.ShieldsUp | Flags.LandingGearDeployed | Flags.Landed },
             };
         }
 
