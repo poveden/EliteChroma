@@ -198,6 +198,9 @@ namespace EliteChroma.Core.Tests
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LandingGearDeployed },
                 { "Touchdown", new { PlayerControlled = true }, false },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LandingGearDeployed | Flags.Landed },
+                { Flags.InSrv | Flags.ShieldsUp | Flags.SrvTurretRetracted | Flags.LightsOn },
+                { Flags.InSrv | Flags.ShieldsUp | Flags.HudInAnalysisMode | Flags.SrvUsingTurretView | Flags.LightsOn | Flags.SrvHighBeam },
+                { Flags.InSrv | Flags.ShieldsUp | Flags.NightVision | Flags.CargoScoopDeployed },
             };
         }
 

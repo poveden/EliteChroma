@@ -54,6 +54,14 @@ namespace EliteChroma.Elite
             }
         }
 
+        public bool InSrv
+        {
+            get
+            {
+                return Status.HasFlag(Flags.InSrv) && AtHelm;
+            }
+        }
+
         public bool AtHelm
         {
             get

@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Add fuel scoop layer
 - Add landed layer
+- Add SRV layers
 
 ## [1.6.0](https://github.com/poveden/EliteChroma/compare/v1.5.0...v1.6.0) — 2020-06-01
 
