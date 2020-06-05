@@ -28,6 +28,7 @@ If a picture is worth a thousand words, then perhaps a video will be better stil
   - Hyperspace jump destination hazard level indicator
   - Star glare on hyperspace jump exit
   - Ship in danger, under attack or overheating
+  - Fuel scooping
 
 ## Application requirements
 
