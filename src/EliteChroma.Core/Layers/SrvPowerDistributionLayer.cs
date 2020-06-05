@@ -3,13 +3,11 @@ using System.Diagnostics.CodeAnalysis;
 using Colore.Data;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
-using EliteFiles.Status;
-using static EliteFiles.Journal.Events.StartJump;
 
 namespace EliteChroma.Core.Layers
 {
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
-    internal sealed class PowerDistributionLayer : LayerBase
+    internal sealed class SrvPowerDistributionLayer : LayerBase
     {
         private static readonly List<Color> _pips = new List<Color>
         {
@@ -28,7 +26,7 @@ namespace EliteChroma.Core.Layers
 
         protected override void OnRender(ChromaCanvas canvas)
         {
-            if (!Game.InCockpit || Game.DockedOrLanded || Game.FsdJumpType != FsdJumpType.None)
+            if (!Game.InSrv)
             {
                 return;
             }
@@ -37,10 +35,10 @@ namespace EliteChroma.Core.Layers
             var cEng = _pips[Game.Status.Pips.Eng];
             var cWep = _pips[Game.Status.Pips.Wep];
 
-            ApplyColorToBinding(canvas.Keyboard, Miscellaneous.IncreaseSystemsPower, cSys);
-            ApplyColorToBinding(canvas.Keyboard, Miscellaneous.IncreaseWeaponsPower, cWep);
-            ApplyColorToBinding(canvas.Keyboard, Miscellaneous.IncreaseEnginesPower, cEng);
-            ApplyColorToBinding(canvas.Keyboard, Miscellaneous.ResetPowerDistribution, new Color(0.5, 0.5, 0.5));
+            ApplyColorToBinding(canvas.Keyboard, DrivingMiscellaneous.IncreaseSystemsPower, cSys);
+            ApplyColorToBinding(canvas.Keyboard, DrivingMiscellaneous.IncreaseWeaponsPower, cWep);
+            ApplyColorToBinding(canvas.Keyboard, DrivingMiscellaneous.IncreaseEnginesPower, cEng);
+            ApplyColorToBinding(canvas.Keyboard, DrivingMiscellaneous.ResetPowerDistribution, new Color(0.5, 0.5, 0.5));
         }
     }
 }

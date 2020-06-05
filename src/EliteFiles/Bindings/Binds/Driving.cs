@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace EliteFiles.Bindings.Binds
 {
@@ -39,5 +40,41 @@ namespace EliteFiles.Bindings.Binds
         /// Gets the collection of all <see cref="Driving"/> bind names.
         /// </summary>
         public static IReadOnlyCollection<string> All { get; } = Binding.BuildGroup(typeof(Driving));
+
+        /// <summary>
+        /// Gets the collection of all rotation-related <see cref="Driving"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> Rotation { get; } = new ReadOnlyCollection<string>(new[]
+        {
+            SteeringAxis,
+            SteerLeft,
+            SteerRight,
+            RollAxisRaw,
+            RollLeft,
+            RollRight,
+            PitchAxis,
+            PitchUp,
+            PitchDown,
+        });
+
+        /// <summary>
+        /// Gets the collection of all thrust-related <see cref="Driving"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> Thrust { get; } = new ReadOnlyCollection<string>(new[]
+        {
+            VerticalThrusters,
+        });
+
+        /// <summary>
+        /// Gets the collection of all weapon-related <see cref="Driving"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> Weapons { get; } = new ReadOnlyCollection<string>(new[]
+        {
+            PrimaryFire,
+            SecondaryFire,
+            CycleFireGroupNext,
+            CycleFireGroupPrevious,
+            ToggleTurret,
+        });
     }
 }

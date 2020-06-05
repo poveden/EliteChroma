@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Colore.Data;
 using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
@@ -8,21 +9,23 @@ using EliteFiles.Status;
 namespace EliteChroma.Core.Layers
 {
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
-    internal sealed class InterfaceModeLayer : LayerBase
+    internal sealed class LandedLayer : LayerBase
     {
-        public override int Order => 1000;
-
         protected override void OnRender(ChromaCanvas canvas)
         {
-            if (Game.AtHelm && !Game.DockedOrLanded && Game.Status.GuiFocus == GuiFocus.None)
+            if (!Game.Status.HasFlag(Flags.Landed))
             {
+                StopAnimation();
                 return;
             }
+
+            StartAnimation();
 
             var k = canvas.Keyboard;
             k[Key.Escape] = Color.White;
 
-            ApplyColorToBinding(canvas.Keyboard, InterfaceMode.All, Color.White);
+            var c = PulseColor(Color.Black, Color.Orange.Combine(Color.Red), TimeSpan.FromSeconds(1));
+            ApplyColorToBinding(canvas.Keyboard, FlightThrust.Up, c);
         }
     }
 }

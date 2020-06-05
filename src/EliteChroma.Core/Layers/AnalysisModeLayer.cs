@@ -27,7 +27,7 @@ namespace EliteChroma.Core.Layers
 
             ApplyColorToBinding(canvas.Keyboard, ModeSwitches.PlayerHUDModeToggle, color);
 
-            if (!Game.Status.HasFlag(Flags.Docked))
+            if (!Game.DockedOrLanded)
             {
                 ApplyColorToBinding(canvas.Keyboard, Weapons.PrimaryFire, color);
                 ApplyColorToBinding(canvas.Keyboard, Weapons.SecondaryFire, color);
