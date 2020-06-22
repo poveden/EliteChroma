@@ -12,7 +12,7 @@ namespace EliteChroma.Core.Layers
     {
         internal static readonly Color BackgroundColor = Color.FromRgb(0x0A0200);
 
-        private const int _fadeSeconds = 1;
+        private static readonly TimeSpan _fadeDuration = TimeSpan.FromSeconds(1);
 
         private static readonly Color EliteOrange = new Color(1.0, 0.2, 0);
 
@@ -40,14 +40,14 @@ namespace EliteChroma.Core.Layers
                 _lastState = Game.ProcessState;
             }
 
-            if (Animated && AnimationElapsed.TotalSeconds >= _fadeSeconds)
+            if (Animated && AnimationElapsed >= _fadeDuration)
             {
                 StopAnimation();
             }
 
             var cLogo = EliteOrange;
             var cBack = Animated
-                ? PulseColor(_animC1, _animC2, TimeSpan.FromSeconds(_fadeSeconds * 2))
+                ? PulseColor(_animC1, _animC2, _fadeDuration, PulseColorType.Sawtooth)
                 : _animC2;
 
             if (!Game.InMainMenu)

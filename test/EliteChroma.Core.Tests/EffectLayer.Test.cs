@@ -15,6 +15,7 @@ using EliteChroma.Elite;
 using EliteFiles;
 using EliteFiles.Bindings;
 using EliteFiles.Bindings.Binds;
+using EliteFiles.Graphics;
 using EliteFiles.Journal;
 using EliteFiles.Journal.Events;
 using Moq;
@@ -117,6 +118,41 @@ namespace EliteChroma.Core.Tests
                 await le.Render(chroma.Object, game).ConfigureAwait(false);
                 Assert.Equal(color, keyboard[hyperJumpKey]);
             }
+        }
+
+        [Theory]
+        [InlineData(GameProcessState.NotRunning, 0x000000, 1.0)]
+        [InlineData(GameProcessState.InBackground, 0xFF3300, 1.0)]
+        [InlineData(GameProcessState.InForeground, 0xFF3300, 0.04)]
+        public async Task BackgroundLayerSetsAColorPerGameProcessState(GameProcessState processState, int rgbColor, double brightness)
+        {
+            var graphicsConfig = GraphicsConfig.FromFile(_gif.GraphicsConfiguration.FullName);
+
+            var le = new LayeredEffect();
+            le.Add(new BackgroundLayer());
+
+            var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
+
+            KeyboardCustom keyboard;
+            Mock.Get(chroma.Object.Keyboard)
+                .Setup(x => x.SetCustomAsync(It.IsAny<KeyboardCustom>()))
+                .Callback((KeyboardCustom c) => keyboard = c);
+
+            var game = new GameState
+            {
+                ProcessState = processState,
+                GuiColour = graphicsConfig.GuiColour.Default,
+            };
+
+            game.Now = DateTimeOffset.UtcNow;
+            await le.Render(chroma.Object, game).ConfigureAwait(false);
+            Assert.Equal(Color.Black, keyboard[0]);
+
+            var expectedColor = Color.FromRgb((uint)rgbColor).Transform(brightness);
+
+            game.Now += TimeSpan.FromSeconds(1);
+            await le.Render(chroma.Object, game).ConfigureAwait(false);
+            Assert.Equal(expectedColor, keyboard[0]);
         }
 
         private static Key GetKey(BindingPreset binds, string binding)

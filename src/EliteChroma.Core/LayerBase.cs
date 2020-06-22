@@ -17,6 +17,7 @@ namespace EliteChroma.Core
         {
             Triangle = 0,
             Square = 1,
+            Sawtooth = 2,
 
             Default = Triangle,
         }
@@ -74,6 +75,9 @@ namespace EliteChroma.Core
             {
                 case PulseColorType.Square:
                     x = t < 0.5 ? 1 : 0;
+                    break;
+                case PulseColorType.Sawtooth:
+                    x = t;
                     break;
                 case PulseColorType.Triangle:
                 default:
