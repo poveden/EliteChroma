@@ -13,8 +13,6 @@ namespace EliteChroma.Core.Layers
     {
         private const double _periodMs = 750.0;
 
-        private static readonly Color EliteOrange = new Color(1.0, 0.2, 0);
-
         public override int Order => 700;
 
         protected override void OnRender(ChromaCanvas canvas)
@@ -31,7 +29,7 @@ namespace EliteChroma.Core.Layers
             double offsetPct = 0;
             for (int col = 0; col < KeyboardConstants.MaxColumns; col++, offsetPct += offsetStep)
             {
-                var c = PulseColor(Color.Black, EliteOrange, TimeSpan.FromMilliseconds(_periodMs), offsetPct: offsetPct);
+                var c = PulseColor(Color.Black, Game.Colors.Hud, TimeSpan.FromMilliseconds(_periodMs), offsetPct: offsetPct);
 
                 for (var row = 0; row < KeyboardConstants.MaxRows; row++)
                 {
@@ -44,7 +42,7 @@ namespace EliteChroma.Core.Layers
             offsetPct = (double)KeypadConstants.MaxColumns / KeyboardConstants.MaxColumns;
             for (int col = 0; col < KeypadConstants.MaxColumns; col++, offsetPct += offsetStep)
             {
-                var c = PulseColor(Color.Black, EliteOrange, TimeSpan.FromMilliseconds(_periodMs), offsetPct: offsetPct);
+                var c = PulseColor(Color.Black, Game.Colors.Hud, TimeSpan.FromMilliseconds(_periodMs), offsetPct: offsetPct);
 
                 for (var row = 0; row < KeypadConstants.MaxRows; row++)
                 {

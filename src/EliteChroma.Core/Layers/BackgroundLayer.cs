@@ -1,30 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Colore.Data;
 using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
+using EliteChroma.Elite;
 
 namespace EliteChroma.Core.Layers
 {
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class BackgroundLayer : LayerBase
     {
-        internal static readonly Color BackgroundColor = Color.FromRgb(0x0A0200);
+        internal const double DimBrightness = 0.04;
 
         private static readonly TimeSpan _fadeDuration = TimeSpan.FromSeconds(1);
 
-        private static readonly Color EliteOrange = new Color(1.0, 0.2, 0);
-
-        private static readonly IReadOnlyDictionary<Elite.GameProcessState, Color> _stateColors =
-            new Dictionary<Elite.GameProcessState, Color>
-            {
-                [Elite.GameProcessState.NotRunning] = Color.Black,
-                [Elite.GameProcessState.InForeground] = BackgroundColor,
-                [Elite.GameProcessState.InBackground] = EliteOrange,
-            };
-
-        private Elite.GameProcessState _lastState;
+        private GameProcessState _lastState;
         private Color _animC1;
         private Color _animC2;
 
@@ -35,8 +25,8 @@ namespace EliteChroma.Core.Layers
             if (Game.ProcessState != _lastState)
             {
                 StartAnimation();
-                _animC1 = _stateColors[_lastState];
-                _animC2 = _stateColors[Game.ProcessState];
+                _animC1 = GetBackgroundColor(_lastState);
+                _animC2 = GetBackgroundColor(Game.ProcessState);
                 _lastState = Game.ProcessState;
             }
 
@@ -45,15 +35,10 @@ namespace EliteChroma.Core.Layers
                 StopAnimation();
             }
 
-            var cLogo = EliteOrange;
+            var cLogo = Game.InMainMenu ? GameColors.EliteOrange : Game.Colors.Hud;
             var cBack = Animated
                 ? PulseColor(_animC1, _animC2, _fadeDuration, PulseColorType.Sawtooth)
                 : _animC2;
-
-            if (!Game.InMainMenu)
-            {
-                cLogo = cLogo.Transform(Game.GuiColour);
-            }
 
             canvas.Keyboard.Set(cBack);
             canvas.Mouse.Set(cBack);
@@ -63,6 +48,19 @@ namespace EliteChroma.Core.Layers
             canvas.ChromaLink.Set(cBack);
             var k = canvas.Keyboard;
             k[Key.Logo] = cLogo;
+        }
+
+        private Color GetBackgroundColor(GameProcessState state)
+        {
+            switch (state)
+            {
+                case GameProcessState.InForeground:
+                    return Game.Colors.Hud.Transform(DimBrightness);
+                case GameProcessState.InBackground:
+                    return Game.Colors.Hud;
+                default:
+                    return Color.Black;
+            }
         }
     }
 }

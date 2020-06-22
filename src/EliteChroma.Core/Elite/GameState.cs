@@ -11,6 +11,8 @@ namespace EliteChroma.Elite
     {
         public static readonly TimeSpan JumpCountdownDelay = TimeSpan.FromSeconds(5);
 
+        private GuiColourMatrix _guiColour;
+
         internal GameState()
         {
         }
@@ -25,7 +27,17 @@ namespace EliteChroma.Elite
 
         public StatusEntry Status { get; internal set; }
 
-        public GuiColourMatrix GuiColour { get; internal set; }
+        public GuiColourMatrix GuiColour
+        {
+            get => _guiColour;
+            set
+            {
+                _guiColour = value;
+                Colors = new GameColors(_guiColour);
+            }
+        }
+
+        public GameColors Colors { get; private set; }
 
         public string MusicTrack { get; internal set; }
 

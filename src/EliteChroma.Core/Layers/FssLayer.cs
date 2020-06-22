@@ -11,9 +11,6 @@ namespace EliteChroma.Core.Layers
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class FssLayer : LayerBase
     {
-        private static readonly Color EliteOrange = new Color(1.0, 0.2, 0);
-        private static readonly Color AnalysisModeColor = new Color(0.14, 0.62, 0.81);
-
         private static readonly IReadOnlyCollection<string> FssCamera = new[]
         {
             FullSpectrumSystemScanner.CameraPitch,
@@ -51,10 +48,10 @@ namespace EliteChroma.Core.Layers
             ApplyColorToBinding(canvas.Keyboard, FssCamera, Color.Green);
             ApplyColorToBinding(canvas.Keyboard, FssZoom, Color.Blue);
             ApplyColorToBinding(canvas.Keyboard, FssTuning, Color.Purple);
-            ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.DiscoveryScan, AnalysisModeColor);
+            ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.DiscoveryScan, Game.Colors.AnalysisMode);
             ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.Quit, Color.White);
             ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.Target, Color.Yellow);
-            ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.ShowHelp, EliteOrange);
+            ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.ShowHelp, Game.Colors.Hud);
         }
     }
 }

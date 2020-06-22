@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Colore.Data;
 using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
+using EliteChroma.Elite;
 using EliteFiles.Journal.Events;
 using EliteFiles.Status;
 
@@ -11,9 +12,6 @@ namespace EliteChroma.Core.Layers
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class DangerLayer : LayerBase
     {
-        private static readonly Color _alertColorHigh = Color.Red;
-        private static readonly Color _alertColorLow = BackgroundLayer.BackgroundColor;
-
         private static readonly TimeSpan _underAttackDuration = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan _fastPulse = TimeSpan.FromMilliseconds(350);
         private static readonly TimeSpan _slowPulse = TimeSpan.FromSeconds(1);
@@ -49,15 +47,16 @@ namespace EliteChroma.Core.Layers
 
             if (underAttack || otherDanger)
             {
-                var hiColor = _alertColorHigh;
+                var hiColor = GameColors.RedAlert;
+                var loColor = Game.Colors.Hud.Transform(BackgroundLayer.DimBrightness);
 
                 if (!otherDanger)
                 {
                     var fade = (_underAttackFade - Now).TotalSeconds / _underAttackDuration.TotalSeconds;
-                    hiColor = _alertColorLow.Combine(hiColor, fade * fade);
+                    hiColor = loColor.Combine(hiColor, fade * fade);
                 }
 
-                var c = PulseColor(hiColor, _alertColorLow, _fastPulse);
+                var c = PulseColor(hiColor, loColor, _fastPulse);
 
                 var cLogo = k[Key.Logo];
                 canvas.Keyboard.Max(c);
@@ -72,7 +71,7 @@ namespace EliteChroma.Core.Layers
 
             if (inDanger)
             {
-                k[Key.Logo] = PulseColor(_alertColorHigh, _alertColorLow, _slowPulse);
+                k[Key.Logo] = PulseColor(k[Key.Logo], GameColors.RedAlert, _slowPulse);
             }
         }
     }
