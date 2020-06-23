@@ -13,8 +13,10 @@ namespace EliteChroma.Core.Layers
         private static readonly TimeSpan _fadeDuration = TimeSpan.FromSeconds(1);
 
         private GameProcessState _lastState;
-        private Color _animC1;
-        private Color _animC2;
+        private Color _animKbdC1;
+        private Color _animKbdC2;
+        private Color _animDevC1;
+        private Color _animDevC2;
 
         public override int Order => 0;
 
@@ -23,8 +25,8 @@ namespace EliteChroma.Core.Layers
             if (Game.ProcessState != _lastState)
             {
                 StartAnimation();
-                _animC1 = GetBackgroundColor(_lastState);
-                _animC2 = GetBackgroundColor(Game.ProcessState);
+                _animKbdC1 = GetBackgroundColor(_lastState, Colors.KeyboardDimBrightness);
+                _animDevC1 = GetBackgroundColor(_lastState, Colors.DeviceDimBrightness);
                 _lastState = Game.ProcessState;
             }
 
@@ -33,27 +35,35 @@ namespace EliteChroma.Core.Layers
                 StopAnimation();
             }
 
-            var cLogo = Game.InMainMenu ? GameColors.EliteOrange : Game.Colors.Hud;
-            var cBack = Animated
-                ? PulseColor(_animC1, _animC2, _fadeDuration, PulseColorType.Sawtooth)
-                : _animC2;
+            _animKbdC2 = GetBackgroundColor(Game.ProcessState, Colors.KeyboardDimBrightness);
+            _animDevC2 = GetBackgroundColor(Game.ProcessState, Colors.DeviceDimBrightness);
 
-            canvas.Keyboard.Set(cBack);
-            canvas.Mouse.Set(cBack);
-            canvas.Mousepad.Set(cBack);
-            canvas.Keypad.Set(cBack);
-            canvas.Headset.Set(cBack);
-            canvas.ChromaLink.Set(cBack);
+            var cLogo = Game.InMainMenu ? GameColors.EliteOrange : Game.Colors.Hud;
+
+            Color cKbd = Animated
+                ? PulseColor(_animKbdC1, _animKbdC2, _fadeDuration, PulseColorType.Sawtooth)
+                : _animKbdC2;
+
+            Color cDev = Animated
+                ? PulseColor(_animDevC1, _animDevC2, _fadeDuration, PulseColorType.Sawtooth)
+                : _animDevC2;
+
+            canvas.Keyboard.Set(cKbd);
+            canvas.Mouse.Set(cDev);
+            canvas.Mousepad.Set(cDev);
+            canvas.Keypad.Set(cKbd);
+            canvas.Headset.Set(cDev);
+            canvas.ChromaLink.Set(cDev);
             var k = canvas.Keyboard;
             k[Key.Logo] = cLogo;
         }
 
-        private Color GetBackgroundColor(GameProcessState state)
+        private Color GetBackgroundColor(GameProcessState state, double brightness)
         {
             switch (state)
             {
                 case GameProcessState.InForeground:
-                    return Game.Colors.Hud.Transform(Colors.DimBrightness);
+                    return Game.Colors.Hud.Transform(brightness);
                 case GameProcessState.InBackground:
                     return Game.Colors.Hud;
                 default:

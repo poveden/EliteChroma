@@ -47,26 +47,25 @@ namespace EliteChroma.Core.Layers
 
             if (underAttack || otherDanger)
             {
-                var hiColor = GameColors.RedAlert;
-                var loColor = Game.Colors.Hud.Transform(Colors.DimBrightness);
+                var flarePct = PulseColor(Color.Black, Color.White, _fastPulse).R / 255.0;
 
                 if (!otherDanger)
                 {
                     var fade = (_underAttackFade - Now).TotalSeconds / _underAttackDuration.TotalSeconds;
-                    hiColor = loColor.Combine(hiColor, fade * fade);
+                    flarePct = flarePct * fade * fade;
                 }
 
-                var c = PulseColor(hiColor, loColor, _fastPulse);
+                var c = GameColors.RedAlert.Transform(flarePct);
 
                 var cLogo = k[Key.Logo];
                 canvas.Keyboard.Max(c);
                 k[Key.Logo] = cLogo;
 
-                canvas.Mouse.Set(c);
-                canvas.Mousepad.Set(c);
-                canvas.Keypad.Set(c);
-                canvas.Headset.Set(c);
-                canvas.ChromaLink.Set(c);
+                canvas.Mouse.Combine(GameColors.RedAlert, flarePct);
+                canvas.Mousepad.Combine(GameColors.RedAlert, flarePct);
+                canvas.Keypad.Max(c);
+                canvas.Headset.Combine(GameColors.RedAlert, flarePct);
+                canvas.ChromaLink.Combine(GameColors.RedAlert, flarePct);
             }
 
             if (inDanger)

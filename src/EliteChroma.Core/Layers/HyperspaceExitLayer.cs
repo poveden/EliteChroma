@@ -46,14 +46,15 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            var c = PulseColor(Game.Colors.Hud.Transform(Colors.DimBrightness), _starClassColor, _flashTotalLength);
+            var cKey = PulseColor(Game.Colors.Hud.Transform(Colors.KeyboardDimBrightness), _starClassColor, _flashTotalLength);
+            var cDev = PulseColor(Game.Colors.Hud.Transform(Colors.DeviceDimBrightness), _starClassColor, _flashTotalLength);
 
-            canvas.Keyboard.Max(c);
-            canvas.Mouse.Max(c);
-            canvas.Mousepad.Max(c);
-            canvas.Keypad.Max(c);
-            canvas.Headset.Max(c);
-            canvas.ChromaLink.Max(c);
+            canvas.Keyboard.Max(cKey);
+            canvas.Mouse.Max(cDev);
+            canvas.Mousepad.Max(cDev);
+            canvas.Keypad.Max(cKey);
+            canvas.Headset.Max(cDev);
+            canvas.ChromaLink.Max(cDev);
         }
     }
 }

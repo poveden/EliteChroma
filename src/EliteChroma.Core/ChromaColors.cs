@@ -13,7 +13,9 @@ namespace EliteChroma.Core
             BuildPipsColors();
         }
 
-        public double DimBrightness { get; } = 0.04;
+        public double KeyboardDimBrightness { get; } = 0.04;
+
+        public double DeviceDimBrightness { get; } = 0.5;
 
         public double SecondaryBindingBrightness { get; } = 0.2;
 
