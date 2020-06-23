@@ -11,8 +11,6 @@ namespace EliteChroma.Core.Layers
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class AnalysisModeLayer : LayerBase
     {
-        private static readonly Color CombatModeColor = Color.Red;
-
         public override int Order => 600;
 
         protected override void OnRender(ChromaCanvas canvas)
@@ -22,7 +20,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            var color = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? Game.Colors.AnalysisMode : CombatModeColor;
+            var color = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? Game.Colors.AnalysisMode : Colors.HardpointsToggle;
 
             ApplyColorToBinding(canvas.Keyboard, ModeSwitches.PlayerHUDModeToggle, color);
 

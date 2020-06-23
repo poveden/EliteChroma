@@ -46,7 +46,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            var c = PulseColor(Game.Colors.Hud.Transform(BackgroundLayer.DimBrightness), _starClassColor, _flashTotalLength);
+            var c = PulseColor(Game.Colors.Hud.Transform(Colors.DimBrightness), _starClassColor, _flashTotalLength);
 
             canvas.Keyboard.Max(c);
             canvas.Mouse.Max(c);

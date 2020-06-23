@@ -9,8 +9,6 @@ namespace EliteChroma.Core.Layers
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class SrvLightsLayer : LayerBase
     {
-        private static readonly Color _midBeamColor = Color.Blue.Combine(Color.White);
-
         public override int Order => 600;
 
         protected override void OnRender(ChromaCanvas canvas)
@@ -21,11 +19,11 @@ namespace EliteChroma.Core.Layers
             }
 
             var lColor = Game.Status.HasFlag(Flags.LightsOn)
-                ? (Game.Status.HasFlag(Flags.SrvHighBeam) ? Color.White : _midBeamColor)
-                : Color.Blue;
+                ? (Game.Status.HasFlag(Flags.SrvHighBeam) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsMidBeam)
+                : Colors.VehicleLightsOff;
             ApplyColorToBinding(canvas.Keyboard, Driving.Headlights, lColor);
 
-            var nColor = Game.Status.HasFlag(Flags.NightVision) ? Color.White : Color.Blue;
+            var nColor = Game.Status.HasFlag(Flags.NightVision) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsOff;
             ApplyColorToBinding(canvas.Keyboard, Miscellaneous.NightVisionToggle, nColor);
         }
     }

@@ -176,7 +176,7 @@ namespace EliteChroma.Core.Tests
                 { "Undocked", new { StationType = "Coriolis" }, false },
                 { Flags.InMainShip | Flags.ShieldsUp },
                 { Flags.InMainShip | Flags.ShieldsUp, GuiFocus.GalaxyMap },
-                { Flags.InMainShip | Flags.ShieldsUp },
+                { Flags.InMainShip | Flags.ShieldsUp | Flags.HudInAnalysisMode },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.ScoopingFuel },
                 { Flags.InMainShip | Flags.ShieldsUp },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.IsInDanger },

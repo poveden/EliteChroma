@@ -22,6 +22,7 @@ namespace EliteChroma.Core
         private readonly LayeredEffect _effect;
         private readonly System.Timers.Timer _animation;
         private readonly SemaphoreSlim _chromaLock = new SemaphoreSlim(1, 1);
+        private readonly ChromaColors _colors = new ChromaColors();
 
         private IChroma _chroma;
         private int _rendering;
@@ -215,7 +216,7 @@ namespace EliteChroma.Core
                 try
                 {
                     game.Now = DateTimeOffset.UtcNow;
-                    await _effect.Render(_chroma, game).ConfigureAwait(false);
+                    await _effect.Render(_chroma, new LayerRenderState(game, _colors)).ConfigureAwait(false);
                 }
                 finally
                 {

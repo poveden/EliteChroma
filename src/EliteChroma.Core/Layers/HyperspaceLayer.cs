@@ -136,19 +136,19 @@ namespace EliteChroma.Core.Layers
             switch (_hazardLevel)
             {
                 case HazardLevel.Medium:
-                    hazardColor = Color.Yellow;
+                    hazardColor = GameColors.YellowAlert;
                     period = TimeSpan.FromSeconds(1);
                     pulseType = PulseColorType.Square;
                     break;
 
                 case HazardLevel.High:
-                    hazardColor = Color.Red;
+                    hazardColor = GameColors.RedAlert;
                     period = TimeSpan.FromSeconds(0.67);
                     pulseType = PulseColorType.Square;
                     break;
 
                 default:
-                    hazardColor = Color.Green;
+                    hazardColor = GameColors.GreenAlert;
                     period = TimeSpan.FromSeconds(1);
                     pulseType = PulseColorType.Triangle;
                     break;

@@ -26,6 +26,8 @@ namespace EliteChroma.Core
 
         protected GameState Game { get; private set; }
 
+        protected ChromaColors Colors { get; private set; }
+
         protected DateTimeOffset Now => Game.Now;
 
         protected DateTimeOffset AnimationStart { get; private set; }
@@ -34,7 +36,9 @@ namespace EliteChroma.Core
 
         protected override void OnRender(ChromaCanvas canvas, object state)
         {
-            Game = (GameState)state;
+            var rs = (LayerRenderState)state ?? throw new ArgumentNullException(nameof(state));
+            Game = rs.GameState;
+            Colors = rs.Colors;
             OnRender(canvas);
         }
 
@@ -136,7 +140,7 @@ namespace EliteChroma.Core
 
                 grid[key] = color;
 
-                color = color.Transform(0.2);
+                color = color.Transform(Colors.SecondaryBindingBrightness);
             }
         }
     }

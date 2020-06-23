@@ -48,7 +48,7 @@ namespace EliteChroma.Core.Layers
             if (underAttack || otherDanger)
             {
                 var hiColor = GameColors.RedAlert;
-                var loColor = Game.Colors.Hud.Transform(BackgroundLayer.DimBrightness);
+                var loColor = Game.Colors.Hud.Transform(Colors.DimBrightness);
 
                 if (!otherDanger)
                 {

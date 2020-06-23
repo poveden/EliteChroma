@@ -10,8 +10,6 @@ namespace EliteChroma.Core.Layers
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class BackgroundLayer : LayerBase
     {
-        internal const double DimBrightness = 0.04;
-
         private static readonly TimeSpan _fadeDuration = TimeSpan.FromSeconds(1);
 
         private GameProcessState _lastState;
@@ -55,7 +53,7 @@ namespace EliteChroma.Core.Layers
             switch (state)
             {
                 case GameProcessState.InForeground:
-                    return Game.Colors.Hud.Transform(DimBrightness);
+                    return Game.Colors.Hud.Transform(Colors.DimBrightness);
                 case GameProcessState.InBackground:
                     return Game.Colors.Hud;
                 default:

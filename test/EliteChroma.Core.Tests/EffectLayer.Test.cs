@@ -72,6 +72,24 @@ namespace EliteChroma.Core.Tests
             Assert.False(le.Remove(layer));
         }
 
+        [Fact]
+        public void LayerRenderStateThrowsOnNullArguments()
+        {
+            Assert.Throws<ArgumentNullException>("gameState", () => new LayerRenderState(null, new ChromaColors()));
+            Assert.Throws<ArgumentNullException>("colors", () => new LayerRenderState(new GameState(), null));
+        }
+
+        [Fact]
+        public async Task LayerBaseThrowsOnInvalidGameState()
+        {
+            var le = new LayeredEffect();
+            le.Add(new DummyLayer());
+
+            var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => le.Render(chroma.Object, null)).ConfigureAwait(false);
+        }
+
         [Theory]
         [InlineData(StarClass.O, 0.25, new[] { 0x000000, 0x007F00, 0x00FF00, 0x007F00, 0x000000 })]
         [InlineData(StarClass.HerbigAeBe, 0.25, new[] { 0xFFFF00, 0xFFFF00, 0x000000, 0x000000 })]
@@ -103,19 +121,21 @@ namespace EliteChroma.Core.Tests
                 PressedModifiers = new DeviceKeySet(Enumerable.Empty<DeviceKey>()),
             };
 
+            var state = new LayerRenderState(game, new ChromaColors());
+
             game.Now = DateTimeOffset.UtcNow;
-            await le.Render(chroma.Object, game).ConfigureAwait(false);
+            await le.Render(chroma.Object, state).ConfigureAwait(false);
             Assert.False(game.InWitchSpace);
 
             game.Now += GameState.JumpCountdownDelay;
-            await le.Render(chroma.Object, game).ConfigureAwait(false);
+            await le.Render(chroma.Object, state).ConfigureAwait(false);
             Assert.True(game.InWitchSpace);
             Assert.Equal(colors[0], keyboard[hyperJumpKey]);
 
             foreach (var color in colors.Skip(1))
             {
                 game.Now += TimeSpan.FromSeconds(stepSeconds);
-                await le.Render(chroma.Object, game).ConfigureAwait(false);
+                await le.Render(chroma.Object, state).ConfigureAwait(false);
                 Assert.Equal(color, keyboard[hyperJumpKey]);
             }
         }
@@ -144,14 +164,16 @@ namespace EliteChroma.Core.Tests
                 GuiColour = graphicsConfig.GuiColour.Default,
             };
 
+            var state = new LayerRenderState(game, new ChromaColors());
+
             game.Now = DateTimeOffset.UtcNow;
-            await le.Render(chroma.Object, game).ConfigureAwait(false);
+            await le.Render(chroma.Object, state).ConfigureAwait(false);
             Assert.Equal(Color.Black, keyboard[0]);
 
             var expectedColor = Color.FromRgb((uint)rgbColor).Transform(brightness);
 
             game.Now += TimeSpan.FromSeconds(1);
-            await le.Render(chroma.Object, game).ConfigureAwait(false);
+            await le.Render(chroma.Object, state).ConfigureAwait(false);
             Assert.Equal(expectedColor, keyboard[0]);
         }
 
@@ -159,6 +181,13 @@ namespace EliteChroma.Core.Tests
         {
             var bps = binds.Bindings[binding].Primary;
             return KeyMappings.EliteKeys[bps.Key];
+        }
+
+        private sealed class DummyLayer : LayerBase
+        {
+            protected override void OnRender(ChromaCanvas canvas)
+            {
+            }
         }
     }
 }

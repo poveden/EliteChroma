@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
 using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
@@ -43,14 +42,14 @@ namespace EliteChroma.Core.Layers
             }
 
             var k = canvas.Keyboard;
-            k[Key.Escape] = Color.White;
+            k[Key.Escape] = Colors.InterfaceMode;
 
-            ApplyColorToBinding(canvas.Keyboard, FssCamera, Color.Green);
-            ApplyColorToBinding(canvas.Keyboard, FssZoom, Color.Blue);
-            ApplyColorToBinding(canvas.Keyboard, FssTuning, Color.Purple);
+            ApplyColorToBinding(canvas.Keyboard, FssCamera, Colors.FssCamera);
+            ApplyColorToBinding(canvas.Keyboard, FssZoom, Colors.FssZoom);
+            ApplyColorToBinding(canvas.Keyboard, FssTuning, Colors.FssTuning);
             ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.DiscoveryScan, Game.Colors.AnalysisMode);
-            ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.Quit, Color.White);
-            ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.Target, Color.Yellow);
+            ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.Quit, Colors.InterfaceMode);
+            ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.Target, Colors.FssTarget);
             ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.ShowHelp, Game.Colors.Hud);
         }
     }

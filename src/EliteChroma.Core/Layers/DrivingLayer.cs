@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
 using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
@@ -18,18 +17,18 @@ namespace EliteChroma.Core.Layers
             }
 
             var k = canvas.Keyboard;
-            k[Key.Escape] = Color.White;
+            k[Key.Escape] = Colors.InterfaceMode;
 
-            ApplyColorToBinding(canvas.Keyboard, Driving.Rotation, Color.White);
-            ApplyColorToBinding(canvas.Keyboard, Driving.Thrust, Color.Orange.Combine(Color.Red));
-            ApplyColorToBinding(canvas.Keyboard, DriveThrottle.All, Color.Yellow);
-            ApplyColorToBinding(canvas.Keyboard, Driving.AutoBreak, Color.Yellow);
-            ApplyColorToBinding(canvas.Keyboard, DrivingMiscellaneous.All, Color.Pink);
-            ApplyColorToBinding(canvas.Keyboard, DrivingTargeting.All, Color.Green);
+            ApplyColorToBinding(canvas.Keyboard, Driving.Rotation, Colors.VehicleRotation);
+            ApplyColorToBinding(canvas.Keyboard, Driving.Thrust, Colors.VehicleThrust);
+            ApplyColorToBinding(canvas.Keyboard, DriveThrottle.All, Colors.VehicleThrottle);
+            ApplyColorToBinding(canvas.Keyboard, Driving.AutoBreak, Colors.VehicleThrottle);
+            ApplyColorToBinding(canvas.Keyboard, DrivingMiscellaneous.All, Colors.VehicleMiscellaneous);
+            ApplyColorToBinding(canvas.Keyboard, DrivingTargeting.All, Colors.VehicleTargeting);
 
             if (!Game.Status.HasFlag(Flags.SrvTurretRetracted))
             {
-                ApplyColorToBinding(canvas.Keyboard, Driving.Weapons, Color.Red);
+                ApplyColorToBinding(canvas.Keyboard, Driving.Weapons, Colors.VehicleWeapons);
             }
         }
     }
