@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Colore.Data;
 using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
+using EliteChroma.Elite;
 using EliteFiles.Journal.Events;
 using EliteFiles.Status;
 
@@ -11,9 +12,6 @@ namespace EliteChroma.Core.Layers
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class DangerLayer : LayerBase
     {
-        private static readonly Color _alertColorHigh = Color.Red;
-        private static readonly Color _alertColorLow = BackgroundLayer.BackgroundColor;
-
         private static readonly TimeSpan _underAttackDuration = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan _fastPulse = TimeSpan.FromMilliseconds(350);
         private static readonly TimeSpan _slowPulse = TimeSpan.FromSeconds(1);
@@ -49,30 +47,30 @@ namespace EliteChroma.Core.Layers
 
             if (underAttack || otherDanger)
             {
-                var hiColor = _alertColorHigh;
+                var flarePct = PulseColor(Color.Black, Color.White, _fastPulse).R / 255.0;
 
                 if (!otherDanger)
                 {
                     var fade = (_underAttackFade - Now).TotalSeconds / _underAttackDuration.TotalSeconds;
-                    hiColor = _alertColorLow.Combine(hiColor, fade * fade);
+                    flarePct = flarePct * fade * fade;
                 }
 
-                var c = PulseColor(hiColor, _alertColorLow, _fastPulse);
+                var c = GameColors.RedAlert.Transform(flarePct);
 
                 var cLogo = k[Key.Logo];
                 canvas.Keyboard.Max(c);
                 k[Key.Logo] = cLogo;
 
-                canvas.Mouse.Set(c);
-                canvas.Mousepad.Set(c);
-                canvas.Keypad.Set(c);
-                canvas.Headset.Set(c);
-                canvas.ChromaLink.Set(c);
+                canvas.Mouse.Combine(GameColors.RedAlert, flarePct);
+                canvas.Mousepad.Combine(GameColors.RedAlert, flarePct);
+                canvas.Keypad.Max(c);
+                canvas.Headset.Combine(GameColors.RedAlert, flarePct);
+                canvas.ChromaLink.Combine(GameColors.RedAlert, flarePct);
             }
 
             if (inDanger)
             {
-                k[Key.Logo] = PulseColor(_alertColorHigh, _alertColorLow, _slowPulse);
+                k[Key.Logo] = PulseColor(k[Key.Logo], GameColors.RedAlert, _slowPulse);
             }
         }
     }

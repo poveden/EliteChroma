@@ -1,32 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Colore.Data;
 using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
+using EliteChroma.Elite;
 
 namespace EliteChroma.Core.Layers
 {
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class BackgroundLayer : LayerBase
     {
-        internal static readonly Color BackgroundColor = Color.FromRgb(0x0A0200);
+        private static readonly TimeSpan _fadeDuration = TimeSpan.FromSeconds(1);
 
-        private const int _fadeSeconds = 1;
-
-        private static readonly Color EliteOrange = new Color(1.0, 0.2, 0);
-
-        private static readonly IReadOnlyDictionary<Elite.GameProcessState, Color> _stateColors =
-            new Dictionary<Elite.GameProcessState, Color>
-            {
-                [Elite.GameProcessState.NotRunning] = Color.Black,
-                [Elite.GameProcessState.InForeground] = BackgroundColor,
-                [Elite.GameProcessState.InBackground] = EliteOrange,
-            };
-
-        private Elite.GameProcessState _lastState;
-        private Color _animC1;
-        private Color _animC2;
+        private GameProcessState _lastState;
+        private Color _animKbdC1;
+        private Color _animKbdC2;
+        private Color _animDevC1;
+        private Color _animDevC2;
 
         public override int Order => 0;
 
@@ -35,34 +25,50 @@ namespace EliteChroma.Core.Layers
             if (Game.ProcessState != _lastState)
             {
                 StartAnimation();
-                _animC1 = _stateColors[_lastState];
-                _animC2 = _stateColors[Game.ProcessState];
+                _animKbdC1 = GetBackgroundColor(_lastState, Colors.KeyboardDimBrightness);
+                _animDevC1 = GetBackgroundColor(_lastState, Colors.DeviceDimBrightness);
                 _lastState = Game.ProcessState;
             }
 
-            if (Animated && AnimationElapsed.TotalSeconds >= _fadeSeconds)
+            if (Animated && AnimationElapsed >= _fadeDuration)
             {
                 StopAnimation();
             }
 
-            var cLogo = EliteOrange;
-            var cBack = Animated
-                ? PulseColor(_animC1, _animC2, TimeSpan.FromSeconds(_fadeSeconds * 2))
-                : _animC2;
+            _animKbdC2 = GetBackgroundColor(Game.ProcessState, Colors.KeyboardDimBrightness);
+            _animDevC2 = GetBackgroundColor(Game.ProcessState, Colors.DeviceDimBrightness);
 
-            if (!Game.InMainMenu)
-            {
-                cLogo = cLogo.Transform(Game.GuiColour);
-            }
+            var cLogo = Game.InMainMenu ? GameColors.EliteOrange : Game.Colors.Hud;
 
-            canvas.Keyboard.Set(cBack);
-            canvas.Mouse.Set(cBack);
-            canvas.Mousepad.Set(cBack);
-            canvas.Keypad.Set(cBack);
-            canvas.Headset.Set(cBack);
-            canvas.ChromaLink.Set(cBack);
+            Color cKbd = Animated
+                ? PulseColor(_animKbdC1, _animKbdC2, _fadeDuration, PulseColorType.Sawtooth)
+                : _animKbdC2;
+
+            Color cDev = Animated
+                ? PulseColor(_animDevC1, _animDevC2, _fadeDuration, PulseColorType.Sawtooth)
+                : _animDevC2;
+
+            canvas.Keyboard.Set(cKbd);
+            canvas.Mouse.Set(cDev);
+            canvas.Mousepad.Set(cDev);
+            canvas.Keypad.Set(cKbd);
+            canvas.Headset.Set(cDev);
+            canvas.ChromaLink.Set(cDev);
             var k = canvas.Keyboard;
             k[Key.Logo] = cLogo;
+        }
+
+        private Color GetBackgroundColor(GameProcessState state, double brightness)
+        {
+            switch (state)
+            {
+                case GameProcessState.InForeground:
+                    return Game.Colors.Hud.Transform(brightness);
+                case GameProcessState.InBackground:
+                    return Game.Colors.Hud;
+                default:
+                    return Color.Black;
+            }
         }
     }
 }

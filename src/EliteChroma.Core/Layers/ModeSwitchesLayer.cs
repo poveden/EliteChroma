@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 using static EliteFiles.Journal.Events.StartJump;
@@ -16,7 +15,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            ApplyColorToBinding(canvas.Keyboard, ModeSwitches.All, Color.Green);
+            ApplyColorToBinding(canvas.Keyboard, ModeSwitches.All, Colors.VehicleModeSwitches);
         }
     }
 }

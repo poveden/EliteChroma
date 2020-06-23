@@ -15,7 +15,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            ApplyColorToBinding(canvas.Keyboard, DrivingModeSwitches.All, Color.Green);
+            ApplyColorToBinding(canvas.Keyboard, DrivingModeSwitches.All, Colors.VehicleModeSwitches);
         }
     }
 }

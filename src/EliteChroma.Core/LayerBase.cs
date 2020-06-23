@@ -17,6 +17,7 @@ namespace EliteChroma.Core
         {
             Triangle = 0,
             Square = 1,
+            Sawtooth = 2,
 
             Default = Triangle,
         }
@@ -24,6 +25,8 @@ namespace EliteChroma.Core
         public bool Animated { get; private set; }
 
         protected GameState Game { get; private set; }
+
+        protected ChromaColors Colors { get; private set; }
 
         protected DateTimeOffset Now => Game.Now;
 
@@ -33,7 +36,9 @@ namespace EliteChroma.Core
 
         protected override void OnRender(ChromaCanvas canvas, object state)
         {
-            Game = (GameState)state;
+            var rs = (LayerRenderState)state ?? throw new ArgumentNullException(nameof(state));
+            Game = rs.GameState;
+            Colors = rs.Colors;
             OnRender(canvas);
         }
 
@@ -74,6 +79,9 @@ namespace EliteChroma.Core
             {
                 case PulseColorType.Square:
                     x = t < 0.5 ? 1 : 0;
+                    break;
+                case PulseColorType.Sawtooth:
+                    x = t;
                     break;
                 case PulseColorType.Triangle:
                 default:
@@ -132,7 +140,7 @@ namespace EliteChroma.Core
 
                 grid[key] = color;
 
-                color = color.Transform(0.2);
+                color = color.Transform(Colors.SecondaryBindingBrightness);
             }
         }
     }

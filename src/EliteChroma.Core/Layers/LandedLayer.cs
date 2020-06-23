@@ -22,9 +22,9 @@ namespace EliteChroma.Core.Layers
             StartAnimation();
 
             var k = canvas.Keyboard;
-            k[Key.Escape] = Color.White;
+            k[Key.Escape] = Colors.InterfaceMode;
 
-            var c = PulseColor(Color.Black, Color.Orange.Combine(Color.Red), TimeSpan.FromSeconds(1));
+            var c = PulseColor(Color.Black, Colors.VehicleThrust, TimeSpan.FromSeconds(1));
             ApplyColorToBinding(canvas.Keyboard, FlightThrust.Up, c);
         }
     }

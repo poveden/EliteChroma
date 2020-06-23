@@ -28,12 +28,12 @@ namespace EliteChroma.Core.Layers
             if (Game.Status.HasFlag(Flags.LandingGearDeployed))
             {
                 StartAnimation();
-                lColor = PulseColor(Color.Black, Color.Orange, TimeSpan.FromSeconds(1));
+                lColor = PulseColor(Color.Black, Colors.LandingGearDeployed, TimeSpan.FromSeconds(1));
             }
             else
             {
                 StopAnimation();
-                lColor = Color.Blue;
+                lColor = Colors.LandingGearRetracted;
             }
 
             ApplyColorToBinding(canvas.Keyboard, Miscellaneous.LandingGearToggle, lColor);

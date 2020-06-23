@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
 using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
@@ -18,9 +17,9 @@ namespace EliteChroma.Core.Layers
             }
 
             var k = canvas.Keyboard;
-            k[Key.Escape] = Color.White;
+            k[Key.Escape] = Colors.InterfaceMode;
 
-            ApplyColorToBinding(canvas.Keyboard, GalaxyMap.All, Color.White);
+            ApplyColorToBinding(canvas.Keyboard, GalaxyMap.All, Colors.InterfaceMode);
         }
     }
 }

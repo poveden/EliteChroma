@@ -31,6 +31,16 @@ namespace EliteChroma.Chroma
             return keyboard;
         }
 
+        public static MouseCustom Combine(this MouseCustom mouse, Color c, double cPct = 0.5)
+        {
+            for (var i = 0; i < MouseConstants.MaxLeds; i++)
+            {
+                mouse[i] = mouse[i].Combine(c, cPct);
+            }
+
+            return mouse;
+        }
+
         public static MouseCustom Max(this MouseCustom mouse, Color c)
         {
             for (var i = 0; i < MouseConstants.MaxLeds; i++)
@@ -39,6 +49,16 @@ namespace EliteChroma.Chroma
             }
 
             return mouse;
+        }
+
+        public static MousepadCustom Combine(this MousepadCustom mousepad, Color c, double cPct = 0.5)
+        {
+            for (var i = 0; i < MousepadConstants.MaxLeds; i++)
+            {
+                mousepad[i] = mousepad[i].Combine(c, cPct);
+            }
+
+            return mousepad;
         }
 
         public static MousepadCustom Max(this MousepadCustom mousepad, Color c)
@@ -61,6 +81,16 @@ namespace EliteChroma.Chroma
             return keypad;
         }
 
+        public static HeadsetCustom Combine(this HeadsetCustom headset, Color c, double cPct = 0.5)
+        {
+            for (var i = 0; i < HeadsetConstants.MaxLeds; i++)
+            {
+                headset[i] = headset[i].Combine(c, cPct);
+            }
+
+            return headset;
+        }
+
         public static HeadsetCustom Max(this HeadsetCustom headset, Color c)
         {
             for (var i = 0; i < HeadsetConstants.MaxLeds; i++)
@@ -69,6 +99,16 @@ namespace EliteChroma.Chroma
             }
 
             return headset;
+        }
+
+        public static ChromaLinkCustom Combine(this ChromaLinkCustom chromaLink, Color c, double cPct = 0.5)
+        {
+            for (var i = 0; i < ChromaLinkConstants.MaxLeds; i++)
+            {
+                chromaLink[i] = chromaLink[i].Combine(c, cPct);
+            }
+
+            return chromaLink;
         }
 
         public static ChromaLinkCustom Max(this ChromaLinkCustom chromaLink, Color c)

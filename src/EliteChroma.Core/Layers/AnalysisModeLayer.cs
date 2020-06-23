@@ -11,9 +11,6 @@ namespace EliteChroma.Core.Layers
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class AnalysisModeLayer : LayerBase
     {
-        private static readonly Color AnalysisModeColor = new Color(0.14, 0.62, 0.81);
-        private static readonly Color CombatModeColor = Color.Red;
-
         public override int Order => 600;
 
         protected override void OnRender(ChromaCanvas canvas)
@@ -23,36 +20,44 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            var color = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? AnalysisModeColor.Transform(Game.GuiColour) : CombatModeColor;
+            var colorOn = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? Game.Colors.AnalysisMode : Colors.HardpointsToggle;
 
-            ApplyColorToBinding(canvas.Keyboard, ModeSwitches.PlayerHUDModeToggle, color);
+            ApplyColorToBinding(canvas.Keyboard, ModeSwitches.PlayerHUDModeToggle, colorOn);
 
-            if (!Game.DockedOrLanded)
+            if (Game.DockedOrLanded)
             {
-                ApplyColorToBinding(canvas.Keyboard, Weapons.PrimaryFire, color);
-                ApplyColorToBinding(canvas.Keyboard, Weapons.SecondaryFire, color);
-
-                Color hColor = color;
-                Color mColor = color;
-                Color bColor = color.Transform(0.5);
-
-                if (Game.Status.HasFlag(Flags.HardpointsDeployed) && !Game.Status.HasFlag(Flags.Supercruise))
-                {
-                    StartAnimation();
-                    hColor = PulseColor(Color.Black, color, TimeSpan.FromSeconds(1));
-                }
-                else
-                {
-                    StopAnimation();
-                    mColor = bColor;
-                }
-
-                ApplyColorToBinding(canvas.Keyboard, Weapons.DeployHardpointToggle, hColor);
-                canvas.Mouse.Set(mColor);
-                canvas.Mousepad.Set(mColor);
-                canvas.Headset.Set(mColor);
-                canvas.ChromaLink.Set(bColor);
+                return;
             }
+
+            ApplyColorToBinding(canvas.Keyboard, Weapons.PrimaryFire, colorOn);
+            ApplyColorToBinding(canvas.Keyboard, Weapons.SecondaryFire, colorOn);
+
+            var hardpointsDeployed = Game.Status.HasFlag(Flags.HardpointsDeployed) && !Game.Status.HasFlag(Flags.Supercruise);
+
+            Color hColor;
+            if (hardpointsDeployed)
+            {
+                StartAnimation();
+                hColor = PulseColor(Color.Black, colorOn, TimeSpan.FromSeconds(1));
+            }
+            else
+            {
+                StopAnimation();
+                hColor = colorOn;
+            }
+
+            ApplyColorToBinding(canvas.Keyboard, Weapons.DeployHardpointToggle, hColor);
+
+            var colorOff = Game.Status.HasFlag(Flags.HudInAnalysisMode)
+                ? Game.Colors.AnalysisMode.Transform(Colors.DeviceDimBrightness)
+                : Game.Colors.Hud.Transform(Colors.DeviceDimBrightness);
+
+            var c = hardpointsDeployed ? colorOn : colorOff;
+
+            canvas.Mouse.Set(c);
+            canvas.Mousepad.Set(c);
+            canvas.Headset.Set(c);
+            canvas.ChromaLink.Set(c);
         }
     }
 }

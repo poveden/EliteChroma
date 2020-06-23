@@ -30,32 +30,32 @@ namespace EliteChroma.Core.Layers
             }
 
             var k = canvas.Keyboard;
-            k[Key.Escape] = Color.White;
+            k[Key.Escape] = Colors.InterfaceMode;
 
-            ApplyColorToBinding(canvas.Keyboard, FlightRotation.All, Color.White);
-            ApplyColorToBinding(canvas.Keyboard, FlightThrust.All, Color.Orange);
-            ApplyColorToBinding(canvas.Keyboard, AlternateFlightControls.All, Color.White);
-            ApplyColorToBinding(canvas.Keyboard, FlightThrottle.All, Color.Yellow);
-            ApplyColorToBinding(canvas.Keyboard, FlightLandingOverrides.All, Color.White);
-            ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.All, Color.Pink);
-            ApplyColorToBinding(canvas.Keyboard, Targeting.All, Color.Green);
-            ApplyColorToBinding(canvas.Keyboard, Weapons.All, Color.Red);
-            ApplyColorToBinding(canvas.Keyboard, Cooling.All, Color.HotPink);
+            ApplyColorToBinding(canvas.Keyboard, FlightRotation.All, Colors.VehicleRotation);
+            ApplyColorToBinding(canvas.Keyboard, FlightThrust.All, Colors.VehicleThrust);
+            ApplyColorToBinding(canvas.Keyboard, AlternateFlightControls.All, Colors.VehicleAlternate);
+            ApplyColorToBinding(canvas.Keyboard, FlightThrottle.All, Colors.VehicleThrottle);
+            ApplyColorToBinding(canvas.Keyboard, FlightLandingOverrides.All, Colors.VehicleAlternate);
+            ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.All, Colors.VehicleMiscellaneous);
+            ApplyColorToBinding(canvas.Keyboard, Targeting.All, Colors.VehicleTargeting);
+            ApplyColorToBinding(canvas.Keyboard, Weapons.All, Colors.VehicleWeapons);
+            ApplyColorToBinding(canvas.Keyboard, Cooling.All, Colors.VehicleCooling);
 
             if (Game.Status.HasFlag(Flags.Supercruise))
             {
-                ApplyColorToBinding(canvas.Keyboard, SupercruiseMiscellaneous, Color.Blue);
-                ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.Enter, Color.Green);
+                ApplyColorToBinding(canvas.Keyboard, SupercruiseMiscellaneous, Colors.Miscellaneous);
+                ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.Enter, Colors.FullSpectrumSystemScanner);
             }
             else
             {
-                ApplyColorToBinding(canvas.Keyboard, Miscellaneous.All, Color.Blue);
+                ApplyColorToBinding(canvas.Keyboard, Miscellaneous.All, Colors.Miscellaneous);
             }
 
             if (Game.Status.HasFlag(Flags.FsdCharging))
             {
                 StartAnimation();
-                var jumpColor = PulseColor(Color.Pink, Color.Black, TimeSpan.FromSeconds(1));
+                var jumpColor = PulseColor(Colors.FrameShiftDriveControls, Color.Black, TimeSpan.FromSeconds(1));
                 ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.HyperSuperCombination, jumpColor);
                 ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Supercruise, jumpColor);
                 ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Hyperspace, jumpColor);
