@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using EliteFiles.Internal;
 
 namespace EliteFiles.Journal
@@ -121,13 +123,22 @@ namespace EliteFiles.Journal
             DispatchEventsFromJournal();
         }
 
-        private void JournalReadTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Will rethrow exceptions into calling thread")]
+        private async void JournalReadTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            DispatchEventsFromJournal();
-
-            if (_watching)
+            try
             {
-                _journalReadTimer.Start();
+                DispatchEventsFromJournal();
+
+                if (_watching)
+                {
+                    _journalReadTimer.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Reference: https://docs.microsoft.com/en-us/dotnet/api/system.timers.timer?view=netcore-3.1#remarks
+                await Task.FromException(ex).ConfigureAwait(false);
             }
         }
 

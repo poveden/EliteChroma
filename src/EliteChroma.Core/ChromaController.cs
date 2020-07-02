@@ -177,7 +177,7 @@ namespace EliteChroma.Core
             }
         }
 
-        private void GameState_Changed(object sender, EventArgs e)
+        private async void GameState_Changed(object sender, EventArgs e)
         {
             if (_animation.Enabled)
             {
@@ -185,12 +185,12 @@ namespace EliteChroma.Core
                 return;
             }
 
-            Task.Run(RenderEffect);
+            await RenderEffect().ConfigureAwait(false);
         }
 
-        private void Animation_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private async void Animation_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            Task.Run(RenderEffect);
+            await RenderEffect().ConfigureAwait(false);
         }
 
         private async Task RenderEffect()

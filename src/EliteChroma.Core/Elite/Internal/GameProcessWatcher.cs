@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using System.Timers;
 using EliteChroma.Core.Internal;
 using EliteFiles;
@@ -93,7 +95,8 @@ namespace EliteChroma.Elite.Internal
             return GameProcessState.NotRunning;
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Will rethrow exceptions into calling thread")]
+        private async void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (System.Threading.Interlocked.Exchange(ref _checking, 1) == 1)
             {
@@ -112,6 +115,11 @@ namespace EliteChroma.Elite.Internal
                 _processState = newState;
 
                 Changed?.Invoke(this, newState);
+            }
+            catch (Exception ex)
+            {
+                // Reference: https://docs.microsoft.com/en-us/dotnet/api/system.timers.timer?view=netcore-3.1#remarks
+                await Task.FromException(ex).ConfigureAwait(false);
             }
             finally
             {
