@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace EliteChroma.Core.Tests.Internal
@@ -8,11 +9,13 @@ namespace EliteChroma.Core.Tests.Internal
     {
         private readonly Action<EventHandler<T>> _attach;
         private readonly Action<EventHandler<T>> _detach;
+        private readonly string _name;
 
-        public EventCollector(Action<EventHandler<T>> attach, Action<EventHandler<T>> detach)
+        public EventCollector(Action<EventHandler<T>> attach, Action<EventHandler<T>> detach, string name)
         {
             _attach = attach;
             _detach = detach;
+            _name = name;
         }
 
         public T Wait(Action trigger, int timeout = Timeout.Infinite)
@@ -50,6 +53,13 @@ namespace EliteChroma.Core.Tests.Internal
                 void Handler(object sender, T e)
                 {
                     res.Add(e);
+
+                    if (ce.IsSet)
+                    {
+                        var list = string.Join(',', res.Select(x => $"{x}"));
+                        throw new InvalidOperationException($"More than {count} events received in collector '{_name}': {list}.");
+                    }
+
                     ce.Signal();
                 }
 
@@ -60,7 +70,8 @@ namespace EliteChroma.Core.Tests.Internal
 
                 if (!ok)
                 {
-                    throw new TimeoutException();
+                    var list = string.Join(',', res.Select(x => $"{x}"));
+                    throw new TimeoutException($"Timeout in collector '{_name}' after receiving the following events: {list}.");
                 }
             }
 

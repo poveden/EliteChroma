@@ -77,7 +77,7 @@ namespace EliteFiles.Tests
         public async Task WatcherRaisesTheChangedEventOnStart()
         {
             using var watcher = new GraphicsConfigWatcher(_gif, _gof);
-            var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h);
+            var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatcherRaisesTheChangedEventOnStart));
 
             var config = await evs.WaitAsync(() =>
             {
@@ -96,7 +96,7 @@ namespace EliteFiles.Tests
             using var watcher = new GraphicsConfigWatcher(new GameInstallFolder(dirMain.Name), new GameOptionsFolder(dirOpts.Name));
             watcher.Start();
 
-            var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h);
+            var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatchesForChangesInTheGraphicsConfigurationFiles));
 
             var xmlMain = dirMain.ReadText(_mainFile);
 

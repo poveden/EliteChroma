@@ -134,8 +134,8 @@ namespace EliteFiles.Tests
         public async Task WatcherRaisesEventsForHistoricalEntriesOnStart()
         {
             using var watcher = new JournalWatcher(_jf);
-            var ecEntries = new EventCollector<JournalEntry>(h => watcher.EntryAdded += h, h => watcher.EntryAdded -= h);
-            var ecReady = new EventCollector<EventArgs>(h => watcher.Started += h, h => watcher.Started -= h);
+            var ecEntries = new EventCollector<JournalEntry>(h => watcher.EntryAdded += h, h => watcher.EntryAdded -= h, nameof(WatcherRaisesEventsForHistoricalEntriesOnStart));
+            var ecReady = new EventCollector<EventArgs>(h => watcher.Started += h, h => watcher.Started -= h, nameof(WatcherRaisesEventsForHistoricalEntriesOnStart));
 
             var readyTask = ecReady.WaitAsync(() => { });
             var entries = new Queue<JournalEntry>(await ecEntries.WaitAsync(_journalFile1Count, () =>
@@ -165,8 +165,8 @@ namespace EliteFiles.Tests
         {
             using var dir = new TestFolder(_jf.FullName);
             using var watcher = new JournalWatcher(new JournalFolder(dir.Name));
-            var ecEntries = new EventCollector<JournalEntry>(h => watcher.EntryAdded += h, h => watcher.EntryAdded -= h);
-            var ecReady = new EventCollector<EventArgs>(h => watcher.Started += h, h => watcher.Started -= h);
+            var ecEntries = new EventCollector<JournalEntry>(h => watcher.EntryAdded += h, h => watcher.EntryAdded -= h, nameof(WatcherRaisesEventsForNewJournalEntries));
+            var ecReady = new EventCollector<EventArgs>(h => watcher.Started += h, h => watcher.Started -= h, nameof(WatcherRaisesEventsForNewJournalEntries));
 
             var ev = await ecReady.WaitAsync(watcher.Start).ConfigureAwait(false);
             Assert.NotNull(ev);

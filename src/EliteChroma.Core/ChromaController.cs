@@ -177,7 +177,7 @@ namespace EliteChroma.Core
             }
         }
 
-        private async void GameState_Changed(object sender, EventArgs e)
+        private async void GameState_Changed(object sender, GameStateWatcher.ChangeType e)
         {
             if (_animation.Enabled)
             {

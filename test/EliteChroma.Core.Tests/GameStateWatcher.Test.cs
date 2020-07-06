@@ -1,10 +1,11 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite;
 using Xunit;
+using static EliteChroma.Elite.GameStateWatcher;
 
 namespace EliteChroma.Core.Tests
 {
@@ -18,15 +19,31 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void RaisesEventsForEachGameStateChange()
         {
+            var expected = new[]
+            {
+                ChangeType.StatusEntry,
+                ChangeType.BindingPreset,
+                ChangeType.GraphicsConfig,
+                ChangeType.DeviceKeySet,
+                ChangeType.GameProcessState,
+                ChangeType.JournalEntry,
+                ChangeType.JournalEntry,
+                ChangeType.JournalEntry,
+                ChangeType.JournalDrain,
+            };
+
             using var watcher = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, _journalFolder)
             {
                 RaisePreStartupEvents = true,
             };
 
-            var evs = new EventCollector<EventArgs>(h => watcher.Changed += h, h => watcher.Changed -= h);
+            var evs = new EventCollector<ChangeType>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(RaisesEventsForEachGameStateChange));
 
-            evs.Wait(8, watcher.Start, 5000);
+            var events = evs.Wait(expected.Length, watcher.Start, 5000);
             watcher.Stop();
+
+            var mismatches = expected.Except(events);
+            Assert.Empty(mismatches);
         }
 
         [Fact]
@@ -47,8 +64,8 @@ namespace EliteChroma.Core.Tests
                 RaisePreStartupEvents = false,
             };
 
-            var evs = new EventCollector<EventArgs>(h => watcher.Changed += h, h => watcher.Changed -= h);
-            evs.Wait(1, watcher.Start, 5000);
+            var evs = new EventCollector<ChangeType>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(OnChangedIsNotReentrant));
+            evs.Wait(watcher.Start, 5000);
 
             var nOnChangedCalls = 0;
             using var mre = new ManualResetEventSlim();
@@ -61,7 +78,7 @@ namespace EliteChroma.Core.Tests
 
             void OnChanged()
             {
-                watcher.InvokePrivateMethod<object>("OnChanged");
+                watcher.InvokePrivateMethod<object>("OnChanged", new object[] { null });
                 mre.Set();
             }
 

@@ -92,7 +92,7 @@ namespace EliteFiles.Tests
         public async Task WatcherRaisesTheChangedEventOnStart()
         {
             using var watcher = new BindingsWatcher(_gif, _gof);
-            var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h);
+            var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatcherRaisesTheChangedEventOnStart));
 
             var binds = await evs.WaitAsync(() =>
             {
@@ -123,7 +123,7 @@ namespace EliteFiles.Tests
             using var watcher = new BindingsWatcher(new GameInstallFolder(dirMain.Name), new GameOptionsFolder(dirOpts.Name));
             watcher.Start();
 
-            var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h);
+            var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatchesForChangesInTheBidingsFiles));
 
             var bindsCustom = dirOpts.ReadText(_customFile);
 
