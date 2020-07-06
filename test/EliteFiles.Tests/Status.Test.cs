@@ -60,7 +60,7 @@ namespace EliteFiles.Tests
         public async Task WatcherRaisesTheChangedEventOnStart()
         {
             using var watcher = new StatusWatcher(_jf);
-            var ecs = new EventCollector<StatusEntry>(h => watcher.Changed += h, h => watcher.Changed -= h);
+            var ecs = new EventCollector<StatusEntry>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatcherRaisesTheChangedEventOnStart));
 
             var status = await ecs.WaitAsync(() =>
             {
@@ -78,7 +78,7 @@ namespace EliteFiles.Tests
             using var watcher = new StatusWatcher(new JournalFolder(dir.Name));
             watcher.Start();
 
-            var ec = new EventCollector<StatusEntry>(h => watcher.Changed += h, h => watcher.Changed -= h);
+            var ec = new EventCollector<StatusEntry>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatchesForChangesInTheStatusFile));
 
             var status = await ec.WaitAsync(() => dir.WriteText("Status.json", "{\"event\":\"One\"}\r\n")).ConfigureAwait(false);
             Assert.Equal("One", status.Event);

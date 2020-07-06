@@ -36,7 +36,7 @@ namespace EliteChroma.Core.Tests
             };
 
             using var gpw = new GameProcessWatcher(_gif, nm);
-            var evs = new EventCollector<GameProcessState>(h => gpw.Changed += h, h => gpw.Changed -= h);
+            var evs = new EventCollector<GameProcessState>(h => gpw.Changed += h, h => gpw.Changed -= h, nameof(WatchesForGameProcessChanges));
 
             var pss = evs.Wait(3, () =>
             {

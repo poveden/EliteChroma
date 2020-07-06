@@ -62,7 +62,18 @@ namespace EliteChroma.Elite
             _gameState = new GameState();
         }
 
-        public event EventHandler<EventArgs> Changed;
+        public event EventHandler<ChangeType> Changed;
+
+        public enum ChangeType
+        {
+            JournalDrain,
+            JournalEntry,
+            StatusEntry,
+            BindingPreset,
+            GraphicsConfig,
+            DeviceKeySet,
+            GameProcessState,
+        }
 
         public bool DetectForegroundProcess { get; set; } = true;
 
@@ -155,7 +166,7 @@ namespace EliteChroma.Elite
 
         private void JournalWatcher_Started(object sender, EventArgs e)
         {
-            OnChanged();
+            OnChanged(ChangeType.JournalDrain);
         }
 
         private void JournalWatcher_EntryAdded(object sender, JournalEntry e)
@@ -203,41 +214,41 @@ namespace EliteChroma.Elite
                     break;
             }
 
-            OnChanged();
+            OnChanged(ChangeType.JournalEntry);
         }
 
         private void StatusWatcher_Changed(object sender, StatusEntry e)
         {
             _gameState.Status = e;
-            OnChanged();
+            OnChanged(ChangeType.StatusEntry);
         }
 
         private void BindingsWatcher_Changed(object sender, BindingPreset e)
         {
             _modifierKeysWatcher.Watch(GetAllModifiers(e.Bindings.Values));
             _gameState.Bindings = e.Bindings;
-            OnChanged();
+            OnChanged(ChangeType.BindingPreset);
         }
 
         private void GraphicsConfig_Changed(object sender, GraphicsConfig e)
         {
             _gameState.GuiColour = e.GuiColour.Default;
-            OnChanged();
+            OnChanged(ChangeType.GraphicsConfig);
         }
 
         private void ModifierKeysWatcher_Changed(object sender, DeviceKeySet e)
         {
             _gameState.PressedModifiers = e;
-            OnChanged();
+            OnChanged(ChangeType.DeviceKeySet);
         }
 
         private void GameProcessWatcher_Changed(object sender, GameProcessState e)
         {
             _gameState.ProcessState = e;
-            OnChanged();
+            OnChanged(ChangeType.GameProcessState);
         }
 
-        private void OnChanged()
+        private void OnChanged(ChangeType changeType)
         {
             if (!_journalWatcher.IsWatching && !RaisePreStartupEvents)
             {
@@ -251,7 +262,7 @@ namespace EliteChroma.Elite
 
             try
             {
-                Changed?.Invoke(this, EventArgs.Empty);
+                Changed?.Invoke(this, changeType);
             }
             finally
             {

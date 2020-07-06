@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,11 +10,13 @@ namespace EliteFiles.Tests.Internal
     {
         private readonly Action<EventHandler<T>> _attach;
         private readonly Action<EventHandler<T>> _detach;
+        private readonly string _name;
 
-        public EventCollector(Action<EventHandler<T>> attach, Action<EventHandler<T>> detach)
+        public EventCollector(Action<EventHandler<T>> attach, Action<EventHandler<T>> detach, string name)
         {
             _attach = attach;
             _detach = detach;
+            _name = name;
         }
 
         public async Task<T> WaitAsync(Action trigger, int timeout = Timeout.Infinite)
@@ -46,13 +49,26 @@ namespace EliteFiles.Tests.Internal
                 void Handler(object sender, T e)
                 {
                     res.Add(e);
+
+                    if (ce.IsSet)
+                    {
+                        var list = string.Join(',', res.Select(x => $"{x}"));
+                        throw new InvalidOperationException($"More than {count} events received in collector '{_name}': {list}.");
+                    }
+
                     ce.Signal();
                 }
 
                 _attach(Handler);
                 trigger();
-                await Task.Run(() => ce.Wait(timeout)).ConfigureAwait(false);
+                var ok = await Task.Run(() => ce.Wait(timeout)).ConfigureAwait(false);
                 _detach(Handler);
+
+                if (!ok)
+                {
+                    var list = string.Join(',', res.Select(x => $"{x}"));
+                    throw new TimeoutException($"Timeout in collector '{_name}' after receiving the following events: {list}.");
+                }
             }
 
             return res;
