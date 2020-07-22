@@ -17,6 +17,9 @@ namespace EliteFiles.Bindings
         private readonly EliteFileSystemWatcher _startPresetWatcher;
         private readonly EliteFileSystemWatcher _customBindsWatcher;
 
+        private bool _running;
+        private bool _disposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BindingsWatcher"/> class
         /// with the given game installation folder and game options folder paths.
@@ -47,8 +50,14 @@ namespace EliteFiles.Bindings
         /// </summary>
         public void Start()
         {
+            if (_running)
+            {
+                return;
+            }
+
             Reload();
             _startPresetWatcher.Start();
+            _running = true;
         }
 
         /// <summary>
@@ -56,8 +65,14 @@ namespace EliteFiles.Bindings
         /// </summary>
         public void Stop()
         {
+            if (!_running)
+            {
+                return;
+            }
+
             _startPresetWatcher.Stop();
             _customBindsWatcher.Stop();
+            _running = false;
         }
 
         /// <summary>
@@ -65,8 +80,14 @@ namespace EliteFiles.Bindings
         /// </summary>
         public void Dispose()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             _startPresetWatcher.Dispose();
             _customBindsWatcher.Dispose();
+            _disposed = true;
         }
 
         private void Bindings_Changed(object sender, FileSystemEventArgs e)

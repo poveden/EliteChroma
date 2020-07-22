@@ -16,6 +16,8 @@ namespace EliteChroma.Core.Windows
 
         private readonly ChromaWindow _cw;
 
+        private bool _disposed;
+
         public WinChromaFactory()
         {
             _cw = new ChromaWindow();
@@ -37,7 +39,13 @@ namespace EliteChroma.Core.Windows
 
         public void Dispose()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             _cw.Dispose();
+            _disposed = true;
         }
 
         private async Task<bool> WaitForAccessGranted(IChroma chroma)

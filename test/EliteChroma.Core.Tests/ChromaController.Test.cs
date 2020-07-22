@@ -108,6 +108,28 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
+        public void StartAndStopAreNotReentrant()
+        {
+            using var watcher = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
+
+            bool IsRunning() => watcher.GetPrivateField<bool>("_running");
+
+            Assert.False(IsRunning());
+
+            watcher.Start();
+            Assert.True(IsRunning());
+
+            watcher.Start();
+            Assert.True(IsRunning());
+
+            watcher.Stop();
+            Assert.False(IsRunning());
+
+            watcher.Stop();
+            Assert.False(IsRunning());
+        }
+
+        [Fact]
         public void DoesNotThrowWhenDisposingTwice()
         {
             var watcher = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);

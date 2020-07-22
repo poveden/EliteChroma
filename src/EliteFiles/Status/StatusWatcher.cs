@@ -14,6 +14,9 @@ namespace EliteFiles.Status
         private readonly FileInfo _statusFile;
         private readonly EliteFileSystemWatcher _watcher;
 
+        private bool _running;
+        private bool _disposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StatusWatcher"/> class
         /// with the given player journal folder path.
@@ -38,9 +41,14 @@ namespace EliteFiles.Status
         /// </summary>
         public void Start()
         {
-            _watcher.Stop();
+            if (_running)
+            {
+                return;
+            }
+
             Reload();
             _watcher.Start();
+            _running = true;
         }
 
         /// <summary>
@@ -48,7 +56,13 @@ namespace EliteFiles.Status
         /// </summary>
         public void Stop()
         {
+            if (!_running)
+            {
+                return;
+            }
+
             _watcher.Stop();
+            _running = false;
         }
 
         /// <summary>
@@ -56,7 +70,13 @@ namespace EliteFiles.Status
         /// </summary>
         public void Dispose()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             _watcher.Dispose();
+            _disposed = true;
         }
 
         private void StatusWatcher_Changed(object sender, FileSystemEventArgs e)

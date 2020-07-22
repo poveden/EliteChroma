@@ -9,6 +9,8 @@ namespace EliteFiles.Tests.Internal
     {
         private readonly DirectoryInfo _di;
 
+        private bool _disposed;
+
         public TestFolder()
             : this(null)
         {
@@ -56,7 +58,13 @@ namespace EliteFiles.Tests.Internal
 
         public void Dispose()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             _di?.Delete(true);
+            _disposed = true;
         }
 
         private static void Copy(DirectoryInfo source, DirectoryInfo target)

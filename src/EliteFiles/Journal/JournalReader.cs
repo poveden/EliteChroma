@@ -19,6 +19,8 @@ namespace EliteFiles.Journal
         private int _bufI;
         private int _bufN;
 
+        private bool _disposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="JournalReader"/> class
         /// with the specified journal file.
@@ -68,7 +70,13 @@ namespace EliteFiles.Journal
         /// </summary>
         public void Dispose()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             _fs.Dispose();
+            _disposed = true;
         }
 
         private bool TryReadEntryFromBuffer(out JournalEntry entry)

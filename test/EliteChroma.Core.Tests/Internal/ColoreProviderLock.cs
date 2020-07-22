@@ -22,7 +22,18 @@ namespace EliteChroma.Core.Tests.Internal
 
         private sealed class Lock : IDisposable
         {
-            public void Dispose() => _chromaLock.Release();
+            private bool _disposed;
+
+            public void Dispose()
+            {
+                if (_disposed)
+                {
+                    return;
+                }
+
+                _chromaLock.Release();
+                _disposed = true;
+            }
         }
     }
 }
