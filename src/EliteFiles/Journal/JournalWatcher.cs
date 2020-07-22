@@ -24,6 +24,7 @@ namespace EliteFiles.Journal
 
         private bool _watching;
         private bool _starting;
+        private bool _disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JournalWatcher"/> class
@@ -111,9 +112,15 @@ namespace EliteFiles.Journal
         /// </summary>
         public void Dispose()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             Stop();
             _journalFilesWatcher.Dispose();
             _journalReadTimer.Dispose();
+            _disposed = true;
         }
 
         private void JournalFilesWatcher_Changed(object sender, FileSystemEventArgs e)

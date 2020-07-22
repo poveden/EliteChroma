@@ -10,6 +10,7 @@ namespace EliteFiles.Internal
         private readonly object _lock = new object();
 
         private bool _started;
+        private bool _disposed;
 
         public EliteFileSystemWatcher(string path)
             : this(path, "*.*")
@@ -43,6 +44,11 @@ namespace EliteFiles.Internal
 
         public void Start()
         {
+            if (_started)
+            {
+                return;
+            }
+
             lock (_lock)
             {
                 _watcher.EnableRaisingEvents = true;
@@ -52,6 +58,11 @@ namespace EliteFiles.Internal
 
         public void Stop()
         {
+            if (!_started)
+            {
+                return;
+            }
+
             lock (_lock)
             {
                 _watcher.EnableRaisingEvents = false;
@@ -61,8 +72,14 @@ namespace EliteFiles.Internal
 
         public void Dispose()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             Stop();
             _watcher.Dispose();
+            _disposed = true;
         }
 
         private void Watcher_Changed(object sender, FileSystemEventArgs e)

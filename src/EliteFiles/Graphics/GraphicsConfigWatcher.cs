@@ -17,6 +17,9 @@ namespace EliteFiles.Graphics
         private readonly EliteFileSystemWatcher _mainWatcher;
         private readonly EliteFileSystemWatcher _overrideWatcher;
 
+        private bool _running;
+        private bool _disposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GraphicsConfigWatcher"/> class
         /// with the given game installation folder and game options folder paths.
@@ -47,13 +50,16 @@ namespace EliteFiles.Graphics
         /// </summary>
         public void Start()
         {
-            _mainWatcher.Stop();
-            _overrideWatcher.Stop();
+            if (_running)
+            {
+                return;
+            }
 
             Reload();
 
             _mainWatcher.Start();
             _overrideWatcher.Start();
+            _running = true;
         }
 
         /// <summary>
@@ -61,8 +67,14 @@ namespace EliteFiles.Graphics
         /// </summary>
         public void Stop()
         {
+            if (!_running)
+            {
+                return;
+            }
+
             _mainWatcher.Stop();
             _overrideWatcher.Stop();
+            _running = false;
         }
 
         /// <summary>
@@ -70,9 +82,15 @@ namespace EliteFiles.Graphics
         /// </summary>
         public void Dispose()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             Stop();
             _mainWatcher.Dispose();
             _overrideWatcher.Dispose();
+            _disposed = true;
         }
 
         private void GraphicsConfig_Changed(object sender, FileSystemEventArgs e)

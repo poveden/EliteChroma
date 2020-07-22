@@ -54,6 +54,26 @@ namespace EliteChroma.Core.Tests
             await chroma.UninitializeAsync().ConfigureAwait(false);
         }
 
+        [Fact]
+        public void DoesNotThrowWhenDisposingTwice()
+        {
+            var cf = new WinChromaFactory();
+#pragma warning disable IDISP016, IDISP017
+            cf.Dispose();
+            cf.Dispose();
+#pragma warning restore IDISP016, IDISP017
+        }
+
+        [Fact]
+        public void ChromaWindowDoesNotThrowWhenDisposingTwice()
+        {
+            var cw = new ChromaWindow();
+#pragma warning disable IDISP016, IDISP017
+            cw.Dispose();
+            cw.Dispose();
+#pragma warning restore IDISP016, IDISP017
+        }
+
         private static ChromaWindow GetChromaWindowInstance(WinChromaFactory cf)
         {
             return (ChromaWindow)cf.GetType()

@@ -94,6 +94,38 @@ namespace EliteChroma.Core.Tests
             Assert.Equal(1, nOnChangedCalls);
         }
 
+        [Fact]
+        public void StartAndStopAreNotReentrant()
+        {
+            using var gpw = new GameProcessWatcher(_gif, new NativeMethodsMock());
+
+            bool IsRunning() => gpw.GetPrivateField<bool>("_running");
+
+            Assert.False(IsRunning());
+
+            gpw.Start();
+            Assert.True(IsRunning());
+
+            gpw.Start();
+            Assert.True(IsRunning());
+
+            gpw.Stop();
+            Assert.False(IsRunning());
+
+            gpw.Stop();
+            Assert.False(IsRunning());
+        }
+
+        [Fact]
+        public void DoesNotThrowWhenDisposingTwice()
+        {
+            var pw = new GameProcessWatcher(_gif, new NativeMethodsMock());
+#pragma warning disable IDISP016, IDISP017
+            pw.Dispose();
+            pw.Dispose();
+#pragma warning restore IDISP016, IDISP017
+        }
+
         private static void InvokeTimerElapsed(GameProcessWatcher instance)
         {
             // HACK: Hopefully will no longer be needed when .NET 5.0 arrives (https://github.com/dotnet/runtime/issues/31204)

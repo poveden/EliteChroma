@@ -41,6 +41,38 @@ namespace EliteChroma.Core.Tests
             Assert.Contains(key3, keys);
         }
 
+        [Fact]
+        public void StartAndStopAreNotReentrant()
+        {
+            using var mkw = new ModifierKeysWatcher(new NativeMethodsMock());
+
+            bool IsRunning() => mkw.GetPrivateField<bool>("_running");
+
+            Assert.False(IsRunning());
+
+            mkw.Start();
+            Assert.True(IsRunning());
+
+            mkw.Start();
+            Assert.True(IsRunning());
+
+            mkw.Stop();
+            Assert.False(IsRunning());
+
+            mkw.Stop();
+            Assert.False(IsRunning());
+        }
+
+        [Fact]
+        public void DoesNotThrowWhenDisposingTwice()
+        {
+            var mkw = new ModifierKeysWatcher(new NativeMethodsMock());
+#pragma warning disable IDISP016, IDISP017
+            mkw.Dispose();
+            mkw.Dispose();
+#pragma warning restore IDISP016, IDISP017
+        }
+
         private static T FromXml<T>(string xml)
             where T : DeviceKeyBase
         {

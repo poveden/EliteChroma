@@ -100,6 +100,28 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
+        public void StartAndStopAreNotReentrant()
+        {
+            using var watcher = new StatusWatcher(_jf);
+
+            bool IsRunning() => watcher.GetPrivateField<bool>("_running");
+
+            Assert.False(IsRunning());
+
+            watcher.Start();
+            Assert.True(IsRunning());
+
+            watcher.Start();
+            Assert.True(IsRunning());
+
+            watcher.Stop();
+            Assert.False(IsRunning());
+
+            watcher.Stop();
+            Assert.False(IsRunning());
+        }
+
+        [Fact]
         public void WatcherDoesNotThrowWhenDisposingTwice()
         {
             var watcher = new StatusWatcher(_jf);

@@ -20,6 +20,8 @@ namespace EliteChroma.Elite.Internal
         private GameProcessState? _processState;
         private int _checking;
         private int _processCheckCycle;
+        private bool _running;
+        private bool _disposed;
 
         public GameProcessWatcher(GameInstallFolder gameInstallFolder, INativeMethods nativeMethods)
             : base(nativeMethods)
@@ -40,23 +42,36 @@ namespace EliteChroma.Elite.Internal
 
         public void Start()
         {
-            if (_timer.Enabled)
+            if (_running)
             {
                 return;
             }
 
             _processState = null;
             _timer.Start();
+            _running = true;
         }
 
         public void Stop()
         {
+            if (!_running)
+            {
+                return;
+            }
+
             _timer.Stop();
+            _running = false;
         }
 
         public void Dispose()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             _timer?.Dispose();
+            _disposed = true;
         }
 
         private bool CheckGameForegroundState()

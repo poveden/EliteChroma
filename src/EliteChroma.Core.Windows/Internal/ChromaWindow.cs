@@ -10,6 +10,8 @@ namespace EliteChroma.Core.Windows.Internal
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Win32 handle constant")]
         private static readonly IntPtr HWND_MESSAGE = new IntPtr(-3);
 
+        private bool _disposed;
+
         public ChromaWindow()
         {
             CreateHandle(new CreateParams
@@ -22,7 +24,13 @@ namespace EliteChroma.Core.Windows.Internal
 
         public void Dispose()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             ReleaseHandle();
+            _disposed = true;
         }
 
         protected override void WndProc(ref Message m)

@@ -17,6 +17,8 @@ namespace EliteChroma.Elite.Internal
         private readonly Timer _timer;
 
         private DeviceKeySet _currPressed;
+        private bool _running;
+        private bool _disposed;
 
         public ModifierKeysWatcher(INativeMethods nativeMethods)
             : base(nativeMethods)
@@ -47,17 +49,35 @@ namespace EliteChroma.Elite.Internal
 
         public void Start()
         {
+            if (_running)
+            {
+                return;
+            }
+
             _timer.Start();
+            _running = true;
         }
 
         public void Stop()
         {
+            if (!_running)
+            {
+                return;
+            }
+
             _timer.Stop();
+            _running = false;
         }
 
         public void Dispose()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             _timer?.Dispose();
+            _disposed = true;
         }
 
         [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Will rethrow exceptions into calling thread")]

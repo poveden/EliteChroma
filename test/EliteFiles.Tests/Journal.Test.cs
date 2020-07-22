@@ -204,5 +204,16 @@ namespace EliteFiles.Tests
             watcher.Dispose();
 #pragma warning restore IDISP016, IDISP017
         }
+
+        [Fact]
+        public void JournalReaderDoesNotThrowWhenDisposingTwice()
+        {
+            using var tf = new TestFolder(_journalFolder);
+            var jr = new JournalReader(tf.Resolve(_journalFile1));
+#pragma warning disable IDISP016, IDISP017
+            jr.Dispose();
+            jr.Dispose();
+#pragma warning restore IDISP016, IDISP017
+        }
     }
 }

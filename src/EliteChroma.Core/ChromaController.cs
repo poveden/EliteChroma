@@ -29,6 +29,7 @@ namespace EliteChroma.Core
         private int _fps;
         private DateTimeOffset _chromaWarmupUntil;
 
+        private bool _running;
         private bool _disposed;
 
         [ExcludeFromCodeCoverage]
@@ -83,13 +84,25 @@ namespace EliteChroma.Core
 
         public void Start()
         {
+            if (_running)
+            {
+                return;
+            }
+
             _watcher.Start();
+            _running = true;
         }
 
         public void Stop()
         {
+            if (!_running)
+            {
+                return;
+            }
+
             _watcher.Stop();
             ChromaStop().Wait();
+            _running = false;
         }
 
         public void Dispose()
