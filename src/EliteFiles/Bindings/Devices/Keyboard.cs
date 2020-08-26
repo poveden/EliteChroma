@@ -4,7 +4,9 @@
     /// Defines keyboard key names.
     /// </summary>
     /// <remarks>
-    /// Reference: &lt;EliteRoot&gt;\Products\elite-dangerous-64\ControlSchemes\Help.txt.
+    /// References:
+    /// - &lt;EliteRoot&gt;\Products\elite-dangerous-64\ControlSchemes\Help.txt.
+    /// - &lt;EliteRoot&gt;\Products\elite-dangerous-64\EliteDangerous64.exe (binary scraping).
     /// </remarks>
     public static class Keyboard
     {
@@ -92,7 +94,6 @@
         public const string Numpad3 = "Key_Numpad_3";
         public const string Numpad0 = "Key_Numpad_0";
         public const string NumpadDecimal = "Key_Numpad_Decimal";
-        public const string Oem102 = "Key_OEM_102";
         public const string F11 = "Key_F11";
         public const string F12 = "Key_F12";
         public const string F13 = "Key_F13";
@@ -155,6 +156,64 @@
         public const string MediaSelect = "Key_MediaSelect";
         public const string GreenModifier = "Key_GreenModifier";
         public const string OrangeModifier = "Key_OrangeModifier";
+        public const string F16 = "Key_F16";
+        public const string F17 = "Key_F17";
+        public const string F18 = "Key_F18";
+        public const string F19 = "Key_F19";
+        public const string F20 = "Key_F20";
+        public const string Section = "Key_Section";
+        public const string Menu = "Key_Menu";
+        public const string Help = "Key_Help";
+        public const string Function = "Key_Function";
+        public const string Clear = "Key_Clear";
+        public const string LeftCommand = "Key_LeftCommand";
+        public const string RightCommand = "Key_RightCommand";
+        public const string Plus = "Key_Plus";
+        public const string Hash = "Key_Hash";
+        public const string LessThan = "Key_LessThan";
+        public const string GreaterThan = "Key_GreaterThan";
+        public const string Acute = "Key_Acute";
+        public const string Circumflex = "Key_Circumflex";
+        public const string Tilde = "Key_Tilde";
+        public const string Ring = "Key_Ring";
+        public const string Umlaut = "Key_Umlaut";
+        public const string Half = "Key_Half";
+        public const string Dollar = "Key_Dollar";
+        public const string SuperscriptTwo = "Key_SuperscriptTwo";
+        public const string Ampersand = "Key_Ampersand";
+        public const string DoubleQuote = "Key_DoubleQuote";
+        public const string LeftParenthesis = "Key_LeftParenthesis";
+        public const string RightParenthesis = "Key_RightParenthesis";
+        public const string Asterisk = "Key_Asterisk";
+        public const string ExclamationPoint = "Key_ExclamationPoint";
+        public const string Macron = "Key_Macron";
+        public const string Overline = "Key_Overline";
+        public const string Breve = "Key_Breve";
+        public const string Overdot = "Key_Overdot";
+        public const string HookAbove = "Key_HookAbove";
+        public const string RingAbove = "Key_RingAbove";
+        public const string DoubleAcute = "Key_DoubleAcute";
+        public const string Caron = "Key_Caron";
+        public const string VerticalLineAbove = "Key_VerticalLineAbove";
+        public const string DoubleVerticalLineAbove = "Key_DoubleVerticalLineAbove";
+        public const string DoubleGrave = "Key_DoubleGrave";
+        public const string Candrabindu = "Key_Candrabindu";
+        public const string InvertedBreve = "Key_InvertedBreve";
+        public const string TurnedCommaAbove = "Key_TurnedCommaAbove";
+        public const string CommaAbove = "Key_CommaAbove";
+        public const string ReversedCommaAbove = "Key_ReversedCommaAbove";
+        public const string CommaAboveRight = "Key_CommaAboveRight";
+        public const string GraveBelow = "Key_GraveBelow";
+        public const string AcuteBelow = "Key_AcuteBelow";
+        public const string LeftTackBelow = "Key_LeftTackBelow";
+        public const string RightTackBelow = "Key_RightTackBelow";
+        public const string LeftAngleAbove = "Key_LeftAngleAbove";
+        public const string Horn = "Key_Horn";
+        public const string LeftHalfRingBelow = "Key_LeftHalfRingBelow";
+        public const string UpTackBelow = "Key_UpTackBelow";
+        public const string DownTackBelow = "Key_DownTackBelow";
+        public const string PlusSignBelow = "Key_PlusSignBelow";
+        public const string Cedilla = "Key_Cedilla";
 #pragma warning restore 1591, SA1600
     }
 }
