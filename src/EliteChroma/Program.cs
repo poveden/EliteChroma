@@ -1,6 +1,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Windows.Forms;
+using EliteChroma.Internal;
+using EliteChroma.Properties;
 
 namespace EliteChroma
 {
@@ -13,6 +16,19 @@ namespace EliteChroma
         [STAThread]
         static void Main()
         {
+            using var mutex = new Mutex(true, $"{nameof(EliteChroma)}-SingleInstance-Mutex");
+
+            if (!mutex.WaitOne(0, true))
+            {
+                MessageBox.Show(
+                    Resources.MsgBox_AppAlreadyRunning,
+                    new AssemblyInfo().Title,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+
+                return;
+            }
+
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -23,6 +39,8 @@ namespace EliteChroma
             {
                 Application.Run(appContext);
             }
+
+            mutex.ReleaseMutex();
         }
     }
 }
