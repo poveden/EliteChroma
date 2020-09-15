@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using EliteFiles.Bindings.Devices;
 using static EliteChroma.Core.Internal.NativeMethods;
@@ -9,7 +8,7 @@ namespace EliteChroma.Elite.Internal
     // Reference: <EliteRoot>\Products\elite-dangerous-64\ControlSchemes\Help.txt
     internal static class KeyMappings
     {
-        private static readonly Map _map = new Map
+        private static readonly Dictionary<string, VirtualKey> _keys = new Dictionary<string, VirtualKey>(StringComparer.Ordinal)
         {
             { Keyboard.Escape, VirtualKey.VK_ESCAPE },
             { Keyboard.D1, (VirtualKey)'1' },
@@ -135,23 +134,6 @@ namespace EliteChroma.Elite.Internal
             { Keyboard.Mail, VirtualKey.VK_LAUNCH_MAIL },
         };
 
-        public static IReadOnlyDictionary<string, VirtualKey> EliteKeys => _map.EliteKeys;
-
-        public static IReadOnlyDictionary<VirtualKey, string> VirtualKeys => _map.VirtualKeys;
-
-        private sealed class Map : IEnumerable
-        {
-            public Dictionary<string, VirtualKey> EliteKeys { get; } = new Dictionary<string, VirtualKey>(StringComparer.Ordinal);
-
-            public Dictionary<VirtualKey, string> VirtualKeys { get; } = new Dictionary<VirtualKey, string>();
-
-            public void Add(string eliteKey, VirtualKey virtualKey)
-            {
-                EliteKeys.Add(eliteKey, virtualKey);
-                VirtualKeys.Add(virtualKey, eliteKey);
-            }
-
-            public IEnumerator GetEnumerator() => ((IEnumerable)EliteKeys).GetEnumerator();
-        }
+        public static IReadOnlyDictionary<string, VirtualKey> EliteKeys => _keys;
     }
 }
