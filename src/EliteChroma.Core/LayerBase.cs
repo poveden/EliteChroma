@@ -128,7 +128,7 @@ namespace EliteChroma.Core
                     continue;
                 }
 
-                if (key == Key.Invalid)
+                if (key == 0)
                 {
                     continue;
                 }
