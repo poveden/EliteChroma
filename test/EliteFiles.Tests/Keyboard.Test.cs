@@ -28,8 +28,9 @@ namespace EliteFiles.Tests
 
         [Theory]
         [InlineData('A', true, "Key_A")]
-        [InlineData('-', true, "Key_-")]
-        [InlineData(' ', false, null)]
+        [InlineData('-', true, "Key_Minus")]
+        [InlineData(' ', true, "Key_Space")]
+        [InlineData('\u001b', false, null)]
         public void TryGetKeyNameReturnsExpectedValues(char c, bool expectedOk, string expectedKeyName)
         {
             var ok = Keyboard.TryGetKeyName(c, out var keyName);

@@ -7,24 +7,6 @@ namespace EliteChroma.Core.Internal
 {
     internal static class OemKeyMappings
     {
-        /*
-        private static Dictionary<VirtualKey, char> _enus = new Dictionary<VirtualKey, char>()
-        {
-            [VirtualKey.VK_OEM_1] = ';',
-            [VirtualKey.VK_OEM_PLUS] = '=',
-            [VirtualKey.VK_OEM_COMMA] = ',',
-            [VirtualKey.VK_OEM_MINUS] = '-',
-            [VirtualKey.VK_OEM_PERIOD] = '.',
-            [VirtualKey.VK_OEM_2] = '/',
-            [VirtualKey.VK_OEM_3] = '`',
-            [VirtualKey.VK_OEM_4] = '[',
-            [VirtualKey.VK_OEM_5] = '\\',
-            [VirtualKey.VK_OEM_6] = ']',
-            [VirtualKey.VK_OEM_7] = '\'',
-            [VirtualKey.VK_OEM_102] = '\\',
-        };
-        */
-
         private static readonly VirtualKey[] _oemKeys = new[]
         {
             VirtualKey.VK_OEM_1,

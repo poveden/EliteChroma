@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EliteFiles.Bindings.Devices
 {
@@ -15,22 +16,11 @@ namespace EliteFiles.Bindings.Devices
     {
 #pragma warning disable 1591, SA1600
         public const string Escape = "Key_Escape";
-        public const string Minus = "Key_Minus";
-        public const string EqualsKey = "Key_Equals";
         public const string Backspace = "Key_Backspace";
         public const string Tab = "Key_Tab";
-        public const string LeftBracket = "Key_LeftBracket";
-        public const string RightBracket = "Key_RightBracket";
         public const string Enter = "Key_Enter";
         public const string LeftControl = "Key_LeftControl";
-        public const string SemiColon = "Key_SemiColon";
-        public const string Apostrophe = "Key_Apostrophe";
-        public const string Grave = "Key_Grave";
         public const string LeftShift = "Key_LeftShift";
-        public const string BackSlash = "Key_BackSlash";
-        public const string Comma = "Key_Comma";
-        public const string Period = "Key_Period";
-        public const string Slash = "Key_Slash";
         public const string RightShift = "Key_RightShift";
         public const string NumpadMultiply = "Key_Numpad_Multiply";
         public const string LeftAlt = "Key_LeftAlt";
@@ -75,8 +65,6 @@ namespace EliteFiles.Bindings.Devices
         public const string NumpadEquals = "Key_Numpad_Equals";
         public const string PrevTrack = "Key_PrevTrack";
         public const string AT = "Key_AT";
-        public const string Colon = "Key_Colon";
-        public const string Underline = "Key_Underline";
         public const string Kanji = "Key_Kanji";
         public const string Stop = "Key_Stop";
         public const string AX = "Key_AX";
@@ -135,55 +123,78 @@ namespace EliteFiles.Bindings.Devices
         public const string Clear = "Key_Clear";
         public const string LeftCommand = "Key_LeftCommand";
         public const string RightCommand = "Key_RightCommand";
-        public const string Plus = "Key_Plus";
-        public const string Hash = "Key_Hash";
-        public const string LessThan = "Key_LessThan";
-        public const string GreaterThan = "Key_GreaterThan";
-        public const string Acute = "Key_Acute";
-        public const string Circumflex = "Key_Circumflex";
-        public const string Tilde = "Key_Tilde";
-        public const string Ring = "Key_Ring";
-        public const string Umlaut = "Key_Umlaut";
-        public const string Half = "Key_Half";
-        public const string Dollar = "Key_Dollar";
-        public const string SuperscriptTwo = "Key_SuperscriptTwo";
-        public const string Ampersand = "Key_Ampersand";
-        public const string DoubleQuote = "Key_DoubleQuote";
-        public const string LeftParenthesis = "Key_LeftParenthesis";
-        public const string RightParenthesis = "Key_RightParenthesis";
-        public const string Asterisk = "Key_Asterisk";
-        public const string ExclamationPoint = "Key_ExclamationPoint";
-        public const string Macron = "Key_Macron";
-        public const string Overline = "Key_Overline";
-        public const string Breve = "Key_Breve";
-        public const string Overdot = "Key_Overdot";
-        public const string HookAbove = "Key_HookAbove";
-        public const string RingAbove = "Key_RingAbove";
-        public const string DoubleAcute = "Key_DoubleAcute";
-        public const string Caron = "Key_Caron";
-        public const string VerticalLineAbove = "Key_VerticalLineAbove";
-        public const string DoubleVerticalLineAbove = "Key_DoubleVerticalLineAbove";
-        public const string DoubleGrave = "Key_DoubleGrave";
-        public const string Candrabindu = "Key_Candrabindu";
-        public const string InvertedBreve = "Key_InvertedBreve";
-        public const string TurnedCommaAbove = "Key_TurnedCommaAbove";
-        public const string CommaAbove = "Key_CommaAbove";
-        public const string ReversedCommaAbove = "Key_ReversedCommaAbove";
-        public const string CommaAboveRight = "Key_CommaAboveRight";
-        public const string GraveBelow = "Key_GraveBelow";
-        public const string AcuteBelow = "Key_AcuteBelow";
-        public const string LeftTackBelow = "Key_LeftTackBelow";
-        public const string RightTackBelow = "Key_RightTackBelow";
-        public const string LeftAngleAbove = "Key_LeftAngleAbove";
-        public const string Horn = "Key_Horn";
-        public const string LeftHalfRingBelow = "Key_LeftHalfRingBelow";
-        public const string UpTackBelow = "Key_UpTackBelow";
-        public const string DownTackBelow = "Key_DownTackBelow";
-        public const string PlusSignBelow = "Key_PlusSignBelow";
-        public const string Cedilla = "Key_Cedilla";
 #pragma warning restore 1591, SA1600
 
         private const string _keyNamePrefix = "Key_";
+
+        private static readonly IReadOnlyDictionary<string, char> _namedKeys = new Dictionary<string, char>(StringComparer.Ordinal)
+        {
+            { "Key_Minus", '\u002D' },
+            { "Key_Plus", '\u002B' },
+            { "Key_Equals", '\u003D' },
+            { Backspace, '\u0008' },
+            { Tab, '\u0009' },
+            { "Key_LeftBracket", '\u005B' },
+            { "Key_RightBracket", '\u005D' },
+            { Enter, '\u000d' },
+            { "Key_SemiColon", '\u003B' },
+            { "Key_Apostrophe", '\u0027' },
+            { "Key_Grave", '\u0060' },
+            { "Key_Hash", '\u0023' },
+            { "Key_Comma", '\u002C' },
+            { "Key_Period", '\u002E' },
+            { "Key_Slash", '\u002F' },
+            { Space, '\u0020' },
+            { "Key_BackSlash", '\u005C' },
+            { "Key_Colon", '\u003A' },
+            { "Key_Underline", '\u005F' },
+            { "Key_LessThan", '\u003C' },
+            { "Key_GreaterThan", '\u003E' },
+            { "Key_Acute", '\u00B4' },
+            { "Key_Circumflex", '\u005E' },
+            { "Key_Tilde", '\u007E' },
+            { "Key_Ring", '\u00B0' },
+            { "Key_Umlaut", '\u00A8' },
+            { "Key_Half", '\u00BD' },
+            { "Key_Dollar", '\u0024' },
+            { "Key_SuperscriptTwo", '\u00B2' },
+            { "Key_Ampersand", '\u0026' },
+            { "Key_DoubleQuote", '\u0022' },
+            { "Key_LeftParenthesis", '\u0028' },
+            { "Key_RightParenthesis", '\u0029' },
+            { "Key_Asterisk", '\u002A' },
+            { "Key_ExclamationPoint", '\u0021' },
+            { "Key_Macron", '\u00AF' },
+            { "Key_Overline", '\u0305' },
+            { "Key_Breve", '\u02D8' },
+            { "Key_Overdot", '\u02D9' },
+            { "Key_HookAbove", '\u0309' },
+            { "Key_RingAbove", '\u02DA' },
+            { "Key_DoubleAcute", '\u02DD' },
+            { "Key_Caron", '\u02C7' },
+            { "Key_VerticalLineAbove", '\u030D' },
+            { "Key_DoubleVerticalLineAbove", '\u030E' },
+            { "Key_DoubleGrave", '\u030F' },
+            { "Key_Candrabindu", '\u0310' },
+            { "Key_InvertedBreve", '\u0311' },
+            { "Key_TurnedCommaAbove", '\u0312' },
+            { "Key_CommaAbove", '\u0313' },
+            { "Key_ReversedCommaAbove", '\u0314' },
+            { "Key_CommaAboveRight", '\u0315' },
+            { "Key_GraveBelow", '\u0316' },
+            { "Key_AcuteBelow", '\u0317' },
+            { "Key_LeftTackBelow", '\u0318' },
+            { "Key_RightTackBelow", '\u0319' },
+            { "Key_LeftAngleAbove", '\u031A' },
+            { "Key_Horn", '\u031B' },
+            { "Key_LeftHalfRingBelow", '\u031C' },
+            { "Key_UpTackBelow", '\u031D' },
+            { "Key_DownTackBelow", '\u031E' },
+            { "Key_PlusSignBelow", '\u031F' },
+            { "Key_Cedilla", '\u00B8' },
+        };
+
+        private static readonly IReadOnlyDictionary<char, string> _namedKeysInv = _namedKeys.ToDictionary(kv => kv.Value, kv => kv.Key);
 
         private static readonly Dictionary<char, string> _charKeyNames = new Dictionary<char, string>();
 
@@ -213,8 +224,8 @@ namespace EliteFiles.Bindings.Devices
                 return true;
             }
 
-            c = default;
-            return false;
+            // Named character key (e.g. "Key_Asterisk" -> '*')
+            return _namedKeys.TryGetValue(keyName, out c);
         }
 
         /// <summary>
@@ -225,6 +236,12 @@ namespace EliteFiles.Bindings.Devices
         /// <returns><c>true</c> if <paramref name="c"/> is a has a corresponding keyboard key name; otherwise, <c>false</c>.</returns>
         public static bool TryGetKeyName(char c, out string keyName)
         {
+            // Return named character bindings first (e.g. '*' -> "Key_Asterisk")
+            if (_namedKeysInv.TryGetValue(c, out keyName))
+            {
+                return true;
+            }
+
             if (c <= ' ')
             {
                 keyName = null;
