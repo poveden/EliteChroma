@@ -21,6 +21,12 @@ namespace EliteChroma.Core.Tests.Internal
         public virtual IntPtr GetForegroundWindow() =>
             throw new NotImplementedException();
 
+        public virtual IntPtr GetKeyboardLayout(int idThread) =>
+            throw new NotImplementedException();
+
+        public virtual int GetKeyboardLayoutList(int nBuff, IntPtr[] lpList) =>
+            throw new NotImplementedException();
+
         public virtual int GetModuleFileNameEx(SafeProcessHandle hProcess, IntPtr hModule, char[] lpFilename, int nSize) =>
             throw new NotImplementedException();
 
@@ -28,6 +34,9 @@ namespace EliteChroma.Core.Tests.Internal
             throw new NotImplementedException();
 
         public virtual IntPtr LoadLibrary(string lpFileName) =>
+            throw new NotImplementedException();
+
+        public virtual uint MapVirtualKeyEx(uint uCode, NativeMethods.MAPVK uMapType, IntPtr dwhkl) =>
             throw new NotImplementedException();
 
         public virtual SafeProcessHandle OpenProcess(NativeMethods.ProcessAccess dwDesiredAccess, bool bInheritHandle, int dwProcessId) =>

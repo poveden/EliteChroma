@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Colore.Effects.Keyboard;
+using EliteChroma.Elite.Internal;
 using EliteFiles.Bindings.Devices;
 
 namespace EliteChroma.Core.Internal
@@ -14,55 +15,55 @@ namespace EliteChroma.Core.Internal
         private static readonly Dictionary<string, Key> _keys = new Dictionary<string, Key>(StringComparer.Ordinal)
         {
             { Keyboard.Escape, Key.Escape },
-            { Keyboard.D1, Key.D1 },
-            { Keyboard.D2, Key.D2 },
-            { Keyboard.D3, Key.D3 },
-            { Keyboard.D4, Key.D4 },
-            { Keyboard.D5, Key.D5 },
-            { Keyboard.D6, Key.D6 },
-            { Keyboard.D7, Key.D7 },
-            { Keyboard.D8, Key.D8 },
-            { Keyboard.D9, Key.D9 },
-            { Keyboard.D0, Key.D0 },
+            { GetKeyName('1'), Key.D1 },
+            { GetKeyName('2'), Key.D2 },
+            { GetKeyName('3'), Key.D3 },
+            { GetKeyName('4'), Key.D4 },
+            { GetKeyName('5'), Key.D5 },
+            { GetKeyName('6'), Key.D6 },
+            { GetKeyName('7'), Key.D7 },
+            { GetKeyName('8'), Key.D8 },
+            { GetKeyName('9'), Key.D9 },
+            { GetKeyName('0'), Key.D0 },
             { Keyboard.Minus, Key.OemMinus },
             { Keyboard.EqualsKey, Key.OemEquals },
             { Keyboard.Backspace, Key.Backspace },
             { Keyboard.Tab, Key.Tab },
-            { Keyboard.Q, Key.Q },
-            { Keyboard.W, Key.W },
-            { Keyboard.E, Key.E },
-            { Keyboard.R, Key.R },
-            { Keyboard.T, Key.T },
-            { Keyboard.Y, Key.Y },
-            { Keyboard.U, Key.U },
-            { Keyboard.I, Key.I },
-            { Keyboard.O, Key.O },
-            { Keyboard.P, Key.P },
+            { GetKeyName('Q'), Key.Q },
+            { GetKeyName('W'), Key.W },
+            { GetKeyName('E'), Key.E },
+            { GetKeyName('R'), Key.R },
+            { GetKeyName('T'), Key.T },
+            { GetKeyName('Y'), Key.Y },
+            { GetKeyName('U'), Key.U },
+            { GetKeyName('I'), Key.I },
+            { GetKeyName('O'), Key.O },
+            { GetKeyName('P'), Key.P },
             { Keyboard.LeftBracket, Key.OemLeftBracket },
             { Keyboard.RightBracket, Key.OemRightBracket },
             { Keyboard.Enter, Key.Enter },
             { Keyboard.LeftControl, Key.LeftControl },
-            { Keyboard.A, Key.A },
-            { Keyboard.S, Key.S },
-            { Keyboard.D, Key.D },
-            { Keyboard.F, Key.F },
-            { Keyboard.G, Key.G },
-            { Keyboard.H, Key.H },
-            { Keyboard.J, Key.J },
-            { Keyboard.K, Key.K },
-            { Keyboard.L, Key.L },
+            { GetKeyName('A'), Key.A },
+            { GetKeyName('S'), Key.S },
+            { GetKeyName('D'), Key.D },
+            { GetKeyName('F'), Key.F },
+            { GetKeyName('G'), Key.G },
+            { GetKeyName('H'), Key.H },
+            { GetKeyName('J'), Key.J },
+            { GetKeyName('K'), Key.K },
+            { GetKeyName('L'), Key.L },
             { Keyboard.SemiColon, Key.OemSemicolon },
             { Keyboard.Apostrophe, Key.OemApostrophe },
             { Keyboard.Grave, Key.OemTilde },
             { Keyboard.LeftShift, Key.LeftShift },
             { Keyboard.BackSlash, Key.EurBackslash },
-            { Keyboard.Z, Key.Z },
-            { Keyboard.X, Key.X },
-            { Keyboard.C, Key.C },
-            { Keyboard.V, Key.V },
-            { Keyboard.B, Key.B },
-            { Keyboard.N, Key.N },
-            { Keyboard.M, Key.M },
+            { GetKeyName('Z'), Key.Z },
+            { GetKeyName('X'), Key.X },
+            { GetKeyName('C'), Key.C },
+            { GetKeyName('V'), Key.V },
+            { GetKeyName('B'), Key.B },
+            { GetKeyName('N'), Key.N },
+            { GetKeyName('M'), Key.M },
             { Keyboard.Comma, Key.OemComma },
             { Keyboard.Period, Key.OemPeriod },
             { Keyboard.Slash, Key.OemSlash },
@@ -218,6 +219,48 @@ namespace EliteChroma.Core.Internal
             { Keyboard.Cedilla, 0 },
         };
 
-        public static IReadOnlyDictionary<string, Key> EliteKeys => _keys;
+        private static readonly Dictionary<uint, Key> _scanCodes = new Dictionary<uint, Key>()
+        {
+            { 0x7D, Key.JpnYen },
+            { 0x29, Key.OemTilde },
+            { 0x0C, Key.OemMinus },
+            { 0x0D, Key.OemEquals },
+            { 0x1A, Key.OemLeftBracket },
+            { 0x1B, Key.OemRightBracket },
+            { 0x2B, Key.OemBackslash },
+            { 0x27, Key.OemSemicolon },
+            { 0x28, Key.OemApostrophe },
+            { 0x56, Key.EurBackslash },
+            { 0x33, Key.OemComma },
+            { 0x34, Key.OemPeriod },
+            { 0x35, Key.OemSlash },
+            { 0x73, Key.JpnSlash },
+            { 0xE01C, Key.NumEnter },
+            { 0x7B, Key.Jpn3 },
+            { 0x79, Key.Jpn4 },
+            { 0x70, Key.Jpn5 },
+        };
+
+        public static bool TryGetKey(string keyName, string keyboardLayout, out Key key, INativeMethods nativeMethods)
+        {
+            if (_keys.TryGetValue(keyName, out key))
+            {
+                return true;
+            }
+
+            _ = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, out var vk, nativeMethods);
+
+            IntPtr hkl = KeyboardLayoutMap.GetKeyboardLayout(keyboardLayout, nativeMethods);
+
+            var scanCode = nativeMethods.MapVirtualKeyEx((uint)vk, NativeMethods.MAPVK.VK_TO_VSC_EX, hkl);
+
+            return _scanCodes.TryGetValue(scanCode, out key);
+        }
+
+        private static string GetKeyName(char c)
+        {
+            _ = Keyboard.TryGetKeyName(c, out var keyName);
+            return keyName;
+        }
     }
 }

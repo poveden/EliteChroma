@@ -21,7 +21,7 @@ namespace EliteChroma.Elite
 
         public GameProcessState ProcessState { get; internal set; }
 
-        public IReadOnlyDictionary<string, Binding> Bindings { get; internal set; }
+        public BindingPreset BindingPreset { get; internal set; }
 
         public DeviceKeySet PressedModifiers { get; internal set; }
 

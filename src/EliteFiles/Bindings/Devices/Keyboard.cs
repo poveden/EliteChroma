@@ -1,4 +1,7 @@
-﻿namespace EliteFiles.Bindings.Devices
+﻿using System;
+using System.Collections.Generic;
+
+namespace EliteFiles.Bindings.Devices
 {
     /// <summary>
     /// Defines keyboard key names.
@@ -12,55 +15,19 @@
     {
 #pragma warning disable 1591, SA1600
         public const string Escape = "Key_Escape";
-        public const string D1 = "Key_1";
-        public const string D2 = "Key_2";
-        public const string D3 = "Key_3";
-        public const string D4 = "Key_4";
-        public const string D5 = "Key_5";
-        public const string D6 = "Key_6";
-        public const string D7 = "Key_7";
-        public const string D8 = "Key_8";
-        public const string D9 = "Key_9";
-        public const string D0 = "Key_0";
         public const string Minus = "Key_Minus";
         public const string EqualsKey = "Key_Equals";
         public const string Backspace = "Key_Backspace";
         public const string Tab = "Key_Tab";
-        public const string Q = "Key_Q";
-        public const string W = "Key_W";
-        public const string E = "Key_E";
-        public const string R = "Key_R";
-        public const string T = "Key_T";
-        public const string Y = "Key_Y";
-        public const string U = "Key_U";
-        public const string I = "Key_I";
-        public const string O = "Key_O";
-        public const string P = "Key_P";
         public const string LeftBracket = "Key_LeftBracket";
         public const string RightBracket = "Key_RightBracket";
         public const string Enter = "Key_Enter";
         public const string LeftControl = "Key_LeftControl";
-        public const string A = "Key_A";
-        public const string S = "Key_S";
-        public const string D = "Key_D";
-        public const string F = "Key_F";
-        public const string G = "Key_G";
-        public const string H = "Key_H";
-        public const string J = "Key_J";
-        public const string K = "Key_K";
-        public const string L = "Key_L";
         public const string SemiColon = "Key_SemiColon";
         public const string Apostrophe = "Key_Apostrophe";
         public const string Grave = "Key_Grave";
         public const string LeftShift = "Key_LeftShift";
         public const string BackSlash = "Key_BackSlash";
-        public const string Z = "Key_Z";
-        public const string X = "Key_X";
-        public const string C = "Key_C";
-        public const string V = "Key_V";
-        public const string B = "Key_B";
-        public const string N = "Key_N";
-        public const string M = "Key_M";
         public const string Comma = "Key_Comma";
         public const string Period = "Key_Period";
         public const string Slash = "Key_Slash";
@@ -215,5 +182,62 @@
         public const string PlusSignBelow = "Key_PlusSignBelow";
         public const string Cedilla = "Key_Cedilla";
 #pragma warning restore 1591, SA1600
+
+        private const string _keyNamePrefix = "Key_";
+
+        private static readonly Dictionary<char, string> _charKeyNames = new Dictionary<char, string>();
+
+        /// <summary>
+        /// Gets the character associated with the specified keyboard key name.
+        /// </summary>
+        /// <param name="keyName">The keyboard key name.</param>
+        /// <param name="c">The matching character.</param>
+        /// <returns><c>true</c> if <paramref name="keyName"/> is a character key name; otherwise, <c>false</c>.</returns>
+        public static bool TryGetKeyChar(string keyName, out char c)
+        {
+            if (keyName == null)
+            {
+                throw new ArgumentNullException(nameof(keyName));
+            }
+
+            if (!keyName.StartsWith(_keyNamePrefix, StringComparison.Ordinal))
+            {
+                c = default;
+                return false;
+            }
+
+            // Character key binding (e.g. "Key_A" → 'A', "Key_ß" → 'ß')
+            if (keyName.Length - _keyNamePrefix.Length == 1)
+            {
+                c = keyName[keyName.Length - 1];
+                return true;
+            }
+
+            c = default;
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the keyboard key name associated with the specified character.
+        /// </summary>
+        /// <param name="c">The character.</param>
+        /// <param name="keyName">The matching key name.</param>
+        /// <returns><c>true</c> if <paramref name="c"/> is a has a corresponding keyboard key name; otherwise, <c>false</c>.</returns>
+        public static bool TryGetKeyName(char c, out string keyName)
+        {
+            if (c <= ' ')
+            {
+                keyName = null;
+                return false;
+            }
+
+            if (!_charKeyNames.TryGetValue(c, out keyName))
+            {
+                keyName = $"{_keyNamePrefix}{c}";
+                _charKeyNames[c] = keyName;
+            }
+
+            return true;
+        }
     }
 }
