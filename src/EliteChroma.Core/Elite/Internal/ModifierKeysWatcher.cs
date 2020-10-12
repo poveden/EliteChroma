@@ -36,13 +36,13 @@ namespace EliteChroma.Elite.Internal
 
         public event EventHandler<DeviceKeySet> Changed;
 
-        public void Watch(IEnumerable<DeviceKey> modifiers, string keyboardLayout)
+        public void Watch(IEnumerable<DeviceKey> modifiers, string keyboardLayout, bool enUSOverride)
         {
             _watch.Clear();
 
             foreach (var m in modifiers.Where(x => x.Device == Device.Keyboard))
             {
-                if (KeyMappings.TryGetKey(m.Key, keyboardLayout, out var key, NativeMethods))
+                if (KeyMappings.TryGetKey(m.Key, keyboardLayout, enUSOverride, out var key, NativeMethods))
                 {
                     _watch[key] = m;
                 }

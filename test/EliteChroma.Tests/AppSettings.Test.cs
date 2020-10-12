@@ -52,6 +52,7 @@ namespace EliteChroma.Tests
             Assert.Equal(@"C:\ELITE_INSTALL_FOLDER", settings.GameInstallFolder);
             Assert.Equal(@"C:\GAME_OPTIONS_FOLDER", settings.GameOptionsFolder);
             Assert.Equal(@"C:\JOURNAL_FOLDER", settings.JournalFolder);
+            Assert.True(settings.ForceEnUSKeyboardLayout);
         }
 
         [Fact]
@@ -85,7 +86,10 @@ namespace EliteChroma.Tests
             var settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
             var settings = AppSettings.Load(settingsFile);
+            Assert.True(settings.ForceEnUSKeyboardLayout);
+
             settings.GameOptionsFolder = @"C:\ANOTHER_GAME_OPTIONS_FOLDER";
+            settings.ForceEnUSKeyboardLayout = false;
             settings.Save(settingsFile);
 
             var settings2 = AppSettings.Load(settingsFile);
@@ -93,6 +97,7 @@ namespace EliteChroma.Tests
             Assert.Equal(settings.GameInstallFolder, settings2.GameInstallFolder);
             Assert.Equal(settings.GameOptionsFolder, settings2.GameOptionsFolder);
             Assert.Equal(settings.JournalFolder, settings2.JournalFolder);
+            Assert.False(settings.ForceEnUSKeyboardLayout);
         }
 
         internal static string PrepareValidSettingsFile(TestFolder baseFolder)

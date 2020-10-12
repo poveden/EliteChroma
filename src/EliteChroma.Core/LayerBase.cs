@@ -125,7 +125,7 @@ namespace EliteChroma.Core
                     continue;
                 }
 
-                if (!KeyMappings.TryGetKey(bps.Key, Game.BindingPreset.KeyboardLayout, out var key, NativeMethods))
+                if (!KeyMappings.TryGetKey(bps.Key, Game.BindingPreset.KeyboardLayout, Game.ForceEnUSKeyboardLayout, out var key, NativeMethods))
                 {
                     continue;
                 }

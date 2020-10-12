@@ -106,6 +106,7 @@ namespace EliteChroma
             frm.txtGameInstall.Text = settings.GameInstallFolder;
             frm.txtGameOptions.Text = settings.GameOptionsFolder;
             frm.txtJournal.Text = settings.JournalFolder;
+            frm.chEsUSOverride.Checked = settings.ForceEnUSKeyboardLayout;
 
             if (frm.ShowDialog(ContextMenu) != DialogResult.OK)
             {
@@ -115,6 +116,7 @@ namespace EliteChroma
             settings.GameInstallFolder = frm.txtGameInstall.Text;
             settings.GameOptionsFolder = frm.txtGameOptions.Text;
             settings.JournalFolder = frm.txtJournal.Text;
+            settings.ForceEnUSKeyboardLayout = frm.chEsUSOverride.Checked;
 
             return true;
         }
@@ -125,6 +127,7 @@ namespace EliteChroma
             _cc = new ChromaController(settings.GameInstallFolder, settings.GameOptionsFolder, settings.JournalFolder)
             {
                 ChromaFactory = _chromaFactory,
+                ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout,
             };
             _cc.Start();
         }

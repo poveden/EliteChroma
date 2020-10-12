@@ -25,6 +25,8 @@ namespace EliteChroma.Elite
 
         public DeviceKeySet PressedModifiers { get; internal set; }
 
+        public bool ForceEnUSKeyboardLayout { get; internal set; }
+
         public StatusEntry Status { get; internal set; }
 
         public GuiColourMatrix GuiColour

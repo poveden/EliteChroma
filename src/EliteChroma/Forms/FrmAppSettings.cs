@@ -18,6 +18,7 @@ namespace EliteChroma.Forms
     public partial class FrmAppSettings : Form
     {
         private const string _gameFoldersSection = "GameFolders";
+        private const string _keyboardSection = "Keyboard";
 
         private readonly HashSet<string> _sectionErrors = new HashSet<string>(StringComparer.Ordinal);
 
@@ -61,6 +62,7 @@ namespace EliteChroma.Forms
         {
             tvSections.DrawMode = TreeViewDrawMode.OwnerDrawText;
             tvSections.Nodes[_gameFoldersSection].Tag = grpEDFolders;
+            tvSections.Nodes[_keyboardSection].Tag = pnlKeyboard;
 
             tvSections.SelectedNode = tvSections.Nodes[_gameFoldersSection];
 

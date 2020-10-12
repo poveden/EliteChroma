@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Game folders");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Keyboard");
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
@@ -47,9 +48,13 @@
             this.linkGameFolders = new System.Windows.Forms.LinkLabel();
             this.tvSections = new System.Windows.Forms.TreeView();
             this.pbError = new System.Windows.Forms.PictureBox();
+            this.pnlKeyboard = new System.Windows.Forms.Panel();
+            this.lblEnUSOverride = new System.Windows.Forms.Label();
+            this.chEsUSOverride = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.grpEDFolders.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbError)).BeginInit();
+            this.pnlKeyboard.SuspendLayout();
             this.SuspendLayout();
             // 
             // folderBrowser
@@ -242,8 +247,11 @@
             this.tvSections.Name = "tvSections";
             treeNode1.Name = "GameFolders";
             treeNode1.Text = "Game folders";
+            treeNode2.Name = "Keyboard";
+            treeNode2.Text = "Keyboard";
             this.tvSections.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode1,
+            treeNode2});
             this.tvSections.ShowLines = false;
             this.tvSections.ShowRootLines = false;
             this.tvSections.Size = new System.Drawing.Size(178, 278);
@@ -253,7 +261,6 @@
             // 
             // pbError
             // 
-            this.pbError.Image = global::EliteChroma.Properties.Resources.RedDot;
             this.pbError.Location = new System.Drawing.Point(12, 296);
             this.pbError.Name = "pbError";
             this.pbError.Size = new System.Drawing.Size(16, 16);
@@ -261,6 +268,41 @@
             this.pbError.TabIndex = 14;
             this.pbError.TabStop = false;
             this.pbError.Visible = false;
+            // 
+            // pnlKeyboard
+            // 
+            this.pnlKeyboard.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlKeyboard.Controls.Add(this.lblEnUSOverride);
+            this.pnlKeyboard.Controls.Add(this.chEsUSOverride);
+            this.pnlKeyboard.Location = new System.Drawing.Point(202, 12);
+            this.pnlKeyboard.Name = "pnlKeyboard";
+            this.pnlKeyboard.Size = new System.Drawing.Size(546, 278);
+            this.pnlKeyboard.TabIndex = 2;
+            // 
+            // lblEnUSOverride
+            // 
+            this.lblEnUSOverride.AutoSize = true;
+            this.lblEnUSOverride.Location = new System.Drawing.Point(20, 31);
+            this.lblEnUSOverride.MaximumSize = new System.Drawing.Size(520, 0);
+            this.lblEnUSOverride.Name = "lblEnUSOverride";
+            this.lblEnUSOverride.Size = new System.Drawing.Size(517, 60);
+            this.lblEnUSOverride.TabIndex = 1;
+            this.lblEnUSOverride.Text = "Elite:Dangerous apparently won\'t recognize some keyboard layouts, and will treat " +
+    "them as US English. This setting makes EliteChroma properly recognize US English" +
+    " keyboard bindings.";
+            this.lblEnUSOverride.UseMnemonic = false;
+            // 
+            // chEsUSOverride
+            // 
+            this.chEsUSOverride.AutoSize = true;
+            this.chEsUSOverride.Location = new System.Drawing.Point(0, 0);
+            this.chEsUSOverride.Name = "chEsUSOverride";
+            this.chEsUSOverride.Size = new System.Drawing.Size(251, 24);
+            this.chEsUSOverride.TabIndex = 0;
+            this.chEsUSOverride.Text = "&Force US English keyboard layout";
+            this.chEsUSOverride.UseVisualStyleBackColor = true;
             // 
             // FrmAppSettings
             // 
@@ -270,6 +312,7 @@
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(760, 357);
+            this.Controls.Add(this.pnlKeyboard);
             this.Controls.Add(this.pbError);
             this.Controls.Add(this.tvSections);
             this.Controls.Add(this.grpEDFolders);
@@ -287,6 +330,8 @@
             this.grpEDFolders.ResumeLayout(false);
             this.grpEDFolders.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbError)).EndInit();
+            this.pnlKeyboard.ResumeLayout(false);
+            this.pnlKeyboard.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -311,5 +356,8 @@
         private System.Windows.Forms.LinkLabel linkGameFolders;
         private System.Windows.Forms.TreeView tvSections;
         private System.Windows.Forms.PictureBox pbError;
+        private System.Windows.Forms.Panel pnlKeyboard;
+        private System.Windows.Forms.Label lblEnUSOverride;
+        internal System.Windows.Forms.CheckBox chEsUSOverride;
     }
 }

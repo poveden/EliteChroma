@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Correctly map international keyboard layouts to Chroma keyboard keys (thanks [@Andechs75](https://github.com/Andechs75)!)
 - Apply minor stability fixes
 
+### Added
+
+- Add setting to force US English keyboard layout
+
 ### Changed
 
 - Make settings form support multiple pages
