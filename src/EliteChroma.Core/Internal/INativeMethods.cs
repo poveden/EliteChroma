@@ -7,6 +7,12 @@ namespace EliteChroma.Core.Internal
     {
         short GetAsyncKeyState(NativeMethods.VirtualKey vKey);
 
+        IntPtr GetKeyboardLayout(int idThread);
+
+        int GetKeyboardLayoutList(int nBuff, IntPtr[] lpList);
+
+        uint MapVirtualKeyEx(uint uCode, NativeMethods.MAPVK uMapType, IntPtr dwhkl);
+
         IntPtr LoadLibrary(string lpFileName);
 
         bool FreeLibrary(IntPtr hModule);

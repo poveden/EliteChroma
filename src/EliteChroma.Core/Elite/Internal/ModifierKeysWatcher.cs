@@ -36,14 +36,16 @@ namespace EliteChroma.Elite.Internal
 
         public event EventHandler<DeviceKeySet> Changed;
 
-        public void Watch(IEnumerable<DeviceKey> modifiers)
+        public void Watch(IEnumerable<DeviceKey> modifiers, string keyboardLayout)
         {
             _watch.Clear();
 
             foreach (var m in modifiers.Where(x => x.Device == Device.Keyboard))
             {
-                var key = KeyMappings.EliteKeys[m.Key];
-                _watch[key] = m;
+                if (KeyMappings.TryGetKey(m.Key, keyboardLayout, out var key, NativeMethods))
+                {
+                    _watch[key] = m;
+                }
             }
         }
 

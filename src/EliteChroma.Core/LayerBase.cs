@@ -24,6 +24,8 @@ namespace EliteChroma.Core
 
         public bool Animated { get; private set; }
 
+        internal INativeMethods NativeMethods { get; set; } = Internal.NativeMethods.Instance;
+
         protected GameState Game { get; private set; }
 
         protected ChromaColors Colors { get; private set; }
@@ -111,7 +113,7 @@ namespace EliteChroma.Core
 
         protected void ApplyColorToBinding(KeyboardCustom grid, string bindingName, Color color)
         {
-            if (!Game.Bindings.TryGetValue(bindingName, out var binding))
+            if (!Game.BindingPreset.Bindings.TryGetValue(bindingName, out var binding))
             {
                 return;
             }
@@ -123,12 +125,12 @@ namespace EliteChroma.Core
                     continue;
                 }
 
-                if (!KeyMappings.EliteKeys.TryGetValue(bps.Key, out var key))
+                if (!KeyMappings.TryGetKey(bps.Key, Game.BindingPreset.KeyboardLayout, out var key, NativeMethods))
                 {
                     continue;
                 }
 
-                if (key == Key.Invalid)
+                if (key == 0)
                 {
                     continue;
                 }

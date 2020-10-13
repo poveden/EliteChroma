@@ -42,10 +42,14 @@ namespace EliteChroma.Core.Internal
             VK_HANGEUL = 0x15,  /* old name - should be here for compatibility */
             VK_HANGUL = 0x15,
 
+            VK_IME_ON = 0x16,
+
             VK_JUNJA = 0x17,
             VK_FINAL = 0x18,
             VK_HANJA = 0x19,
             VK_KANJI = 0x19,
+
+            VK_IME_OFF = 0x1A,
 
             VK_ESCAPE = 0x1B,
 
@@ -209,6 +213,15 @@ namespace EliteChroma.Core.Internal
             VK_OEM_CLEAR = 0xFE,
         }
 
+        public enum MAPVK
+        {
+            VK_TO_VSC = 0,
+            VSC_TO_VK,
+            VK_TO_CHAR,
+            VSC_TO_VK_EX,
+            VK_TO_VSC_EX,
+        }
+
         // Reference: https://docs.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights
         public enum ProcessAccess
         {
@@ -218,6 +231,15 @@ namespace EliteChroma.Core.Internal
 
         public short GetAsyncKeyState(VirtualKey vKey) =>
             Impl.GetAsyncKeyState(vKey);
+
+        public IntPtr GetKeyboardLayout(int idThread) =>
+            Impl.GetKeyboardLayout(idThread);
+
+        public int GetKeyboardLayoutList(int nBuff, IntPtr[] lpList) =>
+            Impl.GetKeyboardLayoutList(nBuff, lpList);
+
+        public uint MapVirtualKeyEx(uint uCode, MAPVK uMapType, IntPtr dwhkl) =>
+            Impl.MapVirtualKeyEx(uCode, uMapType, dwhkl);
 
         public IntPtr LoadLibrary(string lpFileName) =>
             Impl.LoadLibrary(lpFileName);
@@ -247,6 +269,15 @@ namespace EliteChroma.Core.Internal
         {
             [DllImport("user32.dll")]
             public static extern short GetAsyncKeyState(VirtualKey vKey);
+
+            [DllImport("user32.dll")]
+            public static extern IntPtr GetKeyboardLayout(int idThread);
+
+            [DllImport("user32.dll")]
+            public static extern int GetKeyboardLayoutList(int nBuff, [Out] IntPtr[] lpList);
+
+            [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+            public static extern uint MapVirtualKeyEx(uint uCode, MAPVK uMapType, IntPtr dwhkl);
 
             [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
             public static extern IntPtr LoadLibrary(string lpFileName);

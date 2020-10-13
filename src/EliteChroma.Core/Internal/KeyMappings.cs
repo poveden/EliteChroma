@@ -1,64 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 using Colore.Effects.Keyboard;
+using EliteChroma.Elite.Internal;
 using EliteFiles.Bindings.Devices;
 
 namespace EliteChroma.Core.Internal
 {
     // References:
     // - <EliteRoot>\Products\elite-dangerous-64\ControlSchemes\Help.txt
+    // - <EliteRoot>\Products\elite-dangerous-64\EliteDangerous64.exe (binary scraping)
     // - https://developer.razer.com/works-with-chroma/razer-chroma-led-profiles/
     internal static class KeyMappings
     {
         private static readonly Dictionary<string, Key> _keys = new Dictionary<string, Key>(StringComparer.Ordinal)
         {
             { Keyboard.Escape, Key.Escape },
-            { Keyboard.D1, Key.D1 },
-            { Keyboard.D2, Key.D2 },
-            { Keyboard.D3, Key.D3 },
-            { Keyboard.D4, Key.D4 },
-            { Keyboard.D5, Key.D5 },
-            { Keyboard.D6, Key.D6 },
-            { Keyboard.D7, Key.D7 },
-            { Keyboard.D8, Key.D8 },
-            { Keyboard.D9, Key.D9 },
-            { Keyboard.D0, Key.D0 },
-            { Keyboard.Minus, Key.OemMinus },
-            { Keyboard.EqualsKey, Key.OemEquals },
+            { GetKeyName('1'), Key.D1 },
+            { GetKeyName('2'), Key.D2 },
+            { GetKeyName('3'), Key.D3 },
+            { GetKeyName('4'), Key.D4 },
+            { GetKeyName('5'), Key.D5 },
+            { GetKeyName('6'), Key.D6 },
+            { GetKeyName('7'), Key.D7 },
+            { GetKeyName('8'), Key.D8 },
+            { GetKeyName('9'), Key.D9 },
+            { GetKeyName('0'), Key.D0 },
             { Keyboard.Backspace, Key.Backspace },
             { Keyboard.Tab, Key.Tab },
-            { Keyboard.Q, Key.Q },
-            { Keyboard.W, Key.W },
-            { Keyboard.E, Key.E },
-            { Keyboard.R, Key.R },
-            { Keyboard.T, Key.T },
-            { Keyboard.Y, Key.Y },
-            { Keyboard.U, Key.U },
-            { Keyboard.I, Key.I },
-            { Keyboard.O, Key.O },
-            { Keyboard.P, Key.P },
+            { GetKeyName('Q'), Key.Q },
+            { GetKeyName('W'), Key.W },
+            { GetKeyName('E'), Key.E },
+            { GetKeyName('R'), Key.R },
+            { GetKeyName('T'), Key.T },
+            { GetKeyName('Y'), Key.Y },
+            { GetKeyName('U'), Key.U },
+            { GetKeyName('I'), Key.I },
+            { GetKeyName('O'), Key.O },
+            { GetKeyName('P'), Key.P },
             { Keyboard.Enter, Key.Enter },
             { Keyboard.LeftControl, Key.LeftControl },
-            { Keyboard.A, Key.A },
-            { Keyboard.S, Key.S },
-            { Keyboard.D, Key.D },
-            { Keyboard.F, Key.F },
-            { Keyboard.G, Key.G },
-            { Keyboard.H, Key.H },
-            { Keyboard.J, Key.J },
-            { Keyboard.K, Key.K },
-            { Keyboard.L, Key.L },
-            { Keyboard.Apostrophe, Key.OemApostrophe },
+            { GetKeyName('A'), Key.A },
+            { GetKeyName('S'), Key.S },
+            { GetKeyName('D'), Key.D },
+            { GetKeyName('F'), Key.F },
+            { GetKeyName('G'), Key.G },
+            { GetKeyName('H'), Key.H },
+            { GetKeyName('J'), Key.J },
+            { GetKeyName('K'), Key.K },
+            { GetKeyName('L'), Key.L },
             { Keyboard.LeftShift, Key.LeftShift },
-            { Keyboard.Z, Key.Z },
-            { Keyboard.X, Key.X },
-            { Keyboard.C, Key.C },
-            { Keyboard.V, Key.V },
-            { Keyboard.B, Key.B },
-            { Keyboard.N, Key.N },
-            { Keyboard.M, Key.M },
-            { Keyboard.Comma, Key.OemComma },
-            { Keyboard.Period, Key.OemPeriod },
+            { GetKeyName('Z'), Key.Z },
+            { GetKeyName('X'), Key.X },
+            { GetKeyName('C'), Key.C },
+            { GetKeyName('V'), Key.V },
+            { GetKeyName('B'), Key.B },
+            { GetKeyName('N'), Key.N },
+            { GetKeyName('M'), Key.M },
             { Keyboard.RightShift, Key.RightShift },
             { Keyboard.NumpadMultiply, Key.NumMultiply },
             { Keyboard.LeftAlt, Key.LeftAlt },
@@ -89,27 +86,35 @@ namespace EliteChroma.Core.Internal
             { Keyboard.Numpad3, Key.Num3 },
             { Keyboard.Numpad0, Key.Num0 },
             { Keyboard.NumpadDecimal, Key.NumDecimal },
-            { Keyboard.Oem102, Key.Invalid },
             { Keyboard.F11, Key.F11 },
             { Keyboard.F12, Key.F12 },
-            { Keyboard.F13, Key.Invalid },
-            { Keyboard.F14, Key.Invalid },
-            { Keyboard.F15, Key.Invalid },
-            { Keyboard.Kana, Key.Invalid },
-            { Keyboard.AbntC1, Key.Invalid },
-            { Keyboard.Convert, Key.Invalid },
-            { Keyboard.NoConvert, Key.Invalid },
-            { Keyboard.AbntC2, Key.Invalid },
-            { Keyboard.PrevTrack, Key.Invalid },
-            { Keyboard.Kanji, Key.Invalid },
-            { Keyboard.Stop, Key.Invalid },
-            { Keyboard.NextTrack, Key.Invalid },
+            { Keyboard.F13, 0 },
+            { Keyboard.F14, 0 },
+            { Keyboard.F15, 0 },
+            { Keyboard.Kana, 0 },
+            { Keyboard.AbntC1, 0 },
+            { Keyboard.Convert, Key.Jpn3 },
+            { Keyboard.NoConvert, Key.Jpn4 },
+            { Keyboard.Yen, Key.JpnYen },
+            { Keyboard.AbntC2, 0 },
+            { Keyboard.NumpadEquals, 0 },
+            { Keyboard.PrevTrack, 0 },
+            { Keyboard.AT, 0 },
+            { Keyboard.Kanji, 0 },
+            { Keyboard.Stop, 0 },
+            { Keyboard.AX, 0 },
+            { Keyboard.Unlabeled, 0 },
+            { Keyboard.NextTrack, 0 },
+            { Keyboard.NumpadEnter, Key.NumEnter },
             { Keyboard.RightControl, Key.RightControl },
-            { Keyboard.Mute, Key.Invalid },
-            { Keyboard.PlayPause, Key.Invalid },
-            { Keyboard.VolumeDown, Key.Invalid },
-            { Keyboard.VolumeUp, Key.Invalid },
-            { Keyboard.WebHome, Key.Invalid },
+            { Keyboard.Mute, 0 },
+            { Keyboard.Calculator, 0 },
+            { Keyboard.PlayPause, 0 },
+            { Keyboard.MediaStop, 0 },
+            { Keyboard.VolumeDown, 0 },
+            { Keyboard.VolumeUp, 0 },
+            { Keyboard.WebHome, 0 },
+            { Keyboard.NumpadComma, 0 },
             { Keyboard.NumpadDivide, Key.NumDivide },
             { Keyboard.SysRQ, Key.PrintScreen },
             { Keyboard.RightAlt, Key.RightAlt },
@@ -125,18 +130,78 @@ namespace EliteChroma.Core.Internal
             { Keyboard.Insert, Key.Insert },
             { Keyboard.Delete, Key.Delete },
             { Keyboard.LeftWin, Key.LeftWindows },
-            { Keyboard.RightWin, Key.Invalid },
+            { Keyboard.RightWin, 0 },
             { Keyboard.Apps, Key.RightMenu },
-            { Keyboard.Sleep, Key.Invalid },
-            { Keyboard.WebSearch, Key.Invalid },
-            { Keyboard.WebFavourites, Key.Invalid },
-            { Keyboard.WebRefresh, Key.Invalid },
-            { Keyboard.WebStop, Key.Invalid },
-            { Keyboard.WebForward, Key.Invalid },
-            { Keyboard.WebBack, Key.Invalid },
-            { Keyboard.Mail, Key.Invalid },
+            { Keyboard.Power, 0 },
+            { Keyboard.Sleep, 0 },
+            { Keyboard.Wake, 0 },
+            { Keyboard.WebSearch, 0 },
+            { Keyboard.WebFavourites, 0 },
+            { Keyboard.WebRefresh, 0 },
+            { Keyboard.WebStop, 0 },
+            { Keyboard.WebForward, 0 },
+            { Keyboard.WebBack, 0 },
+            { Keyboard.MyComputer, 0 },
+            { Keyboard.Mail, 0 },
+            { Keyboard.MediaSelect, 0 },
+            { Keyboard.GreenModifier, 0 },
+            { Keyboard.OrangeModifier, 0 },
+            { Keyboard.F16, 0 },
+            { Keyboard.F17, 0 },
+            { Keyboard.F18, 0 },
+            { Keyboard.F19, 0 },
+            { Keyboard.F20, 0 },
+            { Keyboard.Section, 0 },
+            { Keyboard.Menu, 0 },
+            { Keyboard.Help, 0 },
+            { Keyboard.Function, Key.Function },
+            { Keyboard.Clear, 0 },
+            { Keyboard.LeftCommand, 0 },
+            { Keyboard.RightCommand, 0 },
         };
 
-        public static IReadOnlyDictionary<string, Key> EliteKeys => _keys;
+        private static readonly Dictionary<uint, Key> _scanCodes = new Dictionary<uint, Key>()
+        {
+            { 0x7D, Key.JpnYen },
+            { 0x29, Key.OemTilde },
+            { 0x0C, Key.OemMinus },
+            { 0x0D, Key.OemEquals },
+            { 0x1A, Key.OemLeftBracket },
+            { 0x1B, Key.OemRightBracket },
+            { 0x2B, Key.OemBackslash },
+            { 0x27, Key.OemSemicolon },
+            { 0x28, Key.OemApostrophe },
+            { 0x56, Key.EurBackslash },
+            { 0x33, Key.OemComma },
+            { 0x34, Key.OemPeriod },
+            { 0x35, Key.OemSlash },
+            { 0x73, Key.JpnSlash },
+            { 0xE01C, Key.NumEnter },
+            { 0x7B, Key.Jpn3 },
+            { 0x79, Key.Jpn4 },
+            { 0x70, Key.Jpn5 },
+        };
+
+        public static bool TryGetKey(string keyName, string keyboardLayout, out Key key, INativeMethods nativeMethods)
+        {
+            if (_keys.TryGetValue(keyName, out key))
+            {
+                return true;
+            }
+
+            _ = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, out var vk, nativeMethods);
+
+            IntPtr hkl = KeyboardLayoutMap.GetKeyboardLayout(keyboardLayout, nativeMethods);
+
+            var scanCode = nativeMethods.MapVirtualKeyEx((uint)vk, NativeMethods.MAPVK.VK_TO_VSC_EX, hkl);
+
+            return _scanCodes.TryGetValue(scanCode, out key);
+        }
+
+        private static string GetKeyName(char c)
+        {
+            _ = Keyboard.TryGetKeyName(c, out var keyName);
+            return keyName;
+        }
     }
 }

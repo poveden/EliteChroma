@@ -225,8 +225,8 @@ namespace EliteChroma.Elite
 
         private void BindingsWatcher_Changed(object sender, BindingPreset e)
         {
-            _modifierKeysWatcher.Watch(GetAllModifiers(e.Bindings.Values));
-            _gameState.Bindings = e.Bindings;
+            _modifierKeysWatcher.Watch(GetAllModifiers(e.Bindings.Values), e.KeyboardLayout);
+            _gameState.BindingPreset = e;
             OnChanged(ChangeType.BindingPreset);
         }
 

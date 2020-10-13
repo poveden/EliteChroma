@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased](https://github.com/poveden/EliteChroma/compare/v1.8.0...HEAD)
+
+### Fixed
+
+- Correctly map international keyboard layouts to Chroma keyboard keys (thanks [@Andechs75](https://github.com/Andechs75)!)
+- Apply minor stability fixes
+
 ## [1.8.0](https://github.com/poveden/EliteChroma/compare/v1.7.0...v1.8.0) — 2020-06-23
 
 ### Changed

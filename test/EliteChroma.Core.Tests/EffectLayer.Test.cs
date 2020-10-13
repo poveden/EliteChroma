@@ -11,6 +11,7 @@ using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
 using EliteChroma.Core.Internal;
 using EliteChroma.Core.Layers;
+using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite;
 using EliteFiles;
 using EliteFiles.Bindings;
@@ -83,7 +84,7 @@ namespace EliteChroma.Core.Tests
         public async Task LayerBaseThrowsOnInvalidGameState()
         {
             var le = new LayeredEffect();
-            le.Add(new DummyLayer());
+            le.Add(new DummyLayer(new NativeMethodsStub()));
 
             var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
 
@@ -101,7 +102,7 @@ namespace EliteChroma.Core.Tests
             var binds = BindingPreset.FromFile(Path.Combine(_gif.FullName, _mainFile));
             var hyperJumpKey = GetKey(binds, FlightMiscellaneous.HyperSuperCombination);
 
-            var hyperspaceLayer = new HyperspaceLayer();
+            var hyperspaceLayer = new HyperspaceLayer() { NativeMethods = new NativeMethodsStub() };
             var le = new LayeredEffect();
             le.Add(hyperspaceLayer);
 
@@ -117,7 +118,7 @@ namespace EliteChroma.Core.Tests
                 FsdJumpType = StartJump.FsdJumpType.Hyperspace,
                 FsdJumpStarClass = starClass,
                 FsdJumpChange = DateTimeOffset.UtcNow,
-                Bindings = binds.Bindings,
+                BindingPreset = binds,
                 PressedModifiers = new DeviceKeySet(Enumerable.Empty<DeviceKey>()),
             };
 
@@ -180,11 +181,16 @@ namespace EliteChroma.Core.Tests
         private static Key GetKey(BindingPreset binds, string binding)
         {
             var bps = binds.Bindings[binding].Primary;
-            return KeyMappings.EliteKeys[bps.Key];
+            return KeyMappings.TryGetKey(bps.Key, "en-US", out var key, new NativeMethodsStub()) ? key : 0;
         }
 
         private sealed class DummyLayer : LayerBase
         {
+            public DummyLayer(INativeMethods nativeMethods)
+            {
+                NativeMethods = nativeMethods;
+            }
+
             protected override void OnRender(ChromaCanvas canvas)
             {
             }

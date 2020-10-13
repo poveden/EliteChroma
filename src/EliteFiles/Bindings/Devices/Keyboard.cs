@@ -1,67 +1,26 @@
-﻿namespace EliteFiles.Bindings.Devices
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace EliteFiles.Bindings.Devices
 {
     /// <summary>
     /// Defines keyboard key names.
     /// </summary>
     /// <remarks>
-    /// Reference: &lt;EliteRoot&gt;\Products\elite-dangerous-64\ControlSchemes\Help.txt.
+    /// References:
+    /// - &lt;EliteRoot&gt;\Products\elite-dangerous-64\ControlSchemes\Help.txt.
+    /// - &lt;EliteRoot&gt;\Products\elite-dangerous-64\EliteDangerous64.exe (binary scraping).
     /// </remarks>
     public static class Keyboard
     {
 #pragma warning disable 1591, SA1600
         public const string Escape = "Key_Escape";
-        public const string D1 = "Key_1";
-        public const string D2 = "Key_2";
-        public const string D3 = "Key_3";
-        public const string D4 = "Key_4";
-        public const string D5 = "Key_5";
-        public const string D6 = "Key_6";
-        public const string D7 = "Key_7";
-        public const string D8 = "Key_8";
-        public const string D9 = "Key_9";
-        public const string D0 = "Key_0";
-        public const string Minus = "Key_Minus";
-        public const string EqualsKey = "Key_Equals";
         public const string Backspace = "Key_Backspace";
         public const string Tab = "Key_Tab";
-        public const string Q = "Key_Q";
-        public const string W = "Key_W";
-        public const string E = "Key_E";
-        public const string R = "Key_R";
-        public const string T = "Key_T";
-        public const string Y = "Key_Y";
-        public const string U = "Key_U";
-        public const string I = "Key_I";
-        public const string O = "Key_O";
-        public const string P = "Key_P";
-        public const string LeftBracket = "Key_LeftBracket";
-        public const string RightBracket = "Key_RightBracket";
         public const string Enter = "Key_Enter";
         public const string LeftControl = "Key_LeftControl";
-        public const string A = "Key_A";
-        public const string S = "Key_S";
-        public const string D = "Key_D";
-        public const string F = "Key_F";
-        public const string G = "Key_G";
-        public const string H = "Key_H";
-        public const string J = "Key_J";
-        public const string K = "Key_K";
-        public const string L = "Key_L";
-        public const string SemiColon = "Key_SemiColon";
-        public const string Apostrophe = "Key_Apostrophe";
-        public const string Grave = "Key_Grave";
         public const string LeftShift = "Key_LeftShift";
-        public const string BackSlash = "Key_BackSlash";
-        public const string Z = "Key_Z";
-        public const string X = "Key_X";
-        public const string C = "Key_C";
-        public const string V = "Key_V";
-        public const string B = "Key_B";
-        public const string N = "Key_N";
-        public const string M = "Key_M";
-        public const string Comma = "Key_Comma";
-        public const string Period = "Key_Period";
-        public const string Slash = "Key_Slash";
         public const string RightShift = "Key_RightShift";
         public const string NumpadMultiply = "Key_Numpad_Multiply";
         public const string LeftAlt = "Key_LeftAlt";
@@ -92,7 +51,6 @@
         public const string Numpad3 = "Key_Numpad_3";
         public const string Numpad0 = "Key_Numpad_0";
         public const string NumpadDecimal = "Key_Numpad_Decimal";
-        public const string Oem102 = "Key_OEM_102";
         public const string F11 = "Key_F11";
         public const string F12 = "Key_F12";
         public const string F13 = "Key_F13";
@@ -107,8 +65,6 @@
         public const string NumpadEquals = "Key_Numpad_Equals";
         public const string PrevTrack = "Key_PrevTrack";
         public const string AT = "Key_AT";
-        public const string Colon = "Key_Colon";
-        public const string Underline = "Key_Underline";
         public const string Kanji = "Key_Kanji";
         public const string Stop = "Key_Stop";
         public const string AX = "Key_AX";
@@ -155,6 +111,150 @@
         public const string MediaSelect = "Key_MediaSelect";
         public const string GreenModifier = "Key_GreenModifier";
         public const string OrangeModifier = "Key_OrangeModifier";
+        public const string F16 = "Key_F16";
+        public const string F17 = "Key_F17";
+        public const string F18 = "Key_F18";
+        public const string F19 = "Key_F19";
+        public const string F20 = "Key_F20";
+        public const string Section = "Key_Section";
+        public const string Menu = "Key_Menu";
+        public const string Help = "Key_Help";
+        public const string Function = "Key_Function";
+        public const string Clear = "Key_Clear";
+        public const string LeftCommand = "Key_LeftCommand";
+        public const string RightCommand = "Key_RightCommand";
 #pragma warning restore 1591, SA1600
+
+        private const string _keyNamePrefix = "Key_";
+
+        private static readonly IReadOnlyDictionary<string, char> _namedKeys = new Dictionary<string, char>(StringComparer.Ordinal)
+        {
+            { "Key_Minus", '\u002D' },
+            { "Key_Plus", '\u002B' },
+            { "Key_Equals", '\u003D' },
+            { Backspace, '\u0008' },
+            { Tab, '\u0009' },
+            { "Key_LeftBracket", '\u005B' },
+            { "Key_RightBracket", '\u005D' },
+            { Enter, '\u000d' },
+            { "Key_SemiColon", '\u003B' },
+            { "Key_Apostrophe", '\u0027' },
+            { "Key_Grave", '\u0060' },
+            { "Key_Hash", '\u0023' },
+            { "Key_Comma", '\u002C' },
+            { "Key_Period", '\u002E' },
+            { "Key_Slash", '\u002F' },
+            { Space, '\u0020' },
+            { "Key_BackSlash", '\u005C' },
+            { "Key_Colon", '\u003A' },
+            { "Key_Underline", '\u005F' },
+            { "Key_LessThan", '\u003C' },
+            { "Key_GreaterThan", '\u003E' },
+            { "Key_Acute", '\u00B4' },
+            { "Key_Circumflex", '\u005E' },
+            { "Key_Tilde", '\u007E' },
+            { "Key_Ring", '\u00B0' },
+            { "Key_Umlaut", '\u00A8' },
+            { "Key_Half", '\u00BD' },
+            { "Key_Dollar", '\u0024' },
+            { "Key_SuperscriptTwo", '\u00B2' },
+            { "Key_Ampersand", '\u0026' },
+            { "Key_DoubleQuote", '\u0022' },
+            { "Key_LeftParenthesis", '\u0028' },
+            { "Key_RightParenthesis", '\u0029' },
+            { "Key_Asterisk", '\u002A' },
+            { "Key_ExclamationPoint", '\u0021' },
+            { "Key_Macron", '\u00AF' },
+            { "Key_Overline", '\u0305' },
+            { "Key_Breve", '\u02D8' },
+            { "Key_Overdot", '\u02D9' },
+            { "Key_HookAbove", '\u0309' },
+            { "Key_RingAbove", '\u02DA' },
+            { "Key_DoubleAcute", '\u02DD' },
+            { "Key_Caron", '\u02C7' },
+            { "Key_VerticalLineAbove", '\u030D' },
+            { "Key_DoubleVerticalLineAbove", '\u030E' },
+            { "Key_DoubleGrave", '\u030F' },
+            { "Key_Candrabindu", '\u0310' },
+            { "Key_InvertedBreve", '\u0311' },
+            { "Key_TurnedCommaAbove", '\u0312' },
+            { "Key_CommaAbove", '\u0313' },
+            { "Key_ReversedCommaAbove", '\u0314' },
+            { "Key_CommaAboveRight", '\u0315' },
+            { "Key_GraveBelow", '\u0316' },
+            { "Key_AcuteBelow", '\u0317' },
+            { "Key_LeftTackBelow", '\u0318' },
+            { "Key_RightTackBelow", '\u0319' },
+            { "Key_LeftAngleAbove", '\u031A' },
+            { "Key_Horn", '\u031B' },
+            { "Key_LeftHalfRingBelow", '\u031C' },
+            { "Key_UpTackBelow", '\u031D' },
+            { "Key_DownTackBelow", '\u031E' },
+            { "Key_PlusSignBelow", '\u031F' },
+            { "Key_Cedilla", '\u00B8' },
+        };
+
+        private static readonly IReadOnlyDictionary<char, string> _namedKeysInv = _namedKeys.ToDictionary(kv => kv.Value, kv => kv.Key);
+
+        private static readonly Dictionary<char, string> _charKeyNames = new Dictionary<char, string>();
+
+        /// <summary>
+        /// Gets the character associated with the specified keyboard key name.
+        /// </summary>
+        /// <param name="keyName">The keyboard key name.</param>
+        /// <param name="c">The matching character.</param>
+        /// <returns><c>true</c> if <paramref name="keyName"/> is a character key name; otherwise, <c>false</c>.</returns>
+        public static bool TryGetKeyChar(string keyName, out char c)
+        {
+            if (keyName == null)
+            {
+                throw new ArgumentNullException(nameof(keyName));
+            }
+
+            if (!keyName.StartsWith(_keyNamePrefix, StringComparison.Ordinal))
+            {
+                c = default;
+                return false;
+            }
+
+            // Character key binding (e.g. "Key_A" → 'A', "Key_ß" → 'ß')
+            if (keyName.Length - _keyNamePrefix.Length == 1)
+            {
+                c = keyName[keyName.Length - 1];
+                return true;
+            }
+
+            // Named character key (e.g. "Key_Asterisk" -> '*')
+            return _namedKeys.TryGetValue(keyName, out c);
+        }
+
+        /// <summary>
+        /// Gets the keyboard key name associated with the specified character.
+        /// </summary>
+        /// <param name="c">The character.</param>
+        /// <param name="keyName">The matching key name.</param>
+        /// <returns><c>true</c> if <paramref name="c"/> is a has a corresponding keyboard key name; otherwise, <c>false</c>.</returns>
+        public static bool TryGetKeyName(char c, out string keyName)
+        {
+            // Return named character bindings first (e.g. '*' -> "Key_Asterisk")
+            if (_namedKeysInv.TryGetValue(c, out keyName))
+            {
+                return true;
+            }
+
+            if (c <= ' ')
+            {
+                keyName = null;
+                return false;
+            }
+
+            if (!_charKeyNames.TryGetValue(c, out keyName))
+            {
+                keyName = $"{_keyNamePrefix}{c}";
+                _charKeyNames[c] = keyName;
+            }
+
+            return true;
+        }
     }
 }

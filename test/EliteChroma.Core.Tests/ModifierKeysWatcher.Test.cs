@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -32,7 +33,7 @@ namespace EliteChroma.Core.Tests
             var key2 = FromXml<DeviceKey>("<Key1 Device='Keyboard' Key='Key_LeftShift' />");
             var key3 = FromXml<DeviceKey>("<Key2 Device='Keyboard' Key='Key_A' />");
 
-            mkw.Watch(new[] { key1, key2, key3 });
+            mkw.Watch(new[] { key1, key2, key3 }, "en-US");
 
             var keys = mkw.InvokePrivateMethod<IEnumerable<DeviceKey>>("GetAllPressedModifiers").ToList();
 
@@ -88,6 +89,11 @@ namespace EliteChroma.Core.Tests
             private const short _hiBit = unchecked((short)0x8000);
 
             public HashSet<VirtualKey> PressedKeys { get; } = new HashSet<VirtualKey>();
+
+            public override IntPtr GetKeyboardLayout(int idThread)
+            {
+                return new IntPtr(NativeMethodsKeyboardMock.EnUS);
+            }
 
             public override short GetAsyncKeyState(VirtualKey vKey)
             {
