@@ -91,6 +91,17 @@ namespace EliteChroma.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EliteChroma is already running.
+        ///
+        ///Look for the EliteChroma icon in the Windows notification area..
+        /// </summary>
+        internal static string MsgBox_AppAlreadyRunning {
+            get {
+                return ResourceManager.GetString("MsgBox_AppAlreadyRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to EliteChroma was unable to find the Razer Chroma SDK.
         ///
         ///The application will now exit..

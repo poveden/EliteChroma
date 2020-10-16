@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Add setting to force US English keyboard layout
+- Ensure that only a single application instance can be run.
 
 ### Changed
 

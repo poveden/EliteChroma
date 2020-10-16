@@ -127,6 +127,11 @@
   <data name="RedDot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RedDot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MsgBox_AppAlreadyRunning" xml:space="preserve">
+    <value>EliteChroma is already running.
+
+Look for the EliteChroma icon in the Windows notification area.</value>
+  </data>
   <data name="MsgBox_RazerChromaSdkNotFound" xml:space="preserve">
     <value>EliteChroma was unable to find the Razer Chroma SDK.
 
