@@ -108,10 +108,10 @@ namespace EliteChroma.Core.Tests
 
             var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
 
-            KeyboardCustom keyboard;
+            CustomKeyboardEffect keyboard;
             Mock.Get(chroma.Object.Keyboard)
-                .Setup(x => x.SetCustomAsync(It.IsAny<KeyboardCustom>()))
-                .Callback((KeyboardCustom c) => keyboard = c);
+                .Setup(x => x.SetCustomAsync(It.IsAny<CustomKeyboardEffect>()))
+                .Callback((CustomKeyboardEffect c) => keyboard = c);
 
             var game = new GameState
             {
@@ -154,10 +154,10 @@ namespace EliteChroma.Core.Tests
 
             var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
 
-            KeyboardCustom keyboard;
+            CustomKeyboardEffect keyboard;
             Mock.Get(chroma.Object.Keyboard)
-                .Setup(x => x.SetCustomAsync(It.IsAny<KeyboardCustom>()))
-                .Callback((KeyboardCustom c) => keyboard = c);
+                .Setup(x => x.SetCustomAsync(It.IsAny<CustomKeyboardEffect>()))
+                .Callback((CustomKeyboardEffect c) => keyboard = c);
 
             var game = new GameState
             {

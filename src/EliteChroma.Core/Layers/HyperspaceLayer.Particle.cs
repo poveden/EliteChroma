@@ -55,7 +55,7 @@ namespace EliteChroma.Core.Layers
                 Render(canvas.ChromaLink, c);
             }
 
-            private void Render(KeyboardCustom keyboard, Color c, double lastZ)
+            private void Render(CustomKeyboardEffect keyboard, Color c, double lastZ)
             {
                 // Particles are drawn as stretched lines, simulating movement.
                 // Lines are antialiased at both ends.
@@ -111,7 +111,7 @@ namespace EliteChroma.Core.Layers
                 }
             }
 
-            private void Render(MouseCustom mouse, Color c, double lastZ)
+            private void Render(CustomMouseEffect mouse, Color c, double lastZ)
             {
                 // Particles are drawn as stretched lines, as with keyboard.
                 const int yMin = 1;
@@ -176,7 +176,7 @@ namespace EliteChroma.Core.Layers
                 }
             }
 
-            private void Render(MousepadCustom mousepad, Color c)
+            private void Render(CustomMousepadEffect mousepad, Color c)
             {
                 if (_angle > 180)
                 {
@@ -194,7 +194,7 @@ namespace EliteChroma.Core.Layers
                 mousepad[ic] = mousepad[ic].Max(cf);
             }
 
-            private void Render(KeypadCustom keypad, Color c, double lastZ)
+            private void Render(CustomKeypadEffect keypad, Color c, double lastZ)
             {
                 // Particles are drawn as stretched lines, as with keyboard.
                 const int xMax = KeypadConstants.MaxColumns - 1;
@@ -264,7 +264,7 @@ namespace EliteChroma.Core.Layers
                 }
             }
 
-            private void Render(HeadsetCustom headset, Color c)
+            private void Render(CustomHeadsetEffect headset, Color c)
             {
                 if (_angle > 90)
                 {
@@ -275,7 +275,7 @@ namespace EliteChroma.Core.Layers
                 headset[i] = headset[i].Max(c);
             }
 
-            private void Render(ChromaLinkCustom chromaLink, Color c)
+            private void Render(CustomChromaLinkEffect chromaLink, Color c)
             {
                 if (_angle > 90)
                 {

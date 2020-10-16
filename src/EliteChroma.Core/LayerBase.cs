@@ -98,7 +98,7 @@ namespace EliteChroma.Core
             return new Color(r, g, b);
         }
 
-        protected void ApplyColorToBinding(KeyboardCustom grid, IEnumerable<string> bindingNames, Color color)
+        protected void ApplyColorToBinding(CustomKeyboardEffect grid, IEnumerable<string> bindingNames, Color color)
         {
             if (bindingNames == null)
             {
@@ -111,7 +111,7 @@ namespace EliteChroma.Core
             }
         }
 
-        protected void ApplyColorToBinding(KeyboardCustom grid, string bindingName, Color color)
+        protected void ApplyColorToBinding(CustomKeyboardEffect grid, string bindingName, Color color)
         {
             if (!Game.BindingPreset.Bindings.TryGetValue(bindingName, out var binding))
             {
