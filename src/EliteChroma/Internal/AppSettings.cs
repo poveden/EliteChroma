@@ -17,6 +17,8 @@ namespace EliteChroma.Internal
 
         public string JournalFolder { get; set; }
 
+        public bool ForceEnUSKeyboardLayout { get; set; }
+
         public static AppSettings Load(string path)
         {
             try

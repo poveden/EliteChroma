@@ -182,14 +182,14 @@ namespace EliteChroma.Core.Internal
             { 0x70, Key.Jpn5 },
         };
 
-        public static bool TryGetKey(string keyName, string keyboardLayout, out Key key, INativeMethods nativeMethods)
+        public static bool TryGetKey(string keyName, string keyboardLayout, bool enUSOverride, out Key key, INativeMethods nativeMethods)
         {
             if (_keys.TryGetValue(keyName, out key))
             {
                 return true;
             }
 
-            _ = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, out var vk, nativeMethods);
+            _ = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, enUSOverride, out var vk, nativeMethods);
 
             IntPtr hkl = KeyboardLayoutMap.GetKeyboardLayout(keyboardLayout, nativeMethods);
 

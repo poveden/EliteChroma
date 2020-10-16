@@ -80,6 +80,12 @@ namespace EliteChroma.Core
             set => _watcher.DetectForegroundProcess = value;
         }
 
+        public bool ForceEnUSKeyboardLayout
+        {
+            get => _watcher.ForceEnUSKeyboardLayout;
+            set => _watcher.ForceEnUSKeyboardLayout = value;
+        }
+
         public static bool IsChromaSdkAvailable() => IsChromaSdkAvailable(NativeMethods.Instance);
 
         public void Start()

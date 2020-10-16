@@ -114,5 +114,20 @@ namespace EliteChroma.Core.Tests
 
             Assert.Equal(1, nOnChangedCalls);
         }
+
+        [Fact]
+        public void EnUSOverrideIsAppliedInTheGameState()
+        {
+            using var watcher = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, _journalFolder);
+
+            Assert.False(watcher.ForceEnUSKeyboardLayout);
+            Assert.False(watcher.GetPrivateField<GameState>("_gameState").ForceEnUSKeyboardLayout);
+            Assert.False(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
+
+            watcher.ForceEnUSKeyboardLayout = true;
+            Assert.True(watcher.ForceEnUSKeyboardLayout);
+            Assert.True(watcher.GetPrivateField<GameState>("_gameState").ForceEnUSKeyboardLayout);
+            Assert.True(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
+        }
     }
 }

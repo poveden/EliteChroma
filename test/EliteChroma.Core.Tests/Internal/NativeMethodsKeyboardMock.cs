@@ -16,6 +16,9 @@ namespace EliteChroma.Core.Tests.Internal
         private static readonly Dictionary<(int Layout, VirtualKey VirtualKey), (char Character, uint ScanCode)> _map = new Dictionary<(int, VirtualKey), (char, uint)>
         {
             [(DeDE, VirtualKey.VK_OEM_4)] = ('ß', 0x0C),
+            [(EsES, VirtualKey.VK_OEM_5)] = ('º', 0x29),
+            [(EnUS, VirtualKey.VK_OEM_3)] = ('`', 0x29),
+            [(EsES, VirtualKey.VK_OEM_3)] = ('ñ', 0x27),
         };
 
         private static readonly int[] _layouts = _map.Keys.Select(x => x.Layout).Distinct().ToArray();
@@ -28,6 +31,7 @@ namespace EliteChroma.Core.Tests.Internal
             {
                 MAPVK.VK_TO_CHAR => GetChar(keyboardLayout, (VirtualKey)uCode),
                 MAPVK.VK_TO_VSC_EX => GetScanCode(keyboardLayout, (VirtualKey)uCode),
+                MAPVK.VSC_TO_VK_EX => GetVirtualKey(keyboardLayout, uCode),
                 _ => 0,
             };
         }
@@ -63,5 +67,10 @@ namespace EliteChroma.Core.Tests.Internal
             => _map.TryGetValue((keyboardLayout, virtualKey), out var res)
             ? res.ScanCode
             : 0;
+
+        private static uint GetVirtualKey(int keyboardLayout, uint scanCode)
+            => _map.Where(kv => kv.Key.Layout == keyboardLayout && kv.Value.ScanCode == scanCode)
+            .Select(kv => (uint)kv.Key.VirtualKey)
+            .FirstOrDefault();
     }
 }

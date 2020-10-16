@@ -108,6 +108,20 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
+        public void EnUSOverrideIsAppliedInTheGameState()
+        {
+            using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
+            var watcher = cc.GetPrivateField<GameStateWatcher>("_watcher");
+
+            Assert.False(cc.ForceEnUSKeyboardLayout);
+            Assert.False(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
+
+            cc.ForceEnUSKeyboardLayout = true;
+            Assert.True(cc.ForceEnUSKeyboardLayout);
+            Assert.True(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
+        }
+
+        [Fact]
         public void StartAndStopAreNotReentrant()
         {
             using var watcher = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);

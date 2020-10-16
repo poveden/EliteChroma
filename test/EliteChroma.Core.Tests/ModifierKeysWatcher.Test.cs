@@ -33,7 +33,7 @@ namespace EliteChroma.Core.Tests
             var key2 = FromXml<DeviceKey>("<Key1 Device='Keyboard' Key='Key_LeftShift' />");
             var key3 = FromXml<DeviceKey>("<Key2 Device='Keyboard' Key='Key_A' />");
 
-            mkw.Watch(new[] { key1, key2, key3 }, "en-US");
+            mkw.Watch(new[] { key1, key2, key3 }, "en-US", false);
 
             var keys = mkw.InvokePrivateMethod<IEnumerable<DeviceKey>>("GetAllPressedModifiers").ToList();
 

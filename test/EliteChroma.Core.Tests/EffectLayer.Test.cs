@@ -181,7 +181,7 @@ namespace EliteChroma.Core.Tests
         private static Key GetKey(BindingPreset binds, string binding)
         {
             var bps = binds.Bindings[binding].Primary;
-            return KeyMappings.TryGetKey(bps.Key, "en-US", out var key, new NativeMethodsStub()) ? key : 0;
+            return KeyMappings.TryGetKey(bps.Key, "en-US", false, out var key, new NativeMethodsStub()) ? key : 0;
         }
 
         private sealed class DummyLayer : LayerBase

@@ -77,6 +77,12 @@ namespace EliteChroma.Elite
 
         public bool DetectForegroundProcess { get; set; } = true;
 
+        public bool ForceEnUSKeyboardLayout
+        {
+            get => _gameState.ForceEnUSKeyboardLayout;
+            set => _gameState.ForceEnUSKeyboardLayout = value;
+        }
+
         public bool RaisePreStartupEvents { get; set; }
 
         public void Start()
@@ -225,7 +231,7 @@ namespace EliteChroma.Elite
 
         private void BindingsWatcher_Changed(object sender, BindingPreset e)
         {
-            _modifierKeysWatcher.Watch(GetAllModifiers(e.Bindings.Values), e.KeyboardLayout);
+            _modifierKeysWatcher.Watch(GetAllModifiers(e.Bindings.Values), e.KeyboardLayout, _gameState.ForceEnUSKeyboardLayout);
             _gameState.BindingPreset = e;
             OnChanged(ChangeType.BindingPreset);
         }
