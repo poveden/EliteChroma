@@ -17,6 +17,10 @@ namespace EliteChroma.Forms
     [ExcludeFromCodeCoverage]
     public partial class FrmAppSettings : Form
     {
+        private const string _gameFoldersSection = "GameFolders";
+
+        private readonly HashSet<string> _sectionErrors = new HashSet<string>(StringComparer.Ordinal);
+
         public FrmAppSettings()
         {
             InitializeComponent();
@@ -55,6 +59,11 @@ namespace EliteChroma.Forms
 
         private void AppSettings_Load(object sender, EventArgs e)
         {
+            tvSections.DrawMode = TreeViewDrawMode.OwnerDrawText;
+            tvSections.Nodes[_gameFoldersSection].Tag = grpEDFolders;
+
+            tvSections.SelectedNode = tvSections.Nodes[_gameFoldersSection];
+
             ValidateChildren();
         }
 
@@ -99,13 +108,13 @@ namespace EliteChroma.Forms
             if (!new GameInstallFolder(txtGameInstall.Text).IsValid)
             {
                 e.Cancel = true;
-                errorProvider.SetError(txtGameInstall, "Invalid game install folder");
+                SetError(_gameFoldersSection, txtGameInstall, "Invalid game install folder");
             }
         }
 
         private void TxtGameInstall_Validated(object sender, EventArgs e)
         {
-            errorProvider.SetError(txtGameInstall, string.Empty);
+            SetError(_gameFoldersSection, txtGameInstall, string.Empty);
         }
 
         private void TxtGameOptions_Validating(object sender, CancelEventArgs e)
@@ -113,13 +122,13 @@ namespace EliteChroma.Forms
             if (!new GameOptionsFolder(txtGameOptions.Text).IsValid)
             {
                 e.Cancel = true;
-                errorProvider.SetError(txtGameOptions, "Invalid game options folder");
+                SetError(_gameFoldersSection, txtGameOptions, "Invalid game options folder");
             }
         }
 
         private void TxtGameOptions_Validated(object sender, EventArgs e)
         {
-            errorProvider.SetError(txtGameOptions, string.Empty);
+            SetError(_gameFoldersSection, txtGameOptions, string.Empty);
         }
 
         private void TxtJournal_Validating(object sender, CancelEventArgs e)
@@ -127,13 +136,13 @@ namespace EliteChroma.Forms
             if (!new JournalFolder(txtJournal.Text).IsValid)
             {
                 e.Cancel = true;
-                errorProvider.SetError(txtJournal, "Invalid journal folder");
+                SetError(_gameFoldersSection, txtJournal, "Invalid journal folder");
             }
         }
 
         private void TxtJournal_Validated(object sender, EventArgs e)
         {
-            errorProvider.SetError(txtJournal, string.Empty);
+            SetError(_gameFoldersSection, txtJournal, string.Empty);
         }
 
         private void BtnOK_Click(object sender, EventArgs e)
@@ -155,6 +164,58 @@ namespace EliteChroma.Forms
             };
 
             Process.Start(ps);
+        }
+
+        private void TvSections_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            ((Control)e.Node.Tag).Visible = true;
+
+            foreach (TreeNode node in tvSections.Nodes)
+            {
+                if (node == e.Node)
+                {
+                    continue;
+                }
+
+                ((Control)node.Tag).Visible = false;
+            }
+        }
+
+        private void TvSections_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+            var b = e.State.HasFlag(TreeNodeStates.Focused) ? SystemBrushes.HighlightText : SystemBrushes.ControlText;
+            e.Graphics.DrawString(e.Node.Text, tvSections.Font, b, e.Bounds);
+
+            if (!_sectionErrors.Contains(e.Node.Name))
+            {
+                return;
+            }
+
+            var x = e.Bounds.Right - 4;
+            var y = e.Bounds.Top + (e.Bounds.Height - pbError.Image.Height) / 2;
+            var r = new Rectangle(new Point(x, y), pbError.Image.Size);
+            e.Graphics.DrawImageUnscaledAndClipped(pbError.Image, r);
+        }
+
+        public override bool ValidateChildren()
+        {
+            var res = base.ValidateChildren();
+            tvSections.Refresh();
+            return res;
+        }
+
+        private void SetError(string sectionKey, Control control, string value)
+        {
+            errorProvider.SetError(control, value);
+
+            if (string.IsNullOrEmpty(value))
+            {
+                _sectionErrors.Remove(sectionKey);
+            }
+            else
+            {
+                _sectionErrors.Add(sectionKey);
+            }
         }
     }
 }
