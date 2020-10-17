@@ -48,7 +48,7 @@ namespace EliteChroma.Core.Tests
             const int grantedAccess = 1;
             SendChromaEventMessage(cw, deviceAccess, grantedAccess);
 
-            var chroma = await tChroma.ConfigureAwait(false);
+            using var chroma = await tChroma.ConfigureAwait(false);
             Assert.NotNull(chroma);
 
             await chroma.UninitializeAsync().ConfigureAwait(false);

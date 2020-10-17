@@ -13,24 +13,24 @@ namespace EliteChroma.Chroma
 {
     public sealed class ChromaCanvas
     {
-        private readonly Lazy<KeyboardCustom> _keyboard = new Lazy<KeyboardCustom>(KeyboardCustom.Create);
-        private readonly Lazy<MouseCustom> _mouse = new Lazy<MouseCustom>(MouseCustom.Create);
-        private readonly Lazy<HeadsetCustom> _headset = new Lazy<HeadsetCustom>(HeadsetCustom.Create);
-        private readonly Lazy<MousepadCustom> _mousepad = new Lazy<MousepadCustom>(MousepadCustom.Create);
-        private readonly Lazy<KeypadCustom> _keypad = new Lazy<KeypadCustom>(KeypadCustom.Create);
-        private readonly Lazy<ChromaLinkCustom> _chromaLink = new Lazy<ChromaLinkCustom>(ChromaLinkCustom.Create);
+        private readonly Lazy<CustomKeyboardEffect> _keyboard = new Lazy<CustomKeyboardEffect>(CustomKeyboardEffect.Create);
+        private readonly Lazy<CustomMouseEffect> _mouse = new Lazy<CustomMouseEffect>(CustomMouseEffect.Create);
+        private readonly Lazy<CustomHeadsetEffect> _headset = new Lazy<CustomHeadsetEffect>(CustomHeadsetEffect.Create);
+        private readonly Lazy<CustomMousepadEffect> _mousepad = new Lazy<CustomMousepadEffect>(CustomMousepadEffect.Create);
+        private readonly Lazy<CustomKeypadEffect> _keypad = new Lazy<CustomKeypadEffect>(CustomKeypadEffect.Create);
+        private readonly Lazy<CustomChromaLinkEffect> _chromaLink = new Lazy<CustomChromaLinkEffect>(CustomChromaLinkEffect.Create);
 
-        public KeyboardCustom Keyboard => _keyboard.Value;
+        public CustomKeyboardEffect Keyboard => _keyboard.Value;
 
-        public MouseCustom Mouse => _mouse.Value;
+        public CustomMouseEffect Mouse => _mouse.Value;
 
-        public HeadsetCustom Headset => _headset.Value;
+        public CustomHeadsetEffect Headset => _headset.Value;
 
-        public MousepadCustom Mousepad => _mousepad.Value;
+        public CustomMousepadEffect Mousepad => _mousepad.Value;
 
-        public KeypadCustom Keypad => _keypad.Value;
+        public CustomKeypadEffect Keypad => _keypad.Value;
 
-        public ChromaLinkCustom ChromaLink => _chromaLink.Value;
+        public CustomChromaLinkEffect ChromaLink => _chromaLink.Value;
 
         public Task SetEffect(IChroma chroma)
         {

@@ -50,7 +50,7 @@ namespace EliteChroma.Core.Tests
 
             var chromaApi = new Mock<IChromaApi> { DefaultValue = DefaultValue.Mock };
             var mockIA = chromaApi.Setup(x => x.InitializeAsync(It.IsAny<AppInfo>()));
-            var mockCKEA = chromaApi.Setup(x => x.CreateKeyboardEffectAsync(It.IsAny<KeyboardEffect>(), It.IsAny<It.IsValueType>()));
+            var mockCKEA = chromaApi.Setup(x => x.CreateKeyboardEffectAsync(It.IsAny<KeyboardEffectType>(), It.IsAny<It.IsValueType>()));
             var mockUA = chromaApi.Setup(x => x.UninitializeAsync());
 
             using TestFolder

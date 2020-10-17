@@ -12,7 +12,7 @@ namespace EliteChroma.Chroma
     {
         private static readonly Key[] _allKeys = GetAllKeys();
 
-        public static KeyboardCustom Max(this KeyboardCustom keyboard, Color c)
+        public static CustomKeyboardEffect Max(this CustomKeyboardEffect keyboard, Color c)
         {
             for (var i = 0; i < _allKeys.Length; i++)
             {
@@ -23,7 +23,7 @@ namespace EliteChroma.Chroma
             return keyboard;
         }
 
-        public static KeyboardCustom MaxAt(this KeyboardCustom keyboard, int row, int column, Color c)
+        public static CustomKeyboardEffect MaxAt(this CustomKeyboardEffect keyboard, int row, int column, Color c)
         {
             var key = GetKeyAt(row, column);
             keyboard[key] = keyboard[key].Max(c);
@@ -31,7 +31,7 @@ namespace EliteChroma.Chroma
             return keyboard;
         }
 
-        public static MouseCustom Combine(this MouseCustom mouse, Color c, double cPct = 0.5)
+        public static CustomMouseEffect Combine(this CustomMouseEffect mouse, Color c, double cPct = 0.5)
         {
             for (var i = 0; i < MouseConstants.MaxLeds; i++)
             {
@@ -41,7 +41,7 @@ namespace EliteChroma.Chroma
             return mouse;
         }
 
-        public static MouseCustom Max(this MouseCustom mouse, Color c)
+        public static CustomMouseEffect Max(this CustomMouseEffect mouse, Color c)
         {
             for (var i = 0; i < MouseConstants.MaxLeds; i++)
             {
@@ -51,7 +51,7 @@ namespace EliteChroma.Chroma
             return mouse;
         }
 
-        public static MousepadCustom Combine(this MousepadCustom mousepad, Color c, double cPct = 0.5)
+        public static CustomMousepadEffect Combine(this CustomMousepadEffect mousepad, Color c, double cPct = 0.5)
         {
             for (var i = 0; i < MousepadConstants.MaxLeds; i++)
             {
@@ -61,7 +61,7 @@ namespace EliteChroma.Chroma
             return mousepad;
         }
 
-        public static MousepadCustom Max(this MousepadCustom mousepad, Color c)
+        public static CustomMousepadEffect Max(this CustomMousepadEffect mousepad, Color c)
         {
             for (var i = 0; i < MousepadConstants.MaxLeds; i++)
             {
@@ -71,7 +71,7 @@ namespace EliteChroma.Chroma
             return mousepad;
         }
 
-        public static KeypadCustom Max(this KeypadCustom keypad, Color c)
+        public static CustomKeypadEffect Max(this CustomKeypadEffect keypad, Color c)
         {
             for (var i = 0; i < KeypadConstants.MaxKeys; i++)
             {
@@ -81,7 +81,7 @@ namespace EliteChroma.Chroma
             return keypad;
         }
 
-        public static HeadsetCustom Combine(this HeadsetCustom headset, Color c, double cPct = 0.5)
+        public static CustomHeadsetEffect Combine(this CustomHeadsetEffect headset, Color c, double cPct = 0.5)
         {
             for (var i = 0; i < HeadsetConstants.MaxLeds; i++)
             {
@@ -91,7 +91,7 @@ namespace EliteChroma.Chroma
             return headset;
         }
 
-        public static HeadsetCustom Max(this HeadsetCustom headset, Color c)
+        public static CustomHeadsetEffect Max(this CustomHeadsetEffect headset, Color c)
         {
             for (var i = 0; i < HeadsetConstants.MaxLeds; i++)
             {
@@ -101,7 +101,7 @@ namespace EliteChroma.Chroma
             return headset;
         }
 
-        public static ChromaLinkCustom Combine(this ChromaLinkCustom chromaLink, Color c, double cPct = 0.5)
+        public static CustomChromaLinkEffect Combine(this CustomChromaLinkEffect chromaLink, Color c, double cPct = 0.5)
         {
             for (var i = 0; i < ChromaLinkConstants.MaxLeds; i++)
             {
@@ -111,7 +111,7 @@ namespace EliteChroma.Chroma
             return chromaLink;
         }
 
-        public static ChromaLinkCustom Max(this ChromaLinkCustom chromaLink, Color c)
+        public static CustomChromaLinkEffect Max(this CustomChromaLinkEffect chromaLink, Color c)
         {
             for (var i = 0; i < ChromaLinkConstants.MaxLeds; i++)
             {
