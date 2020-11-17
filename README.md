@@ -19,6 +19,7 @@ If a picture is worth a thousand words, then perhaps a video will be better stil
 
 - Runs in the background, accessible through a system tray notification icon.
 - Retrieves device key bindings from the game configuration (currently limited to keyboard devices)
+- Binding key colors are fully customizable
 - Retrieves the current HUD color from the game configuration (currently used only as device background color)
 - Watches for changes in the [game journal files](http://edcodex.info/?m=doc) and highlights the appropriate keys
 - Performs color animation on certain events:
@@ -54,6 +55,8 @@ Once installed, just run EliteChroma from the start menu. You may then control t
 Contributions are welcome! Please read on [how to contribute](https://github.com/poveden/EliteChroma/blob/master/CONTRIBUTING.md).
 
 For non-developer stuff, a [Frontier Forums thread](https://forums.frontier.co.uk/threads/elitechroma.534200/) is available so you can leave any comments or suggestions.
+
+If you have any cool key binding color combinations, share them! If it becomes a thing, I may setup a gallery of color bindings for all the world to see.
 
 ## Code of conduct
 

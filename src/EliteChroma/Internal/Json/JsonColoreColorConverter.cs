@@ -28,7 +28,7 @@ namespace EliteChroma.Internal.Json
             writer.WriteValue(ToRgbString(value));
         }
 
-        private static bool TryParseRgbString(string str, out Color color)
+        public static bool TryParseRgbString(string str, out Color color)
         {
             if (!uint.TryParse(str, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var rgb))
             {
@@ -40,7 +40,7 @@ namespace EliteChroma.Internal.Json
             return true;
         }
 
-        private static string ToRgbString(Color color)
+        public static string ToRgbString(Color color)
         {
             var rgb = (color.R << 16) | (color.G << 8) | color.B;
             return rgb.ToString("X6", CultureInfo.InvariantCulture);

@@ -16,6 +16,7 @@ namespace EliteChroma
         private readonly WinChromaFactory _chromaFactory;
 
         private ChromaController _cc;
+        private AppSettings _currentSettings;
 
         public AppContext(string appSettingsPath = null)
         {
@@ -107,6 +108,7 @@ namespace EliteChroma
                 GameOptionsFolder = settings.GameOptionsFolder,
                 JournalFolder = settings.JournalFolder,
                 ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout,
+                Colors = settings.Colors,
             };
 
             if (frm.ShowDialog(ContextMenu) != DialogResult.OK)
@@ -124,6 +126,15 @@ namespace EliteChroma
 
         private void CycleChromaController(AppSettings settings)
         {
+            if (CanSoftCycle(settings))
+            {
+                _cc.ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout;
+                _cc.Colors = settings.Colors;
+                _cc.Refresh();
+                _currentSettings = settings;
+                return;
+            }
+
             _cc?.Dispose();
             _cc = new ChromaController(settings.GameInstallFolder, settings.GameOptionsFolder, settings.JournalFolder)
             {
@@ -132,6 +143,19 @@ namespace EliteChroma
                 Colors = settings.Colors,
             };
             _cc.Start();
+            _currentSettings = settings;
+        }
+
+        private bool CanSoftCycle(AppSettings newSettings)
+        {
+            if (_currentSettings == null)
+            {
+                return false;
+            }
+
+            return string.Equals(_currentSettings.GameInstallFolder, newSettings.GameInstallFolder, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(_currentSettings.GameOptionsFolder, newSettings.GameOptionsFolder, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(_currentSettings.JournalFolder, newSettings.JournalFolder, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

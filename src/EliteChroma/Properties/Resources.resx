@@ -151,4 +151,132 @@ Please choose the right folders in the following window.</value>
   <data name="Url_JournalFolderHelp" xml:space="preserve">
     <value>https://support.frontier.co.uk/kb/faq.php?id=372</value>
   </data>
+  <data name="Colors_Category_Brightness" xml:space="preserve">
+    <value>Brightness Levels</value>
+  </data>
+  <data name="Colors_DeviceDimBrightness" xml:space="preserve">
+    <value>Device dim brightness</value>
+  </data>
+  <data name="Colors_Category_FSS" xml:space="preserve">
+    <value>Full Spectrum System Scanner (FSS)</value>
+  </data>
+  <data name="Colors_CargoScoopDeployed" xml:space="preserve">
+    <value>Cargo scoop deployed</value>
+  </data>
+  <data name="Colors_CargoScoopRetracted" xml:space="preserve">
+    <value>Cargo scoop retracted</value>
+  </data>
+  <data name="Colors_FrameShiftDriveControls" xml:space="preserve">
+    <value>Frame Shift Drive engage/disengage</value>
+  </data>
+  <data name="Colors_FssCamera" xml:space="preserve">
+    <value>Camera pitch/yaw</value>
+  </data>
+  <data name="Colors_FssTarget" xml:space="preserve">
+    <value>Target current signal</value>
+  </data>
+  <data name="Colors_FssTuning" xml:space="preserve">
+    <value>Tuning increase/decrease</value>
+  </data>
+  <data name="Colors_FssZoom" xml:space="preserve">
+    <value>Zoom in/out</value>
+  </data>
+  <data name="Colors_FullSpectrumSystemScanner" xml:space="preserve">
+    <value>Enter FSS mode</value>
+  </data>
+  <data name="Colors_HardpointsToggle" xml:space="preserve">
+    <value>Hardpoints toggle</value>
+  </data>
+  <data name="Colors_InterfaceMode" xml:space="preserve">
+    <value>Current view cursor controls</value>
+  </data>
+  <data name="Colors_LandingGearDeployed" xml:space="preserve">
+    <value>Landing gear deployed</value>
+  </data>
+  <data name="Colors_LandingGearRetracted" xml:space="preserve">
+    <value>Landing gear retracted</value>
+  </data>
+  <data name="Colors_Miscellaneous" xml:space="preserve">
+    <value>Miscellaneous subsystem controls</value>
+    <comment>Jettison, sensor zoom, shield cell, chaff, ECM, weapon/engine details, night vision</comment>
+  </data>
+  <data name="Colors_PowerDistributor0" xml:space="preserve">
+    <value>Power distributor 0%</value>
+  </data>
+  <data name="Colors_PowerDistributor100" xml:space="preserve">
+    <value>Power distributor 100%</value>
+  </data>
+  <data name="Colors_PowerDistributorReset" xml:space="preserve">
+    <value>Power distributor reset</value>
+  </data>
+  <data name="Colors_SecondaryBindingBrightness" xml:space="preserve">
+    <value>Keyboard secondary binding brightness</value>
+  </data>
+  <data name="Colors_VehicleAlternate" xml:space="preserve">
+    <value>Alternate flight controls</value>
+  </data>
+  <data name="Colors_VehicleCooling" xml:space="preserve">
+    <value>Silent running and heatsinks</value>
+  </data>
+  <data name="Colors_VehicleLightsHighBeam" xml:space="preserve">
+    <value>Vehicle lights (High beam)</value>
+  </data>
+  <data name="Colors_VehicleLightsMidBeam" xml:space="preserve">
+    <value>Vehicle lights (Mid beam)</value>
+  </data>
+  <data name="Colors_VehicleLightsOff" xml:space="preserve">
+    <value>Vehicle lights (Off)</value>
+  </data>
+  <data name="Colors_VehicleMiscellaneous" xml:space="preserve">
+    <value>Miscellaneous vehicle controls</value>
+    <comment>Flight assist, boost, rotation correction, orbit lines</comment>
+  </data>
+  <data name="Colors_VehicleModeSwitches" xml:space="preserve">
+    <value>Vehicle panel/mode switches</value>
+  </data>
+  <data name="Colors_VehicleRotation" xml:space="preserve">
+    <value>Vehicle rotation controls</value>
+  </data>
+  <data name="Colors_VehicleTargeting" xml:space="preserve">
+    <value>Vehicle targeting controls</value>
+  </data>
+  <data name="Colors_VehicleThrottle" xml:space="preserve">
+    <value>Vehicle throttle controls</value>
+  </data>
+  <data name="Colors_VehicleThrust" xml:space="preserve">
+    <value>Vehicle thrust controls</value>
+  </data>
+  <data name="Colors_VehicleWeapons" xml:space="preserve">
+    <value>Weapon controls</value>
+  </data>
+  <data name="Colors_KeyboardDimBrightness" xml:space="preserve">
+    <value>Keyboard dim brightness</value>
+  </data>
+  <data name="Colors_Category_Subsystems" xml:space="preserve">
+    <value>Vehicle Subsystems</value>
+  </data>
+  <data name="Colors_Category_ThrustAttitude" xml:space="preserve">
+    <value>Thrust and Attitude</value>
+  </data>
+  <data name="Colors_Category_HUD" xml:space="preserve">
+    <value>Head-up Display</value>
+  </data>
+  <data name="Colors_Category_PowerDistributor" xml:space="preserve">
+    <value>Power Distributor</value>
+  </data>
+  <data name="Colors_Category_WeaponsTargeting" xml:space="preserve">
+    <value>Weapons and Targeting</value>
+  </data>
+  <data name="Picker0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Picker0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Picker1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Picker1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FormatException_InvalidBrightnessValue" xml:space="preserve">
+    <value>Brightness must be a percentage value in the range 0-100.</value>
+  </data>
+  <data name="FormatException_InvalidColorValue" xml:space="preserve">
+    <value>Colors must be in the form 'RRGGBB', where 'RR', 'GG' and 'BB' are hexadecimal values in the range 00-FF.</value>
+  </data>
 </root>

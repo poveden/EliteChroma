@@ -115,6 +115,11 @@ namespace EliteChroma.Core
             _running = false;
         }
 
+        public void Refresh()
+        {
+            _animation.Enabled = true;
+        }
+
         public void Dispose()
         {
             if (_disposed)

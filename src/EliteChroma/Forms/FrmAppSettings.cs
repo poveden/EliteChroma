@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using EliteChroma.Core;
+using EliteChroma.Internal;
+using EliteChroma.Internal.UI;
 using EliteChroma.Properties;
 using EliteFiles;
 
@@ -19,8 +19,14 @@ namespace EliteChroma.Forms
     {
         private const string _gameFoldersSection = "GameFolders";
         private const string _keyboardSection = "Keyboard";
+        private const string _colorsSection = "Colors";
 
         private readonly HashSet<string> _sectionErrors = new HashSet<string>(StringComparer.Ordinal);
+
+        static FrmAppSettings()
+        {
+            ChromaColorsMetadata.InitTypeDescriptionProvider();
+        }
 
         public FrmAppSettings()
         {
@@ -58,6 +64,12 @@ namespace EliteChroma.Forms
             set => chEnUSOverride.Checked = value;
         }
 
+        public ChromaColors Colors
+        {
+            get => (ChromaColors)pgColors.SelectedObject;
+            set => pgColors.SelectedObject = value;
+        }
+
         private static void ApplyLinks(LinkLabel linkLabel, IEnumerable<string> urls)
         {
             var template = linkLabel.Text;
@@ -87,8 +99,11 @@ namespace EliteChroma.Forms
             tvSections.DrawMode = TreeViewDrawMode.OwnerDrawText;
             tvSections.Nodes[_gameFoldersSection].Tag = grpEDFolders;
             tvSections.Nodes[_keyboardSection].Tag = pnlKeyboard;
+            tvSections.Nodes[_colorsSection].Tag = pnlColors;
 
             tvSections.SelectedNode = tvSections.Nodes[_gameFoldersSection];
+
+            pgColors.SelectedGridItem = pgColors.GetGridItems()[0];
 
             ValidateChildren();
         }
@@ -242,6 +257,11 @@ namespace EliteChroma.Forms
             {
                 _sectionErrors.Add(sectionKey);
             }
+        }
+
+        private void PgColors_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            var v = e.ChangedItem.Value;
         }
     }
 }
