@@ -32,6 +32,34 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
+        public void CanCreateCompleteBindingPresetInstance()
+        {
+            var binds = new BindingPreset
+            {
+                PresetName = "Test",
+                Version = new Version(3, 0),
+                KeyboardLayout = "en-US",
+                Bindings =
+                {
+                    ["Supercruise"] = new Binding(
+                        "Supercruise",
+                        new DeviceKeyCombination(
+                            "Keyboard",
+                            "Key_J",
+                            new[] { new DeviceKey("Keyboard", "Key_LeftShift"), new DeviceKey("Keyboard", "Key_LeftShift") }),
+                        new DeviceKeyCombination(
+                            "Keyboard",
+                            "Key_J",
+                            new[] { new DeviceKey("Keyboard", "Key_RightShift") })),
+                },
+            };
+
+            var mod = new DeviceKeySet(new[] { new DeviceKey("Keyboard", "Key_RightShift") });
+
+            Assert.Equal(mod, binds.Bindings["Supercruise"].Secondary.Modifiers);
+        }
+
+        [Fact]
         public void DeserializesBindingPresetsFiles()
         {
             var binds = BindingPreset.FromFile(Path.Combine(_gif.FullName, _mainFile))!;

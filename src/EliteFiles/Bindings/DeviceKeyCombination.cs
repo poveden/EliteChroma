@@ -9,7 +9,13 @@ namespace EliteFiles.Bindings
     /// </summary>
     public sealed class DeviceKeyCombination : DeviceKeyBase
     {
-        private DeviceKeyCombination(string? device, string? key, IEnumerable<DeviceKey> modifiers)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceKeyCombination"/> class.
+        /// </summary>
+        /// <param name="device">The device for the key.</param>
+        /// <param name="key">The key bound to the device.</param>
+        /// <param name="modifiers">The collection of device key modifiers.</param>
+        public DeviceKeyCombination(string? device, string? key, IEnumerable<DeviceKey> modifiers)
             : base(device, key)
         {
             Modifiers = new DeviceKeySet(modifiers);

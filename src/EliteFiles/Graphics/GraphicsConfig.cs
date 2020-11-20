@@ -12,14 +12,23 @@ namespace EliteFiles.Graphics
     /// </remarks>
     public sealed class GraphicsConfig
     {
-        private GraphicsConfig()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GraphicsConfig"/> class.
+        /// </summary>
+        public GraphicsConfig()
         {
+            GuiColour = new GuiColourDictionary();
+        }
+
+        private GraphicsConfig(GuiColourDictionary guiColour)
+        {
+            GuiColour = guiColour;
         }
 
         /// <summary>
         /// Gets the GUI colour configuration.
         /// </summary>
-        public GuiColourDictionary? GuiColour { get; private set; }
+        public GuiColourDictionary GuiColour { get; }
 
         /// <summary>
         /// Read the graphics configuration from the given file.
@@ -52,10 +61,9 @@ namespace EliteFiles.Graphics
                 }
             }
 
-            return new GraphicsConfig
-            {
-                GuiColour = GuiColourDictionary.FromXml(xml.Root.Element("GUIColour")),
-            };
+            var guiColour = GuiColourDictionary.FromXml(xml.Root.Element("GUIColour"));
+
+            return new GraphicsConfig(guiColour);
         }
 
         /// <summary>

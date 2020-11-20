@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using EliteFiles.Journal;
 using EliteFiles.Journal.Events;
@@ -21,6 +23,52 @@ namespace EliteFiles.Tests
         public JournalTests()
         {
             _jf = new JournalFolder(_journalFolder);
+        }
+
+        public static IEnumerable<object[]> AllJournalEntryTypes()
+        {
+            return typeof(JournalEntry).Assembly.GetExportedTypes()
+                .Where(x => x.IsSubclassOf(typeof(JournalEntry)))
+                .Select(x => new object[] { x });
+        }
+
+        [Fact]
+        public void CanCreateCompleteJournalEntryInstance()
+        {
+            var entry = new TestEntry
+            {
+                Timestamp = DateTimeOffset.UtcNow,
+                Event = "TestEntry",
+                AdditionalFields =
+                {
+                    ["ExtraField"] = "Extra value",
+                },
+            };
+
+            Assert.Single(entry.AdditionalFields);
+        }
+
+        [Theory]
+        [MemberData(nameof(AllJournalEntryTypes))]
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Always not null")]
+        public void AllJournalEntryTypesHaveAJournalEntryAttribute(Type type)
+        {
+            var jea = (JournalEntryAttribute)type.GetCustomAttributes(typeof(JournalEntryAttribute), false).Single();
+
+            Assert.NotNull(jea.EventName);
+        }
+
+        [Theory]
+        [MemberData(nameof(AllJournalEntryTypes))]
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Always not null")]
+        public void AllJournalEntryFieldsAreReadWritable(Type type)
+        {
+            var pNames = type.GetProperties()
+                .Where(x => x.Name != nameof(JournalEntry.AdditionalFields) && (x.CanRead && x.GetGetMethod(false) != null) ^ (x.CanWrite && x.GetSetMethod(false) != null))
+                .Select(x => x.Name)
+                .ToList();
+
+            Assert.Empty(pNames);
         }
 
         [Fact]
@@ -212,6 +260,10 @@ namespace EliteFiles.Tests
             jr.Dispose();
             jr.Dispose();
 #pragma warning restore IDISP016, IDISP017
+        }
+
+        private class TestEntry : JournalEntry
+        {
         }
     }
 }

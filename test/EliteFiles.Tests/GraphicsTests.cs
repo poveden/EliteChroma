@@ -26,6 +26,32 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
+        public void CanCreateCompleteGraphicsConfigInstances()
+        {
+            var config = new GraphicsConfig
+            {
+                GuiColour =
+                {
+                    ["Default"] = new GuiColourMatrix
+                    {
+                        LocalisationName = "Standard",
+                        MatrixRed = { Red = 1, Green = 0, Blue = 0, },
+                        MatrixGreen = { Red = 0, Green = 1, Blue = 0, },
+                        MatrixBlue = { Red = 0, Green = 0, Blue = 1, },
+                    },
+                    ["Other"] = new GuiColourMatrix
+                    {
+                        LocalisationName = "Other",
+                        [2, 0] = 1,
+                    },
+                },
+            };
+
+            Assert.Equal(1, config.GuiColour.Default![0, 0]);
+            Assert.Equal(1, config.GuiColour["Other"][2, 0]);
+        }
+
+        [Fact]
         public void DeserializesGraphicsConfigFiles()
         {
             var config = GraphicsConfig.FromFile(_gif.GraphicsConfiguration.FullName)!;
@@ -78,7 +104,7 @@ namespace EliteFiles.Tests
             dir.WriteText("MinimalConfig.xml", _minimalConfig);
 
             var status = GraphicsConfig.FromFile(dir.Resolve("MinimalConfig.xml"))!;
-            Assert.Null(status.GuiColour);
+            Assert.Empty(status.GuiColour);
         }
 
         [Fact]
@@ -240,13 +266,13 @@ namespace EliteFiles.Tests
         [InlineData(-2, -1)]
         public void GuiColourMatrixEntryClampsValuesToTheMinus1Plus1Range(double value, double expected)
         {
-            var entry = new GuiColourMatrixEntry(value, 0.1, 0.2);
+            var entry = new GuiColourMatrixEntry { Red = value, Green = 0.1, Blue = 0.2 };
             Assert.Equal(expected, entry.Red);
 
-            entry = new GuiColourMatrixEntry(0.3, value, 0.4);
+            entry = new GuiColourMatrixEntry { Red = 0.3, Green = value, Blue = 0.4 };
             Assert.Equal(expected, entry.Green);
 
-            entry = new GuiColourMatrixEntry(0.5, 0.6, value);
+            entry = new GuiColourMatrixEntry { Red = 0.5, Green = 0.6, Blue = value };
             Assert.Equal(expected, entry.Blue);
         }
     }

@@ -9,7 +9,13 @@ namespace EliteFiles.Status
     [JsonConverter(typeof(PowerDistributorConverter))]
     public sealed class PowerDistributor
     {
-        internal PowerDistributor(byte sys, byte eng, byte wep)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PowerDistributor"/> class.
+        /// </summary>
+        /// <param name="sys">The SYS capacitor level in half-pips (i.e. 0-8).</param>
+        /// <param name="eng">The ENG capacitor level in half-pips (i.e. 0-8).</param>
+        /// <param name="wep">The WEP capacitor level in half-pips (i.e. 0-8).</param>
+        public PowerDistributor(byte sys, byte eng, byte wep)
         {
             Sys = sys;
             Eng = eng;

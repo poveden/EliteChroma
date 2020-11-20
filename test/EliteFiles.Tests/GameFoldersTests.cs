@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using EliteFiles.Internal;
+using System.Reflection;
 using EliteFiles.Tests.Internal;
 using Xunit;
 
@@ -42,13 +43,13 @@ namespace EliteFiles.Tests
                 tf.WriteText(filename, contents);
             }
 
-            Assert.Null(SteamLibraryFolders.FromFile(tf.Resolve(filename)));
+            Assert.Null(SteamLibraryFoldersFromFile(tf.Resolve(filename)));
         }
 
         [Fact]
         public void SteamLibraryFoldersFromFileGetsTheListOfFolders()
         {
-            var slf = SteamLibraryFolders.FromFile(@"TestFiles\libraryfolders.vdf")!;
+            var slf = SteamLibraryFoldersFromFile(@"TestFiles\libraryfolders.vdf");
 
             Assert.Equal(2, slf.Count);
             Assert.Equal(@"C:\Games\Path1", slf[0]);
@@ -152,6 +153,16 @@ namespace EliteFiles.Tests
             using var dir = new TestFolder(templatePath);
             dir.DeleteFolder(folderToDelete);
             Assert.False(testFunc(dir.Name));
+        }
+
+        private static IReadOnlyList<string> SteamLibraryFoldersFromFile(string path)
+        {
+            var ti = typeof(JournalFolder).Assembly.DefinedTypes
+                .Single(x => x.IsNotPublic && x.Name == "SteamLibraryFolders");
+
+            var mi = ti.GetMethod("FromFile", BindingFlags.Public | BindingFlags.Static)!;
+
+            return (IReadOnlyList<string>)mi.Invoke(null, new object[] { path })!;
         }
     }
 }

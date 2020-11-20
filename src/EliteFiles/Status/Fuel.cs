@@ -8,15 +8,15 @@ namespace EliteFiles.Status
     public sealed class Fuel
     {
         /// <summary>
-        /// Gets the main fuel level in tons.
+        /// Gets or sets the main fuel level in tons.
         /// </summary>
         [JsonProperty("FuelMain")]
-        public double FuelMain { get; private set; }
+        public double FuelMain { get; set; }
 
         /// <summary>
-        /// Gets the reservoir fuel level in tons.
+        /// Gets or sets the reservoir fuel level in tons.
         /// </summary>
         [JsonProperty("FuelReservoir")]
-        public double FuelReservoir { get; private set; }
+        public double FuelReservoir { get; set; }
     }
 }

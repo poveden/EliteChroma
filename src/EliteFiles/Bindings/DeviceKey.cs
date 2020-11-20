@@ -9,7 +9,12 @@ namespace EliteFiles.Bindings
     [DebuggerDisplay("{Device}:{Key}")]
     public sealed class DeviceKey : DeviceKeyBase
     {
-        private DeviceKey(string? device, string? key)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceKey"/> class.
+        /// </summary>
+        /// <param name="device">The device for the key.</param>
+        /// <param name="key">The key bound to the device.</param>
+        public DeviceKey(string? device, string? key)
             : base(device, key)
         {
         }

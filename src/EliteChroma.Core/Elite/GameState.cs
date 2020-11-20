@@ -14,7 +14,7 @@ namespace EliteChroma.Elite
 
         internal GameState()
         {
-            Status = StatusEntry.Empty;
+            Status = new StatusEntry();
             _guiColour = GuiColourMatrix.Default;
             Colors = new GameColors(_guiColour);
         }

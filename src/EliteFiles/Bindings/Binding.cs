@@ -11,7 +11,14 @@ namespace EliteFiles.Bindings
     /// </summary>
     public sealed class Binding
     {
-        private Binding(string name, DeviceKeyCombination? primary, DeviceKeyCombination? secondary)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Binding"/> class
+        /// with the provided name and key combinations.
+        /// </summary>
+        /// <param name="name">The name of the binding.</param>
+        /// <param name="primary">The primary device key combination that triggers this binding.</param>
+        /// <param name="secondary">The secondary device key combination that triggers this binding.</param>
+        public Binding(string name, DeviceKeyCombination? primary, DeviceKeyCombination? secondary)
         {
             Name = name;
             Primary = primary ?? DeviceKeyCombination.Undefined;

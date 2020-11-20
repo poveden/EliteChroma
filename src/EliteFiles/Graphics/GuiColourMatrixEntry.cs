@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace EliteFiles.Graphics
@@ -13,43 +12,48 @@ namespace EliteFiles.Graphics
         private readonly double[] _v = new double[3];
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GuiColourMatrixEntry"/> class,
-        /// with the provided red, green and blue values.
+        /// Gets or sets the red component value.
         /// </summary>
-        /// <param name="r">The red component in the -1.0 to 1.0 range.</param>
-        /// <param name="g">The green component in the -1.0 to 1.0 range.</param>
-        /// <param name="b">The blue component in the -1.0 to 1.0 range.</param>
-        public GuiColourMatrixEntry(double r, double g, double b)
+        public double Red
         {
-            _v[0] = Math.Clamp(r, -1, 1);
-            _v[1] = Math.Clamp(g, -1, 1);
-            _v[2] = Math.Clamp(b, -1, 1);
+            get => _v[0];
+            set => _v[0] = Math.Clamp(value, -1, 1);
         }
 
         /// <summary>
-        /// Gets the red component value.
+        /// Gets or sets the green component value.
         /// </summary>
-        public double Red => _v[0];
+        public double Green
+        {
+            get => _v[1];
+            set => _v[1] = Math.Clamp(value, -1, 1);
+        }
 
         /// <summary>
-        /// Gets the green component value.
+        /// Gets or sets the blue component value.
         /// </summary>
-        public double Green => _v[1];
+        public double Blue
+        {
+            get => _v[2];
+            set => _v[2] = Math.Clamp(value, -1, 1);
+        }
 
-        /// <summary>
-        /// Gets the blue component value.
-        /// </summary>
-        public double Blue => _v[2];
-
-        internal double this[int index] => _v[index];
+        internal double this[int index]
+        {
+            get => _v[index];
+            set => _v[index] = Math.Clamp(value, -1, 1);
+        }
 
         internal static GuiColourMatrixEntry FromXml(XElement xml)
         {
-            double[] values = xml.Value.Split(',')
-                .Select(x => double.Parse(x, CultureInfo.InvariantCulture))
-                .ToArray();
+            string[] values = xml.Value.Split(',');
 
-            return new GuiColourMatrixEntry(values[0], values[1], values[2]);
+            return new GuiColourMatrixEntry
+            {
+                Red = double.Parse(values[0], CultureInfo.InvariantCulture),
+                Green = double.Parse(values[1], CultureInfo.InvariantCulture),
+                Blue = double.Parse(values[2], CultureInfo.InvariantCulture),
+            };
         }
     }
 }

@@ -9,6 +9,8 @@ namespace EliteFiles.Bindings
     /// </summary>
     public sealed class DeviceKeySet : IReadOnlyCollection<DeviceKey>, IEquatable<DeviceKeySet>
     {
+        private static readonly IEqualityComparer<HashSet<DeviceKey>> _setComparer = HashSet<DeviceKey>.CreateSetComparer();
+
         private readonly HashSet<DeviceKey> _modifiers;
         private readonly int _hashCode;
 
@@ -20,7 +22,7 @@ namespace EliteFiles.Bindings
         public DeviceKeySet(IEnumerable<DeviceKey> modifiers)
         {
             _modifiers = new HashSet<DeviceKey>(modifiers ?? throw new ArgumentNullException(nameof(modifiers)));
-            _hashCode = HashSet<DeviceKey>.CreateSetComparer().GetHashCode(_modifiers);
+            _hashCode = _setComparer.GetHashCode(_modifiers);
         }
 
         /// <summary>

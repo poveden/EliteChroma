@@ -6,8 +6,5 @@
     [JournalEntry("Shutdown")]
     public sealed class Shutdown : JournalEntry
     {
-        private Shutdown()
-        {
-        }
     }
 }
