@@ -261,6 +261,7 @@
             // 
             // pbError
             // 
+            this.pbError.Image = global::EliteChroma.Properties.Resources.RedDot;
             this.pbError.Location = new System.Drawing.Point(12, 296);
             this.pbError.Name = "pbError";
             this.pbError.Size = new System.Drawing.Size(16, 16);

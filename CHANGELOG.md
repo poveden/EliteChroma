@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.9.1](https://github.com/poveden/EliteChroma/compare/v1.9.0...v1.9.1) — 2020-11-29
+
+### Fixed
+
+- Restore missing image in App Setings form
+
 ## [1.9.0](https://github.com/poveden/EliteChroma/compare/v1.8.0...v1.9.0) — 2020-10-17
 
 ### Fixed
