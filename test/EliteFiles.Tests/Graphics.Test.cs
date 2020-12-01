@@ -107,10 +107,28 @@ namespace EliteFiles.Tests
             Assert.Equal(0, config.GuiColour.Default[0, 0]);
 
             config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, string.Empty), 100).ConfigureAwait(false);
-            Assert.Null(config);
+            Assert.Equal(1, config.GuiColour.Default[0, 0]);
 
             config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, _minimalConfig)).ConfigureAwait(false);
             Assert.Equal(1, config.GuiColour.Default[0, 0]);
+        }
+
+        [Fact]
+        public async Task WatcherToleratesEmptyGraphicsConfigurationOverrideFiles()
+        {
+            using var dirOpts = new TestFolder(_gof.FullName);
+            dirOpts.WriteText(_overrideFile, string.Empty);
+
+            using var watcher = new GraphicsConfigWatcher(_gif, new GameOptionsFolder(dirOpts.Name));
+            var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatcherRaisesTheChangedEventOnStart));
+
+            var config = await evs.WaitAsync(() =>
+            {
+                watcher.Start();
+                watcher.Stop();
+            }).ConfigureAwait(false);
+
+            Assert.Equal("Standard", config.GuiColour.Default.LocalisationName);
         }
 
         [Fact]
