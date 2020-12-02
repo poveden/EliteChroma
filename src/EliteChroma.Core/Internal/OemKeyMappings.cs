@@ -48,6 +48,8 @@ namespace EliteChroma.Core.Internal
 
         public static bool TryGetKey(string keyboardLayout, char c, bool enUSOverride, out VirtualKey key, INativeMethods nativeMethods)
         {
+            keyboardLayout = keyboardLayout ?? KeyboardLayoutMap.GetCurrentLayout(nativeMethods);
+
             if (!_layoutCache.TryGetValue(keyboardLayout, out var map))
             {
                 map = BuildMap(keyboardLayout, nativeMethods);

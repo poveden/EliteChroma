@@ -19,6 +19,7 @@ namespace EliteChroma.Core.Tests.Internal
             [(EsES, VirtualKey.VK_OEM_5)] = ('º', 0x29),
             [(EnUS, VirtualKey.VK_OEM_3)] = ('`', 0x29),
             [(EsES, VirtualKey.VK_OEM_3)] = ('ñ', 0x27),
+            [(EnUS, VirtualKey.VK_OEM_2)] = ('/', 0x35),
         };
 
         private static readonly int[] _layouts = _map.Keys.Select(x => x.Layout).Distinct().ToArray();

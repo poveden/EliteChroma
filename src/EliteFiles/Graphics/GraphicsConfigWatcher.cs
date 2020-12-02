@@ -113,12 +113,10 @@ namespace EliteFiles.Graphics
                 return;
             }
 
-            if (gcOverride == null && _overrideFile.Exists)
+            if (gcOverride != null)
             {
-                return;
+                gcMain.OverrideWith(gcOverride);
             }
-
-            gcMain.OverrideWith(gcOverride);
 
             Changed?.Invoke(this, gcMain);
         }

@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.9.2](https://github.com/poveden/EliteChroma/compare/v1.9.1...v1.9.2) — 2020-12-01
+
+### Fixed
+
+- Tolerate empty `GraphicsConfigurationOverride.xml` files
+- Correctly handle preset bindings lacking keyboard layout name
+
 ## [1.9.1](https://github.com/poveden/EliteChroma/compare/v1.9.0...v1.9.1) — 2020-11-29
 
 ### Fixed

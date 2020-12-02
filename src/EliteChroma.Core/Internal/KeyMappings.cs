@@ -189,6 +189,8 @@ namespace EliteChroma.Core.Internal
                 return true;
             }
 
+            keyboardLayout = keyboardLayout ?? KeyboardLayoutMap.GetCurrentLayout(nativeMethods);
+
             _ = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, enUSOverride, out var vk, nativeMethods);
 
             IntPtr hkl = KeyboardLayoutMap.GetKeyboardLayout(keyboardLayout, nativeMethods);
