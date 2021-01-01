@@ -48,11 +48,12 @@ namespace EliteChroma.Core.Layers
 
             ApplyColorToBinding(canvas.Keyboard, Weapons.DeployHardpointToggle, hColor);
 
-            var colorOff = Game.Status.HasFlag(Flags.HudInAnalysisMode)
-                ? Game.Colors.AnalysisMode.Transform(Colors.DeviceDimBrightness)
-                : Game.Colors.Hud.Transform(Colors.DeviceDimBrightness);
+            var c = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? Game.Colors.AnalysisMode : Game.Colors.Hud;
 
-            var c = hardpointsDeployed ? colorOn : colorOff;
+            if (!hardpointsDeployed)
+            {
+                c = c.Transform(Colors.DeviceDimBrightness);
+            }
 
             canvas.Mouse.Set(c);
             canvas.Mousepad.Set(c);

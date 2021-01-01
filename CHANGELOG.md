@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Fix brightness of nearby hyperspace stars
+- Stop applying hardpoint color to background (i.e. non-keyboard) devices
 
 ### Changed
 
