@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased](https://github.com/poveden/EliteChroma/compare/v1.9.2...HEAD)
 
+### Fixed
+
+- Fix brightness of nearby hyperspace stars
+
 ### Changed
 
 - Apply more realistic colors

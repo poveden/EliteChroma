@@ -44,7 +44,7 @@ namespace EliteChroma.Core.Layers
                 {
                     // We take the brightness from the nearest point in the light streak.
                     var nearestZ = Math.Min(Math.Abs(lastZ), Math.Abs(Z));
-                    c = _color.Transform(1 / (0.1 + nearestZ));
+                    c = _color.Transform(1 / (1 + nearestZ));
                 }
 
                 Render(canvas.Keyboard, c, lastZ);
