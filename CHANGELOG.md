@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Apply more realistic colors
+- Improve adherence to ChromaLink guidelines
 
 ## [1.9.2](https://github.com/poveden/EliteChroma/compare/v1.9.1...v1.9.2) — 2020-12-01
 

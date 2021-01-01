@@ -52,7 +52,7 @@ namespace EliteChroma.Core.Layers
                 Render(canvas.Mousepad, c);
                 Render(canvas.Keypad, c, lastZ);
                 Render(canvas.Headset, c);
-                Render(canvas.ChromaLink, c);
+                Render(canvas.ChromaLink, c, lastZ);
             }
 
             private void Render(CustomKeyboardEffect keyboard, Color c, double lastZ)
@@ -275,15 +275,66 @@ namespace EliteChroma.Core.Layers
                 headset[i] = headset[i].Max(c);
             }
 
-            private void Render(CustomChromaLinkEffect chromaLink, Color c)
+            private void Render(CustomChromaLinkEffect chromaLink, Color c, double lastZ)
             {
-                if (_angle > 90)
+                // Particles are drawn either as moving to the left or to the right, front to back.
+                //                  Front
+                //               ┌───┐ ┌───┐
+                //  ┌───┐        │CL3│ │CL4│
+                //  │CL1│  Left ┌┴──┬┘↓└┬──┴┐ Right
+                //  └───┘       │CL2│   │CL5│
+                //  Base        └───┘   └───┘
+                //                  Back
+                // Reference: https://developer.razer.com/works-with-chroma/chroma-link-guide/
+                Debug.Assert(ChromaLinkConstants.MaxLeds >= 5, "ChromaLink is expected to have LEDs CL1-CL5");
+                const int CL1 = 0;
+                const int CL2 = 1;
+                const int CL3 = 2;
+                const int CL4 = 3;
+                const int CL5 = 4;
+
+                const double ZBleed = 1;
+
+                if (_angle > 60)
                 {
                     return;
                 }
 
-                var i = (_angle % (ChromaLinkConstants.MaxLeds - 1)) + 1;
-                chromaLink[i] = chromaLink[i].Max(c);
+                chromaLink[CL1] = chromaLink[CL1].Max(c);
+
+                Color c1, c2;
+
+                if (lastZ > ZBleed)
+                {
+                    c1 = c;
+                    c2 = 0;
+                }
+                else if (lastZ < -ZBleed)
+                {
+                    c1 = 0;
+                    c2 = c;
+                }
+                else if (lastZ >= 0)
+                {
+                    c1 = c;
+                    c2 = c.Transform(1 - (lastZ / ZBleed));
+                }
+                else
+                {
+                    c1 = c.Transform(1 - (lastZ / -ZBleed));
+                    c2 = c;
+                }
+
+                if ((_angle % 2) == 0)
+                {
+                    chromaLink[CL3] = chromaLink[CL3].Max(c1);
+                    chromaLink[CL2] = chromaLink[CL2].Max(c2);
+                }
+                else
+                {
+                    chromaLink[CL4] = chromaLink[CL4].Max(c1);
+                    chromaLink[CL5] = chromaLink[CL5].Max(c2);
+                }
             }
         }
     }
