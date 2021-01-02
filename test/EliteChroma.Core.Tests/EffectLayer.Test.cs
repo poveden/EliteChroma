@@ -143,8 +143,8 @@ namespace EliteChroma.Core.Tests
 
         [Theory]
         [InlineData(GameProcessState.NotRunning, 0x000000, 1.0)]
-        [InlineData(GameProcessState.InBackground, 0xFF3300, 1.0)]
-        [InlineData(GameProcessState.InForeground, 0xFF3300, 0.04)]
+        [InlineData(GameProcessState.InBackground, 0xFF8800, 1.0)]
+        [InlineData(GameProcessState.InForeground, 0xFF8800, 0.04)]
         public async Task BackgroundLayerSetsAColorPerGameProcessState(GameProcessState processState, int rgbColor, double brightness)
         {
             var graphicsConfig = GraphicsConfig.FromFile(_gif.GraphicsConfiguration.FullName);

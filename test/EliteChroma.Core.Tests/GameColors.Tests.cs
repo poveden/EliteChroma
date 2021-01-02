@@ -10,8 +10,9 @@ namespace EliteChroma.Core.Tests
     public class GameColorsTest
     {
         [Theory]
-        [InlineData(StarClass.O, 0xA9ECFB)]
+        [InlineData(StarClass.O, 0xB1F0FE)]
         [InlineData(StarClass.RoguePlanet, 0x000000)]
+        [InlineData("SOME_UNDOCUMENTED_STAR_CLASS", 0x000000)]
         public void GetsColorsMatchingTheStarClass(string starClass, int rgbColor)
         {
             var expectedColor = Color.FromRgb((uint)rgbColor);
