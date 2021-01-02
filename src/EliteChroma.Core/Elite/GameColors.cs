@@ -64,9 +64,9 @@ namespace EliteChroma.Elite
 
         public static Color GetStarClassColor(string starClass)
         {
-            StarClass.GetKind(starClass, out var baseClass);
+            var kind = StarClass.GetKind(starClass, out var baseClass);
 
-            if (_baseStarClass.TryGetValue(baseClass, out var res))
+            if (kind != StarClass.Kind.Unknown && _baseStarClass.TryGetValue(baseClass, out var res))
             {
                 return res;
             }
