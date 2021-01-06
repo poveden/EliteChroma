@@ -128,6 +128,7 @@ namespace EliteChroma
             {
                 ChromaFactory = _chromaFactory,
                 ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout,
+                Colors = settings.Colors,
             };
             _cc.Start();
         }

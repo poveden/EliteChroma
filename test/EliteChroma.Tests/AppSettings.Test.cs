@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Colore.Data;
+using EliteChroma.Core;
 using EliteChroma.Internal;
 using EliteChroma.Tests.Internal;
 using EliteFiles;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace EliteChroma.Tests
@@ -42,6 +46,9 @@ namespace EliteChroma.Tests
             Assert.NotNull(settings.GameInstallFolder);
             Assert.Equal(GameOptionsFolder.DefaultPath, settings.GameOptionsFolder);
             Assert.Equal(JournalFolder.DefaultPath, settings.JournalFolder);
+            Assert.NotNull(settings.Colors);
+            Assert.Equal(0.5, settings.Colors.DeviceDimBrightness);
+            Assert.Equal(Color.Red, settings.Colors.HardpointsToggle);
         }
 
         [Fact]
@@ -53,6 +60,9 @@ namespace EliteChroma.Tests
             Assert.Equal(@"C:\GAME_OPTIONS_FOLDER", settings.GameOptionsFolder);
             Assert.Equal(@"C:\JOURNAL_FOLDER", settings.JournalFolder);
             Assert.True(settings.ForceEnUSKeyboardLayout);
+            Assert.NotNull(settings.Colors);
+            Assert.Equal(0.12, settings.Colors.DeviceDimBrightness);
+            Assert.Equal(Color.FromRgb(0x34AB12), settings.Colors.HardpointsToggle);
         }
 
         [Fact]
@@ -87,9 +97,14 @@ namespace EliteChroma.Tests
 
             var settings = AppSettings.Load(settingsFile);
             Assert.True(settings.ForceEnUSKeyboardLayout);
+            Assert.NotNull(settings.Colors);
+            Assert.Equal(0.12, settings.Colors.DeviceDimBrightness);
+            Assert.Equal(Color.FromRgb(0x34AB12), settings.Colors.HardpointsToggle);
 
             settings.GameOptionsFolder = @"C:\ANOTHER_GAME_OPTIONS_FOLDER";
             settings.ForceEnUSKeyboardLayout = false;
+            settings.Colors.DeviceDimBrightness = 0.77;
+            settings.Colors.HardpointsToggle = Color.FromRgb(0xA0110A);
             settings.Save(settingsFile);
 
             var settings2 = AppSettings.Load(settingsFile);
@@ -98,6 +113,59 @@ namespace EliteChroma.Tests
             Assert.Equal(settings.GameOptionsFolder, settings2.GameOptionsFolder);
             Assert.Equal(settings.JournalFolder, settings2.JournalFolder);
             Assert.False(settings.ForceEnUSKeyboardLayout);
+            Assert.Equal(settings.Colors.DeviceDimBrightness, settings2.Colors.DeviceDimBrightness);
+            Assert.Equal(settings.Colors.HardpointsToggle, settings2.Colors.HardpointsToggle);
+        }
+
+        [Fact]
+        public void AddDefaultColorsWhenMissingFromTheSettingsFile()
+        {
+            using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
+            var settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
+
+            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile));
+            jo.Remove("Colors");
+            File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
+
+            var settings = AppSettings.Load(settingsFile);
+
+            Assert.NotNull(settings.Colors);
+        }
+
+        [Fact]
+        public void InvalidBrightnessValuesFromJsonFallBackToDefaultValue()
+        {
+            var ccDefaults = new ChromaColors();
+
+            using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
+            var settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
+
+            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile));
+            jo["Colors"]["DeviceDimBrightness"] = "NOT-A-NUMBER";
+            File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
+
+            var settings = AppSettings.Load(settingsFile);
+
+            Assert.Equal(ccDefaults.DeviceDimBrightness, settings.Colors.DeviceDimBrightness);
+        }
+
+        [Theory]
+        [InlineData(123)]
+        [InlineData("NOT-A-COLOR")]
+        public void InvalidColorValuesFromJsonFallBackToDefaultValue(object faultyValue)
+        {
+            var ccDefaults = new ChromaColors();
+
+            using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
+            var settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
+
+            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile));
+            jo["Colors"]["HardpointsToggle"] = JToken.FromObject(faultyValue);
+            File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
+
+            var settings = AppSettings.Load(settingsFile);
+
+            Assert.Equal(ccDefaults.HardpointsToggle, settings.Colors.HardpointsToggle);
         }
 
         internal static string PrepareValidSettingsFile(TestFolder baseFolder)
