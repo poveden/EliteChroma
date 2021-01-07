@@ -33,5 +33,38 @@ namespace EliteFiles.Bindings.Binds
         /// Gets the collection of all <see cref="FlightLandingOverrides"/> bind names.
         /// </summary>
         public static IReadOnlyCollection<string> All { get; } = Binding.BuildGroup(typeof(FlightLandingOverrides));
+
+        /// <summary>
+        /// Gets the collection of all rotation-related <see cref="FlightLandingOverrides"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> Rotation { get; } = new[]
+        {
+            YawAxis,
+            YawLeft,
+            YawRight,
+            YawToRollMode,
+            PitchAxis,
+            PitchUp,
+            PitchDown,
+            RollAxis,
+            RollLeft,
+            RollRight,
+        };
+
+        /// <summary>
+        /// Gets the collection of all thrust-related <see cref="FlightLandingOverrides"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> Thrust { get; } = new[]
+        {
+            LateralThrust,
+            LeftThrust,
+            RightThrust,
+            VerticalThrust,
+            UpThrust,
+            DownThrust,
+            AheadThrust,
+            ForwardThrust,
+            BackwardThrust,
+        };
     }
 }
