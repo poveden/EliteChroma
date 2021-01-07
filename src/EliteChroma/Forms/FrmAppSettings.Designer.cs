@@ -47,13 +47,11 @@
             this.lblGameInstall = new System.Windows.Forms.Label();
             this.linkGameFolders = new System.Windows.Forms.LinkLabel();
             this.tvSections = new System.Windows.Forms.TreeView();
-            this.pbError = new System.Windows.Forms.PictureBox();
             this.pnlKeyboard = new System.Windows.Forms.Panel();
             this.lblEnUSOverride = new System.Windows.Forms.Label();
             this.chEnUSOverride = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.grpEDFolders.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbError)).BeginInit();
             this.pnlKeyboard.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -259,17 +257,6 @@
             this.tvSections.DrawNode += new System.Windows.Forms.DrawTreeNodeEventHandler(this.TvSections_DrawNode);
             this.tvSections.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvSections_AfterSelect);
             // 
-            // pbError
-            // 
-            this.pbError.Image = global::EliteChroma.Properties.Resources.RedDot;
-            this.pbError.Location = new System.Drawing.Point(12, 296);
-            this.pbError.Name = "pbError";
-            this.pbError.Size = new System.Drawing.Size(16, 16);
-            this.pbError.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pbError.TabIndex = 14;
-            this.pbError.TabStop = false;
-            this.pbError.Visible = false;
-            // 
             // pnlKeyboard
             // 
             this.pnlKeyboard.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -314,7 +301,6 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(760, 357);
             this.Controls.Add(this.pnlKeyboard);
-            this.Controls.Add(this.pbError);
             this.Controls.Add(this.tvSections);
             this.Controls.Add(this.grpEDFolders);
             this.Controls.Add(this.btnOK);
@@ -330,11 +316,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.grpEDFolders.ResumeLayout(false);
             this.grpEDFolders.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbError)).EndInit();
             this.pnlKeyboard.ResumeLayout(false);
             this.pnlKeyboard.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -356,7 +340,6 @@
         private System.Windows.Forms.Label lblGameInstall;
         private System.Windows.Forms.LinkLabel linkGameFolders;
         private System.Windows.Forms.TreeView tvSections;
-        private System.Windows.Forms.PictureBox pbError;
         private System.Windows.Forms.Panel pnlKeyboard;
         private System.Windows.Forms.Label lblEnUSOverride;
         private System.Windows.Forms.CheckBox chEnUSOverride;

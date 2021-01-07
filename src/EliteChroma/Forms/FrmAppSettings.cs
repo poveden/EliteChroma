@@ -218,9 +218,9 @@ namespace EliteChroma.Forms
             }
 
             var x = e.Bounds.Right - 4;
-            var y = e.Bounds.Top + (e.Bounds.Height - pbError.Image.Height) / 2;
-            var r = new Rectangle(new Point(x, y), pbError.Image.Size);
-            e.Graphics.DrawImageUnscaledAndClipped(pbError.Image, r);
+            var y = e.Bounds.Top + (e.Bounds.Height - Resources.RedDot.Height) / 2;
+            var r = new Rectangle(new Point(x, y), Resources.RedDot.Size);
+            e.Graphics.DrawImageUnscaledAndClipped(Resources.RedDot, r);
         }
 
         public override bool ValidateChildren()
