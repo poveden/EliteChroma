@@ -36,7 +36,6 @@ namespace EliteChroma.Core.Layers
             ApplyColorToBinding(canvas.Keyboard, FlightThrust.All, Colors.VehicleThrust);
             ApplyColorToBinding(canvas.Keyboard, AlternateFlightControls.All, Colors.VehicleAlternate);
             ApplyColorToBinding(canvas.Keyboard, FlightThrottle.All, Colors.VehicleThrottle);
-            ApplyColorToBinding(canvas.Keyboard, FlightLandingOverrides.All, Colors.VehicleAlternate);
             ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.All, Colors.VehicleMiscellaneous);
             ApplyColorToBinding(canvas.Keyboard, Targeting.All, Colors.VehicleTargeting);
             ApplyColorToBinding(canvas.Keyboard, Weapons.All, Colors.VehicleWeapons);

@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fix brightness of nearby hyperspace stars
 - Stop applying hardpoint color to background (i.e. non-keyboard) devices
+- Render landing overrides only when landing gear is deployed
 
 ### Changed
 

@@ -27,6 +27,9 @@ namespace EliteChroma.Core.Layers
 
             if (Game.Status.HasFlag(Flags.LandingGearDeployed))
             {
+                ApplyColorToBinding(canvas.Keyboard, FlightLandingOverrides.Rotation, Colors.VehicleRotation);
+                ApplyColorToBinding(canvas.Keyboard, FlightLandingOverrides.Thrust, Colors.VehicleThrust);
+
                 StartAnimation();
                 lColor = PulseColor(Color.Black, Colors.LandingGearDeployed, TimeSpan.FromSeconds(1));
             }
