@@ -101,22 +101,23 @@ namespace EliteChroma
 
         private bool EditSettingsDialog(AppSettings settings)
         {
-            using var frm = new FrmAppSettings();
-
-            frm.txtGameInstall.Text = settings.GameInstallFolder;
-            frm.txtGameOptions.Text = settings.GameOptionsFolder;
-            frm.txtJournal.Text = settings.JournalFolder;
-            frm.chEsUSOverride.Checked = settings.ForceEnUSKeyboardLayout;
+            using var frm = new FrmAppSettings
+            {
+                GameInstallFolder = settings.GameInstallFolder,
+                GameOptionsFolder = settings.GameOptionsFolder,
+                JournalFolder = settings.JournalFolder,
+                ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout,
+            };
 
             if (frm.ShowDialog(ContextMenu) != DialogResult.OK)
             {
                 return false;
             }
 
-            settings.GameInstallFolder = frm.txtGameInstall.Text;
-            settings.GameOptionsFolder = frm.txtGameOptions.Text;
-            settings.JournalFolder = frm.txtJournal.Text;
-            settings.ForceEnUSKeyboardLayout = frm.chEsUSOverride.Checked;
+            settings.GameInstallFolder = frm.GameInstallFolder;
+            settings.GameOptionsFolder = frm.GameOptionsFolder;
+            settings.JournalFolder = frm.JournalFolder;
+            settings.ForceEnUSKeyboardLayout = frm.ForceEnUSKeyboardLayout;
 
             return true;
         }

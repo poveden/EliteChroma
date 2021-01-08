@@ -50,7 +50,7 @@
             this.pbError = new System.Windows.Forms.PictureBox();
             this.pnlKeyboard = new System.Windows.Forms.Panel();
             this.lblEnUSOverride = new System.Windows.Forms.Label();
-            this.chEsUSOverride = new System.Windows.Forms.CheckBox();
+            this.chEnUSOverride = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.grpEDFolders.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbError)).BeginInit();
@@ -234,7 +234,7 @@
             this.linkGameFolders.Text = "Default {game install}, {options} and {journal} locations";
             this.linkGameFolders.UseMnemonic = false;
             this.linkGameFolders.VisitedLinkColor = System.Drawing.Color.Blue;
-            this.linkGameFolders.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGameFolders_LinkClicked);
+            this.linkGameFolders.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkGameFolders_LinkClicked);
             // 
             // tvSections
             // 
@@ -276,7 +276,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlKeyboard.Controls.Add(this.lblEnUSOverride);
-            this.pnlKeyboard.Controls.Add(this.chEsUSOverride);
+            this.pnlKeyboard.Controls.Add(this.chEnUSOverride);
             this.pnlKeyboard.Location = new System.Drawing.Point(202, 12);
             this.pnlKeyboard.Name = "pnlKeyboard";
             this.pnlKeyboard.Size = new System.Drawing.Size(546, 278);
@@ -295,15 +295,15 @@
     " keyboard bindings.";
             this.lblEnUSOverride.UseMnemonic = false;
             // 
-            // chEsUSOverride
+            // chEnUSOverride
             // 
-            this.chEsUSOverride.AutoSize = true;
-            this.chEsUSOverride.Location = new System.Drawing.Point(0, 0);
-            this.chEsUSOverride.Name = "chEsUSOverride";
-            this.chEsUSOverride.Size = new System.Drawing.Size(251, 24);
-            this.chEsUSOverride.TabIndex = 0;
-            this.chEsUSOverride.Text = "&Force US English keyboard layout";
-            this.chEsUSOverride.UseVisualStyleBackColor = true;
+            this.chEnUSOverride.AutoSize = true;
+            this.chEnUSOverride.Location = new System.Drawing.Point(0, 0);
+            this.chEnUSOverride.Name = "chEnUSOverride";
+            this.chEnUSOverride.Size = new System.Drawing.Size(251, 24);
+            this.chEnUSOverride.TabIndex = 0;
+            this.chEnUSOverride.Text = "&Force US English keyboard layout";
+            this.chEnUSOverride.UseVisualStyleBackColor = true;
             // 
             // FrmAppSettings
             // 
@@ -346,19 +346,19 @@
         private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.GroupBox grpEDFolders;
         private System.Windows.Forms.Button btnJournal;
-        internal System.Windows.Forms.TextBox txtJournal;
+        private System.Windows.Forms.TextBox txtJournal;
         private System.Windows.Forms.Label lblJournal;
         private System.Windows.Forms.Button btnGameOptions;
-        internal System.Windows.Forms.TextBox txtGameOptions;
+        private System.Windows.Forms.TextBox txtGameOptions;
         private System.Windows.Forms.Label lblGameOptions;
         private System.Windows.Forms.Button btnGameInstall;
-        internal System.Windows.Forms.TextBox txtGameInstall;
+        private System.Windows.Forms.TextBox txtGameInstall;
         private System.Windows.Forms.Label lblGameInstall;
         private System.Windows.Forms.LinkLabel linkGameFolders;
         private System.Windows.Forms.TreeView tvSections;
         private System.Windows.Forms.PictureBox pbError;
         private System.Windows.Forms.Panel pnlKeyboard;
         private System.Windows.Forms.Label lblEnUSOverride;
-        internal System.Windows.Forms.CheckBox chEsUSOverride;
+        private System.Windows.Forms.CheckBox chEnUSOverride;
     }
 }

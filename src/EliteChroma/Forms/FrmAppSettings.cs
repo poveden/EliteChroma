@@ -34,6 +34,30 @@ namespace EliteChroma.Forms
             });
         }
 
+        public string GameInstallFolder
+        {
+            get => txtGameInstall.Text;
+            set => txtGameInstall.Text = value;
+        }
+
+        public string GameOptionsFolder
+        {
+            get => txtGameOptions.Text;
+            set => txtGameOptions.Text = value;
+        }
+
+        public string JournalFolder
+        {
+            get => txtJournal.Text;
+            set => txtJournal.Text = value;
+        }
+
+        public bool ForceEnUSKeyboardLayout
+        {
+            get => chEnUSOverride.Checked;
+            set => chEnUSOverride.Checked = value;
+        }
+
         private static void ApplyLinks(LinkLabel linkLabel, IEnumerable<string> urls)
         {
             var template = linkLabel.Text;
@@ -156,7 +180,7 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void linkGameFolders_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkGameFolders_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             // Reference: https://stackoverflow.com/a/53245993/400347
             var ps = new ProcessStartInfo((string)e.Link.LinkData)
