@@ -322,7 +322,6 @@
             this.pgColors.Name = "pgColors";
             this.pgColors.Size = new System.Drawing.Size(478, 266);
             this.pgColors.TabIndex = 2;
-            this.pgColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PgColors_PropertyValueChanged);
             // 
             // FrmAppSettings
             // 

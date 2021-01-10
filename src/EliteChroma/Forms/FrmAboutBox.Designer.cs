@@ -102,7 +102,7 @@
             this.linkCompanyName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.linkCompanyName.UseMnemonic = false;
             this.linkCompanyName.VisitedLinkColor = System.Drawing.Color.Blue;
-            this.linkCompanyName.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkCompanyName_LinkClicked);
+            this.linkCompanyName.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkCompanyName_LinkClicked);
             // 
             // textBoxDescription
             // 
