@@ -16,6 +16,7 @@ namespace EliteChroma
         private readonly WinChromaFactory _chromaFactory;
 
         private ChromaController _cc;
+        private AppSettings _currentSettings;
 
         public AppContext(string appSettingsPath = null)
         {
@@ -101,35 +102,60 @@ namespace EliteChroma
 
         private bool EditSettingsDialog(AppSettings settings)
         {
-            using var frm = new FrmAppSettings();
-
-            frm.txtGameInstall.Text = settings.GameInstallFolder;
-            frm.txtGameOptions.Text = settings.GameOptionsFolder;
-            frm.txtJournal.Text = settings.JournalFolder;
-            frm.chEsUSOverride.Checked = settings.ForceEnUSKeyboardLayout;
+            using var frm = new FrmAppSettings
+            {
+                GameInstallFolder = settings.GameInstallFolder,
+                GameOptionsFolder = settings.GameOptionsFolder,
+                JournalFolder = settings.JournalFolder,
+                ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout,
+                Colors = settings.Colors,
+            };
 
             if (frm.ShowDialog(ContextMenu) != DialogResult.OK)
             {
                 return false;
             }
 
-            settings.GameInstallFolder = frm.txtGameInstall.Text;
-            settings.GameOptionsFolder = frm.txtGameOptions.Text;
-            settings.JournalFolder = frm.txtJournal.Text;
-            settings.ForceEnUSKeyboardLayout = frm.chEsUSOverride.Checked;
+            settings.GameInstallFolder = frm.GameInstallFolder;
+            settings.GameOptionsFolder = frm.GameOptionsFolder;
+            settings.JournalFolder = frm.JournalFolder;
+            settings.ForceEnUSKeyboardLayout = frm.ForceEnUSKeyboardLayout;
 
             return true;
         }
 
         private void CycleChromaController(AppSettings settings)
         {
+            if (CanSoftCycle(settings))
+            {
+                _cc.ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout;
+                _cc.Colors = settings.Colors;
+                _cc.Refresh();
+                _currentSettings = settings;
+                return;
+            }
+
             _cc?.Dispose();
             _cc = new ChromaController(settings.GameInstallFolder, settings.GameOptionsFolder, settings.JournalFolder)
             {
                 ChromaFactory = _chromaFactory,
                 ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout,
+                Colors = settings.Colors,
             };
             _cc.Start();
+            _currentSettings = settings;
+        }
+
+        private bool CanSoftCycle(AppSettings newSettings)
+        {
+            if (_currentSettings == null)
+            {
+                return false;
+            }
+
+            return string.Equals(_currentSettings.GameInstallFolder, newSettings.GameInstallFolder, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(_currentSettings.GameOptionsFolder, newSettings.GameOptionsFolder, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(_currentSettings.JournalFolder, newSettings.JournalFolder, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

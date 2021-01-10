@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Game folders");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Keyboard");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Colors");
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
@@ -47,14 +48,15 @@
             this.lblGameInstall = new System.Windows.Forms.Label();
             this.linkGameFolders = new System.Windows.Forms.LinkLabel();
             this.tvSections = new System.Windows.Forms.TreeView();
-            this.pbError = new System.Windows.Forms.PictureBox();
             this.pnlKeyboard = new System.Windows.Forms.Panel();
             this.lblEnUSOverride = new System.Windows.Forms.Label();
-            this.chEsUSOverride = new System.Windows.Forms.CheckBox();
+            this.chEnUSOverride = new System.Windows.Forms.CheckBox();
+            this.pnlColors = new System.Windows.Forms.Panel();
+            this.pgColors = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.grpEDFolders.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbError)).BeginInit();
             this.pnlKeyboard.SuspendLayout();
+            this.pnlColors.SuspendLayout();
             this.SuspendLayout();
             // 
             // folderBrowser
@@ -65,10 +67,10 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(661, 308);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnCancel.Location = new System.Drawing.Point(578, 289);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(86, 32);
+            this.btnCancel.Size = new System.Drawing.Size(75, 24);
             this.btnCancel.TabIndex = 11;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -76,10 +78,10 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(568, 308);
-            this.btnOK.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnOK.Location = new System.Drawing.Point(497, 289);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(86, 32);
+            this.btnOK.Size = new System.Drawing.Size(75, 24);
             this.btnOK.TabIndex = 10;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -95,11 +97,11 @@
             this.txtGameInstall.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.errorProvider.SetIconPadding(this.txtGameInstall, -20);
-            this.txtGameInstall.Location = new System.Drawing.Point(10, 55);
-            this.txtGameInstall.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.txtGameInstall.Location = new System.Drawing.Point(9, 41);
+            this.txtGameInstall.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtGameInstall.Name = "txtGameInstall";
             this.txtGameInstall.ReadOnly = true;
-            this.txtGameInstall.Size = new System.Drawing.Size(432, 27);
+            this.txtGameInstall.Size = new System.Drawing.Size(378, 23);
             this.txtGameInstall.TabIndex = 2;
             this.txtGameInstall.Validating += new System.ComponentModel.CancelEventHandler(this.TxtGameInstall_Validating);
             this.txtGameInstall.Validated += new System.EventHandler(this.TxtGameInstall_Validated);
@@ -109,11 +111,11 @@
             this.txtGameOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.errorProvider.SetIconPadding(this.txtGameOptions, -20);
-            this.txtGameOptions.Location = new System.Drawing.Point(10, 120);
-            this.txtGameOptions.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.txtGameOptions.Location = new System.Drawing.Point(9, 90);
+            this.txtGameOptions.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtGameOptions.Name = "txtGameOptions";
             this.txtGameOptions.ReadOnly = true;
-            this.txtGameOptions.Size = new System.Drawing.Size(432, 27);
+            this.txtGameOptions.Size = new System.Drawing.Size(378, 23);
             this.txtGameOptions.TabIndex = 5;
             this.txtGameOptions.Validating += new System.ComponentModel.CancelEventHandler(this.TxtGameOptions_Validating);
             this.txtGameOptions.Validated += new System.EventHandler(this.TxtGameOptions_Validated);
@@ -123,11 +125,11 @@
             this.txtJournal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.errorProvider.SetIconPadding(this.txtJournal, -20);
-            this.txtJournal.Location = new System.Drawing.Point(10, 185);
-            this.txtJournal.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.txtJournal.Location = new System.Drawing.Point(9, 139);
+            this.txtJournal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtJournal.Name = "txtJournal";
             this.txtJournal.ReadOnly = true;
-            this.txtJournal.Size = new System.Drawing.Size(432, 27);
+            this.txtJournal.Size = new System.Drawing.Size(378, 23);
             this.txtJournal.TabIndex = 8;
             this.txtJournal.Validating += new System.ComponentModel.CancelEventHandler(this.TxtJournal_Validating);
             this.txtJournal.Validated += new System.EventHandler(this.TxtJournal_Validated);
@@ -147,11 +149,11 @@
             this.grpEDFolders.Controls.Add(this.txtGameInstall);
             this.grpEDFolders.Controls.Add(this.lblGameInstall);
             this.grpEDFolders.Controls.Add(this.linkGameFolders);
-            this.grpEDFolders.Location = new System.Drawing.Point(202, 13);
-            this.grpEDFolders.Margin = new System.Windows.Forms.Padding(3, 4, 3, 8);
+            this.grpEDFolders.Location = new System.Drawing.Point(177, 10);
+            this.grpEDFolders.Margin = new System.Windows.Forms.Padding(3, 3, 3, 6);
             this.grpEDFolders.Name = "grpEDFolders";
-            this.grpEDFolders.Padding = new System.Windows.Forms.Padding(7, 4, 7, 4);
-            this.grpEDFolders.Size = new System.Drawing.Size(546, 277);
+            this.grpEDFolders.Padding = new System.Windows.Forms.Padding(6, 3, 6, 3);
+            this.grpEDFolders.Size = new System.Drawing.Size(478, 266);
             this.grpEDFolders.TabIndex = 1;
             this.grpEDFolders.TabStop = false;
             this.grpEDFolders.Text = "Elite:Dangerous folders";
@@ -159,10 +161,10 @@
             // btnJournal
             // 
             this.btnJournal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnJournal.Location = new System.Drawing.Point(450, 183);
-            this.btnJournal.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnJournal.Location = new System.Drawing.Point(394, 137);
+            this.btnJournal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnJournal.Name = "btnJournal";
-            this.btnJournal.Size = new System.Drawing.Size(86, 32);
+            this.btnJournal.Size = new System.Drawing.Size(75, 24);
             this.btnJournal.TabIndex = 9;
             this.btnJournal.Text = "Select...";
             this.btnJournal.UseVisualStyleBackColor = true;
@@ -171,20 +173,20 @@
             // lblJournal
             // 
             this.lblJournal.AutoSize = true;
-            this.lblJournal.Location = new System.Drawing.Point(10, 160);
-            this.lblJournal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
+            this.lblJournal.Location = new System.Drawing.Point(9, 120);
+            this.lblJournal.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.lblJournal.Name = "lblJournal";
-            this.lblJournal.Size = new System.Drawing.Size(103, 20);
+            this.lblJournal.Size = new System.Drawing.Size(82, 15);
             this.lblJournal.TabIndex = 7;
             this.lblJournal.Text = "&Journal folder:";
             // 
             // btnGameOptions
             // 
             this.btnGameOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGameOptions.Location = new System.Drawing.Point(450, 117);
-            this.btnGameOptions.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnGameOptions.Location = new System.Drawing.Point(394, 88);
+            this.btnGameOptions.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGameOptions.Name = "btnGameOptions";
-            this.btnGameOptions.Size = new System.Drawing.Size(86, 32);
+            this.btnGameOptions.Size = new System.Drawing.Size(75, 24);
             this.btnGameOptions.TabIndex = 6;
             this.btnGameOptions.Text = "Select...";
             this.btnGameOptions.UseVisualStyleBackColor = true;
@@ -193,20 +195,20 @@
             // lblGameOptions
             // 
             this.lblGameOptions.AutoSize = true;
-            this.lblGameOptions.Location = new System.Drawing.Point(10, 95);
-            this.lblGameOptions.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
+            this.lblGameOptions.Location = new System.Drawing.Point(9, 71);
+            this.lblGameOptions.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.lblGameOptions.Name = "lblGameOptions";
-            this.lblGameOptions.Size = new System.Drawing.Size(149, 20);
+            this.lblGameOptions.Size = new System.Drawing.Size(118, 15);
             this.lblGameOptions.TabIndex = 4;
             this.lblGameOptions.Text = "Game &options folder:";
             // 
             // btnGameInstall
             // 
             this.btnGameInstall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGameInstall.Location = new System.Drawing.Point(450, 52);
-            this.btnGameInstall.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnGameInstall.Location = new System.Drawing.Point(394, 39);
+            this.btnGameInstall.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGameInstall.Name = "btnGameInstall";
-            this.btnGameInstall.Size = new System.Drawing.Size(86, 32);
+            this.btnGameInstall.Size = new System.Drawing.Size(75, 24);
             this.btnGameInstall.TabIndex = 3;
             this.btnGameInstall.Text = "Select...";
             this.btnGameInstall.UseVisualStyleBackColor = true;
@@ -215,10 +217,10 @@
             // lblGameInstall
             // 
             this.lblGameInstall.AutoSize = true;
-            this.lblGameInstall.Location = new System.Drawing.Point(10, 29);
-            this.lblGameInstall.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
+            this.lblGameInstall.Location = new System.Drawing.Point(9, 22);
+            this.lblGameInstall.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.lblGameInstall.Name = "lblGameInstall";
-            this.lblGameInstall.Size = new System.Drawing.Size(172, 20);
+            this.lblGameInstall.Size = new System.Drawing.Size(136, 15);
             this.lblGameInstall.TabIndex = 1;
             this.lblGameInstall.Text = "&Game installation folder:";
             // 
@@ -226,15 +228,15 @@
             // 
             this.linkGameFolders.AutoSize = true;
             this.linkGameFolders.LinkColor = System.Drawing.Color.Blue;
-            this.linkGameFolders.Location = new System.Drawing.Point(10, 231);
+            this.linkGameFolders.Location = new System.Drawing.Point(9, 173);
             this.linkGameFolders.Name = "linkGameFolders";
-            this.linkGameFolders.Size = new System.Drawing.Size(373, 20);
+            this.linkGameFolders.Size = new System.Drawing.Size(296, 15);
             this.linkGameFolders.TabIndex = 12;
             this.linkGameFolders.TabStop = true;
             this.linkGameFolders.Text = "Default {game install}, {options} and {journal} locations";
             this.linkGameFolders.UseMnemonic = false;
             this.linkGameFolders.VisitedLinkColor = System.Drawing.Color.Blue;
-            this.linkGameFolders.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkGameFolders_LinkClicked);
+            this.linkGameFolders.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkGameFolders_LinkClicked);
             // 
             // tvSections
             // 
@@ -242,33 +244,25 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.tvSections.FullRowSelect = true;
             this.tvSections.HideSelection = false;
-            this.tvSections.Location = new System.Drawing.Point(12, 12);
-            this.tvSections.Margin = new System.Windows.Forms.Padding(3, 3, 9, 3);
+            this.tvSections.Location = new System.Drawing.Point(10, 9);
+            this.tvSections.Margin = new System.Windows.Forms.Padding(3, 2, 8, 2);
             this.tvSections.Name = "tvSections";
             treeNode1.Name = "GameFolders";
             treeNode1.Text = "Game folders";
             treeNode2.Name = "Keyboard";
             treeNode2.Text = "Keyboard";
+            treeNode3.Name = "Colors";
+            treeNode3.Text = "Colors";
             this.tvSections.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
-            treeNode2});
+            treeNode2,
+            treeNode3});
             this.tvSections.ShowLines = false;
             this.tvSections.ShowRootLines = false;
-            this.tvSections.Size = new System.Drawing.Size(178, 278);
+            this.tvSections.Size = new System.Drawing.Size(156, 267);
             this.tvSections.TabIndex = 0;
             this.tvSections.DrawNode += new System.Windows.Forms.DrawTreeNodeEventHandler(this.TvSections_DrawNode);
             this.tvSections.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvSections_AfterSelect);
-            // 
-            // pbError
-            // 
-            this.pbError.Image = global::EliteChroma.Properties.Resources.RedDot;
-            this.pbError.Location = new System.Drawing.Point(12, 296);
-            this.pbError.Name = "pbError";
-            this.pbError.Size = new System.Drawing.Size(16, 16);
-            this.pbError.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pbError.TabIndex = 14;
-            this.pbError.TabStop = false;
-            this.pbError.Visible = false;
             // 
             // pnlKeyboard
             // 
@@ -276,51 +270,76 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlKeyboard.Controls.Add(this.lblEnUSOverride);
-            this.pnlKeyboard.Controls.Add(this.chEsUSOverride);
-            this.pnlKeyboard.Location = new System.Drawing.Point(202, 12);
+            this.pnlKeyboard.Controls.Add(this.chEnUSOverride);
+            this.pnlKeyboard.Location = new System.Drawing.Point(177, 9);
+            this.pnlKeyboard.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlKeyboard.Name = "pnlKeyboard";
-            this.pnlKeyboard.Size = new System.Drawing.Size(546, 278);
+            this.pnlKeyboard.Size = new System.Drawing.Size(478, 266);
             this.pnlKeyboard.TabIndex = 2;
             // 
             // lblEnUSOverride
             // 
             this.lblEnUSOverride.AutoSize = true;
-            this.lblEnUSOverride.Location = new System.Drawing.Point(20, 31);
-            this.lblEnUSOverride.MaximumSize = new System.Drawing.Size(520, 0);
+            this.lblEnUSOverride.Location = new System.Drawing.Point(18, 23);
+            this.lblEnUSOverride.MaximumSize = new System.Drawing.Size(455, 0);
             this.lblEnUSOverride.Name = "lblEnUSOverride";
-            this.lblEnUSOverride.Size = new System.Drawing.Size(517, 60);
+            this.lblEnUSOverride.Size = new System.Drawing.Size(440, 45);
             this.lblEnUSOverride.TabIndex = 1;
             this.lblEnUSOverride.Text = "Elite:Dangerous apparently won\'t recognize some keyboard layouts, and will treat " +
     "them as US English. This setting makes EliteChroma properly recognize US English" +
     " keyboard bindings.";
             this.lblEnUSOverride.UseMnemonic = false;
             // 
-            // chEsUSOverride
+            // chEnUSOverride
             // 
-            this.chEsUSOverride.AutoSize = true;
-            this.chEsUSOverride.Location = new System.Drawing.Point(0, 0);
-            this.chEsUSOverride.Name = "chEsUSOverride";
-            this.chEsUSOverride.Size = new System.Drawing.Size(251, 24);
-            this.chEsUSOverride.TabIndex = 0;
-            this.chEsUSOverride.Text = "&Force US English keyboard layout";
-            this.chEsUSOverride.UseVisualStyleBackColor = true;
+            this.chEnUSOverride.AutoSize = true;
+            this.chEnUSOverride.Location = new System.Drawing.Point(0, 0);
+            this.chEnUSOverride.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.chEnUSOverride.Name = "chEnUSOverride";
+            this.chEnUSOverride.Size = new System.Drawing.Size(201, 19);
+            this.chEnUSOverride.TabIndex = 0;
+            this.chEnUSOverride.Text = "&Force US English keyboard layout";
+            this.chEnUSOverride.UseVisualStyleBackColor = true;
+            // 
+            // pnlColors
+            // 
+            this.pnlColors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlColors.Controls.Add(this.pgColors);
+            this.pnlColors.Location = new System.Drawing.Point(177, 9);
+            this.pnlColors.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.pnlColors.Name = "pnlColors";
+            this.pnlColors.Size = new System.Drawing.Size(478, 266);
+            this.pnlColors.TabIndex = 3;
+            // 
+            // pgColors
+            // 
+            this.pgColors.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pgColors.HelpVisible = false;
+            this.pgColors.Location = new System.Drawing.Point(0, 0);
+            this.pgColors.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.pgColors.Name = "pgColors";
+            this.pgColors.Size = new System.Drawing.Size(478, 266);
+            this.pgColors.TabIndex = 2;
+            this.pgColors.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PgColors_PropertyValueChanged);
             // 
             // FrmAppSettings
             // 
             this.AcceptButton = this.btnOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(760, 357);
+            this.ClientSize = new System.Drawing.Size(665, 326);
+            this.Controls.Add(this.pnlColors);
             this.Controls.Add(this.pnlKeyboard);
-            this.Controls.Add(this.pbError);
             this.Controls.Add(this.tvSections);
             this.Controls.Add(this.grpEDFolders);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmAppSettings";
@@ -330,11 +349,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.grpEDFolders.ResumeLayout(false);
             this.grpEDFolders.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbError)).EndInit();
             this.pnlKeyboard.ResumeLayout(false);
             this.pnlKeyboard.PerformLayout();
+            this.pnlColors.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -346,19 +364,20 @@
         private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.GroupBox grpEDFolders;
         private System.Windows.Forms.Button btnJournal;
-        internal System.Windows.Forms.TextBox txtJournal;
+        private System.Windows.Forms.TextBox txtJournal;
         private System.Windows.Forms.Label lblJournal;
         private System.Windows.Forms.Button btnGameOptions;
-        internal System.Windows.Forms.TextBox txtGameOptions;
+        private System.Windows.Forms.TextBox txtGameOptions;
         private System.Windows.Forms.Label lblGameOptions;
         private System.Windows.Forms.Button btnGameInstall;
-        internal System.Windows.Forms.TextBox txtGameInstall;
+        private System.Windows.Forms.TextBox txtGameInstall;
         private System.Windows.Forms.Label lblGameInstall;
         private System.Windows.Forms.LinkLabel linkGameFolders;
         private System.Windows.Forms.TreeView tvSections;
-        private System.Windows.Forms.PictureBox pbError;
         private System.Windows.Forms.Panel pnlKeyboard;
         private System.Windows.Forms.Label lblEnUSOverride;
-        internal System.Windows.Forms.CheckBox chEsUSOverride;
+        private System.Windows.Forms.CheckBox chEnUSOverride;
+        private System.Windows.Forms.Panel pnlColors;
+        private System.Windows.Forms.PropertyGrid pgColors;
     }
 }

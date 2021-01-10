@@ -4,9 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Colore;
-using Colore.Api;
-using Colore.Data;
-using Colore.Native;
 using EliteChroma.Chroma;
 using EliteChroma.Core.Internal;
 using EliteChroma.Elite;
@@ -22,7 +19,8 @@ namespace EliteChroma.Core
         private readonly LayeredEffect _effect;
         private readonly System.Timers.Timer _animation;
         private readonly SemaphoreSlim _chromaLock = new SemaphoreSlim(1, 1);
-        private readonly ChromaColors _colors = new ChromaColors();
+
+        private ChromaColors _colors = new ChromaColors();
 
         private IChroma _chroma;
         private int _rendering;
@@ -86,6 +84,12 @@ namespace EliteChroma.Core
             set => _watcher.ForceEnUSKeyboardLayout = value;
         }
 
+        public ChromaColors Colors
+        {
+            get => _colors;
+            set => _colors = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
         public static bool IsChromaSdkAvailable() => IsChromaSdkAvailable(NativeMethods.Instance);
 
         public void Start()
@@ -109,6 +113,11 @@ namespace EliteChroma.Core
             _watcher.Stop();
             ChromaStop().Wait();
             _running = false;
+        }
+
+        public void Refresh()
+        {
+            _animation.Enabled = true;
         }
 
         public void Dispose()

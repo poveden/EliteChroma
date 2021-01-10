@@ -61,6 +61,348 @@ namespace EliteChroma.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cargo scoop deployed.
+        /// </summary>
+        internal static string Colors_CargoScoopDeployed {
+            get {
+                return ResourceManager.GetString("Colors_CargoScoopDeployed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cargo scoop retracted.
+        /// </summary>
+        internal static string Colors_CargoScoopRetracted {
+            get {
+                return ResourceManager.GetString("Colors_CargoScoopRetracted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brightness Levels.
+        /// </summary>
+        internal static string Colors_Category_Brightness {
+            get {
+                return ResourceManager.GetString("Colors_Category_Brightness", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full Spectrum System Scanner (FSS).
+        /// </summary>
+        internal static string Colors_Category_FSS {
+            get {
+                return ResourceManager.GetString("Colors_Category_FSS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Head-up Display.
+        /// </summary>
+        internal static string Colors_Category_HUD {
+            get {
+                return ResourceManager.GetString("Colors_Category_HUD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Power Distributor.
+        /// </summary>
+        internal static string Colors_Category_PowerDistributor {
+            get {
+                return ResourceManager.GetString("Colors_Category_PowerDistributor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle Subsystems.
+        /// </summary>
+        internal static string Colors_Category_Subsystems {
+            get {
+                return ResourceManager.GetString("Colors_Category_Subsystems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thrust and Attitude.
+        /// </summary>
+        internal static string Colors_Category_ThrustAttitude {
+            get {
+                return ResourceManager.GetString("Colors_Category_ThrustAttitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weapons and Targeting.
+        /// </summary>
+        internal static string Colors_Category_WeaponsTargeting {
+            get {
+                return ResourceManager.GetString("Colors_Category_WeaponsTargeting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device dim brightness.
+        /// </summary>
+        internal static string Colors_DeviceDimBrightness {
+            get {
+                return ResourceManager.GetString("Colors_DeviceDimBrightness", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frame Shift Drive engage/disengage.
+        /// </summary>
+        internal static string Colors_FrameShiftDriveControls {
+            get {
+                return ResourceManager.GetString("Colors_FrameShiftDriveControls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camera pitch/yaw.
+        /// </summary>
+        internal static string Colors_FssCamera {
+            get {
+                return ResourceManager.GetString("Colors_FssCamera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target current signal.
+        /// </summary>
+        internal static string Colors_FssTarget {
+            get {
+                return ResourceManager.GetString("Colors_FssTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tuning increase/decrease.
+        /// </summary>
+        internal static string Colors_FssTuning {
+            get {
+                return ResourceManager.GetString("Colors_FssTuning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom in/out.
+        /// </summary>
+        internal static string Colors_FssZoom {
+            get {
+                return ResourceManager.GetString("Colors_FssZoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter FSS mode.
+        /// </summary>
+        internal static string Colors_FullSpectrumSystemScanner {
+            get {
+                return ResourceManager.GetString("Colors_FullSpectrumSystemScanner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hardpoints toggle.
+        /// </summary>
+        internal static string Colors_HardpointsToggle {
+            get {
+                return ResourceManager.GetString("Colors_HardpointsToggle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current view cursor controls.
+        /// </summary>
+        internal static string Colors_InterfaceMode {
+            get {
+                return ResourceManager.GetString("Colors_InterfaceMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keyboard dim brightness.
+        /// </summary>
+        internal static string Colors_KeyboardDimBrightness {
+            get {
+                return ResourceManager.GetString("Colors_KeyboardDimBrightness", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Landing gear deployed.
+        /// </summary>
+        internal static string Colors_LandingGearDeployed {
+            get {
+                return ResourceManager.GetString("Colors_LandingGearDeployed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Landing gear retracted.
+        /// </summary>
+        internal static string Colors_LandingGearRetracted {
+            get {
+                return ResourceManager.GetString("Colors_LandingGearRetracted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Miscellaneous subsystem controls.
+        /// </summary>
+        internal static string Colors_Miscellaneous {
+            get {
+                return ResourceManager.GetString("Colors_Miscellaneous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Power distributor 0%.
+        /// </summary>
+        internal static string Colors_PowerDistributor0 {
+            get {
+                return ResourceManager.GetString("Colors_PowerDistributor0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Power distributor 100%.
+        /// </summary>
+        internal static string Colors_PowerDistributor100 {
+            get {
+                return ResourceManager.GetString("Colors_PowerDistributor100", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Power distributor reset.
+        /// </summary>
+        internal static string Colors_PowerDistributorReset {
+            get {
+                return ResourceManager.GetString("Colors_PowerDistributorReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keyboard secondary binding brightness.
+        /// </summary>
+        internal static string Colors_SecondaryBindingBrightness {
+            get {
+                return ResourceManager.GetString("Colors_SecondaryBindingBrightness", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alternate flight controls.
+        /// </summary>
+        internal static string Colors_VehicleAlternate {
+            get {
+                return ResourceManager.GetString("Colors_VehicleAlternate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Silent running and heatsinks.
+        /// </summary>
+        internal static string Colors_VehicleCooling {
+            get {
+                return ResourceManager.GetString("Colors_VehicleCooling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle lights (High beam).
+        /// </summary>
+        internal static string Colors_VehicleLightsHighBeam {
+            get {
+                return ResourceManager.GetString("Colors_VehicleLightsHighBeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle lights (Mid beam).
+        /// </summary>
+        internal static string Colors_VehicleLightsMidBeam {
+            get {
+                return ResourceManager.GetString("Colors_VehicleLightsMidBeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle lights (Off).
+        /// </summary>
+        internal static string Colors_VehicleLightsOff {
+            get {
+                return ResourceManager.GetString("Colors_VehicleLightsOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Miscellaneous vehicle controls.
+        /// </summary>
+        internal static string Colors_VehicleMiscellaneous {
+            get {
+                return ResourceManager.GetString("Colors_VehicleMiscellaneous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle panel/mode switches.
+        /// </summary>
+        internal static string Colors_VehicleModeSwitches {
+            get {
+                return ResourceManager.GetString("Colors_VehicleModeSwitches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle rotation controls.
+        /// </summary>
+        internal static string Colors_VehicleRotation {
+            get {
+                return ResourceManager.GetString("Colors_VehicleRotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle targeting controls.
+        /// </summary>
+        internal static string Colors_VehicleTargeting {
+            get {
+                return ResourceManager.GetString("Colors_VehicleTargeting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle throttle controls.
+        /// </summary>
+        internal static string Colors_VehicleThrottle {
+            get {
+                return ResourceManager.GetString("Colors_VehicleThrottle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle thrust controls.
+        /// </summary>
+        internal static string Colors_VehicleThrust {
+            get {
+                return ResourceManager.GetString("Colors_VehicleThrust", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weapon controls.
+        /// </summary>
+        internal static string Colors_VehicleWeapons {
+            get {
+                return ResourceManager.GetString("Colors_VehicleWeapons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon EliteChromaIcon {
@@ -81,12 +423,20 @@ namespace EliteChroma.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to Brightness must be a percentage value in the range 0-100..
         /// </summary>
-        internal static System.Drawing.Bitmap RedDot {
+        internal static string FormatException_InvalidBrightnessValue {
             get {
-                object obj = ResourceManager.GetObject("RedDot", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("FormatException_InvalidBrightnessValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colors must be in the form &apos;RRGGBB&apos;, where &apos;RR&apos;, &apos;GG&apos; and &apos;BB&apos; are hexadecimal values in the range 00-FF..
+        /// </summary>
+        internal static string FormatException_InvalidColorValue {
+            get {
+                return ResourceManager.GetString("FormatException_InvalidColorValue", resourceCulture);
             }
         }
         
@@ -120,6 +470,36 @@ namespace EliteChroma.Properties {
         internal static string MsgBox_UnableToIdentifyFolders {
             get {
                 return ResourceManager.GetString("MsgBox_UnableToIdentifyFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Picker0 {
+            get {
+                object obj = ResourceManager.GetObject("Picker0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Picker1 {
+            get {
+                object obj = ResourceManager.GetObject("Picker1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RedDot {
+            get {
+                object obj = ResourceManager.GetObject("RedDot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

@@ -1,12 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
+using EliteChroma.Core;
+using EliteChroma.Internal.Json;
+using Newtonsoft.Json;
 
 namespace EliteChroma.Internal
 {
     internal sealed class AppSettings
     {
+        private static readonly JsonSerializerSettings _settings = new JsonSerializerSettings
+        {
+            ContractResolver = new AppSettingsContractResolver(),
+            Formatting = Formatting.Indented,
+        };
+
         private AppSettings()
         {
         }
@@ -19,12 +27,14 @@ namespace EliteChroma.Internal
 
         public bool ForceEnUSKeyboardLayout { get; set; }
 
+        public ChromaColors Colors { get; } = new ChromaColors();
+
         public static AppSettings Load(string path)
         {
             try
             {
                 var json = File.ReadAllText(path);
-                return JsonSerializer.Deserialize<AppSettings>(json);
+                return JsonConvert.DeserializeObject<AppSettings>(json, _settings);
             }
             catch (IOException) {}
             catch (JsonException) {}
@@ -55,7 +65,7 @@ namespace EliteChroma.Internal
         public void Save(string path)
         {
             Directory.CreateDirectory(Path.GetDirectoryName(path));
-            var json = JsonSerializer.Serialize(this);
+            var json = JsonConvert.SerializeObject(this, _settings);
             File.WriteAllText(path, json);
         }
 

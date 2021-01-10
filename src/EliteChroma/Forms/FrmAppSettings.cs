@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using EliteChroma.Core;
+using EliteChroma.Internal;
+using EliteChroma.Internal.UI;
 using EliteChroma.Properties;
 using EliteFiles;
 
@@ -19,8 +19,14 @@ namespace EliteChroma.Forms
     {
         private const string _gameFoldersSection = "GameFolders";
         private const string _keyboardSection = "Keyboard";
+        private const string _colorsSection = "Colors";
 
         private readonly HashSet<string> _sectionErrors = new HashSet<string>(StringComparer.Ordinal);
+
+        static FrmAppSettings()
+        {
+            ChromaColorsMetadata.InitTypeDescriptionProvider();
+        }
 
         public FrmAppSettings()
         {
@@ -32,6 +38,36 @@ namespace EliteChroma.Forms
                 Resources.Url_GameOptionsFolderHelp,
                 Resources.Url_JournalFolderHelp,
             });
+        }
+
+        public string GameInstallFolder
+        {
+            get => txtGameInstall.Text;
+            set => txtGameInstall.Text = value;
+        }
+
+        public string GameOptionsFolder
+        {
+            get => txtGameOptions.Text;
+            set => txtGameOptions.Text = value;
+        }
+
+        public string JournalFolder
+        {
+            get => txtJournal.Text;
+            set => txtJournal.Text = value;
+        }
+
+        public bool ForceEnUSKeyboardLayout
+        {
+            get => chEnUSOverride.Checked;
+            set => chEnUSOverride.Checked = value;
+        }
+
+        public ChromaColors Colors
+        {
+            get => (ChromaColors)pgColors.SelectedObject;
+            set => pgColors.SelectedObject = value;
         }
 
         private static void ApplyLinks(LinkLabel linkLabel, IEnumerable<string> urls)
@@ -63,8 +99,11 @@ namespace EliteChroma.Forms
             tvSections.DrawMode = TreeViewDrawMode.OwnerDrawText;
             tvSections.Nodes[_gameFoldersSection].Tag = grpEDFolders;
             tvSections.Nodes[_keyboardSection].Tag = pnlKeyboard;
+            tvSections.Nodes[_colorsSection].Tag = pnlColors;
 
             tvSections.SelectedNode = tvSections.Nodes[_gameFoldersSection];
+
+            pgColors.SelectedGridItem = pgColors.GetGridItems()[0];
 
             ValidateChildren();
         }
@@ -156,7 +195,7 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void linkGameFolders_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkGameFolders_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             // Reference: https://stackoverflow.com/a/53245993/400347
             var ps = new ProcessStartInfo((string)e.Link.LinkData)
@@ -194,9 +233,9 @@ namespace EliteChroma.Forms
             }
 
             var x = e.Bounds.Right - 4;
-            var y = e.Bounds.Top + (e.Bounds.Height - pbError.Image.Height) / 2;
-            var r = new Rectangle(new Point(x, y), pbError.Image.Size);
-            e.Graphics.DrawImageUnscaledAndClipped(pbError.Image, r);
+            var y = e.Bounds.Top + (e.Bounds.Height - Resources.RedDot.Height) / 2;
+            var r = new Rectangle(new Point(x, y), Resources.RedDot.Size);
+            e.Graphics.DrawImageUnscaledAndClipped(Resources.RedDot, r);
         }
 
         public override bool ValidateChildren()
@@ -218,6 +257,11 @@ namespace EliteChroma.Forms
             {
                 _sectionErrors.Add(sectionKey);
             }
+        }
+
+        private void PgColors_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            var v = e.ChangedItem.Value;
         }
     }
 }

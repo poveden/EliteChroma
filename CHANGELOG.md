@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Stop applying hardpoint color to background (i.e. non-keyboard) devices
 - Render landing overrides only when landing gear is deployed
 
+### Added
+
+- Add color editor for keyboard bindings
+
 ### Changed
 
 - Apply more realistic colors
