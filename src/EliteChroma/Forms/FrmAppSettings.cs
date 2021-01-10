@@ -258,10 +258,5 @@ namespace EliteChroma.Forms
                 _sectionErrors.Add(sectionKey);
             }
         }
-
-        private void PgColors_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
-        {
-            var v = e.ChangedItem.Value;
-        }
     }
 }
