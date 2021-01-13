@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using EliteChroma.Core.Tests.Internal;
 using Xunit;
 
 namespace EliteChroma.Core.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class KeyboardLayoutMapTest
+    public class KeyboardLayoutMapTests
     {
         [Theory]
         [InlineData("xx-XX")]

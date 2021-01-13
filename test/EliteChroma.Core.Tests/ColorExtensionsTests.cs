@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using Colore.Data;
 using EliteChroma.Chroma;
 using Xunit;
 
 namespace EliteChroma.Core.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class ColorExtensionsTest
+    public class ColorExtensionsTests
     {
         [Fact]
         public void TransformThrowsOnNullTransformArgument()

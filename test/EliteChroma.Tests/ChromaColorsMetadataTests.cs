@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Linq;
 using System.Reflection;
@@ -12,8 +11,7 @@ using Xunit;
 
 namespace EliteChroma.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class ChromaColorsMetadataTest
+    public class ChromaColorsMetadataTests
     {
         [Fact]
         public void AllPublicReadWritePropertiesAreMapped()

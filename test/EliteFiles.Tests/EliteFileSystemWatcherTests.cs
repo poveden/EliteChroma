@@ -1,12 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using EliteFiles.Internal;
+﻿using EliteFiles.Internal;
 using EliteFiles.Tests.Internal;
 using Xunit;
 
 namespace EliteFiles.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class EliteFileSystemWatcherTest
+    public class EliteFileSystemWatcherTests
     {
         [Fact]
         public void DoesNotThrowWhenDisposingTwice()

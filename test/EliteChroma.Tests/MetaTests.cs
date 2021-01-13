@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -8,8 +7,7 @@ using Xunit;
 
 namespace EliteChroma.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class MetaTest
+    public class MetaTests
     {
         public static IEnumerable<object[]> GetAllForms()
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,8 +12,7 @@ using Xunit;
 
 namespace EliteChroma.Core.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class WinChromaFactoryTest
+    public class WinChromaFactoryTests
     {
         [Fact]
         public async Task WaitsForChromaSdkDeviceAccessEvent()

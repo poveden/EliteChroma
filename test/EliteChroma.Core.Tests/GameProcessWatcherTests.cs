@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,8 +11,7 @@ using Xunit;
 
 namespace EliteChroma.Core.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class GameProcessWatcherTest
+    public class GameProcessWatcherTests
     {
         private const string _gameRootFolder = @"TestFiles\GameRoot";
 

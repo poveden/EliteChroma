@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using EliteFiles.Bindings.Devices;
 using Xunit;
 
 namespace EliteFiles.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public sealed class KeyboardTest
+    public sealed class KeyboardTests
     {
         [Fact]
         public void TryGetKeyThrowsOnNullKeyName()

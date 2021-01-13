@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -12,8 +11,7 @@ using Xunit;
 
 namespace EliteFiles.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public sealed class BindingsTest
+    public sealed class BindingsTests
     {
         private const string _gameRootFolder = @"TestFiles\GameRoot";
         private const string _gameOptionsFolder = @"TestFiles\GameOptions";
@@ -25,7 +23,7 @@ namespace EliteFiles.Tests
         private readonly GameInstallFolder _gif;
         private readonly GameOptionsFolder _gof;
 
-        public BindingsTest()
+        public BindingsTests()
         {
             _gif = new GameInstallFolder(_gameRootFolder);
             _gof = new GameOptionsFolder(_gameOptionsFolder);

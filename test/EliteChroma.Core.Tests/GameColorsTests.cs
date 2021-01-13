@@ -1,13 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
+﻿using Colore.Data;
 using EliteChroma.Elite;
 using EliteFiles.Journal;
 using Xunit;
 
 namespace EliteChroma.Core.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class GameColorsTest
+    public class GameColorsTests
     {
         [Theory]
         [InlineData(StarClass.O, 0xB1F0FE)]

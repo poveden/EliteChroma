@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -24,8 +23,7 @@ using Xunit;
 
 namespace EliteChroma.Core.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class EffectLayerTest
+    public class EffectLayerTests
     {
         private const string _gameRootFolder = @"TestFiles\GameRoot";
 
@@ -33,7 +31,7 @@ namespace EliteChroma.Core.Tests
 
         private readonly GameInstallFolder _gif;
 
-        public EffectLayerTest()
+        public EffectLayerTests()
         {
             _gif = new GameInstallFolder(_gameRootFolder);
         }

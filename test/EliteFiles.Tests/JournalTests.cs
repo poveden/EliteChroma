@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using EliteFiles.Journal;
@@ -11,8 +10,7 @@ using Xunit;
 
 namespace EliteFiles.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public sealed class JournalTest
+    public sealed class JournalTests
     {
         private const string _journalFolder = @"TestFiles\Journal";
         private const string _journalFile1 = "Journal.190101020000.01.log";
@@ -20,7 +18,7 @@ namespace EliteFiles.Tests
 
         private readonly JournalFolder _jf;
 
-        public JournalTest()
+        public JournalTests()
         {
             _jf = new JournalFolder(_journalFolder);
         }

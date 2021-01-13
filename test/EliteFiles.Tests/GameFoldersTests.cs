@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EliteFiles.Internal;
 using EliteFiles.Tests.Internal;
@@ -7,8 +6,7 @@ using Xunit;
 
 namespace EliteFiles.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public sealed class GameFoldersTest
+    public sealed class GameFoldersTests
     {
         [Fact]
         public void GetsTheListOfDefaultGameInstallFolders()
