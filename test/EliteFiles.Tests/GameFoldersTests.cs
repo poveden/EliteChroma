@@ -11,7 +11,7 @@ namespace EliteFiles.Tests
         [Fact]
         public void GetsTheListOfDefaultGameInstallFolders()
         {
-            Assert.True(GameInstallFolder.DefaultPaths.Count == 4);
+            Assert.True(GameInstallFolder.DefaultPaths.Count == 5);
             Assert.All(GameInstallFolder.DefaultPaths, x => x.EndsWith(@"\Products\elite-dangerous-64", StringComparison.Ordinal));
         }
 

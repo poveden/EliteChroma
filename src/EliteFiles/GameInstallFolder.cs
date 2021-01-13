@@ -29,6 +29,7 @@ namespace EliteFiles
             return new[]
             {
                 Path.Combine(programFilesFolder, @"Frontier\Products\elite-dangerous-64"),
+                Path.Combine(programFilesFolder, @"Epic Games\EliteDangerous\Products\elite-dangerous-64"),
                 Path.Combine(programFilesFolder, @"Steam\steamapps\common\Elite Dangerous\Products\elite-dangerous-64"),
                 Path.Combine(programFilesFolder, @"Oculus\Software\frontier-developments-plc-elite-dangerous"),
                 Path.Combine(localAppDataFolder, @"Frontier_Developments\Products\elite-dangerous-64"),
