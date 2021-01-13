@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing.Design;
-using System.Text;
 using Colore.Data;
 using EliteChroma.Core;
 using EliteChroma.Internal.UI;
@@ -11,12 +7,11 @@ using Xunit;
 
 namespace EliteChroma.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public sealed class ChromaColorsTypeDescriptorTest : IDisposable
+    public sealed class ChromaColorsTypeDescriptorTests : IDisposable
     {
         private readonly TypeDescriptionProvider _provider;
 
-        public ChromaColorsTypeDescriptorTest()
+        public ChromaColorsTypeDescriptorTests()
         {
             ChromaColorsMetadata.InitTypeDescriptionProvider();
             _provider = TypeDescriptor.GetProvider(typeof(ChromaColors));

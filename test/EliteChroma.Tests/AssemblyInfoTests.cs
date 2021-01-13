@@ -1,11 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using EliteChroma.Internal;
+﻿using EliteChroma.Internal;
 using Xunit;
 
 namespace EliteChroma.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class AssemblyInfoTest
+    public class AssemblyInfoTests
     {
         [Fact]
         public void AllAssemblyInfoPropertiesHaveValues()

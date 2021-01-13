@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Colore.Data;
 using EliteChroma.Core;
@@ -13,8 +12,7 @@ using Xunit;
 
 namespace EliteChroma.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class AppSettingsTest
+    public class AppSettingsTests
     {
         private const string _appSettingsPath = @"TestFiles\Settings.json";
 

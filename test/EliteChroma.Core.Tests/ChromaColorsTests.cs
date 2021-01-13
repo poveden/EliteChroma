@@ -1,12 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Linq;
 using Colore.Data;
 using Xunit;
 
 namespace EliteChroma.Core.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class ChromaColorsTest
+    public class ChromaColorsTests
     {
         [Theory]
         [InlineData(nameof(ChromaColors.KeyboardDimBrightness))]

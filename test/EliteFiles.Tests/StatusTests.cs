@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using EliteFiles.Status;
 using EliteFiles.Tests.Internal;
@@ -7,14 +6,13 @@ using Xunit;
 
 namespace EliteFiles.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public sealed class StatusTest
+    public sealed class StatusTests
     {
         private const string _journalFolder = @"TestFiles\Journal";
 
         private readonly JournalFolder _jf;
 
-        public StatusTest()
+        public StatusTests()
         {
             _jf = new JournalFolder(_journalFolder);
         }

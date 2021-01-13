@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using EliteFiles.Graphics;
 using EliteFiles.Tests.Internal;
@@ -7,8 +6,7 @@ using Xunit;
 
 namespace EliteFiles.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public sealed class GraphicsTest
+    public sealed class GraphicsTests
     {
         private const string _gameRootFolder = @"TestFiles\GameRoot";
         private const string _gameOptionsFolder = @"TestFiles\GameOptions";
@@ -21,7 +19,7 @@ namespace EliteFiles.Tests
         private readonly GameInstallFolder _gif;
         private readonly GameOptionsFolder _gof;
 
-        public GraphicsTest()
+        public GraphicsTests()
         {
             _gif = new GameInstallFolder(_gameRootFolder);
             _gof = new GameOptionsFolder(_gameOptionsFolder);

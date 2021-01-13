@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Colore.Effects.Keyboard;
@@ -11,8 +10,7 @@ using static EliteChroma.Core.Internal.NativeMethods;
 
 namespace EliteChroma.Core.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class KeyMappingsTest
+    public class KeyMappingsTests
     {
         private static readonly StringComparer _comparer = StringComparer.Ordinal;
 

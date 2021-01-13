@@ -10,8 +10,7 @@ using Xunit;
 
 namespace EliteChroma.Core.Tests
 {
-    [SuppressMessage("DocumentationRules", "SA1649:File name should match first type name", Justification = "xUnit test class.")]
-    public class ProcessListTest
+    public class ProcessListTests
     {
         private static readonly FieldInfo _fiBuf = typeof(ProcessList).GetField("_buf", BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly FieldInfo _fiN = typeof(ProcessList).GetField("_n", BindingFlags.NonPublic | BindingFlags.Instance);
