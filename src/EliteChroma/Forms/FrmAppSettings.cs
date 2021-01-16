@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using EliteChroma.Core;
@@ -115,7 +116,20 @@ namespace EliteChroma.Forms
 
             if (folderBrowser.ShowDialog() == DialogResult.OK)
             {
-                txtGameInstall.Text = folderBrowser.SelectedPath;
+                var path = folderBrowser.SelectedPath;
+                
+                if (!new GameInstallFolder(path).IsValid)
+                {
+                    // Perhaps the user chose the base folder where all E:D variants are installed
+                    var ed64SubPath = Path.Combine(path, @"Products\elite-dangerous-64");
+
+                    if (new GameInstallFolder(ed64SubPath).IsValid)
+                    {
+                        path = ed64SubPath;
+                    }
+                }
+
+                txtGameInstall.Text = path;
                 ValidateChildren();
             }
         }

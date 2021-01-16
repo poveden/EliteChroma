@@ -11,8 +11,8 @@ namespace EliteFiles.Tests
         [Fact]
         public void GetsTheListOfDefaultGameInstallFolders()
         {
-            Assert.True(GameInstallFolder.DefaultPaths.Count == 4);
-            Assert.All(GameInstallFolder.DefaultPaths, x => x.EndsWith(@"\Products\elite-dangerous-64", StringComparison.Ordinal));
+            Assert.True(GameInstallFolder.DefaultPaths.Count == 5);
+            Assert.All(GameInstallFolder.DefaultPaths, x => Assert.True(x.Contains(@"\Oculus\", StringComparison.Ordinal) ^ x.EndsWith(@"\Products\elite-dangerous-64", StringComparison.Ordinal)));
         }
 
         [Fact]
@@ -21,7 +21,7 @@ namespace EliteFiles.Tests
             var paths = GameInstallFolder.GetAlternatePaths().ToList();
 
             Assert.True(paths.Count >= 0);
-            Assert.All(GameInstallFolder.DefaultPaths, x => x.EndsWith(@"\Products\elite-dangerous-64", StringComparison.Ordinal));
+            Assert.All(GameInstallFolder.DefaultPaths, x => Assert.True(x.Contains(@"\Oculus\", StringComparison.Ordinal) ^ x.EndsWith(@"\Products\elite-dangerous-64", StringComparison.Ordinal)));
         }
 
         [Theory]
