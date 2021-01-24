@@ -13,22 +13,43 @@ namespace EliteChroma.Core.Layers
     {
         private static readonly TimeSpan _fadeDuration = TimeSpan.FromSeconds(0.2);
 
-        private (bool HardpointsDeployed, bool InAnalysisMode) _lastState;
+        private (bool HardpointsDeployed, VehicleMode Mode) _lastState;
         private AmbientColors _animC1;
         private AmbientColors _animC2;
+
+        private enum VehicleMode
+        {
+            Combat,
+            Analysis,
+            Landing,
+        }
 
         public override int Order => 0;
 
         protected override void OnRender(ChromaCanvas canvas)
         {
             var hardpointsDeployed = Game.Status.HasFlag(Flags.HardpointsDeployed) && !Game.Status.HasFlag(Flags.Supercruise);
-            var inAnalysisMode = Game.Status.HasFlag(Flags.HudInAnalysisMode);
-            var state = (hardpointsDeployed, inAnalysisMode);
+
+            VehicleMode mode;
+            if (Game.Status.HasFlag(Flags.LandingGearDeployed))
+            {
+                mode = VehicleMode.Landing;
+            }
+            else if (Game.Status.HasFlag(Flags.HudInAnalysisMode))
+            {
+                mode = VehicleMode.Analysis;
+            }
+            else
+            {
+                mode = VehicleMode.Combat;
+            }
+
+            var state = (hardpointsDeployed, mode);
 
             if (state != _lastState)
             {
                 StartAnimation();
-                _animC1 = GetAmbientColors(_lastState.HardpointsDeployed, _lastState.InAnalysisMode);
+                _animC1 = GetAmbientColors(_lastState.HardpointsDeployed, _lastState.Mode);
                 _lastState = state;
             }
 
@@ -37,7 +58,7 @@ namespace EliteChroma.Core.Layers
                 StopAnimation();
             }
 
-            _animC2 = GetAmbientColors(hardpointsDeployed, inAnalysisMode);
+            _animC2 = GetAmbientColors(hardpointsDeployed, mode);
 
             var c = _animC2;
 
@@ -59,9 +80,22 @@ namespace EliteChroma.Core.Layers
             k[Key.Logo] = c.Logo;
         }
 
-        private AmbientColors GetAmbientColors(bool hardpointsDeployed, bool inAnalysisMode)
+        private AmbientColors GetAmbientColors(bool hardpointsDeployed, VehicleMode mode)
         {
-            var c = inAnalysisMode ? Game.Colors.AnalysisMode : Game.Colors.Hud;
+            Color c;
+            switch (mode)
+            {
+                case VehicleMode.Combat:
+                    c = Game.Colors.Hud;
+                    break;
+                case VehicleMode.Analysis:
+                    c = Game.Colors.AnalysisMode;
+                    break;
+                case VehicleMode.Landing:
+                default:
+                    c = Colors.LandingMode;
+                    break;
+            }
 
             return new AmbientColors
             {

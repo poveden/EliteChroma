@@ -79,6 +79,15 @@ namespace EliteChroma.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ambient Colors.
+        /// </summary>
+        internal static string Colors_Category_AmbientColors {
+            get {
+                return ResourceManager.GetString("Colors_Category_AmbientColors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Brightness Levels.
         /// </summary>
         internal static string Colors_Category_Brightness {
@@ -246,6 +255,15 @@ namespace EliteChroma.Properties {
         internal static string Colors_LandingGearRetracted {
             get {
                 return ResourceManager.GetString("Colors_LandingGearRetracted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Landing mode.
+        /// </summary>
+        internal static string Colors_LandingMode {
+            get {
+                return ResourceManager.GetString("Colors_LandingMode", resourceCulture);
             }
         }
         

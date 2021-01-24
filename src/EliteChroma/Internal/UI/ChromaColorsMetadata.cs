@@ -20,6 +20,7 @@ namespace EliteChroma.Internal.UI
         private const string _subsystemsCategory = _categoryPrefix + "Subsystems";
         private const string _thrustAttitudeCategory = _categoryPrefix + "ThrustAttitude";
         private const string _weaponsTargetingCategory = _categoryPrefix + "WeaponsTargeting";
+        private const string _ambientColorsCategory = _categoryPrefix + "AmbientColors";
 
         [Category(_brightnessCategory)]
         [TypeConverter(typeof(BrightnessConverter))]
@@ -175,6 +176,11 @@ namespace EliteChroma.Internal.UI
         [TypeConverter(typeof(ColoreColorConverter))]
         [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
         public Color PowerDistributorReset { get; set; }
+
+        [Category(_ambientColorsCategory)]
+        [TypeConverter(typeof(ColoreColorConverter))]
+        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
+        public Color LandingMode { get; set; }
 
         [Browsable(false)]
         public IReadOnlyList<Color> PowerDistributorScale { get; }
