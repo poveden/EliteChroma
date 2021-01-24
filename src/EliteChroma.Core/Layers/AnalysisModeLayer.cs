@@ -47,18 +47,6 @@ namespace EliteChroma.Core.Layers
             }
 
             ApplyColorToBinding(canvas.Keyboard, Weapons.DeployHardpointToggle, hColor);
-
-            var c = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? Game.Colors.AnalysisMode : Game.Colors.Hud;
-
-            if (!hardpointsDeployed)
-            {
-                c = c.Transform(Colors.DeviceDimBrightness);
-            }
-
-            canvas.Mouse.Set(c);
-            canvas.Mousepad.Set(c);
-            canvas.Headset.Set(c);
-            canvas.ChromaLink.Set(c);
         }
     }
 }
