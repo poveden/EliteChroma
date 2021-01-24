@@ -106,7 +106,7 @@ namespace EliteChroma.Core.Tests
 
             var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
 
-            CustomKeyboardEffect keyboard;
+            CustomKeyboardEffect? keyboard = null;
             Mock.Get(chroma.Object.Keyboard)
                 .Setup(x => x.SetCustomAsync(It.IsAny<CustomKeyboardEffect>()))
                 .Callback((CustomKeyboardEffect c) => keyboard = c);
@@ -126,33 +126,44 @@ namespace EliteChroma.Core.Tests
             await le.Render(chroma.Object, state).ConfigureAwait(false);
             Assert.False(game.InWitchSpace);
 
+            keyboard = null;
             game.Now += GameState.JumpCountdownDelay;
             await le.Render(chroma.Object, state).ConfigureAwait(false);
             Assert.True(game.InWitchSpace);
-            Assert.Equal(colors[0], keyboard[hyperJumpKey]);
+            Assert.Equal(colors[0], keyboard.Value[hyperJumpKey]);
 
             foreach (var color in colors.Skip(1))
             {
                 game.Now += TimeSpan.FromSeconds(stepSeconds);
                 await le.Render(chroma.Object, state).ConfigureAwait(false);
-                Assert.Equal(color, keyboard[hyperJumpKey]);
+                Assert.Equal(color, keyboard.Value[hyperJumpKey]);
             }
         }
 
         [Theory]
-        [InlineData(GameProcessState.NotRunning, 0x000000, 1.0)]
-        [InlineData(GameProcessState.InBackground, 0xFF8800, 1.0)]
-        [InlineData(GameProcessState.InForeground, 0xFF8800, 0.04)]
-        public async Task BackgroundLayerSetsAColorPerGameProcessState(GameProcessState processState, int rgbColor, double brightness)
+        [InlineData(false, GameProcessState.InForeground, null, null)]
+        [InlineData(false, GameProcessState.InBackground, 0x000000, 0xFF8800)]
+        [InlineData(false, GameProcessState.NotRunning, null, null)]
+        [InlineData(true, GameProcessState.NotRunning, null, null)]
+        [InlineData(true, GameProcessState.InForeground, 0xFF8800, null)]
+        public async Task GameInBackgroundLayerSetsAColorPerGameProcessState(bool wasInBackground, GameProcessState processState, int? startRgbColor, int? endRgbColor)
         {
+            const double fadeDurationSeconds = 1;
+
+            var expectedStartColor = startRgbColor.HasValue ? Color.FromRgb((uint)startRgbColor.Value) : (Color?)null;
+            var expectedEndColor = endRgbColor.HasValue ? Color.FromRgb((uint)endRgbColor.Value) : (Color?)null;
+
             var graphicsConfig = GraphicsConfig.FromFile(_gif.GraphicsConfiguration.FullName);
 
+            var bl = new GameInBackroundLayer();
+            bl.SetPrivateField("_inBackground", wasInBackground);
+
             var le = new LayeredEffect();
-            le.Add(new BackgroundLayer());
+            le.Add(bl);
 
             var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
 
-            CustomKeyboardEffect keyboard;
+            CustomKeyboardEffect? keyboard = null;
             Mock.Get(chroma.Object.Keyboard)
                 .Setup(x => x.SetCustomAsync(It.IsAny<CustomKeyboardEffect>()))
                 .Callback((CustomKeyboardEffect c) => keyboard = c);
@@ -167,13 +178,12 @@ namespace EliteChroma.Core.Tests
 
             game.Now = DateTimeOffset.UtcNow;
             await le.Render(chroma.Object, state).ConfigureAwait(false);
-            Assert.Equal(Color.Black, keyboard[0]);
+            Assert.Equal(expectedStartColor, keyboard?[(Key)0]);
 
-            var expectedColor = Color.FromRgb((uint)rgbColor).Transform(brightness);
-
-            game.Now += TimeSpan.FromSeconds(1);
+            keyboard = null;
+            game.Now += TimeSpan.FromSeconds(fadeDurationSeconds);
             await le.Render(chroma.Object, state).ConfigureAwait(false);
-            Assert.Equal(expectedColor, keyboard[0]);
+            Assert.Equal(expectedEndColor, keyboard?[(Key)0]);
         }
 
         private static Key GetKey(BindingPreset binds, string binding)
