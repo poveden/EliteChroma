@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Detect Epic Games installation folder
+- Add transition when changing vehicle modes
 
 ### Changed
 
