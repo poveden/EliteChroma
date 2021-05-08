@@ -247,8 +247,10 @@ namespace EliteFiles.Tests
             Assert.True(set2.Equals((object)set1));
             Assert.NotEqual<object>(set1, set3);
             Assert.NotEqual<object>(set3, set1);
+#pragma warning disable CA1508
             Assert.False(set1.Equals(null));
             Assert.False(set2.Equals(null));
+#pragma warning restore CA1508
             Assert.False(set1.Equals("Not a device key set"));
             Assert.False(set2.Equals("Not a device key set"));
         }

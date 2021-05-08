@@ -7,6 +7,8 @@
 <!--
         <Rule Id="CAXXXX" Action="None" />
 -->
+        <!-- Use generic event handler instances -->
+        <Rule Id="CA1003" Action="None" />
     </Rules>
 
     <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp" RuleNamespace="Microsoft.CodeAnalysis.CSharp">
