@@ -13,7 +13,7 @@ namespace EliteChroma.Core
 {
     public sealed class ChromaController : IDisposable
     {
-        private const int _defaultFps = 20; // Razer devices seem to choke at more than 20 fps.
+        private const int _defaultFps = 30; // Confirmed at Razer DevCon 2021.
 
         private readonly GameStateWatcher _watcher;
         private readonly LayeredEffect _effect;

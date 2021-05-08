@@ -99,6 +99,13 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
+        public void DefaultAnimationFrameRateIsSetTo30Fps()
+        {
+            using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
+            Assert.Equal(30, cc.AnimationFrameRate);
+        }
+
+        [Fact]
         public void CannotSetANegativeAnimationFrameRate()
         {
             using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
