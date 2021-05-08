@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Detect Epic Games installation folder
 
+### Changed
+
+- Increase animation rate to 30 fps.
+
 ## [1.10.0](https://github.com/poveden/EliteChroma/compare/v1.9.2...v1.10.0) — 2021-01-10
 
 ### Fixed
