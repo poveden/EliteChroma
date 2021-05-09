@@ -126,17 +126,21 @@ namespace EliteChroma.Core.Tests
             await le.Render(chroma.Object, state).ConfigureAwait(false);
             Assert.False(game.InWitchSpace);
 
-            keyboard = null;
             game.Now += GameState.JumpCountdownDelay;
             await le.Render(chroma.Object, state).ConfigureAwait(false);
             Assert.True(game.InWitchSpace);
-            Assert.Equal(colors[0], keyboard.Value[hyperJumpKey]);
+#pragma warning disable CA1508
+            Assert.Equal(colors[0], keyboard?[hyperJumpKey]);
+#pragma warning restore CA1508
 
             foreach (var color in colors.Skip(1))
             {
+                keyboard = null;
                 game.Now += TimeSpan.FromSeconds(stepSeconds);
                 await le.Render(chroma.Object, state).ConfigureAwait(false);
-                Assert.Equal(color, keyboard.Value[hyperJumpKey]);
+#pragma warning disable CA1508
+                Assert.Equal(color, keyboard?[hyperJumpKey]);
+#pragma warning restore CA1508
             }
         }
 
@@ -178,12 +182,16 @@ namespace EliteChroma.Core.Tests
 
             game.Now = DateTimeOffset.UtcNow;
             await le.Render(chroma.Object, state).ConfigureAwait(false);
+#pragma warning disable CA1508
             Assert.Equal(expectedStartColor, keyboard?[(Key)0]);
+#pragma warning restore CA1508
 
             keyboard = null;
             game.Now += TimeSpan.FromSeconds(fadeDurationSeconds);
             await le.Render(chroma.Object, state).ConfigureAwait(false);
+#pragma warning disable CA1508
             Assert.Equal(expectedEndColor, keyboard?[(Key)0]);
+#pragma warning restore CA1508
         }
 
         private static Key GetKey(BindingPreset binds, string binding)

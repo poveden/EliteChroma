@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EliteFiles.Status
 {
     /// <summary>
     /// Represents the various game status flags.
     /// </summary>
+    [SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "Respect Elite:Dangerous naming convention.")]
     [Flags]
     public enum Flags : long
     {

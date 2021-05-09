@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Common.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
@@ -20,11 +21,12 @@
   <!-- Build analyzers -->
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+      <!-- TODO: Remove when migrating to .NET 5 -->
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="IDisposableAnalyzers" Version="3.4.8">
+    <PackageReference Include="IDisposableAnalyzers" Version="3.4.13">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

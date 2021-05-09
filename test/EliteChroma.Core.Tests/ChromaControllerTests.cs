@@ -261,7 +261,7 @@ namespace EliteChroma.Core.Tests
 
                 var entryJson = JsonConvert.SerializeObject(data);
 
-                var json = $"{tsJson[0..^1]},{entryJson.Substring(1)}";
+                var json = $"{tsJson[0..^1]},{entryJson[1..]}";
 
                 return $"{json}\r\n";
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Colore.Data;
 using EliteChroma.Chroma;
 
@@ -16,6 +17,7 @@ namespace EliteChroma.Core.Layers
 
             private readonly Queue<Particle> _particles = new Queue<Particle>();
 
+            [SuppressMessage("Security", "CA5394:Do not use insecure randomness", Justification = "Simple randomness for particle generation.")]
             public void Add(double probability, Color color, double zps)
             {
                 while (probability >= 1)
