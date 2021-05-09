@@ -12,6 +12,17 @@ namespace EliteChroma.Chroma
     {
         private static readonly Key[] _allKeys = GetAllKeys();
 
+        public static CustomKeyboardEffect Combine(this CustomKeyboardEffect keyboard, Color c, double cPct = 0.5)
+        {
+            for (var i = 0; i < _allKeys.Length; i++)
+            {
+                var key = _allKeys[i];
+                keyboard[key] = keyboard[key].Combine(c, cPct);
+            }
+
+            return keyboard;
+        }
+
         public static CustomKeyboardEffect Max(this CustomKeyboardEffect keyboard, Color c)
         {
             for (var i = 0; i < _allKeys.Length; i++)
@@ -69,6 +80,16 @@ namespace EliteChroma.Chroma
             }
 
             return mousepad;
+        }
+
+        public static CustomKeypadEffect Combine(this CustomKeypadEffect keypad, Color c, double cPct = 0.5)
+        {
+            for (var i = 0; i < KeypadConstants.MaxKeys; i++)
+            {
+                keypad[i] = keypad[i].Combine(c, cPct);
+            }
+
+            return keypad;
         }
 
         public static CustomKeypadEffect Max(this CustomKeypadEffect keypad, Color c)

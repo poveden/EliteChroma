@@ -9,7 +9,7 @@ namespace EliteChroma.Core.Layers
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ChromaController.InitChromaEffect().")]
     internal sealed class InterfaceModeLayer : LayerBase
     {
-        public override int Order => 1000;
+        public override int Order => 900;
 
         protected override void OnRender(ChromaCanvas canvas)
         {

@@ -112,6 +112,8 @@ namespace EliteChroma.Core
 
         public Color PowerDistributorReset { get; set; } = new Color(0.5, 0.5, 0.5);
 
+        public Color LandingMode { get; set; } = Color.Blue;
+
         public IReadOnlyList<Color> PowerDistributorScale => _pips;
 
         private static double Clamp(double value, double min, double max, double nanFallback)

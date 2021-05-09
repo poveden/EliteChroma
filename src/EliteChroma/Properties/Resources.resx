@@ -279,4 +279,10 @@ Please choose the right folders in the following window.</value>
   <data name="FormatException_InvalidColorValue" xml:space="preserve">
     <value>Colors must be in the form 'RRGGBB', where 'RR', 'GG' and 'BB' are hexadecimal values in the range 00-FF.</value>
   </data>
+  <data name="Colors_Category_AmbientColors" xml:space="preserve">
+    <value>Ambient Colors</value>
+  </data>
+  <data name="Colors_LandingMode" xml:space="preserve">
+    <value>Landing mode</value>
+  </data>
 </root>
