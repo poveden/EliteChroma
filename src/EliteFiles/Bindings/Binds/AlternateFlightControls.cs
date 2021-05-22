@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class AlternateFlightControls
     {
+        /// <summary>
+        /// Gets the category of all <see cref="AlternateFlightControls"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.ShipControls;
+
 #pragma warning disable 1591, SA1600
         public const string Toggle = "UseAlternateFlightValuesToggle";
         public const string YawAxis = "YawAxisAlternate";
@@ -17,7 +22,7 @@ namespace EliteFiles.Bindings.Binds
 #pragma warning restore 1591, SA1600
 
         /// <summary>
-        /// Gets the collection of all <see cref="Cooling"/> bind names.
+        /// Gets the collection of all <see cref="AlternateFlightControls"/> bind names.
         /// </summary>
         public static IReadOnlyCollection<string> All { get; } = Binding.BuildGroup(typeof(AlternateFlightControls));
     }

@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class FlightRotation
     {
+        /// <summary>
+        /// Gets the category of all <see cref="FlightRotation"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.ShipControls;
+
 #pragma warning disable 1591, SA1600
         public const string YawAxisRaw = "YawAxisRaw";
         public const string YawLeft = "YawLeftButton";

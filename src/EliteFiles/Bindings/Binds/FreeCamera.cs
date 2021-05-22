@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class FreeCamera
     {
+        /// <summary>
+        /// Gets the category of all <see cref="FreeCamera"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.GeneralControls;
+
 #pragma warning disable 1591, SA1600
         public const string ToggleHUD = "FreeCamToggleHUD";
         public const string SpeedInc = "FreeCamSpeedInc";

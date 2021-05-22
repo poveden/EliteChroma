@@ -8,6 +8,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class Driving
     {
+        /// <summary>
+        /// Gets the category of all <see cref="Driving"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.SrvControls;
+
 #pragma warning disable 1591, SA1600
         public const string ToggleDriveAssist = "ToggleDriveAssist";
         public const string DriveAssistDefault = "DriveAssistDefault";

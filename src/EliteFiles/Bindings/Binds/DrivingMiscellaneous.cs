@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class DrivingMiscellaneous
     {
+        /// <summary>
+        /// Gets the category of all <see cref="DrivingMiscellaneous"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.SrvControls;
+
 #pragma warning disable 1591, SA1600
         public const string IncreaseEnginesPower = "IncreaseEnginesPower_Buggy";
         public const string IncreaseWeaponsPower = "IncreaseWeaponsPower_Buggy";

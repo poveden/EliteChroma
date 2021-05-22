@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class StoreCamera
     {
+        /// <summary>
+        /// Gets the category of all <see cref="StoreCamera"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.GeneralControls;
+
 #pragma warning disable 1591, SA1600
         public const string EnableRotation = "StoreEnableRotation";
         public const string PitchCamera = "StorePitchCamera";

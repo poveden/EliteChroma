@@ -20,6 +20,8 @@ namespace EliteFiles.Tests
         private const string _mainFile = @"ControlSchemes\Keyboard.binds";
         private const string _customFile = @"Bindings\Custom.3.0.binds";
 
+        private const int _bindingCategories = 4;
+
         private readonly GameInstallFolder _gif;
         private readonly GameOptionsFolder _gof;
 
@@ -183,6 +185,36 @@ namespace EliteFiles.Tests
                 {
                     Assert.True(allBinds.Add(bind));
                 }
+            }
+        }
+
+        [Fact]
+        public void BindingCategoryEntriesCorrespondToRowIndexesInTheStartPresetFile()
+        {
+            var allValues = (BindingCategory[])Enum.GetValues(typeof(BindingCategory));
+            Assert.Equal(_bindingCategories, allValues.Length);
+
+            for (var i = 0; i < allValues.Length; i++)
+            {
+                Assert.Equal(i, (int)allValues[i]);
+            }
+        }
+
+        [Fact]
+        public void BindNameCollectionsDefineACategoryField()
+        {
+            var types = typeof(BindingPreset).Assembly.GetTypes()
+                .Where(x => x.Namespace == "EliteFiles.Bindings.Binds")
+                .ToList();
+
+            Assert.NotEmpty(types);
+
+            foreach (var type in types)
+            {
+                var fi = type.GetField("Category", BindingFlags.Public | BindingFlags.Static);
+                var category = (BindingCategory)fi.GetValue(null);
+
+                Assert.True(Enum.IsDefined(typeof(BindingCategory), category));
             }
         }
 

@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class GalaxyMap
     {
+        /// <summary>
+        /// Gets the category of all <see cref="GalaxyMap"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.GeneralControls;
+
 #pragma warning disable 1591, SA1600
         public const string PitchAxis = "CamPitchAxis";
         public const string PitchUp = "CamPitchUp";

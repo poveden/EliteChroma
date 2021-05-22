@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class OnFootModeSwitches
     {
+        /// <summary>
+        /// Gets the category of all <see cref="OnFootModeSwitches"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.OnFootControls;
+
 #pragma warning disable 1591, SA1600
         public const string GalaxyMapOpen = "GalaxyMapOpen_Humanoid";
         public const string SystemMapOpen = "SystemMapOpen_Humanoid";

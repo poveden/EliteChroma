@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class DriveThrottle
     {
+        /// <summary>
+        /// Gets the category of all <see cref="DriveThrottle"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.SrvControls;
+
 #pragma warning disable 1591, SA1600
         public const string DriveSpeedAxis = "DriveSpeedAxis";
         public const string ThrottleRange = "BuggyThrottleRange";

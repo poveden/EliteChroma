@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class Weapons
     {
+        /// <summary>
+        /// Gets the category of all <see cref="Weapons"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.ShipControls;
+
 #pragma warning disable 1591, SA1600
         public const string PrimaryFire = "PrimaryFire";
         public const string SecondaryFire = "SecondaryFire";

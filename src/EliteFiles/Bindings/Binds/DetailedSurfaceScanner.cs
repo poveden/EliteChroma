@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class DetailedSurfaceScanner
     {
+        /// <summary>
+        /// Gets the category of all <see cref="DetailedSurfaceScanner"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.ShipControls;
+
 #pragma warning disable 1591, SA1600
         public const string ChangeScannedAreaViewToggle = "ExplorationSAAChangeScannedAreaViewToggle";
         public const string Exit = "ExplorationSAAExitThirdPerson";

@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class FlightThrottle
     {
+        /// <summary>
+        /// Gets the category of all <see cref="FlightThrottle"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.ShipControls;
+
 #pragma warning disable 1591, SA1600
         public const string Axis = "ThrottleAxis";
         public const string Range = "ThrottleRange";

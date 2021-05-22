@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class Playlist
     {
+        /// <summary>
+        /// Gets the category of all <see cref="Playlist"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.GeneralControls;
+
 #pragma warning disable 1591, SA1600
         public const string PlayPause = "GalnetAudio_Play_Pause";
         public const string SkipForward = "GalnetAudio_SkipForward";

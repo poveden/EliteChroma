@@ -52,7 +52,7 @@ namespace EliteFiles.Bindings
         internal static IReadOnlyCollection<string> BuildGroup(Type type)
         {
             return type.GetFields(BindingFlags.Public | BindingFlags.Static)
-                .Where(fi => fi.IsLiteral && !fi.IsInitOnly)
+                .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(string))
                 .Select(fi => (string)fi.GetValue(null))
                 .ToList()
                 .AsReadOnly();

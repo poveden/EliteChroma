@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class OnFoot
     {
+        /// <summary>
+        /// Gets the category of all <see cref="OnFoot"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.OnFootControls;
+
 #pragma warning disable 1591, SA1600
         public const string MouseXMode = "MouseHumanoidXMode";
         public const string MouseYMode = "MouseHumanoidYMode";
