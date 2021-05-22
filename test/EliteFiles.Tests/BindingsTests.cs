@@ -164,6 +164,29 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
+        public void BindNamesAreUnique()
+        {
+            var types = typeof(BindingPreset).Assembly.GetTypes()
+                .Where(x => x.Namespace == "EliteFiles.Bindings.Binds")
+                .ToList();
+
+            Assert.NotEmpty(types);
+
+            var allBinds = new HashSet<string>(StringComparer.Ordinal);
+
+            foreach (var type in types)
+            {
+                var pi = type.GetProperty("All", BindingFlags.Public | BindingFlags.Static);
+                var all = (IReadOnlyCollection<string>)pi.GetValue(null);
+
+                foreach (var bind in all)
+                {
+                    Assert.True(allBinds.Add(bind));
+                }
+            }
+        }
+
+        [Fact]
         public void WatcherThrowsWhenTheGameInstallFolderIsNotAValidInstallFolder()
         {
             var ex = Assert.Throws<ArgumentException>(() => { using var x = new BindingsWatcher(new GameInstallFolder(@"TestFiles"), _gof); });

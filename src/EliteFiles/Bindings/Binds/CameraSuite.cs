@@ -10,6 +10,7 @@ namespace EliteFiles.Bindings.Binds
 #pragma warning disable 1591, SA1600
         public const string Toggle = "PhotoCameraToggle";
         public const string BuggyToggle = "PhotoCameraToggle_Buggy";
+        public const string HumanoidToggle = "PhotoCameraToggle_Humanoid";
         public const string VanityCameraScrollLeft = "VanityCameraScrollLeft";
         public const string VanityCameraScrollRight = "VanityCameraScrollRight";
         public const string ToggleFreeCam = "ToggleFreeCam";

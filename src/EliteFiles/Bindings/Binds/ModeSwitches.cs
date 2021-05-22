@@ -29,6 +29,7 @@ namespace EliteFiles.Bindings.Binds
         public const string FriendsMenu = "FriendsMenu";
         public const string OpenCodexGoToDiscovery = "OpenCodexGoToDiscovery";
         public const string PlayerHUDModeToggle = "PlayerHUDModeToggle";
+        public const string ExplorationFssEnter = "ExplorationFSSEnter";
 #pragma warning restore 1591, SA1600
 
         /// <summary>

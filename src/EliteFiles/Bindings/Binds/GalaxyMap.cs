@@ -27,6 +27,7 @@ namespace EliteFiles.Bindings.Binds
         public const string ZoomIn = "CamZoomIn";
         public const string ZoomOut = "CamZoomOut";
         public const string TranslateZHold = "CamTranslateZHold";
+        public const string GalaxyMapHome = "GalaxyMapHome";
 #pragma warning restore 1591, SA1600
 
         /// <summary>

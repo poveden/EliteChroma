@@ -28,7 +28,6 @@ namespace EliteFiles.Bindings.Binds
         public const string ChargeECM = "ChargeECM";
         public const string EnableRumbleTrigger = "EnableRumbleTrigger";
         public const string EnableMenuGroups = "EnableMenuGroups";
-        public const string MouseGUI = "MouseGUI";
         public const string WeaponColourToggle = "WeaponColourToggle";
         public const string EngineColourToggle = "EngineColourToggle";
         public const string NightVisionToggle = "NightVisionToggle";

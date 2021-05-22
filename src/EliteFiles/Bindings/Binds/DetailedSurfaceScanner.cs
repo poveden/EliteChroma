@@ -10,6 +10,8 @@ namespace EliteFiles.Bindings.Binds
 #pragma warning disable 1591, SA1600
         public const string ChangeScannedAreaViewToggle = "ExplorationSAAChangeScannedAreaViewToggle";
         public const string Exit = "ExplorationSAAExitThirdPerson";
+        public const string NextGenus = "ExplorationSAANextGenus";
+        public const string PreviousGenus = "ExplorationSAAPreviousGenus";
         public const string MouseXMode = "SAAThirdPersonMouseXMode";
         public const string MouseXDecay = "SAAThirdPersonMouseXDecay";
         public const string MouseYMode = "SAAThirdPersonMouseYMode";
