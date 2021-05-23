@@ -87,6 +87,16 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
+        public void ToleratesMultilineStartPresets()
+        {
+            var expected = Path.Combine(_gof.FullName, @"Bindings\Custom.3.0.binds");
+            var file = BindingPreset.FindActivePresetFile(_gif, _gof, out var isCustom);
+
+            Assert.Equal(expected, file);
+            Assert.True(isCustom);
+        }
+
+        [Fact]
         public async Task WatcherRaisesTheChangedEventOnStart()
         {
             using var watcher = new BindingsWatcher(_gif, _gof);
