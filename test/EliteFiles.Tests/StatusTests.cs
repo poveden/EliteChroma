@@ -26,6 +26,12 @@ namespace EliteFiles.Tests
             Assert.Equal(new DateTimeOffset(2019, 1, 1, 0, 0, 39, TimeSpan.Zero), status.Timestamp);
             Assert.Equal("Status", status.Event);
             Assert.True(status.HasFlag(Flags.Docked));
+            Assert.True(status.HasFlag(Flags2.OnFootExterior));
+            Assert.Equal(1, status.Oxygen);
+            Assert.Equal(1, status.Health);
+            Assert.Equal(57.688763, status.Temperature);
+            Assert.Equal("$humanoid_rechargetool_name;", status.SelectedWeapon);
+            Assert.Equal(0.483871, status.Gravity);
             Assert.Equal(4, status.Pips.Sys);
             Assert.Equal(8, status.Pips.Eng);
             Assert.Equal(0, status.Pips.Wep);
@@ -37,9 +43,12 @@ namespace EliteFiles.Tests
             Assert.Equal(LegalState.Clean, status.LegalState);
             Assert.Equal(-12.955701, status.Latitude);
             Assert.Equal(6.249895, status.Longitude);
-            Assert.Equal(0, status.Heading);
-            Assert.Equal(0, status.Altitude);
-            Assert.Equal(1, status.AdditionalFields.Count);
+            Assert.Equal(49, status.Heading);
+            Assert.Equal(2516467, status.Altitude);
+            Assert.Equal("Shinrarta Dezhra A 1", status.BodyName);
+            Assert.Equal(5635897, status.PlanetRadius);
+            Assert.Equal(2, status.AdditionalFields.Count);
+            Assert.Equal("Energylink", status.AdditionalFields["SelectedWeapon_Localised"]);
             Assert.Equal("AdditionalValue1", status.AdditionalFields["AdditionalField1"]);
         }
 

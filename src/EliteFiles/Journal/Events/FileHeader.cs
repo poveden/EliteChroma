@@ -25,6 +25,12 @@ namespace EliteFiles.Journal.Events
         public string Language { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether the current journal is an Odyssey one.
+        /// </summary>
+        [JsonProperty("Odyssey")]
+        public bool Odyssey { get; private set; }
+
+        /// <summary>
         /// Gets the version of the game that created the journal file.
         /// </summary>
         [JsonProperty("gameversion")]
