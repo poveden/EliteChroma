@@ -121,11 +121,19 @@ namespace EliteChroma.Forms
                 if (!new GameInstallFolder(path).IsValid)
                 {
                     // Perhaps the user chose the base folder where all E:D variants are installed
-                    var ed64SubPath = Path.Combine(path, @"Products\elite-dangerous-64");
-
-                    if (new GameInstallFolder(ed64SubPath).IsValid)
+                    foreach (var edPath in new[]
                     {
-                        path = ed64SubPath;
+                        @"Products\elite-dangerous-64",
+                        @"Products\elite-dangerous-odyssey-64"
+                    })
+                    {
+                        var ed64SubPath = Path.Combine(path, edPath);
+
+                        if (new GameInstallFolder(ed64SubPath).IsValid)
+                        {
+                            path = ed64SubPath;
+                            break;
+                        }
                     }
                 }
 

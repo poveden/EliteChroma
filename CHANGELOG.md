@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Hotfix for Odyssey's multiple binding presets
 
+### Added
+
+- Add Odyssey to the list of default install folders
+
 ## [1.11.0](https://github.com/poveden/EliteChroma/compare/v1.10.0...v1.11.0) — 2021-05-10
 
 ### Added
