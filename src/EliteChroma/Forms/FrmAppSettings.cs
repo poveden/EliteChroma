@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EliteChroma.Core;
@@ -23,6 +24,7 @@ namespace EliteChroma.Forms
         private const string _colorsSection = "Colors";
 
         private readonly HashSet<string> _sectionErrors = new HashSet<string>(StringComparer.Ordinal);
+        private readonly List<ToolStripMenuItem> _gameInstallFolders;
 
         static FrmAppSettings()
         {
@@ -32,6 +34,9 @@ namespace EliteChroma.Forms
         public FrmAppSettings()
         {
             InitializeComponent();
+
+            _gameInstallFolders = CreateGameInstallFolderMenuItems();
+            tsmiGameInstallBrowse.Click += TsmiGameInstallBrowse_Click;
 
             ApplyLinks(linkGameFolders, new[]
             {
@@ -95,6 +100,30 @@ namespace EliteChroma.Forms
             linkLabel.Text = finalTxt.ToString();
         }
 
+        private List<ToolStripMenuItem> CreateGameInstallFolderMenuItems()
+        {
+            var res = new List<ToolStripMenuItem>();
+
+            var allPossibleFolders = EliteFiles.GameInstallFolder.DefaultPaths
+                .Concat(EliteFiles.GameInstallFolder.GetAlternatePaths())
+                .Where(Directory.Exists);
+
+            foreach (var folder in allPossibleFolders)
+            {
+                var mi = new ToolStripMenuItem
+                {
+                    Text = folder.Replace("&", "&&", StringComparison.Ordinal),
+                    Tag = folder,
+                };
+
+                mi.Click += TsmiGameInstallFolder_Click;
+
+                res.Add(mi);
+            }
+
+            return res;
+        }
+
         private void AppSettings_Load(object sender, EventArgs e)
         {
             tvSections.DrawMode = TreeViewDrawMode.OwnerDrawText;
@@ -106,10 +135,30 @@ namespace EliteChroma.Forms
 
             pgColors.SelectedGridItem = pgColors.GetGridItems()[0];
 
+            for (var i = 0; i < _gameInstallFolders.Count; i++)
+            {
+                ctxGameInstall.Items.Insert(i, _gameInstallFolders[i]);
+            }
+
             ValidateChildren();
         }
 
-        private void BtnGameInstall_Click(object sender, EventArgs e)
+        private void CtxGameInstall_Opening(object sender, CancelEventArgs e)
+        {
+            foreach (var item in _gameInstallFolders)
+            {
+                item.Checked = txtGameInstall.Text == (string)item.Tag;
+            }
+        }
+
+        private void TsmiGameInstallFolder_Click(object sender, EventArgs e)
+        {
+            var item = (ToolStripMenuItem)sender;
+            txtGameInstall.Text = (string)item.Tag;
+            ValidateChildren();
+        }
+
+        private void TsmiGameInstallBrowse_Click(object sender, EventArgs e)
         {
             folderBrowser.Description = "Select the folder where Elite:Dangerous is installed:";
             folderBrowser.SelectedPath = txtGameInstall.Text;
