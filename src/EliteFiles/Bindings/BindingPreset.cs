@@ -102,7 +102,7 @@ namespace EliteFiles.Bindings
             {
                 using (var sr = new StreamReader(fs))
                 {
-                    bindsName = sr.ReadToEnd();
+                    bindsName = sr.ReadLine();
                 }
             }
 

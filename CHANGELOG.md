@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased](https://github.com/poveden/EliteChroma/compare/v1.11.0...HEAD)
+
+### Fixed
+
+- Hotfix for Odyssey's multiple binding presets
+
 ## [1.11.0](https://github.com/poveden/EliteChroma/compare/v1.10.0...v1.11.0) — 2021-05-10
 
 ### Added
