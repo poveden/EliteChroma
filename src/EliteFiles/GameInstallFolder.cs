@@ -29,10 +29,14 @@ namespace EliteFiles
             return new[]
             {
                 Path.Combine(programFilesFolder, @"Frontier\Products\elite-dangerous-64"),
+                Path.Combine(programFilesFolder, @"Frontier\Products\elite-dangerous-odyssey-64"),
                 Path.Combine(programFilesFolder, @"Epic Games\EliteDangerous\Products\elite-dangerous-64"),
+                Path.Combine(programFilesFolder, @"Epic Games\EliteDangerous\Products\elite-dangerous-odyssey-64"),
                 Path.Combine(programFilesFolder, @"Steam\steamapps\common\Elite Dangerous\Products\elite-dangerous-64"),
+                Path.Combine(programFilesFolder, @"Steam\steamapps\common\Elite Dangerous\Products\elite-dangerous-odyssey-64"),
                 Path.Combine(programFilesFolder, @"Oculus\Software\frontier-developments-plc-elite-dangerous"),
                 Path.Combine(localAppDataFolder, @"Frontier_Developments\Products\elite-dangerous-64"),
+                Path.Combine(localAppDataFolder, @"Frontier_Developments\Products\elite-dangerous-odyssey-64"),
             };
         });
 
@@ -110,6 +114,7 @@ namespace EliteFiles
             if (launcherPath != null)
             {
                 yield return Path.Combine(launcherPath, @"Products\elite-dangerous-64");
+                yield return Path.Combine(launcherPath, @"Products\elite-dangerous-odyssey-64");
             }
 
             var steamLibraryFolders = SteamLibraryFolders.FromFile(SteamLibraryFolders.DefaultPath);
@@ -119,6 +124,7 @@ namespace EliteFiles
                 foreach (var folder in steamLibraryFolders)
                 {
                     yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-64");
+                    yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-odyssey-64");
                 }
             }
         }

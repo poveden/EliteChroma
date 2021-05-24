@@ -44,7 +44,10 @@
             this.lblJournal = new System.Windows.Forms.Label();
             this.btnGameOptions = new System.Windows.Forms.Button();
             this.lblGameOptions = new System.Windows.Forms.Label();
-            this.btnGameInstall = new System.Windows.Forms.Button();
+            this.btnGameInstall = new EliteChroma.Controls.MenuButton();
+            this.ctxGameInstall = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tssGameInstall = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiGameInstallBrowse = new System.Windows.Forms.ToolStripMenuItem();
             this.lblGameInstall = new System.Windows.Forms.Label();
             this.linkGameFolders = new System.Windows.Forms.LinkLabel();
             this.tvSections = new System.Windows.Forms.TreeView();
@@ -55,6 +58,7 @@
             this.pgColors = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.grpEDFolders.SuspendLayout();
+            this.ctxGameInstall.SuspendLayout();
             this.pnlKeyboard.SuspendLayout();
             this.pnlColors.SuspendLayout();
             this.SuspendLayout();
@@ -207,12 +211,33 @@
             this.btnGameInstall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGameInstall.Location = new System.Drawing.Point(394, 39);
             this.btnGameInstall.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnGameInstall.Menu = this.ctxGameInstall;
+            this.btnGameInstall.MenuHorizontalDirection = EliteChroma.Controls.MenuButton.HorizontalDirection.Left;
             this.btnGameInstall.Name = "btnGameInstall";
             this.btnGameInstall.Size = new System.Drawing.Size(75, 24);
             this.btnGameInstall.TabIndex = 3;
             this.btnGameInstall.Text = "Select...";
             this.btnGameInstall.UseVisualStyleBackColor = true;
-            this.btnGameInstall.Click += new System.EventHandler(this.BtnGameInstall_Click);
+            // 
+            // ctxGameInstall
+            // 
+            this.ctxGameInstall.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tssGameInstall,
+            this.tsmiGameInstallBrowse});
+            this.ctxGameInstall.Name = "ctxGameInstall";
+            this.ctxGameInstall.Size = new System.Drawing.Size(122, 32);
+            this.ctxGameInstall.Opening += new System.ComponentModel.CancelEventHandler(this.CtxGameInstall_Opening);
+            // 
+            // tssGameInstall
+            // 
+            this.tssGameInstall.Name = "tssGameInstall";
+            this.tssGameInstall.Size = new System.Drawing.Size(118, 6);
+            // 
+            // tsmiGameInstallBrowse
+            // 
+            this.tsmiGameInstallBrowse.Name = "tsmiGameInstallBrowse";
+            this.tsmiGameInstallBrowse.Size = new System.Drawing.Size(121, 22);
+            this.tsmiGameInstallBrowse.Text = "Browse...";
             // 
             // lblGameInstall
             // 
@@ -348,6 +373,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.grpEDFolders.ResumeLayout(false);
             this.grpEDFolders.PerformLayout();
+            this.ctxGameInstall.ResumeLayout(false);
             this.pnlKeyboard.ResumeLayout(false);
             this.pnlKeyboard.PerformLayout();
             this.pnlColors.ResumeLayout(false);
@@ -368,7 +394,7 @@
         private System.Windows.Forms.Button btnGameOptions;
         private System.Windows.Forms.TextBox txtGameOptions;
         private System.Windows.Forms.Label lblGameOptions;
-        private System.Windows.Forms.Button btnGameInstall;
+        private Controls.MenuButton btnGameInstall;
         private System.Windows.Forms.TextBox txtGameInstall;
         private System.Windows.Forms.Label lblGameInstall;
         private System.Windows.Forms.LinkLabel linkGameFolders;
@@ -378,5 +404,8 @@
         private System.Windows.Forms.CheckBox chEnUSOverride;
         private System.Windows.Forms.Panel pnlColors;
         private System.Windows.Forms.PropertyGrid pgColors;
+        private System.Windows.Forms.ContextMenuStrip ctxGameInstall;
+        private System.Windows.Forms.ToolStripSeparator tssGameInstall;
+        private System.Windows.Forms.ToolStripMenuItem tsmiGameInstallBrowse;
     }
 }
