@@ -89,13 +89,98 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
-        public void ToleratesMultilineStartPresets()
+        public void SupportsSingleLineStartPresets()
         {
-            var expected = Path.Combine(_gof.FullName, @"Bindings\Custom.3.0.binds");
-            var file = BindingPreset.FindActivePresetFile(_gif, _gof, out var isCustom);
+            using var dirOpts = new TestFolder(_gof.FullName);
+            dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom");
 
-            Assert.Equal(expected, file);
-            Assert.True(isCustom);
+            var gof = new GameOptionsFolder(dirOpts.Name);
+            Assert.True(gof.IsValid);
+
+            var files = BindingPreset.FindActivePresetFiles(_gif, gof);
+            Assert.Equal(_bindingCategories, files.Count);
+
+            var expectedFile = dirOpts.Resolve(@"Bindings\Custom.3.0.binds");
+            Assert.All(files.Values, x => Assert.Equal(expectedFile, x));
+        }
+
+        [Fact]
+        public void SupportsMultilineStartPresets()
+        {
+            using var dirOpts = new TestFolder(_gof.FullName);
+            dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2\nMalformed\nKeyboard");
+
+            var gof = new GameOptionsFolder(dirOpts.Name);
+            Assert.True(gof.IsValid);
+
+            var files = BindingPreset.FindActivePresetFiles(_gif, gof);
+            Assert.Equal(_bindingCategories, files.Count);
+
+            var expected = new Dictionary<BindingCategory, string>
+            {
+                [BindingCategory.GeneralControls] = dirOpts.Resolve(@"Bindings\Custom.3.0.binds"),
+                [BindingCategory.ShipControls] = dirOpts.Resolve(@"Bindings\Custom2.3.0.binds"),
+                [BindingCategory.SrvControls] = dirOpts.Resolve(@"Bindings\Malformed.3.0.binds"),
+                [BindingCategory.OnFootControls] = Path.Combine(_gif.FullName, @"ControlSchemes\Keyboard.binds"),
+            };
+
+            foreach (var category in expected.Keys)
+            {
+                Assert.Equal(expected[category], files[category]);
+            }
+        }
+
+        [Fact]
+        public void FindActivePresetFilesReturnsNullWhenAPresetFileIsMissing()
+        {
+            using var dirOpts = new TestFolder(_gof.FullName);
+            dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2\nMISSING_PRESET\nKeyboard");
+
+            var gof = new GameOptionsFolder(dirOpts.Name);
+            Assert.True(gof.IsValid);
+
+            var files = BindingPreset.FindActivePresetFiles(_gif, gof);
+            Assert.Null(files);
+        }
+
+        [Fact]
+        public void FindActivePresetFilesReturnsNullWhenNeither1Or4PresetFilesAreDefined()
+        {
+            using var dirOpts = new TestFolder(_gof.FullName);
+            dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2");
+
+            var gof = new GameOptionsFolder(dirOpts.Name);
+            Assert.True(gof.IsValid);
+
+            var files = BindingPreset.FindActivePresetFiles(_gif, gof);
+            Assert.Null(files);
+        }
+
+        [Fact]
+        public void FindActivePresetFilesIncludesUnknownCategories()
+        {
+            using var dirOpts = new TestFolder(_gof.FullName);
+            dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2\nKeyboard\nCustom\nCustom2");
+
+            var gof = new GameOptionsFolder(dirOpts.Name);
+            Assert.True(gof.IsValid);
+
+            var files = BindingPreset.FindActivePresetFiles(_gif, gof);
+            Assert.Equal(_bindingCategories + 1, files.Count);
+
+            var expected = new Dictionary<BindingCategory, string>
+            {
+                [BindingCategory.GeneralControls] = dirOpts.Resolve(@"Bindings\Custom.3.0.binds"),
+                [BindingCategory.ShipControls] = dirOpts.Resolve(@"Bindings\Custom2.3.0.binds"),
+                [BindingCategory.SrvControls] = Path.Combine(_gif.FullName, @"ControlSchemes\Keyboard.binds"),
+                [BindingCategory.OnFootControls] = dirOpts.Resolve(@"Bindings\Custom.3.0.binds"),
+                [(BindingCategory)4] = dirOpts.Resolve(@"Bindings\Custom2.3.0.binds"),
+            };
+
+            foreach (var category in expected.Keys)
+            {
+                Assert.Equal(expected[category], files[category]);
+            }
         }
 
         [Fact]
@@ -110,13 +195,13 @@ namespace EliteFiles.Tests
                 watcher.Stop();
             }).ConfigureAwait(false);
 
-            Assert.Equal("Custom", binds.PresetName);
+            Assert.Null(binds.PresetName); // "Custom" and "Custom2" get merged to null.
             Assert.Equal(new Version(3, 0), binds.Version);
             Assert.Equal("es-ES", binds.KeyboardLayout);
 
             var k = binds.Bindings["Supercruise"].Primary;
             Assert.Equal("Keyboard", k.Device);
-            Assert.Equal("Key_J", k.Key);
+            Assert.Equal("Key_H", k.Key);
             Assert.Equal(2, k.Modifiers.Count);
             var modifiers = k.Modifiers.OrderBy(x => x.Key).ToList();
             Assert.Equal("Keyboard", modifiers[0].Device);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Root PresetName="Custom" MajorVersion="3" MinorVersion="0">
+<Root PresetName="Custom2" MajorVersion="3" MinorVersion="0">
 	<KeyboardLayout>es-ES</KeyboardLayout>
 	<HyperSuperCombination>
 		<Primary Device="Keyboard" Key="Key_H" />
