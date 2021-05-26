@@ -44,7 +44,7 @@ namespace EliteChroma.Core.Layers
             if (Game.Status.HasFlag(Flags.Supercruise))
             {
                 ApplyColorToBinding(canvas.Keyboard, SupercruiseMiscellaneous, Colors.Miscellaneous);
-                ApplyColorToBinding(canvas.Keyboard, FullSpectrumSystemScanner.Enter, Colors.FullSpectrumSystemScanner);
+                ApplyColorToBinding(canvas.Keyboard, ModeSwitches.ExplorationFssEnter, Colors.FullSpectrumSystemScanner);
             }
             else
             {

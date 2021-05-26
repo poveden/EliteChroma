@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using EliteFiles.Internal;
 
 namespace EliteFiles.Bindings
@@ -57,6 +59,7 @@ namespace EliteFiles.Bindings
 
             Reload();
             _startPresetWatcher.Start();
+            _customBindsWatcher.Start();
             _running = true;
         }
 
@@ -97,33 +100,41 @@ namespace EliteFiles.Bindings
 
         private void Reload()
         {
-            var isCustom = false;
-
-            var bindsFile = FileOperations.RetryIfNull(
-                () => BindingPreset.FindActivePresetFile(_gameInstallFolder, _gameOptionsFolder, out isCustom),
+            var bindsFiles = FileOperations.RetryIfNull(
+                () => BindingPreset.FindActivePresetFiles(_gameInstallFolder, _gameOptionsFolder),
                 _reloadRetries);
 
-            if (bindsFile == null)
+            if (bindsFiles == null)
             {
                 return;
             }
 
-            var bindingPreset = FileOperations.RetryIfNull(
-                () => BindingPreset.FromFile(bindsFile),
-                _reloadRetries);
+            var uniquePresets = new Dictionary<string, BindingPreset>(StringComparer.Ordinal);
 
-            if (isCustom)
+            foreach (var bindsFile in bindsFiles.Values)
             {
-                _customBindsWatcher.Filter = Path.GetFileName(bindsFile);
-                _customBindsWatcher.Start();
+                if (uniquePresets.ContainsKey(bindsFile))
+                {
+                    continue;
+                }
+
+                var bindingPreset = FileOperations.RetryIfNull(
+                    () => BindingPreset.FromFile(bindsFile),
+                    _reloadRetries);
+
+                if (bindingPreset == null)
+                {
+                    return;
+                }
+
+                uniquePresets.Add(bindsFile, bindingPreset);
             }
 
-            if (bindingPreset == null)
-            {
-                return;
-            }
+            var binds = bindsFiles.ToDictionary(kv => kv.Key, kv => uniquePresets[kv.Value]);
 
-            Changed?.Invoke(this, bindingPreset);
+            var merged = BindingPreset.MergeFromCategories(binds);
+
+            Changed?.Invoke(this, merged);
         }
     }
 }

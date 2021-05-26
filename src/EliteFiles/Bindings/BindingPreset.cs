@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using EliteFiles.Bindings.Binds;
 
 namespace EliteFiles.Bindings
 {
@@ -12,6 +14,9 @@ namespace EliteFiles.Bindings
     /// </summary>
     public sealed class BindingPreset
     {
+        private static readonly int _numBindingCategories = Enum.GetValues(typeof(BindingCategory)).Length;
+        private static readonly IReadOnlyDictionary<string, BindingCategory> _bindNameCategories = BuildBindNameCategoryMap();
+
         private readonly Dictionary<string, Binding> _dict = new Dictionary<string, Binding>(StringComparer.Ordinal);
 
         private BindingPreset()
@@ -85,37 +90,103 @@ namespace EliteFiles.Bindings
         }
 
         /// <summary>
-        /// Gets the path of the currently active binding preset file.
+        /// Merges <see cref="BindingPreset"/> objects from different binding categories into a single object.
+        /// </summary>
+        /// <param name="categoryBindingPresets">The collection of binding presets per category.</param>
+        /// <returns>The merged bindings preset.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="categoryBindingPresets"/> is <c>null</c>.</exception>
+        /// <remarks>
+        /// Starting from Odyssey, bindings have been splitted into categories. Each <see cref="BindingPreset"/> object
+        /// contains a full set of bindings. However, since each category may be assigned in game a different preset,
+        /// (via the <c>StartPreset.start</c> file, only a section of the preset will apply.
+        /// This method picks all relevant bindings from the corresponding presets, and puts them together into a single preset.
+        /// </remarks>
+        public static BindingPreset MergeFromCategories(IReadOnlyDictionary<BindingCategory, BindingPreset> categoryBindingPresets)
+        {
+            _ = categoryBindingPresets ?? throw new ArgumentNullException(nameof(categoryBindingPresets));
+
+            T UniqueOrDefault<T>(Func<BindingPreset, T> selector, IEqualityComparer<T> comparer = null)
+            {
+                var distinct = new HashSet<T>(categoryBindingPresets.Values.Select(selector), comparer);
+                return distinct.Count == 1 ? distinct.Single() : default;
+            }
+
+            var res = new BindingPreset
+            {
+                PresetName = UniqueOrDefault(x => x.PresetName, StringComparer.Ordinal),
+                Version = UniqueOrDefault(x => x.Version),
+                KeyboardLayout = UniqueOrDefault(x => x.KeyboardLayout, StringComparer.OrdinalIgnoreCase),
+            };
+
+            foreach (var kv in _bindNameCategories)
+            {
+                if (!categoryBindingPresets.TryGetValue(kv.Value, out var bindingPreset) || bindingPreset == null)
+                {
+                    continue;
+                }
+
+                if (!bindingPreset.Bindings.TryGetValue(kv.Key, out var binding))
+                {
+                    continue;
+                }
+
+                res._dict.Add(kv.Key, binding);
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// Gets the paths of the currently active binding preset files per category.
         /// </summary>
         /// <param name="gameInstallFolder">The path to the game installation folder.</param>
         /// <param name="gameOptionsFolder">The path to the game options folder.</param>
-        /// <param name="isCustom"><c>true</c> if the returned file is a custom preset; <c>false</c> if it's a game preset file.</param>
         /// <returns>The path to the file, or <c>null</c> if no active preset could be found.</returns>
-        public static string FindActivePresetFile(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder, out bool isCustom)
+        public static IReadOnlyDictionary<BindingCategory, string> FindActivePresetFiles(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder)
         {
             GameInstallFolder.AssertValid(gameInstallFolder);
             GameOptionsFolder.AssertValid(gameOptionsFolder);
 
-            string bindsName;
+            var bindsFiles = new Dictionary<BindingCategory, string>(_numBindingCategories);
 
             using (var fs = gameOptionsFolder.BindingsStartPreset.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 using (var sr = new StreamReader(fs))
                 {
-                    bindsName = sr.ReadLine();
+                    string bindsName;
+                    for (var i = 0; (bindsName = sr.ReadLine()) != null; i++)
+                    {
+                        var bindsFile =
+                            TryGetBindingsFilePath(gameOptionsFolder.Bindings, bindsName)
+                            ?? TryGetBindingsFilePath(gameInstallFolder.ControlSchemes, bindsName);
+
+                        if (bindsFile == null)
+                        {
+                            return null;
+                        }
+
+                        bindsFiles.Add((BindingCategory)i, bindsFile);
+                    }
                 }
             }
 
-            var customBindsFile = TryGetBindingsFilePath(gameOptionsFolder.Bindings, bindsName);
-
-            if (customBindsFile != null)
+            if (bindsFiles.Count == 1)
             {
-                isCustom = true;
-                return customBindsFile;
+                // Pre-Odyssey behaviour.
+                for (var i = 1; i < _numBindingCategories; i++)
+                {
+                    bindsFiles[(BindingCategory)i] = bindsFiles[0];
+                }
+
+                return bindsFiles;
             }
 
-            isCustom = false;
-            return TryGetBindingsFilePath(gameInstallFolder.ControlSchemes, bindsName);
+            if (bindsFiles.Count >= _numBindingCategories)
+            {
+                return bindsFiles;
+            }
+
+            return null;
         }
 
         private static string TryGetBindingsFilePath(DirectoryInfo path, string bindsName)
@@ -128,6 +199,28 @@ namespace EliteFiles.Bindings
                 select file.FullName;
 
             return matches.FirstOrDefault();
+        }
+
+        private static IReadOnlyDictionary<string, BindingCategory> BuildBindNameCategoryMap()
+        {
+            var res = new Dictionary<string, BindingCategory>(StringComparer.Ordinal);
+
+            var allBinds =
+                from type in typeof(InterfaceMode).Assembly.GetTypes()
+                where type.Namespace == typeof(InterfaceMode).Namespace
+                let category = (BindingCategory)type.GetField(nameof(InterfaceMode.Category), BindingFlags.Public | BindingFlags.Static).GetValue(null)
+                let allNames = (IReadOnlyCollection<string>)type.GetProperty(nameof(InterfaceMode.All), BindingFlags.Public | BindingFlags.Static).GetValue(null)
+                select (category, allNames);
+
+            foreach (var (category, allNames) in allBinds)
+            {
+                foreach (var name in allNames)
+                {
+                    res.Add(name, category);
+                }
+            }
+
+            return res;
         }
     }
 }

@@ -7,6 +7,11 @@ namespace EliteFiles.Bindings.Binds
     /// </summary>
     public static class Miscellaneous
     {
+        /// <summary>
+        /// Gets the category of all <see cref="Miscellaneous"/> bind names.
+        /// </summary>
+        public const BindingCategory Category = BindingCategory.ShipControls;
+
 #pragma warning disable 1591, SA1600
         public const string ShipSpotLightToggle = "ShipSpotLightToggle";
         public const string RadarRangeAxis = "RadarRangeAxis";
@@ -28,7 +33,6 @@ namespace EliteFiles.Bindings.Binds
         public const string ChargeECM = "ChargeECM";
         public const string EnableRumbleTrigger = "EnableRumbleTrigger";
         public const string EnableMenuGroups = "EnableMenuGroups";
-        public const string MouseGUI = "MouseGUI";
         public const string WeaponColourToggle = "WeaponColourToggle";
         public const string EngineColourToggle = "EngineColourToggle";
         public const string NightVisionToggle = "NightVisionToggle";
