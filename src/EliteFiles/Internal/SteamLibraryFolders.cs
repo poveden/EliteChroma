@@ -54,7 +54,7 @@ namespace EliteFiles.Internal
 
                     if (m.Success)
                     {
-                        folders.Add(m.Groups[1].Value.Replace(@"\\", @"\"));
+                        folders.Add(m.Groups[1].Value.Replace(@"\\", @"\", StringComparison.Ordinal));
                     }
 
                     line = sr.ReadLine()?.Trim();

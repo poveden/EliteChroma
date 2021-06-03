@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Update solution to .NET 5.0
 - Tolerate malformed graphics configuration files, binding presets
 
 ## [1.12.0](https://github.com/poveden/EliteChroma/compare/v1.11.0...v1.12.0) — 2021-05-24

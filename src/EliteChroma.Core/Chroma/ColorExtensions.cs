@@ -18,9 +18,9 @@ namespace EliteChroma.Chroma
             var g2 = c2.G * c2pct;
             var b2 = c2.B * c2pct;
 
-            var r = EnsureBound((r1 + r2) / 255.0);
-            var g = EnsureBound((g1 + g2) / 255.0);
-            var b = EnsureBound((b1 + b2) / 255.0);
+            var r = Math.Clamp((r1 + r2) / 255.0, 0, 1);
+            var g = Math.Clamp((g1 + g2) / 255.0, 0, 1);
+            var b = Math.Clamp((b1 + b2) / 255.0, 0, 1);
 
             return new Color(r, g, b);
         }
@@ -60,9 +60,9 @@ namespace EliteChroma.Chroma
                 (transform[2, 1] * c1) +
                 (transform[2, 2] * c2);
 
-            r = EnsureBound(r);
-            g = EnsureBound(g);
-            b = EnsureBound(b);
+            r = Math.Clamp(r, 0, 1);
+            g = Math.Clamp(g, 0, 1);
+            b = Math.Clamp(b, 0, 1);
 
             return new Color(r, g, b);
         }
@@ -87,26 +87,11 @@ namespace EliteChroma.Chroma
                 b = Math.Pow(b, gamma);
             }
 
-            r = EnsureBound(r);
-            g = EnsureBound(g);
-            b = EnsureBound(b);
+            r = Math.Clamp(r, 0, 1);
+            g = Math.Clamp(g, 0, 1);
+            b = Math.Clamp(b, 0, 1);
 
             return new Color(r, g, b);
-        }
-
-        private static double EnsureBound(double v)
-        {
-            if (v < 0)
-            {
-                return 0;
-            }
-
-            if (v > 1)
-            {
-                return 1;
-            }
-
-            return v;
         }
     }
 }

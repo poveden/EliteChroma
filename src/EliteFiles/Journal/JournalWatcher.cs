@@ -144,7 +144,7 @@ namespace EliteFiles.Journal
             }
             catch (Exception ex)
             {
-                // Reference: https://docs.microsoft.com/en-us/dotnet/api/system.timers.timer?view=netcore-3.1#remarks
+                // Reference: https://docs.microsoft.com/en-us/dotnet/api/system.timers.timer?view=netcore-5.0#remarks
                 await Task.FromException(ex).ConfigureAwait(false);
             }
         }
