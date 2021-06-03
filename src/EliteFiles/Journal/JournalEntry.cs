@@ -10,7 +10,7 @@ namespace EliteFiles.Journal
     /// Represents an Elite:Dangerous player journal entry.
     /// </summary>
     /// <remarks>
-    /// Reference: <a href="http://hosting.zaonce.net/community/journal/v26/Journal-Manual-v26.pdf">Elite:Dangerous Player Journal</a>.
+    /// Reference: <a href="https://hosting.zaonce.net/community/journal/v31/Journal_Manual_v31.pdf">Elite:Dangerous Player Journal</a>.
     /// </remarks>
     [JsonConverter(typeof(JournalEntryConverter))]
     public class JournalEntry

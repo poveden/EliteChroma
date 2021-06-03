@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Add support for Odyssey's binding preset categories
+- Add Odyssey journal fields
 
 ## [1.12.0](https://github.com/poveden/EliteChroma/compare/v1.11.0...v1.12.0) — 2021-05-24
 

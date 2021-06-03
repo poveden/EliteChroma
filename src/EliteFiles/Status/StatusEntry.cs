@@ -11,7 +11,7 @@ namespace EliteFiles.Status
     /// Represents an Elite:Dangerous game status entry.
     /// </summary>
     /// <remarks>
-    /// Reference: <a href="http://hosting.zaonce.net/community/journal/v26/Journal-Manual-v26.pdf">Elite:Dangerous Player Journal</a>.
+    /// Reference: <a href="https://hosting.zaonce.net/community/journal/v31/Journal_Manual_v31.pdf">Elite:Dangerous Player Journal</a>.
     /// </remarks>
     public sealed class StatusEntry
     {
@@ -39,6 +39,42 @@ namespace EliteFiles.Status
         /// </summary>
         [JsonProperty("Flags")]
         public Flags Flags { get; private set; }
+
+        /// <summary>
+        /// Gets the game status flags.
+        /// </summary>
+        [JsonProperty("Flags2")]
+        public Flags2 Flags2 { get; private set; }
+
+        /// <summary>
+        /// Gets the oxygen level when on foot.
+        /// </summary>
+        [JsonProperty("Oxygen")]
+        public double? Oxygen { get; private set; }
+
+        /// <summary>
+        /// Gets the health level when on foot.
+        /// </summary>
+        [JsonProperty("Health")]
+        public double? Health { get; private set; }
+
+        /// <summary>
+        /// Gets the ambient temperature when on foot.
+        /// </summary>
+        [JsonProperty("Temperature")]
+        public double? Temperature { get; private set; }
+
+        /// <summary>
+        /// Gets the selected weapon when on foot.
+        /// </summary>
+        [JsonProperty("SelectedWeapon")]
+        public string SelectedWeapon { get; private set; }
+
+        /// <summary>
+        /// Gets the gravity amount when on foot.
+        /// </summary>
+        [JsonProperty("Gravity")]
+        public double? Gravity { get; private set; }
 
         /// <summary>
         /// Gets the current ship's power distributor status.
@@ -102,6 +138,18 @@ namespace EliteFiles.Status
         public double? Altitude { get; private set; }
 
         /// <summary>
+        /// Gets the body name.
+        /// </summary>
+        [JsonProperty("BodyName")]
+        public string BodyName { get; private set; }
+
+        /// <summary>
+        /// Gets the planet radius.
+        /// </summary>
+        [JsonProperty("PlanetRadius")]
+        public double? PlanetRadius { get; private set; }
+
+        /// <summary>
         /// Gets a collection of additional fields that may be included in the status.
         /// </summary>
         public IReadOnlyDictionary<string, JToken> AdditionalFields => _additionalFields;
@@ -134,5 +182,12 @@ namespace EliteFiles.Status
         /// <param name="flag">The flag to check.</param>
         /// <returns><c>true</c> if the flag is set; otherwise, <c>false</c>.</returns>
         public bool HasFlag(Flags flag) => Flags.HasFlag(flag);
+
+        /// <summary>
+        /// Returns a value indicating wheter the given flag is currently set.
+        /// </summary>
+        /// <param name="flag">The flag to check.</param>
+        /// <returns><c>true</c> if the flag is set; otherwise, <c>false</c>.</returns>
+        public bool HasFlag(Flags2 flag) => Flags2.HasFlag(flag);
     }
 }
