@@ -6,6 +6,7 @@ using Colore.Effects.Keyboard;
 using EliteChroma.Chroma;
 using EliteChroma.Core.Internal;
 using EliteChroma.Elite;
+using EliteFiles.Bindings;
 using EliteFiles.Bindings.Devices;
 
 namespace EliteChroma.Core
@@ -38,7 +39,7 @@ namespace EliteChroma.Core
 
         protected override void OnRender(ChromaCanvas canvas, object state)
         {
-            var rs = (LayerRenderState)state ?? throw new ArgumentNullException(nameof(state));
+            LayerRenderState rs = (LayerRenderState)state ?? throw new ArgumentNullException(nameof(state));
             Game = rs.GameState;
             Colors = rs.Colors;
             OnRender(canvas);
@@ -71,29 +72,21 @@ namespace EliteChroma.Core
 
         protected Color PulseColor(Color c1, Color c2, TimeSpan period, PulseColorType pulseType = PulseColorType.Triangle, double offsetPct = 0)
         {
-            var max = period.TotalSeconds;
-            var offset = max * (offsetPct - Math.Floor(offsetPct));
-            var t = ((AnimationElapsed.TotalSeconds + offset) % max) / max;
+            double max = period.TotalSeconds;
+            double offset = max * (offsetPct - Math.Floor(offsetPct));
+            double t = ((AnimationElapsed.TotalSeconds + offset) % max) / max;
 
-            double x;
-
-            switch (pulseType)
+            double x = pulseType switch
             {
-                case PulseColorType.Square:
-                    x = t < 0.5 ? 1 : 0;
-                    break;
-                case PulseColorType.Sawtooth:
-                    x = t;
-                    break;
-                case PulseColorType.Triangle:
-                default:
-                    x = t < 0.5 ? t * 2 : (1 - t) * 2;
-                    break;
-            }
+                PulseColorType.Triangle => t < 0.5 ? t * 2 : (1 - t) * 2,
+                PulseColorType.Square => t < 0.5 ? 1 : 0,
+                PulseColorType.Sawtooth => t,
+                _ => throw new ArgumentOutOfRangeException(nameof(pulseType)),
+            };
 
-            var r = (c1.R / 255.0 * (1 - x)) + (c2.R / 255.0 * x);
-            var g = (c1.G / 255.0 * (1 - x)) + (c2.G / 255.0 * x);
-            var b = (c1.B / 255.0 * (1 - x)) + (c2.B / 255.0 * x);
+            double r = (c1.R / 255.0 * (1 - x)) + (c2.R / 255.0 * x);
+            double g = (c1.G / 255.0 * (1 - x)) + (c2.G / 255.0 * x);
+            double b = (c1.B / 255.0 * (1 - x)) + (c2.B / 255.0 * x);
 
             return new Color(r, g, b);
         }
@@ -105,7 +98,7 @@ namespace EliteChroma.Core
                 throw new ArgumentNullException(nameof(bindingNames));
             }
 
-            foreach (var bindingName in bindingNames)
+            foreach (string bindingName in bindingNames)
             {
                 ApplyColorToBinding(grid, bindingName, color);
             }
@@ -113,19 +106,19 @@ namespace EliteChroma.Core
 
         protected void ApplyColorToBinding(CustomKeyboardEffect grid, string bindingName, Color color)
         {
-            if (!Game.BindingPreset.Bindings.TryGetValue(bindingName, out var binding))
+            if (!Game.BindingPreset.Bindings.TryGetValue(bindingName, out Binding binding))
             {
                 return;
             }
 
-            foreach (var bps in new[] { binding.Primary, binding.Secondary })
+            foreach (DeviceKeyCombination bps in new[] { binding.Primary, binding.Secondary })
             {
                 if (bps.Device != Device.Keyboard)
                 {
                     continue;
                 }
 
-                if (!KeyMappings.TryGetKey(bps.Key, Game.BindingPreset.KeyboardLayout, Game.ForceEnUSKeyboardLayout, out var key, NativeMethods))
+                if (!KeyMappings.TryGetKey(bps.Key, Game.BindingPreset.KeyboardLayout, Game.ForceEnUSKeyboardLayout, out Key key, NativeMethods))
                 {
                     continue;
                 }

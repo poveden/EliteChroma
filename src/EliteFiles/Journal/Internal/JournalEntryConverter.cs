@@ -24,11 +24,11 @@ namespace EliteFiles.Journal.Internal
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            JObject item = JObject.Load(reader);
+            var item = JObject.Load(reader);
 
-            var eventName = item["event"].Value<string>();
+            string eventName = item["event"].Value<string>();
 
-            if (!_eventMap.TryGetValue(eventName, out var type))
+            if (!_eventMap.TryGetValue(eventName, out Type type))
             {
                 type = typeof(JournalEntry);
             }
@@ -44,15 +44,11 @@ namespace EliteFiles.Journal.Internal
 
         private static Dictionary<string, Type> BuildJournayEntryEventMap()
         {
-            var journalEventTypes =
+            IEnumerable<(string EventName, Type Type)> journalEventTypes =
                 from type in typeof(JournalEntry).Assembly.GetExportedTypes()
                 where type.IsSubclassOf(typeof(JournalEntry))
                 from JournalEntryAttribute attr in type.GetCustomAttributes(typeof(JournalEntryAttribute), false)
-                select new
-                {
-                    attr.EventName,
-                    Type = type,
-                };
+                select (attr.EventName, type);
 
             return journalEventTypes.ToDictionary(x => x.EventName, x => x.Type, StringComparer.Ordinal);
         }

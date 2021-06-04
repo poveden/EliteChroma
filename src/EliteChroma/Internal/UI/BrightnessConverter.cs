@@ -16,7 +16,7 @@ namespace EliteChroma.Internal.UI
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             // String -> Double
-            var m = Regex.Match((string)value, @"^\s*0*?([0-9]|[1-9][0-9]|100)(?:\s*%)?\s*$");
+            Match m = Regex.Match((string)value, @"^\s*0*?([0-9]|[1-9][0-9]|100)(?:\s*%)?\s*$");
 
             if (!m.Success)
             {

@@ -38,8 +38,8 @@ namespace EliteFiles.Internal
 
         public string Filter
         {
-            get { return _watcher.Filter; }
-            set { _watcher.Filter = value; }
+            get => _watcher.Filter;
+            set => _watcher.Filter = value;
         }
 
         public void Start()

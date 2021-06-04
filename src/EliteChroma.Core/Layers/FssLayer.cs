@@ -41,7 +41,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            var k = canvas.Keyboard;
+            CustomKeyboardEffect k = canvas.Keyboard;
             k[Key.Escape] = Colors.InterfaceMode;
 
             ApplyColorToBinding(canvas.Keyboard, FssCamera, Colors.FssCamera);

@@ -17,12 +17,12 @@ namespace EliteChroma.Core.Layers
 
         protected override void OnRender(ChromaCanvas canvas)
         {
-            var enteredHyperspace = Game.FsdJumpType == FsdJumpType.Hyperspace;
-            var changed = enteredHyperspace != _enteredHyperspace;
+            bool enteredHyperspace = Game.FsdJumpType == FsdJumpType.Hyperspace;
+            bool changed = enteredHyperspace != _enteredHyperspace;
             _enteredHyperspace = enteredHyperspace;
 
-            var enteredNow = changed && enteredHyperspace;
-            var exitedNow = changed && !enteredHyperspace;
+            bool enteredNow = changed && enteredHyperspace;
+            bool exitedNow = changed && !enteredHyperspace;
 
             if (enteredNow)
             {
@@ -32,7 +32,7 @@ namespace EliteChroma.Core.Layers
 
             if (exitedNow)
             {
-                StartAnimation();
+                _ = StartAnimation();
             }
 
             if (!Animated)
@@ -42,19 +42,19 @@ namespace EliteChroma.Core.Layers
 
             if (AnimationElapsed >= _flashTotalLength)
             {
-                StopAnimation();
+                _ = StopAnimation();
                 return;
             }
 
-            var cKey = PulseColor(Game.Colors.Hud.Transform(Colors.KeyboardDimBrightness), _starClassColor, _flashTotalLength);
-            var cDev = PulseColor(Game.Colors.Hud.Transform(Colors.DeviceDimBrightness), _starClassColor, _flashTotalLength);
+            Color cKey = PulseColor(Game.Colors.Hud.Transform(Colors.KeyboardDimBrightness), _starClassColor, _flashTotalLength);
+            Color cDev = PulseColor(Game.Colors.Hud.Transform(Colors.DeviceDimBrightness), _starClassColor, _flashTotalLength);
 
-            canvas.Keyboard.Max(cKey);
-            canvas.Mouse.Max(cDev);
-            canvas.Mousepad.Max(cDev);
-            canvas.Keypad.Max(cKey);
-            canvas.Headset.Max(cDev);
-            canvas.ChromaLink.Max(cDev);
+            _ = canvas.Keyboard.Max(cKey);
+            _ = canvas.Mouse.Max(cDev);
+            _ = canvas.Mousepad.Max(cDev);
+            _ = canvas.Keypad.Max(cKey);
+            _ = canvas.Headset.Max(cDev);
+            _ = canvas.ChromaLink.Max(cDev);
         }
     }
 }

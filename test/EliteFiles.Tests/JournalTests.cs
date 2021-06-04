@@ -26,7 +26,7 @@ namespace EliteFiles.Tests
         [Fact]
         public void ReadsJournalEntriesFromAJournalFile()
         {
-            var file = Path.GetFullPath(Path.Combine(_jf.FullName, _journalFile1));
+            string file = Path.GetFullPath(Path.Combine(_jf.FullName, _journalFile1));
 
             var entries = new Queue<JournalEntry>();
 
@@ -107,7 +107,7 @@ namespace EliteFiles.Tests
             var entry = (StartJump)JsonConvert.DeserializeObject<JournalEntry>($"{{ \"event\":\"StartJump\", \"StarClass\":\"{starClass}\" }}");
             Assert.Equal(starClass, entry.StarClass);
 
-            var kind = StarClass.GetKind(entry.StarClass, out var baseClass);
+            var kind = StarClass.GetKind(entry.StarClass, out string baseClass);
             Assert.Equal(expectedBaseClass, baseClass);
             Assert.Equal(expectedKind, kind);
         }
@@ -116,8 +116,8 @@ namespace EliteFiles.Tests
         public void ReaderThrowsOnAJournalEntryBiggerThanTheInternalBuffer()
         {
             using var dir = new TestFolder();
-            var file = "Journal.entry-too-big.log";
-            var body = $"{{ \"event\":\"One\" }}\r\n{{ \"event\":\"{new string('A', 33000)}\" }}\r\n";
+            string file = "Journal.entry-too-big.log";
+            string body = $"{{ \"event\":\"One\" }}\r\n{{ \"event\":\"{new string('A', 33000)}\" }}\r\n";
             dir.WriteText(file, body);
 
             using var jr = new JournalReader(dir.Resolve(file));
@@ -176,7 +176,7 @@ namespace EliteFiles.Tests
             var entry = await ecEntries.WaitAsync(() => dir.WriteText(_journalFile1, "{ \"event\":\"One\" }\r\n", true)).ConfigureAwait(false);
             Assert.Equal("One", entry.Event);
 
-            var file2 = _journalFile1.Replace(".01.log", ".02.log", StringComparison.Ordinal);
+            string file2 = _journalFile1.Replace(".01.log", ".02.log", StringComparison.Ordinal);
             entry = await ecEntries.WaitAsync(() => dir.WriteText(file2, "{ \"event\":\"Two\" }\r\n")).ConfigureAwait(false);
             Assert.Equal("Two", entry.Event);
 

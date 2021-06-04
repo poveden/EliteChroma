@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using EliteFiles.Bindings;
 using EliteFiles.Graphics;
 using EliteFiles.Journal.Events;
@@ -59,22 +58,9 @@ namespace EliteChroma.Elite
 
         public DateTimeOffset AttackTargetChange { get; internal set; }
 
-        public bool InCockpit
-        {
-            get
-            {
-                return (Status.HasFlag(Flags.InMainShip) || Status.HasFlag(Flags.InFighter))
-                    && AtHelm;
-            }
-        }
+        public bool InCockpit => (Status.HasFlag(Flags.InMainShip) || Status.HasFlag(Flags.InFighter)) && AtHelm;
 
-        public bool InSrv
-        {
-            get
-            {
-                return Status.HasFlag(Flags.InSrv) && AtHelm;
-            }
-        }
+        public bool InSrv => Status.HasFlag(Flags.InSrv) && AtHelm;
 
         public bool AtHelm
         {
@@ -94,7 +80,12 @@ namespace EliteChroma.Elite
                     case GuiFocus.RolePanel:
                     case GuiFocus.StationServices:
                         return !InGalacticPowers && !InSquadronsView;
-
+                    case GuiFocus.GalaxyMap:
+                    case GuiFocus.SystemMap:
+                    case GuiFocus.Orrery:
+                    case GuiFocus.FssMode:
+                    case GuiFocus.SaaMode:
+                    case GuiFocus.Codex:
                     default:
                         return false;
                 }
@@ -107,6 +98,9 @@ namespace EliteChroma.Elite
 
         public bool DockedOrLanded => (Status.Flags & (Flags.Docked | Flags.Landed)) != Flags.None;
 
-        public GameState Copy() => (GameState)MemberwiseClone();
+        public GameState Copy()
+        {
+            return (GameState)MemberwiseClone();
+        }
     }
 }

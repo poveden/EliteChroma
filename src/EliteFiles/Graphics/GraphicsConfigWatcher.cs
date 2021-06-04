@@ -28,8 +28,8 @@ namespace EliteFiles.Graphics
         /// <param name="gameOptionsFolder">The path to the game options folder.</param>
         public GraphicsConfigWatcher(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder)
         {
-            GameInstallFolder.AssertValid(gameInstallFolder);
-            GameOptionsFolder.AssertValid(gameOptionsFolder);
+            _ = GameInstallFolder.AssertValid(gameInstallFolder);
+            _ = GameOptionsFolder.AssertValid(gameOptionsFolder);
 
             _mainFile = gameInstallFolder.GraphicsConfiguration;
             _mainWatcher = new EliteFileSystemWatcher(_mainFile);
@@ -100,11 +100,11 @@ namespace EliteFiles.Graphics
 
         private void Reload()
         {
-            var gcMain = FileOperations.RetryIfNull(
+            GraphicsConfig gcMain = FileOperations.RetryIfNull(
                 () => GraphicsConfig.FromFile(_mainFile.FullName),
                 _reloadRetries);
 
-            var gcOverride = FileOperations.RetryIfNull(
+            GraphicsConfig gcOverride = FileOperations.RetryIfNull(
                 () => GraphicsConfig.FromFile(_overrideFile.FullName),
                 _reloadRetries);
 

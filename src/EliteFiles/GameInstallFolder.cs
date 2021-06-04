@@ -23,8 +23,8 @@ namespace EliteFiles
 
         private static readonly Lazy<string[]> _defaultPaths = new Lazy<string[]>(() =>
         {
-            var programFilesFolder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-            var localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string programFilesFolder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            string localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
             return new[]
             {
@@ -106,7 +106,7 @@ namespace EliteFiles
         public static IEnumerable<string> GetAlternatePaths()
         {
             // Reference: https://github.com/Bemoliph/Elite-Dangerous-Downloader/blob/master/downloader.py
-            var launcherPath = (string)Registry.GetValue(
+            string launcherPath = (string)Registry.GetValue(
                 @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{696F8871-C91D-4CB1-825D-36BE18065575}_is1",
                 "InstallLocation",
                 null);
@@ -121,7 +121,7 @@ namespace EliteFiles
 
             if (steamLibraryFolders != null)
             {
-                foreach (var folder in steamLibraryFolders)
+                foreach (string folder in steamLibraryFolders)
                 {
                     yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-64");
                     yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-odyssey-64");

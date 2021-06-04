@@ -8,19 +8,19 @@ using EliteChroma.Properties;
 namespace EliteChroma
 {
     [ExcludeFromCodeCoverage]
-    static class Program
+    internal static class Program
     {
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             using var mutex = new Mutex(true, $"{nameof(EliteChroma)}-SingleInstance-Mutex");
 
             if (!mutex.WaitOne(0, true))
             {
-                MessageBox.Show(
+                _ = MessageBox.Show(
                     Resources.MsgBox_AppAlreadyRunning,
                     new AssemblyInfo().Title,
                     MessageBoxButtons.OK,
@@ -29,7 +29,7 @@ namespace EliteChroma
                 return;
             }
 
-            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            _ = Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

@@ -54,18 +54,27 @@ namespace EliteFiles.Bindings
         /// Calculates the hash code for the current <see cref="DeviceKeySet"/> instance.
         /// </summary>
         /// <returns>The hash code.</returns>
-        public override int GetHashCode() => _hashCode;
+        public override int GetHashCode()
+        {
+            return _hashCode;
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through the set of device keys.
         /// </summary>
         /// <returns>An enumerator for this object.</returns>
-        public IEnumerator<DeviceKey> GetEnumerator() => _modifiers.GetEnumerator();
+        public IEnumerator<DeviceKey> GetEnumerator()
+        {
+            return _modifiers.GetEnumerator();
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through the set of device keys.
         /// </summary>
         /// <returns>An enumerator for this object.</returns>
-        IEnumerator IEnumerable.GetEnumerator() => _modifiers.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _modifiers.GetEnumerator();
+        }
     }
 }

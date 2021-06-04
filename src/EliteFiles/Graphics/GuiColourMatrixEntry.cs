@@ -37,7 +37,7 @@ namespace EliteFiles.Graphics
 
         internal static GuiColourMatrixEntry FromXml(XElement xml)
         {
-            var values = xml.Value.Split(',')
+            double[] values = xml.Value.Split(',')
                 .Select(x => double.Parse(x, CultureInfo.InvariantCulture))
                 .ToArray();
 

@@ -28,7 +28,7 @@ namespace EliteChroma.Core.Layers
 
         protected override void OnRender(ChromaCanvas canvas)
         {
-            var hardpointsDeployed = Game.Status.HasFlag(Flags.HardpointsDeployed) && !Game.Status.HasFlag(Flags.Supercruise);
+            bool hardpointsDeployed = Game.Status.HasFlag(Flags.HardpointsDeployed) && !Game.Status.HasFlag(Flags.Supercruise);
 
             VehicleMode mode;
             if (Game.Status.HasFlag(Flags.LandingGearDeployed))
@@ -44,23 +44,23 @@ namespace EliteChroma.Core.Layers
                 mode = VehicleMode.Combat;
             }
 
-            var state = (hardpointsDeployed, mode);
+            (bool, VehicleMode) state = (hardpointsDeployed, mode);
 
             if (state != _lastState)
             {
-                StartAnimation();
+                _ = StartAnimation();
                 _animC1 = GetAmbientColors(_lastState.HardpointsDeployed, _lastState.Mode);
                 _lastState = state;
             }
 
             if (Animated && AnimationElapsed >= _fadeDuration)
             {
-                StopAnimation();
+                _ = StopAnimation();
             }
 
             _animC2 = GetAmbientColors(hardpointsDeployed, mode);
 
-            var c = _animC2;
+            AmbientColors c = _animC2;
 
             if (Animated)
             {
@@ -76,26 +76,19 @@ namespace EliteChroma.Core.Layers
             canvas.Headset.Set(c.Device);
             canvas.ChromaLink.Set(c.Device);
 
-            var k = canvas.Keyboard;
+            CustomKeyboardEffect k = canvas.Keyboard;
             k[Key.Logo] = c.Logo;
         }
 
         private AmbientColors GetAmbientColors(bool hardpointsDeployed, VehicleMode mode)
         {
-            Color c;
-            switch (mode)
+            Color c = mode switch
             {
-                case VehicleMode.Combat:
-                    c = Game.Colors.Hud;
-                    break;
-                case VehicleMode.Analysis:
-                    c = Game.Colors.AnalysisMode;
-                    break;
-                case VehicleMode.Landing:
-                default:
-                    c = Colors.LandingMode;
-                    break;
-            }
+                VehicleMode.Combat => Game.Colors.Hud,
+                VehicleMode.Analysis => Game.Colors.AnalysisMode,
+                VehicleMode.Landing => Colors.LandingMode,
+                _ => throw new ArgumentOutOfRangeException(nameof(mode)),
+            };
 
             return new AmbientColors
             {

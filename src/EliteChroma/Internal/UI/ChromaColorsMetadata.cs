@@ -199,7 +199,7 @@ namespace EliteChroma.Internal.UI
 
             public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
             {
-                var baseDescriptor = base.GetTypeDescriptor(objectType, instance);
+                ICustomTypeDescriptor baseDescriptor = base.GetTypeDescriptor(objectType, instance);
                 return new LocalizedTypeDescriptor(baseDescriptor, _resourceNamePrefix);
             }
         }

@@ -48,14 +48,16 @@ namespace EliteChroma.Internal.UI
 
         public override void PaintValue(PaintValueEventArgs e)
         {
-            var v255 = (int)((double)e.Value * 255);
+            int v255 = (int)((double)e.Value * 255);
             using var b = new SolidBrush(Color.FromArgb(v255, v255, v255));
             e.Graphics.FillRectangle(b, e.Bounds);
         }
 
         private sealed class BrightnessTrackBar : TrackBar
         {
+#pragma warning disable SA1310
             private const int WM_PAINT = 0x0F;
+#pragma warning restore SA1310
 
             public BrightnessTrackBar()
             {
@@ -72,12 +74,13 @@ namespace EliteChroma.Internal.UI
                 }
 
                 using var g = Graphics.FromHwndInternal(m.HWnd);
-                OnPaintOverlay(new PaintEventArgs(g, ClientRectangle));
+                using var e = new PaintEventArgs(g, ClientRectangle);
+                OnPaintOverlay(e);
             }
 
-            private void OnPaintOverlay(PaintEventArgs e)
+            private static void OnPaintOverlay(PaintEventArgs e)
             {
-                var r = e.ClipRectangle;
+                Rectangle r = e.ClipRectangle;
                 r.Height /= 2;
                 r.Y = r.Height;
                 r.Inflate(-17, -3);

@@ -43,7 +43,7 @@ namespace EliteFiles.Journal
         /// <returns>The journal entry, or <c>null</c> if the end of the journal has been reached.</returns>
         public JournalEntry ReadEntry()
         {
-            if (TryReadEntryFromBuffer(out var entry))
+            if (TryReadEntryFromBuffer(out JournalEntry entry))
             {
                 return entry;
             }
@@ -83,15 +83,15 @@ namespace EliteFiles.Journal
         {
             entry = null;
 
-            var i = Array.IndexOf(_buf, (byte)'\n', _bufI, _bufN - _bufI);
+            int i = Array.IndexOf(_buf, (byte)'\n', _bufI, _bufN - _bufI);
 
             if (i == -1)
             {
                 return false;
             }
 
-            var n = i + 1 - _bufI;
-            var str = Encoding.UTF8.GetString(_buf, _bufI, n);
+            int n = i + 1 - _bufI;
+            string str = Encoding.UTF8.GetString(_buf, _bufI, n);
             _bufI += n;
 
             entry = JsonConvert.DeserializeObject<JournalEntry>(str);
@@ -100,7 +100,7 @@ namespace EliteFiles.Journal
 
         private void CompressBuffer()
         {
-            var n = _bufN - _bufI;
+            int n = _bufN - _bufI;
             Array.Copy(_buf, _bufI, _buf, 0, n);
             _bufI = 0;
             _bufN = n;

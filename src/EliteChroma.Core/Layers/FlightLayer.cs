@@ -29,7 +29,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            var k = canvas.Keyboard;
+            CustomKeyboardEffect k = canvas.Keyboard;
             k[Key.Escape] = Colors.InterfaceMode;
 
             ApplyColorToBinding(canvas.Keyboard, FlightRotation.All, Colors.VehicleRotation);
@@ -53,15 +53,15 @@ namespace EliteChroma.Core.Layers
 
             if (Game.Status.HasFlag(Flags.FsdCharging))
             {
-                StartAnimation();
-                var jumpColor = PulseColor(Colors.FrameShiftDriveControls, Color.Black, TimeSpan.FromSeconds(1));
+                _ = StartAnimation();
+                Color jumpColor = PulseColor(Colors.FrameShiftDriveControls, Color.Black, TimeSpan.FromSeconds(1));
                 ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.HyperSuperCombination, jumpColor);
                 ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Supercruise, jumpColor);
                 ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Hyperspace, jumpColor);
             }
             else
             {
-                StopAnimation();
+                _ = StopAnimation();
             }
         }
     }

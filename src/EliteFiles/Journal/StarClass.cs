@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace EliteFiles.Journal
@@ -120,9 +118,9 @@ namespace EliteFiles.Journal
                 return Kind.Unknown;
             }
 
-            foreach (var (kind, rx) in _rx)
+            foreach ((Kind kind, Regex rx) in _rx)
             {
-                var m = rx.Match(starClass);
+                Match m = rx.Match(starClass);
 
                 if (m.Success)
                 {

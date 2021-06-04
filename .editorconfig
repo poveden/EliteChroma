@@ -1,0 +1,51 @@
+# NOTE: Requires **VS2019 16.3** or later
+
+# Code Analysis Rules
+# Description: Code analysis rules
+
+root = true
+
+# Code files
+[*.cs]
+
+# Default severity for analyzer diagnostics - Requires **VS2019 16.5** or later
+dotnet_analyzer_diagnostic.severity = warning
+
+# Use generic event handler instances (https://docs.microsoft.com/en-us/dotnet/csharp/modern-events)
+dotnet_diagnostic.CA1003.severity = none
+
+# Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = none
+
+# Field '_xxxxxxx' should not begin with an underscore
+dotnet_diagnostic.SA1309.severity = none
+
+# Element should not be on a single line
+dotnet_diagnostic.SA1502.severity = none
+
+# The file header is missing or not located at the top of the file
+dotnet_diagnostic.SA1633.severity = none
+
+# IDE0008: Use explicit type
+csharp_style_var_when_type_is_apparent = true:warning
+
+# IDE0045: Convert to conditional expression
+dotnet_style_prefer_conditional_expression_over_assignment = false
+
+# IDE0046: Convert to conditional expression
+dotnet_style_prefer_conditional_expression_over_return = false
+
+# IDE0047: Remove unnecessary parentheses
+dotnet_diagnostic.IDE0047.severity = none
+
+# IDE0090: Use 'new(...)'
+csharp_style_implicit_object_creation_when_type_is_apparent = false
+
+# Test code
+[test/**/*.cs]
+
+# IDE0008: Use explicit type
+csharp_style_var_elsewhere = true:warning
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = none

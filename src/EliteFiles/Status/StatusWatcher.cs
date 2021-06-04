@@ -24,7 +24,7 @@ namespace EliteFiles.Status
         /// <param name="journalFolder">The path to the player journal folder.</param>
         public StatusWatcher(JournalFolder journalFolder)
         {
-            JournalFolder.AssertValid(journalFolder);
+            _ = JournalFolder.AssertValid(journalFolder);
 
             _statusFile = journalFolder.Status;
             _watcher = new EliteFileSystemWatcher(journalFolder.FullName, journalFolder.Status.Name);
@@ -86,7 +86,7 @@ namespace EliteFiles.Status
 
         private void Reload()
         {
-            var status = FileOperations.RetryIfNull(
+            StatusEntry status = FileOperations.RetryIfNull(
                 () => StatusEntry.FromFile(_statusFile.FullName),
                 _reloadRetries);
 

@@ -23,16 +23,15 @@ namespace EliteChroma.Core.Tests
 
             pl.Refresh();
 
-            var n = (int)_fiN.GetValue(pl);
+            int n = (int)_fiN.GetValue(pl);
             Assert.Equal(4, n);
 
-            var buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
+            int[] buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
             Assert.Equal(new[] { 1, 2, 3, 4 }, buf);
         }
 
         [Theory]
         [MemberData(nameof(BuildSequences))]
-        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Theory data")]
         public void ExceptReturnsExpectedValues(int[] first, int[] second)
         {
             var nm1 = new NativeMethodsMock { ProcessIds = first };
@@ -61,26 +60,26 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void RefreshWillNotChangeTheInternalCollectionWhenEnumProcessesFails()
         {
-            var ids = new[] { 1, 2, 3, 4 };
+            int[] ids = new[] { 1, 2, 3, 4 };
             var nm = new NativeMethodsMock { ProcessIds = ids };
 
             var pl = new ProcessList(nm);
             pl.Refresh();
 
-            var n = (int)_fiN.GetValue(pl);
+            int n = (int)_fiN.GetValue(pl);
             Assert.Equal(ids.Length, n);
 
             nm.ProcessIds = null;
             pl.Refresh();
 
-            var buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
+            int[] buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
             Assert.Equal(ids, buf);
         }
 
         [Fact]
         public void CanRemoveEntries()
         {
-            var ids = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            int[] ids = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             var nm = new NativeMethodsMock { ProcessIds = ids };
 
             var pl = new ProcessList(nm);
@@ -90,10 +89,10 @@ namespace EliteChroma.Core.Tests
 
             Assert.True(pl.Remove(3));
 
-            var n = (int)_fiN.GetValue(pl);
+            int n = (int)_fiN.GetValue(pl);
             Assert.Equal(8, n);
 
-            var buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
+            int[] buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
             Assert.Equal(new[] { 1, 2, 4, 5, 6, 7, 8, 9 }, buf);
 
             nm.ProcessIds = new[] { 1 };
@@ -196,7 +195,7 @@ namespace EliteChroma.Core.Tests
 
         private static IEnumerable<int> GetSequence(int from, int to)
         {
-            for (var i = from; i <= to; i++)
+            for (int i = from; i <= to; i++)
             {
                 yield return i;
             }

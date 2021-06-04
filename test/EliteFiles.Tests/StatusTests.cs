@@ -111,7 +111,10 @@ namespace EliteFiles.Tests
         {
             using var watcher = new StatusWatcher(_jf);
 
-            bool IsRunning() => watcher.GetPrivateField<bool>("_running");
+            bool IsRunning()
+            {
+                return watcher.GetPrivateField<bool>("_running");
+            }
 
             Assert.False(IsRunning());
 

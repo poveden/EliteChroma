@@ -45,7 +45,10 @@ namespace EliteChroma.Core.Tests
         {
             using var mkw = new ModifierKeysWatcher(new NativeMethodsMock());
 
-            bool IsRunning() => mkw.GetPrivateField<bool>("_running");
+            bool IsRunning()
+            {
+                return mkw.GetPrivateField<bool>("_running");
+            }
 
             Assert.False(IsRunning());
 

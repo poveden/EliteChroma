@@ -7,7 +7,7 @@ namespace EliteChroma.Controls
 {
     // Reference: https://stackoverflow.com/questions/10803184/windows-forms-button-with-drop-down-menu/24087828#24087828
     [ExcludeFromCodeCoverage]
-    public class MenuButton : Button
+    internal class MenuButton : Button
     {
         public enum HorizontalDirection
         {
@@ -24,16 +24,16 @@ namespace EliteChroma.Controls
         [DefaultValue(HorizontalDirection.Right)]
         public HorizontalDirection MenuHorizontalDirection { get; set; }
 
-        protected override void OnMouseDown(MouseEventArgs e)
+        protected override void OnMouseDown(MouseEventArgs mevent)
         {
-            base.OnMouseDown(e);
+            base.OnMouseDown(mevent);
 
-            if (Menu == null || e.Button != MouseButtons.Left)
+            if (Menu == null || mevent.Button != MouseButtons.Left)
             {
                 return;
             }
 
-            var ddd = MenuHorizontalDirection == HorizontalDirection.Left
+            ToolStripDropDownDirection ddd = MenuHorizontalDirection == HorizontalDirection.Left
                 ? ToolStripDropDownDirection.Left
                 : ToolStripDropDownDirection.Right;
 
@@ -41,29 +41,29 @@ namespace EliteChroma.Controls
 
             if (ShowMenuUnderCursor)
             {
-                menuLocation = e.Location;
+                menuLocation = mevent.Location;
             }
             else
             {
-                var x = MenuHorizontalDirection == HorizontalDirection.Left ? Width : 0;
+                int x = MenuHorizontalDirection == HorizontalDirection.Left ? Width : 0;
                 menuLocation = new Point(x, Height);
             }
 
             Menu.Show(this, menuLocation, ddd);
         }
 
-        protected override void OnPaint(PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs pevent)
         {
-            base.OnPaint(e);
+            base.OnPaint(pevent);
 
             if (Menu != null)
             {
                 int arrowX = ClientRectangle.Width - 14;
-                int arrowY = ClientRectangle.Height / 2 - 1;
+                int arrowY = (ClientRectangle.Height / 2) - 1;
 
                 Brush brush = Enabled ? SystemBrushes.ControlText : SystemBrushes.ControlDark;
-                Point[] arrows = new Point[] { new Point(arrowX, arrowY), new Point(arrowX + 7, arrowY), new Point(arrowX + 3, arrowY + 4) };
-                e.Graphics.FillPolygon(brush, arrows);
+                var arrows = new Point[] { new Point(arrowX, arrowY), new Point(arrowX + 7, arrowY), new Point(arrowX + 3, arrowY + 4) };
+                pevent.Graphics.FillPolygon(brush, arrows);
             }
         }
     }

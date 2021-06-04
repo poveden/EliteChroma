@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 

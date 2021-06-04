@@ -58,7 +58,7 @@ namespace EliteFiles.Tests
         [Fact]
         public void GetsTheDefaultGameOptionsFolder()
         {
-            var folder = GameOptionsFolder.DefaultPath;
+            string folder = GameOptionsFolder.DefaultPath;
 
             Assert.EndsWith(@"\Frontier Developments\Elite Dangerous\Options", folder, StringComparison.Ordinal);
         }
@@ -66,7 +66,7 @@ namespace EliteFiles.Tests
         [Fact]
         public void GetsTheDefaultJournalFolder()
         {
-            var folder = JournalFolder.DefaultPath;
+            string folder = JournalFolder.DefaultPath;
 
             Assert.EndsWith(@"\Saved Games\Frontier Developments\Elite Dangerous", folder, StringComparison.Ordinal);
         }
@@ -75,7 +75,11 @@ namespace EliteFiles.Tests
         public void ReturnsFalseWhenTheGivenGameInstallFolderIsNotAValidFolder()
         {
             const string templateFolder = @"TestFiles\GameRoot";
-            static bool IsValidFolder(string path) => new GameInstallFolder(path).IsValid;
+
+            static bool IsValidFolder(string path)
+            {
+                return new GameInstallFolder(path).IsValid;
+            }
 
             Assert.True(IsValidFolder(templateFolder));
             Assert.False(IsValidFolder("Non-Existing-Path"));
@@ -93,7 +97,11 @@ namespace EliteFiles.Tests
         public void ReturnsFalseWhenTheGivenGameOptionsFolderIsNotAValidFolder()
         {
             const string templateFolder = @"TestFiles\GameOptions";
-            static bool IsValidFolder(string path) => new GameOptionsFolder(path).IsValid;
+
+            static bool IsValidFolder(string path)
+            {
+                return new GameOptionsFolder(path).IsValid;
+            }
 
             Assert.True(IsValidFolder(templateFolder));
             Assert.False(IsValidFolder("Non-Existing-Path"));
@@ -110,7 +118,11 @@ namespace EliteFiles.Tests
         public void ReturnsFalseWhenTheGivenJournalFolderIsNotAValidFolder()
         {
             const string templateFolder = @"TestFiles\Journal";
-            static bool IsValidFolder(string path) => new JournalFolder(path).IsValid;
+
+            static bool IsValidFolder(string path)
+            {
+                return new JournalFolder(path).IsValid;
+            }
 
             Assert.True(IsValidFolder(templateFolder));
             Assert.False(IsValidFolder("Non-Existing-Path"));

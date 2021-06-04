@@ -52,7 +52,7 @@ namespace EliteFiles.Tests.Internal
 
                     if (ce.IsSet)
                     {
-                        var list = string.Join(',', res.Select(x => $"{x}"));
+                        string list = string.Join(',', res.Select(x => $"{x}"));
                         throw new InvalidOperationException($"More than {count} events received in collector '{_name}': {list}.");
                     }
 
@@ -61,12 +61,12 @@ namespace EliteFiles.Tests.Internal
 
                 _attach(Handler);
                 trigger();
-                var ok = await Task.Run(() => ce.Wait(timeout)).ConfigureAwait(false);
+                bool ok = await Task.Run(() => ce.Wait(timeout)).ConfigureAwait(false);
                 _detach(Handler);
 
                 if (!ok)
                 {
-                    var list = string.Join(',', res.Select(x => $"{x}"));
+                    string list = string.Join(',', res.Select(x => $"{x}"));
                     throw new TimeoutException($"Timeout in collector '{_name}' after receiving the following events: {list}.");
                 }
             }

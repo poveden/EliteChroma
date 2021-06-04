@@ -33,8 +33,8 @@ namespace EliteFiles.Bindings
         public bool Equals(DeviceKeyBase other)
         {
             return other != null
-                && this.Device == other.Device
-                && this.Key == other.Key;
+                && Device == other.Device
+                && Key == other.Key;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace EliteFiles.Bindings
         /// <returns>The hash code.</returns>
         public override int GetHashCode()
         {
-            return (Device, Key).GetHashCode();
+            return HashCode.Combine(Device, Key);
         }
     }
 }

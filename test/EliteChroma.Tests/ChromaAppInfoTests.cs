@@ -23,7 +23,7 @@ namespace EliteChroma.Tests
         private static XElement LoadChromaAppInfo()
         {
             var a = typeof(AssemblyInfo).Assembly;
-            var xmlFile = Path.Combine(Path.GetDirectoryName(a.Location), "ChromaAppInfo.xml");
+            string xmlFile = Path.Combine(Path.GetDirectoryName(a.Location), "ChromaAppInfo.xml");
             var xml = XDocument.Load(xmlFile);
             return xml.Root;
         }

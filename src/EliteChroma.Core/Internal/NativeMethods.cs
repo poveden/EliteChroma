@@ -231,41 +231,65 @@ namespace EliteChroma.Core.Internal
             QUERY_INFORMATION = 0x00000400,
         }
 
-        public short GetAsyncKeyState(VirtualKey vKey) =>
-            Impl.GetAsyncKeyState(vKey);
+        public short GetAsyncKeyState(VirtualKey vKey)
+        {
+            return Impl.GetAsyncKeyState(vKey);
+        }
 
-        public IntPtr GetKeyboardLayout(int idThread) =>
-            Impl.GetKeyboardLayout(idThread);
+        public IntPtr GetKeyboardLayout(int idThread)
+        {
+            return Impl.GetKeyboardLayout(idThread);
+        }
 
-        public int GetKeyboardLayoutList(int nBuff, IntPtr[] lpList) =>
-            Impl.GetKeyboardLayoutList(nBuff, lpList);
+        public int GetKeyboardLayoutList(int nBuff, IntPtr[] lpList)
+        {
+            return Impl.GetKeyboardLayoutList(nBuff, lpList);
+        }
 
-        public uint MapVirtualKeyEx(uint uCode, MAPVK uMapType, IntPtr dwhkl) =>
-            Impl.MapVirtualKeyEx(uCode, uMapType, dwhkl);
+        public uint MapVirtualKeyEx(uint uCode, MAPVK uMapType, IntPtr dwhkl)
+        {
+            return Impl.MapVirtualKeyEx(uCode, uMapType, dwhkl);
+        }
 
-        public IntPtr LoadLibrary(string lpFileName) =>
-            Impl.LoadLibrary(lpFileName);
+        public IntPtr LoadLibrary(string lpFileName)
+        {
+            return Impl.LoadLibrary(lpFileName);
+        }
 
-        public bool FreeLibrary(IntPtr hModule) =>
-            Impl.FreeLibrary(hModule);
+        public bool FreeLibrary(IntPtr hModule)
+        {
+            return Impl.FreeLibrary(hModule);
+        }
 
-        public IntPtr GetForegroundWindow() =>
-            Impl.GetForegroundWindow();
+        public IntPtr GetForegroundWindow()
+        {
+            return Impl.GetForegroundWindow();
+        }
 
-        public int GetWindowThreadProcessId(IntPtr hWnd, out int processId) =>
-            Impl.GetWindowThreadProcessId(hWnd, out processId);
+        public int GetWindowThreadProcessId(IntPtr hWnd, out int processId)
+        {
+            return Impl.GetWindowThreadProcessId(hWnd, out processId);
+        }
 
-        public bool EnumProcesses(int[] lpidProcess, int cb, out int lpcbNeeded) =>
-            Impl.EnumProcesses(lpidProcess, cb, out lpcbNeeded);
+        public bool EnumProcesses(int[] lpidProcess, int cb, out int lpcbNeeded)
+        {
+            return Impl.EnumProcesses(lpidProcess, cb, out lpcbNeeded);
+        }
 
-        public SafeProcessHandle OpenProcess(ProcessAccess dwDesiredAccess, bool bInheritHandle, int dwProcessId) =>
-            Impl.OpenProcess(dwDesiredAccess, bInheritHandle, dwProcessId);
+        public SafeProcessHandle OpenProcess(ProcessAccess dwDesiredAccess, bool bInheritHandle, int dwProcessId)
+        {
+            return Impl.OpenProcess(dwDesiredAccess, bInheritHandle, dwProcessId);
+        }
 
-        public bool EnumProcessModules(SafeProcessHandle hProcess, IntPtr[] lphModule, int cb, out int lpcbNeeded) =>
-            Impl.EnumProcessModules(hProcess, lphModule, cb, out lpcbNeeded);
+        public bool EnumProcessModules(SafeProcessHandle hProcess, IntPtr[] lphModule, int cb, out int lpcbNeeded)
+        {
+            return Impl.EnumProcessModules(hProcess, lphModule, cb, out lpcbNeeded);
+        }
 
-        public int GetModuleFileNameEx(SafeProcessHandle hProcess, IntPtr hModule, char[] lpFilename, int nSize) =>
-            Impl.GetModuleFileNameEx(hProcess, hModule, lpFilename, nSize);
+        public int GetModuleFileNameEx(SafeProcessHandle hProcess, IntPtr hModule, char[] lpFilename, int nSize)
+        {
+            return Impl.GetModuleFileNameEx(hProcess, hModule, lpFilename, nSize);
+        }
 
         private static class Impl
         {
@@ -295,13 +319,13 @@ namespace EliteChroma.Core.Internal
             public static extern int GetWindowThreadProcessId(IntPtr hWnd, out int processId);
 
             [DllImport("psapi.dll", SetLastError = true)]
-            public static extern bool EnumProcesses([MarshalAs(UnmanagedType.LPArray)] [Out] int[] lpidProcess, int cb, out int lpcbNeeded);
+            public static extern bool EnumProcesses([MarshalAs(UnmanagedType.LPArray)][Out] int[] lpidProcess, int cb, out int lpcbNeeded);
 
             [DllImport("kernel32.dll", SetLastError = true)]
             public static extern SafeProcessHandle OpenProcess(ProcessAccess dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
             [DllImport("psapi.dll", SetLastError = true)]
-            public static extern bool EnumProcessModules(SafeProcessHandle hProcess, [MarshalAs(UnmanagedType.LPArray)] [Out] IntPtr[] lphModule, int cb, out int lpcbNeeded);
+            public static extern bool EnumProcessModules(SafeProcessHandle hProcess, [MarshalAs(UnmanagedType.LPArray)][Out] IntPtr[] lphModule, int cb, out int lpcbNeeded);
 
             [DllImport("psapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
             public static extern int GetModuleFileNameEx(SafeProcessHandle hProcess, IntPtr hModule, [Out] char[] lpFilename, int nSize);

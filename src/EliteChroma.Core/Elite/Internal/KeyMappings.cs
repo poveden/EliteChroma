@@ -166,7 +166,7 @@ namespace EliteChroma.Elite.Internal
                 return true;
             }
 
-            if (!Keyboard.TryGetKeyChar(keyName, out var c))
+            if (!Keyboard.TryGetKeyChar(keyName, out char c))
             {
                 return false;
             }
@@ -176,7 +176,7 @@ namespace EliteChroma.Elite.Internal
 
         private static string GetKeyName(char c)
         {
-            _ = Keyboard.TryGetKeyName(c, out var keyName);
+            _ = Keyboard.TryGetKeyName(c, out string keyName);
             return keyName;
         }
     }

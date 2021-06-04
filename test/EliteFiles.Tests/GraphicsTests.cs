@@ -106,7 +106,7 @@ namespace EliteFiles.Tests
 
             var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatchesForChangesInTheGraphicsConfigurationFiles));
 
-            var xmlMain = dirMain.ReadText(_mainFile);
+            string xmlMain = dirMain.ReadText(_mainFile);
 
             var config = await evs.WaitAsync(() => dirMain.WriteText(_mainFile, string.Empty), 100).ConfigureAwait(false);
             Assert.Null(config);
@@ -202,7 +202,10 @@ namespace EliteFiles.Tests
         {
             using var watcher = new GraphicsConfigWatcher(_gif, _gof);
 
-            bool IsRunning() => watcher.GetPrivateField<bool>("_running");
+            bool IsRunning()
+            {
+                return watcher.GetPrivateField<bool>("_running");
+            }
 
             Assert.False(IsRunning());
 

@@ -35,7 +35,7 @@ namespace EliteFiles.Graphics
 
             XDocument xml;
 
-            using (var fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 if (fs.Length == 0)
                 {

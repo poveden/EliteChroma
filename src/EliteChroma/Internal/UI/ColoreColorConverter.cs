@@ -27,7 +27,7 @@ namespace EliteChroma.Internal.UI
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             // String -> Color
-            if (!JsonColoreColorConverter.TryParseRgbString((string)value, out var color))
+            if (!JsonColoreColorConverter.TryParseRgbString((string)value, out Color color))
             {
                 throw new FormatException(Resources.FormatException_InvalidColorValue);
             }

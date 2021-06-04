@@ -51,8 +51,8 @@ namespace EliteChroma.Core.Tests
 
             Assert.Equal(0, comparer.Compare(l1.Object, l1.Object));
 
-            var h1 = l1.Object.GetHashCode();
-            var h2 = l2.Object.GetHashCode();
+            int h1 = l1.Object.GetHashCode();
+            int h2 = l2.Object.GetHashCode();
 
             Assert.Equal(h1.CompareTo(h2), comparer.Compare(l1.Object, l2.Object));
             Assert.Equal(h2.CompareTo(h1), comparer.Compare(l2.Object, l1.Object));

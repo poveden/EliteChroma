@@ -161,19 +161,17 @@ namespace EliteFiles.Status
         /// <returns>The status entry, or <c>null</c> if the file couldn't be read (e.g. in the middle of an update).</returns>
         public static StatusEntry FromFile(string path)
         {
-            using (var fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                if (fs.Length == 0)
-                {
-                    return null;
-                }
+            using FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-                using (var sr = new StreamReader(fs))
-                {
-                    var serializer = new JsonSerializer();
-                    return (StatusEntry)serializer.Deserialize(sr, typeof(StatusEntry));
-                }
+            if (fs.Length == 0)
+            {
+                return null;
             }
+
+            using var sr = new StreamReader(fs);
+
+            var serializer = new JsonSerializer();
+            return (StatusEntry)serializer.Deserialize(sr, typeof(StatusEntry));
         }
 
         /// <summary>
@@ -181,13 +179,19 @@ namespace EliteFiles.Status
         /// </summary>
         /// <param name="flag">The flag to check.</param>
         /// <returns><c>true</c> if the flag is set; otherwise, <c>false</c>.</returns>
-        public bool HasFlag(Flags flag) => Flags.HasFlag(flag);
+        public bool HasFlag(Flags flag)
+        {
+            return Flags.HasFlag(flag);
+        }
 
         /// <summary>
         /// Returns a value indicating wheter the given flag is currently set.
         /// </summary>
         /// <param name="flag">The flag to check.</param>
         /// <returns><c>true</c> if the flag is set; otherwise, <c>false</c>.</returns>
-        public bool HasFlag(Flags2 flag) => Flags2.HasFlag(flag);
+        public bool HasFlag(Flags2 flag)
+        {
+            return Flags2.HasFlag(flag);
+        }
     }
 }

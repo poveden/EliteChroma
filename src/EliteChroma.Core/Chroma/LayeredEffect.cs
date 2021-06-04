@@ -14,7 +14,7 @@ namespace EliteChroma.Chroma
 
         public bool Add(EffectLayer layer)
         {
-            var i = _layers.BinarySearch(layer, _comparer);
+            int i = _layers.BinarySearch(layer, _comparer);
 
             if (i >= 0)
             {
@@ -25,15 +25,21 @@ namespace EliteChroma.Chroma
             return true;
         }
 
-        public void Clear() => _layers.Clear();
+        public void Clear()
+        {
+            _layers.Clear();
+        }
 
-        public bool Remove(EffectLayer layer) => _layers.Remove(layer);
+        public bool Remove(EffectLayer layer)
+        {
+            return _layers.Remove(layer);
+        }
 
         public async Task Render(IChroma chroma, object state)
         {
             var canvas = new ChromaCanvas();
 
-            for (var i = 0; i < _layers.Count; i++)
+            for (int i = 0; i < _layers.Count; i++)
             {
                 _layers[i].Render(canvas, state);
             }
@@ -50,7 +56,7 @@ namespace EliteChroma.Chroma
                     return 0;
                 }
 
-                var ord = x.Order.CompareTo(y.Order);
+                int ord = x.Order.CompareTo(y.Order);
 
                 return (ord != 0) ? ord : x.GetHashCode().CompareTo(y.GetHashCode());
             }

@@ -18,12 +18,12 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            var lColor = Game.Status.HasFlag(Flags.LightsOn)
+            Color lColor = Game.Status.HasFlag(Flags.LightsOn)
                 ? (Game.Status.HasFlag(Flags.SrvHighBeam) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsMidBeam)
                 : Colors.VehicleLightsOff;
             ApplyColorToBinding(canvas.Keyboard, Driving.Headlights, lColor);
 
-            var nColor = Game.Status.HasFlag(Flags.NightVision) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsOff;
+            Color nColor = Game.Status.HasFlag(Flags.NightVision) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsOff;
             ApplyColorToBinding(canvas.Keyboard, Miscellaneous.NightVisionToggle, nColor);
         }
     }

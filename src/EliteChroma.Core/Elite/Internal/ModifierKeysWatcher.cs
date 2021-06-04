@@ -40,9 +40,9 @@ namespace EliteChroma.Elite.Internal
         {
             _watch.Clear();
 
-            foreach (var m in modifiers.Where(x => x.Device == Device.Keyboard))
+            foreach (DeviceKey m in modifiers.Where(x => x.Device == Device.Keyboard))
             {
-                if (KeyMappings.TryGetKey(m.Key, keyboardLayout, enUSOverride, out var key, NativeMethods))
+                if (KeyMappings.TryGetKey(m.Key, keyboardLayout, enUSOverride, out VirtualKey key, NativeMethods))
                 {
                     _watch[key] = m;
                 }
@@ -105,7 +105,7 @@ namespace EliteChroma.Elite.Internal
 
         private IEnumerable<DeviceKey> GetAllPressedModifiers()
         {
-            foreach (var kv in _watch)
+            foreach (KeyValuePair<VirtualKey, DeviceKey> kv in _watch)
             {
                 if ((NativeMethods.GetAsyncKeyState(kv.Key) & 0x8000) != 0)
                 {

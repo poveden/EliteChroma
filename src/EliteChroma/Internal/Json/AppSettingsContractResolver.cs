@@ -14,7 +14,7 @@ namespace EliteChroma.Internal.Json
 
         protected override JsonContract CreateContract(Type objectType)
         {
-            var contract = base.CreateContract(objectType);
+            JsonContract contract = base.CreateContract(objectType);
 
             if (objectType == typeof(Color))
             {
@@ -26,7 +26,7 @@ namespace EliteChroma.Internal.Json
 
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
-            var property = base.CreateProperty(member, memberSerialization);
+            JsonProperty property = base.CreateProperty(member, memberSerialization);
 
             if (property.DeclaringType != typeof(ChromaColors))
             {
@@ -43,6 +43,9 @@ namespace EliteChroma.Internal.Json
 
                 case nameof(ChromaColors.PowerDistributorScale):
                     property.Ignored = true;
+                    break;
+
+                default:
                     break;
             }
 

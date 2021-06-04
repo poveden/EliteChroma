@@ -20,7 +20,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            var colorOn = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? Game.Colors.AnalysisMode : Colors.HardpointsToggle;
+            Color colorOn = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? Game.Colors.AnalysisMode : Colors.HardpointsToggle;
 
             ApplyColorToBinding(canvas.Keyboard, ModeSwitches.PlayerHUDModeToggle, colorOn);
 
@@ -32,17 +32,17 @@ namespace EliteChroma.Core.Layers
             ApplyColorToBinding(canvas.Keyboard, Weapons.PrimaryFire, colorOn);
             ApplyColorToBinding(canvas.Keyboard, Weapons.SecondaryFire, colorOn);
 
-            var hardpointsDeployed = Game.Status.HasFlag(Flags.HardpointsDeployed) && !Game.Status.HasFlag(Flags.Supercruise);
+            bool hardpointsDeployed = Game.Status.HasFlag(Flags.HardpointsDeployed) && !Game.Status.HasFlag(Flags.Supercruise);
 
             Color hColor;
             if (hardpointsDeployed)
             {
-                StartAnimation();
+                _ = StartAnimation();
                 hColor = PulseColor(Color.Black, colorOn, TimeSpan.FromSeconds(1));
             }
             else
             {
-                StopAnimation();
+                _ = StopAnimation();
                 hColor = colorOn;
             }
 

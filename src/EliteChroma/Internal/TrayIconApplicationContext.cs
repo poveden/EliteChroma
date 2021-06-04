@@ -20,8 +20,8 @@ namespace EliteChroma.Internal
                 ContextMenuStrip = ContextMenu,
             };
 
-            this.TrayIcon.MouseClick += TrayIcon_MouseClick;
-            this.TrayIcon.MouseDoubleClick += TrayIcon_MouseDoubleClick;
+            TrayIcon.MouseClick += TrayIcon_MouseClick;
+            TrayIcon.MouseDoubleClick += TrayIcon_MouseDoubleClick;
         }
 
         protected ContextMenuStrip ContextMenu { get; }
@@ -47,9 +47,20 @@ namespace EliteChroma.Internal
         {
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing)
+            {
+                ContextMenu.Dispose();
+                TrayIcon.Dispose();
+            }
+        }
+
         private void Application_ApplicationExit(object sender, EventArgs e)
         {
-            this.OnApplicationExit(e);
+            OnApplicationExit(e);
         }
 
         private void TrayIcon_MouseClick(object sender, MouseEventArgs e)

@@ -18,6 +18,12 @@
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
+  <Import Project="$(MSBuildThisFileDirectory)..\..\Common.props" />
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\EliteChroma.Core.Windows\EliteChroma.Core.Windows.csproj" />
     <ProjectReference Include="..\EliteChroma.Core\EliteChroma.Core.csproj" />

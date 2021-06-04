@@ -6,20 +6,20 @@ using EliteChroma.Internal;
 namespace EliteChroma.Forms
 {
     [ExcludeFromCodeCoverage]
-    public partial class FrmAboutBox : Form
+    internal partial class FrmAboutBox : Form
     {
         public FrmAboutBox()
         {
             InitializeComponent();
 
             var ai = new AssemblyInfo();
-            this.Text = $"About {ai.Title}";
-            this.labelProductName.Text = ai.Product;
-            this.labelVersion.Text = $"Version {ai.Version.ToString(3)}";
-            this.labelCopyright.Text = ai.Copyright;
-            this.linkCompanyName.Text = ai.Company;
-            this.linkCompanyName.Links[0].LinkData = ai.Company;
-            this.textBoxDescription.Text = ai.Description;
+            Text = $"About {ai.Title}";
+            labelProductName.Text = ai.Product;
+            labelVersion.Text = $"Version {ai.Version.ToString(3)}";
+            labelCopyright.Text = ai.Copyright;
+            linkCompanyName.Text = ai.Company;
+            linkCompanyName.Links[0].LinkData = ai.Company;
+            textBoxDescription.Text = ai.Description;
         }
 
         private void LinkCompanyName_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -31,7 +31,7 @@ namespace EliteChroma.Forms
                 Verb = "open",
             };
 
-            Process.Start(ps);
+            _ = Process.Start(ps);
         }
     }
 }

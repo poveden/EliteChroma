@@ -17,8 +17,8 @@ namespace EliteChroma.Core.Internal
 
         public async Task<IChroma> CreateAsync()
         {
-            var chromaApi = ChromaApi ?? new NativeApi();
-            var res = await ColoreProvider.CreateAsync(ChromaAppInfo, chromaApi).ConfigureAwait(false);
+            IChromaApi chromaApi = ChromaApi ?? new NativeApi();
+            IChroma res = await ColoreProvider.CreateAsync(ChromaAppInfo, chromaApi).ConfigureAwait(false);
             return res;
         }
     }

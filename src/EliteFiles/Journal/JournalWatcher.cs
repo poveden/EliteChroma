@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -195,7 +196,7 @@ namespace EliteFiles.Journal
 
         private string GetLatestJournalFile()
         {
-            var matches =
+            IEnumerable<string> matches =
                 from file in _journalFolder.EnumerateFiles(_journalFilesWatcher.Filter)
                 let m = Regex.Match(file.Name, @"^Journal\.(.+)\.log$", RegexOptions.IgnoreCase)
                 where m.Success

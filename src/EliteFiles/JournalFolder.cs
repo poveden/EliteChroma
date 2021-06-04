@@ -20,7 +20,7 @@ namespace EliteFiles
 
         private static readonly Lazy<string> _defaultPath = new Lazy<string>(() =>
         {
-            var userProfileFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string userProfileFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             return Path.Combine(userProfileFolder, @"Saved Games\Frontier Developments\Elite Dangerous");
         });
 
@@ -89,6 +89,9 @@ namespace EliteFiles
         /// </summary>
         /// <param name="searchPattern">The pattern to match against the names of files.</param>
         /// <returns>The enumerable collection of files that match <paramref name="searchPattern"/>.</returns>
-        public IEnumerable<FileInfo> EnumerateFiles(string searchPattern) => _di.EnumerateFiles(searchPattern);
+        public IEnumerable<FileInfo> EnumerateFiles(string searchPattern)
+        {
+            return _di.EnumerateFiles(searchPattern);
+        }
     }
 }

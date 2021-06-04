@@ -48,9 +48,9 @@ namespace EliteChroma.Core.Internal
 
         public static bool TryGetKey(string keyboardLayout, char c, bool enUSOverride, out VirtualKey key, INativeMethods nativeMethods)
         {
-            keyboardLayout = keyboardLayout ?? KeyboardLayoutMap.GetCurrentLayout(nativeMethods);
+            keyboardLayout ??= KeyboardLayoutMap.GetCurrentLayout(nativeMethods);
 
-            if (!_layoutCache.TryGetValue(keyboardLayout, out var map))
+            if (!_layoutCache.TryGetValue(keyboardLayout, out IReadOnlyDictionary<char, VirtualKey> map))
             {
                 map = BuildMap(keyboardLayout, nativeMethods);
                 _layoutCache[keyboardLayout] = map;
@@ -63,7 +63,7 @@ namespace EliteChroma.Core.Internal
 
             // Elite:Dangerous won't recognize some keyboard layouts (at least, es-ES)
             // and treats them as en-US. Here we fix this behavior.
-            _ = _enUSScanCodes.TryGetValue(c, out var scanCode);
+            _ = _enUSScanCodes.TryGetValue(c, out uint scanCode);
 
             IntPtr hkl = KeyboardLayoutMap.GetKeyboardLayout(keyboardLayout, nativeMethods);
             key = (VirtualKey)nativeMethods.MapVirtualKeyEx(scanCode, MAPVK.VSC_TO_VK_EX, hkl);
@@ -76,9 +76,9 @@ namespace EliteChroma.Core.Internal
 
             IntPtr hkl = KeyboardLayoutMap.GetKeyboardLayout(keyboardLayout, nativeMethods);
 
-            foreach (var key in _oemKeys)
+            foreach (VirtualKey key in _oemKeys)
             {
-                var c = (char)(nativeMethods.MapVirtualKeyEx((uint)key, MAPVK.VK_TO_CHAR, hkl) & 0x7fffffff);
+                char c = (char)(nativeMethods.MapVirtualKeyEx((uint)key, MAPVK.VK_TO_CHAR, hkl) & 0x7fffffff);
 
                 if (c != 0 && !res.ContainsKey(c))
                 {

@@ -67,7 +67,7 @@ namespace EliteChroma.Core.Tests
 
             using var gpw = new GameProcessWatcher(_gif, nm);
 
-            var nOnChangedCalls = 0;
+            int nOnChangedCalls = 0;
             using var mre = new ManualResetEventSlim();
 
             gpw.Changed += (sender, e) =>
@@ -97,7 +97,10 @@ namespace EliteChroma.Core.Tests
         {
             using var gpw = new GameProcessWatcher(_gif, new NativeMethodsMock());
 
-            bool IsRunning() => gpw.GetPrivateField<bool>("_running");
+            bool IsRunning()
+            {
+                return gpw.GetPrivateField<bool>("_running");
+            }
 
             Assert.False(IsRunning());
 

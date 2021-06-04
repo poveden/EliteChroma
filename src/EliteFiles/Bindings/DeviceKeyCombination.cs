@@ -30,9 +30,9 @@ namespace EliteFiles.Bindings
                 return null;
             }
 
-            var device = xml.Attribute("Device")?.Value;
-            var key = xml.Attribute("Key")?.Value;
-            var modifiers = xml.Elements("Modifier").Select(DeviceKey.FromXml);
+            string device = xml.Attribute("Device")?.Value;
+            string key = xml.Attribute("Key")?.Value;
+            IEnumerable<DeviceKey> modifiers = xml.Elements("Modifier").Select(DeviceKey.FromXml);
 
             return new DeviceKeyCombination(device, key, modifiers);
         }

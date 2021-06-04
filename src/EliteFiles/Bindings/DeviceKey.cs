@@ -16,8 +16,8 @@ namespace EliteFiles.Bindings
 
         internal static DeviceKey FromXml(XElement xElement)
         {
-            var device = xElement.Attribute("Device")?.Value;
-            var key = xElement.Attribute("Key")?.Value;
+            string device = xElement.Attribute("Device")?.Value;
+            string key = xElement.Attribute("Key")?.Value;
 
             return new DeviceKey(device, key);
         }

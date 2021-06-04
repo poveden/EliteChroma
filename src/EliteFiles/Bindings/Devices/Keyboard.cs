@@ -220,7 +220,7 @@ namespace EliteFiles.Bindings.Devices
             // Character key binding (e.g. "Key_A" → 'A', "Key_ß" → 'ß')
             if (keyName.Length - _keyNamePrefix.Length == 1)
             {
-                c = keyName[keyName.Length - 1];
+                c = keyName[^1];
                 return true;
             }
 

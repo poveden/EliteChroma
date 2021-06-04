@@ -27,7 +27,7 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void GetCurrentLayoutFallsBackToEnUSOnUnknownKeyboardLayout()
         {
-            var res = Elite.Internal.KeyboardLayoutMap.GetCurrentLayout(new BadKeyboardLayoutKeyboardMock());
+            string res = Elite.Internal.KeyboardLayoutMap.GetCurrentLayout(new BadKeyboardLayoutKeyboardMock());
 
             Assert.Equal("en-US", res);
         }

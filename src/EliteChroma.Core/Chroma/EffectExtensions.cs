@@ -14,9 +14,9 @@ namespace EliteChroma.Chroma
 
         public static CustomKeyboardEffect Combine(this CustomKeyboardEffect keyboard, Color c, double cPct = 0.5)
         {
-            for (var i = 0; i < _allKeys.Length; i++)
+            for (int i = 0; i < _allKeys.Length; i++)
             {
-                var key = _allKeys[i];
+                Key key = _allKeys[i];
                 keyboard[key] = keyboard[key].Combine(c, cPct);
             }
 
@@ -25,9 +25,9 @@ namespace EliteChroma.Chroma
 
         public static CustomKeyboardEffect Max(this CustomKeyboardEffect keyboard, Color c)
         {
-            for (var i = 0; i < _allKeys.Length; i++)
+            for (int i = 0; i < _allKeys.Length; i++)
             {
-                var key = _allKeys[i];
+                Key key = _allKeys[i];
                 keyboard[key] = keyboard[key].Max(c);
             }
 
@@ -36,7 +36,7 @@ namespace EliteChroma.Chroma
 
         public static CustomKeyboardEffect MaxAt(this CustomKeyboardEffect keyboard, int row, int column, Color c)
         {
-            var key = GetKeyAt(row, column);
+            Key key = GetKeyAt(row, column);
             keyboard[key] = keyboard[key].Max(c);
 
             return keyboard;
@@ -44,7 +44,7 @@ namespace EliteChroma.Chroma
 
         public static CustomMouseEffect Combine(this CustomMouseEffect mouse, Color c, double cPct = 0.5)
         {
-            for (var i = 0; i < MouseConstants.MaxLeds; i++)
+            for (int i = 0; i < MouseConstants.MaxLeds; i++)
             {
                 mouse[i] = mouse[i].Combine(c, cPct);
             }
@@ -54,7 +54,7 @@ namespace EliteChroma.Chroma
 
         public static CustomMouseEffect Max(this CustomMouseEffect mouse, Color c)
         {
-            for (var i = 0; i < MouseConstants.MaxLeds; i++)
+            for (int i = 0; i < MouseConstants.MaxLeds; i++)
             {
                 mouse[i] = mouse[i].Max(c);
             }
@@ -64,7 +64,7 @@ namespace EliteChroma.Chroma
 
         public static CustomMousepadEffect Combine(this CustomMousepadEffect mousepad, Color c, double cPct = 0.5)
         {
-            for (var i = 0; i < MousepadConstants.MaxLeds; i++)
+            for (int i = 0; i < MousepadConstants.MaxLeds; i++)
             {
                 mousepad[i] = mousepad[i].Combine(c, cPct);
             }
@@ -74,7 +74,7 @@ namespace EliteChroma.Chroma
 
         public static CustomMousepadEffect Max(this CustomMousepadEffect mousepad, Color c)
         {
-            for (var i = 0; i < MousepadConstants.MaxLeds; i++)
+            for (int i = 0; i < MousepadConstants.MaxLeds; i++)
             {
                 mousepad[i] = mousepad[i].Max(c);
             }
@@ -84,7 +84,7 @@ namespace EliteChroma.Chroma
 
         public static CustomKeypadEffect Combine(this CustomKeypadEffect keypad, Color c, double cPct = 0.5)
         {
-            for (var i = 0; i < KeypadConstants.MaxKeys; i++)
+            for (int i = 0; i < KeypadConstants.MaxKeys; i++)
             {
                 keypad[i] = keypad[i].Combine(c, cPct);
             }
@@ -94,7 +94,7 @@ namespace EliteChroma.Chroma
 
         public static CustomKeypadEffect Max(this CustomKeypadEffect keypad, Color c)
         {
-            for (var i = 0; i < KeypadConstants.MaxKeys; i++)
+            for (int i = 0; i < KeypadConstants.MaxKeys; i++)
             {
                 keypad[i] = keypad[i].Max(c);
             }
@@ -104,7 +104,7 @@ namespace EliteChroma.Chroma
 
         public static CustomHeadsetEffect Combine(this CustomHeadsetEffect headset, Color c, double cPct = 0.5)
         {
-            for (var i = 0; i < HeadsetConstants.MaxLeds; i++)
+            for (int i = 0; i < HeadsetConstants.MaxLeds; i++)
             {
                 headset[i] = headset[i].Combine(c, cPct);
             }
@@ -114,7 +114,7 @@ namespace EliteChroma.Chroma
 
         public static CustomHeadsetEffect Max(this CustomHeadsetEffect headset, Color c)
         {
-            for (var i = 0; i < HeadsetConstants.MaxLeds; i++)
+            for (int i = 0; i < HeadsetConstants.MaxLeds; i++)
             {
                 headset[i] = headset[i].Max(c);
             }
@@ -124,7 +124,7 @@ namespace EliteChroma.Chroma
 
         public static CustomChromaLinkEffect Combine(this CustomChromaLinkEffect chromaLink, Color c, double cPct = 0.5)
         {
-            for (var i = 0; i < ChromaLinkConstants.MaxLeds; i++)
+            for (int i = 0; i < ChromaLinkConstants.MaxLeds; i++)
             {
                 chromaLink[i] = chromaLink[i].Combine(c, cPct);
             }
@@ -134,7 +134,7 @@ namespace EliteChroma.Chroma
 
         public static CustomChromaLinkEffect Max(this CustomChromaLinkEffect chromaLink, Color c)
         {
-            for (var i = 0; i < ChromaLinkConstants.MaxLeds; i++)
+            for (int i = 0; i < ChromaLinkConstants.MaxLeds; i++)
             {
                 chromaLink[i] = chromaLink[i].Max(c);
             }
@@ -149,10 +149,10 @@ namespace EliteChroma.Chroma
         {
             var res = new Key[KeyboardConstants.MaxRows * KeyboardConstants.MaxColumns];
 
-            var i = 0;
-            for (var row = 0; row < KeyboardConstants.MaxRows; row++)
+            int i = 0;
+            for (int row = 0; row < KeyboardConstants.MaxRows; row++)
             {
-                for (var col = 0; col < KeyboardConstants.MaxColumns; col++)
+                for (int col = 0; col < KeyboardConstants.MaxColumns; col++)
                 {
                     res[i++] = GetKeyAt(row, col);
                 }
@@ -161,6 +161,9 @@ namespace EliteChroma.Chroma
             return res;
         }
 
-        private static Key GetKeyAt(int row, int column) => (Key)((row << 8) + column);
+        private static Key GetKeyAt(int row, int column)
+        {
+            return (Key)((row << 8) + column);
+        }
     }
 }

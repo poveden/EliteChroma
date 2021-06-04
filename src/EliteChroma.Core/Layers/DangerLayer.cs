@@ -29,43 +29,43 @@ namespace EliteChroma.Core.Layers
                 _underAttackFade = _lastUnderAttack + _underAttackDuration;
             }
 
-            var underAttack = Now < _underAttackFade;
-            var inDanger = Game.Status.HasFlag(Flags.IsInDanger);
-            var otherDanger = Game.Status.HasFlag(Flags.Overheating);
+            bool underAttack = Now < _underAttackFade;
+            bool inDanger = Game.Status.HasFlag(Flags.IsInDanger);
+            bool otherDanger = Game.Status.HasFlag(Flags.Overheating);
 
             if (underAttack || inDanger || otherDanger)
             {
-                StartAnimation();
+                _ = StartAnimation();
             }
             else
             {
-                StopAnimation();
+                _ = StopAnimation();
                 return;
             }
 
-            var k = canvas.Keyboard;
+            CustomKeyboardEffect k = canvas.Keyboard;
 
             if (underAttack || otherDanger)
             {
-                var flarePct = PulseColor(Color.Black, Color.White, _fastPulse).R / 255.0;
+                double flarePct = PulseColor(Color.Black, Color.White, _fastPulse).R / 255.0;
 
                 if (!otherDanger)
                 {
-                    var fade = (_underAttackFade - Now).TotalSeconds / _underAttackDuration.TotalSeconds;
+                    double fade = (_underAttackFade - Now).TotalSeconds / _underAttackDuration.TotalSeconds;
                     flarePct = flarePct * fade * fade;
                 }
 
-                var c = GameColors.RedAlert.Transform(flarePct);
+                Color c = GameColors.RedAlert.Transform(flarePct);
 
-                var cLogo = k[Key.Logo];
-                canvas.Keyboard.Max(c);
+                Color cLogo = k[Key.Logo];
+                _ = canvas.Keyboard.Max(c);
                 k[Key.Logo] = cLogo;
 
-                canvas.Mouse.Combine(GameColors.RedAlert, flarePct);
-                canvas.Mousepad.Combine(GameColors.RedAlert, flarePct);
-                canvas.Keypad.Max(c);
-                canvas.Headset.Combine(GameColors.RedAlert, flarePct);
-                canvas.ChromaLink.Combine(GameColors.RedAlert, flarePct);
+                _ = canvas.Mouse.Combine(GameColors.RedAlert, flarePct);
+                _ = canvas.Mousepad.Combine(GameColors.RedAlert, flarePct);
+                _ = canvas.Keypad.Max(c);
+                _ = canvas.Headset.Combine(GameColors.RedAlert, flarePct);
+                _ = canvas.ChromaLink.Combine(GameColors.RedAlert, flarePct);
             }
 
             if (inDanger)

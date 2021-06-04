@@ -32,7 +32,7 @@ namespace EliteChroma.Core.Tests.Internal
 
                 _attach(Handler);
                 trigger();
-                var ok = ss.Wait(timeout);
+                bool ok = ss.Wait(timeout);
                 _detach(Handler);
 
                 if (!ok)
@@ -56,7 +56,7 @@ namespace EliteChroma.Core.Tests.Internal
 
                     if (ce.IsSet)
                     {
-                        var list = string.Join(',', res.Select(x => $"{x}"));
+                        string list = string.Join(',', res.Select(x => $"{x}"));
                         throw new InvalidOperationException($"More than {count} events received in collector '{_name}': {list}.");
                     }
 
@@ -65,12 +65,12 @@ namespace EliteChroma.Core.Tests.Internal
 
                 _attach(Handler);
                 trigger();
-                var ok = ce.Wait(timeout);
+                bool ok = ce.Wait(timeout);
                 _detach(Handler);
 
                 if (!ok)
                 {
-                    var list = string.Join(',', res.Select(x => $"{x}"));
+                    string list = string.Join(',', res.Select(x => $"{x}"));
                     throw new TimeoutException($"Timeout in collector '{_name}' after receiving the following events: {list}.");
                 }
             }

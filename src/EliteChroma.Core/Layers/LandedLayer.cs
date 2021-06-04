@@ -15,16 +15,16 @@ namespace EliteChroma.Core.Layers
         {
             if (!Game.Status.HasFlag(Flags.Landed))
             {
-                StopAnimation();
+                _ = StopAnimation();
                 return;
             }
 
-            StartAnimation();
+            _ = StartAnimation();
 
-            var k = canvas.Keyboard;
+            CustomKeyboardEffect k = canvas.Keyboard;
             k[Key.Escape] = Colors.InterfaceMode;
 
-            var c = PulseColor(Color.Black, Colors.VehicleThrust, TimeSpan.FromSeconds(1));
+            Color c = PulseColor(Color.Black, Colors.VehicleThrust, TimeSpan.FromSeconds(1));
             ApplyColorToBinding(canvas.Keyboard, FlightThrust.Up, c);
         }
     }

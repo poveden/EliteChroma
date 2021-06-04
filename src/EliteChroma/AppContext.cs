@@ -22,13 +22,15 @@ namespace EliteChroma
         {
             _appSettingsPath = appSettingsPath ?? AppSettings.GetDefaultPath();
 
-            this.TrayIcon.Icon = Resources.EliteChromaIcon;
+            TrayIcon.Icon = Resources.EliteChromaIcon;
 
-            ContextMenu.Items.Add("&Settings...", null, Settings_Click);
-            ContextMenu.Items.Add("-");
-            ContextMenu.Items.Add("&About...", null, About_Click);
-            ContextMenu.Items.Add("-");
-            ContextMenu.Items.Add("E&xit", null, Exit_Click);
+#pragma warning disable IDISP004
+            _ = ContextMenu.Items.Add("&Settings...", null, Settings_Click);
+            _ = ContextMenu.Items.Add("-");
+            _ = ContextMenu.Items.Add("&About...", null, About_Click);
+            _ = ContextMenu.Items.Add("-");
+            _ = ContextMenu.Items.Add("E&xit", null, Exit_Click);
+#pragma warning restore IDISP004
 
             _chromaFactory = new WinChromaFactory();
         }
@@ -37,7 +39,7 @@ namespace EliteChroma
         {
             if (!ChromaController.IsChromaSdkAvailable())
             {
-                MessageBox.Show(
+                _ = MessageBox.Show(
                     Resources.MsgBox_RazerChromaSdkNotFound,
                     new AssemblyInfo().Title,
                     MessageBoxButtons.OK,
@@ -50,7 +52,7 @@ namespace EliteChroma
 
             if (!settings.IsValid())
             {
-                MessageBox.Show(
+                _ = MessageBox.Show(
                     Resources.MsgBox_UnableToIdentifyFolders,
                     new AssemblyInfo().Title,
                     MessageBoxButtons.OK,
@@ -70,8 +72,12 @@ namespace EliteChroma
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            _cc?.Dispose();
-            _chromaFactory.Dispose();
+
+            if (disposing)
+            {
+                _cc?.Dispose();
+                _chromaFactory.Dispose();
+            }
         }
 
         private void Settings_Click(object sender, EventArgs eventArgs)
@@ -91,7 +97,7 @@ namespace EliteChroma
         private void About_Click(object sender, EventArgs eventArgs)
         {
             using var frm = new FrmAboutBox();
-            frm.ShowDialog(ContextMenu);
+            _ = frm.ShowDialog(ContextMenu);
         }
 
         private void Exit_Click(object sender, EventArgs eventArgs)

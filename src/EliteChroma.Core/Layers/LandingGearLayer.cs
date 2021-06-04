@@ -30,12 +30,12 @@ namespace EliteChroma.Core.Layers
                 ApplyColorToBinding(canvas.Keyboard, FlightLandingOverrides.Rotation, Colors.VehicleRotation);
                 ApplyColorToBinding(canvas.Keyboard, FlightLandingOverrides.Thrust, Colors.VehicleThrust);
 
-                StartAnimation();
+                _ = StartAnimation();
                 lColor = PulseColor(Color.Black, Colors.LandingGearDeployed, TimeSpan.FromSeconds(1));
             }
             else
             {
-                StopAnimation();
+                _ = StopAnimation();
                 lColor = Colors.LandingGearRetracted;
             }
 

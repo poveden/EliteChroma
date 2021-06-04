@@ -10,11 +10,11 @@ namespace EliteFiles.Journal.Internal
     {
         public override PowerDistributor ReadJson(JsonReader reader, Type objectType, PowerDistributor existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            var sys = (byte)reader.ReadAsInt32();
-            var eng = (byte)reader.ReadAsInt32();
-            var wep = (byte)reader.ReadAsInt32();
+            byte sys = (byte)reader.ReadAsInt32();
+            byte eng = (byte)reader.ReadAsInt32();
+            byte wep = (byte)reader.ReadAsInt32();
 
-            reader.Read(); // JsonToken.EndArray
+            _ = reader.Read(); // JsonToken.EndArray
 
             return new PowerDistributor(sys, eng, wep);
         }

@@ -154,16 +154,16 @@ namespace EliteChroma.Elite
         {
             var res = new HashSet<DeviceKey>();
 
-            foreach (var binding in bindings)
+            foreach (Binding binding in bindings)
             {
-                foreach (var modifier in binding.Primary.Modifiers)
+                foreach (DeviceKey modifier in binding.Primary.Modifiers)
                 {
-                    res.Add(modifier);
+                    _ = res.Add(modifier);
                 }
 
-                foreach (var modifier in binding.Secondary.Modifiers)
+                foreach (DeviceKey modifier in binding.Secondary.Modifiers)
                 {
-                    res.Add(modifier);
+                    _ = res.Add(modifier);
                 }
             }
 
@@ -272,7 +272,7 @@ namespace EliteChroma.Elite
             }
             finally
             {
-                Interlocked.Exchange(ref _dispatching, 0);
+                _ = Interlocked.Exchange(ref _dispatching, 0);
             }
         }
     }

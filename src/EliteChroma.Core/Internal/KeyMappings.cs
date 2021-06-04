@@ -189,20 +189,20 @@ namespace EliteChroma.Core.Internal
                 return true;
             }
 
-            keyboardLayout = keyboardLayout ?? KeyboardLayoutMap.GetCurrentLayout(nativeMethods);
+            keyboardLayout ??= KeyboardLayoutMap.GetCurrentLayout(nativeMethods);
 
-            _ = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, enUSOverride, out var vk, nativeMethods);
+            _ = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, enUSOverride, out NativeMethods.VirtualKey vk, nativeMethods);
 
             IntPtr hkl = KeyboardLayoutMap.GetKeyboardLayout(keyboardLayout, nativeMethods);
 
-            var scanCode = nativeMethods.MapVirtualKeyEx((uint)vk, NativeMethods.MAPVK.VK_TO_VSC_EX, hkl);
+            uint scanCode = nativeMethods.MapVirtualKeyEx((uint)vk, NativeMethods.MAPVK.VK_TO_VSC_EX, hkl);
 
             return _scanCodes.TryGetValue(scanCode, out key);
         }
 
         private static string GetKeyName(char c)
         {
-            _ = Keyboard.TryGetKeyName(c, out var keyName);
+            _ = Keyboard.TryGetKeyName(c, out string keyName);
             return keyName;
         }
     }

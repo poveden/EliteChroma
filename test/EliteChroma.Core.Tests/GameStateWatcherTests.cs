@@ -49,7 +49,10 @@ namespace EliteChroma.Core.Tests
         {
             using var watcher = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, _journalFolder);
 
-            bool IsRunning() => watcher.GetPrivateField<bool>("_running");
+            bool IsRunning()
+            {
+                return watcher.GetPrivateField<bool>("_running");
+            }
 
             Assert.False(IsRunning());
 
@@ -87,7 +90,7 @@ namespace EliteChroma.Core.Tests
             var evs = new EventCollector<ChangeType>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(OnChangedIsNotReentrant));
             evs.Wait(watcher.Start, 5000);
 
-            var nOnChangedCalls = 0;
+            int nOnChangedCalls = 0;
             using var mre = new ManualResetEventSlim();
 
             watcher.Changed += (sender, e) =>

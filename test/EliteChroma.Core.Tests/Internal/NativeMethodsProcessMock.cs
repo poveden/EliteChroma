@@ -49,7 +49,7 @@ namespace EliteChroma.Core.Tests.Internal
                 return false;
             }
 
-            var id = hProcess.DangerousGetHandle().ToInt32();
+            int id = hProcess.DangerousGetHandle().ToInt32();
 
             if (!Processes.ContainsKey(id))
             {
@@ -69,9 +69,9 @@ namespace EliteChroma.Core.Tests.Internal
                 return 0;
             }
 
-            var id = hProcess.DangerousGetHandle().ToInt32();
+            int id = hProcess.DangerousGetHandle().ToInt32();
 
-            if (!Processes.TryGetValue(id, out var exePath))
+            if (!Processes.TryGetValue(id, out string exePath))
             {
                 return 0;
             }
@@ -81,7 +81,7 @@ namespace EliteChroma.Core.Tests.Internal
                 return 0;
             }
 
-            var n = exePath.Length;
+            int n = exePath.Length;
             exePath.CopyTo(0, lpFilename, 0, n);
             return n;
         }

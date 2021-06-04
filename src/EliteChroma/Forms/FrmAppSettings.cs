@@ -17,7 +17,7 @@ using EliteFiles;
 namespace EliteChroma.Forms
 {
     [ExcludeFromCodeCoverage]
-    public partial class FrmAppSettings : Form
+    internal partial class FrmAppSettings : Form
     {
         private const string _gameFoldersSection = "GameFolders";
         private const string _keyboardSection = "Keyboard";
@@ -38,12 +38,14 @@ namespace EliteChroma.Forms
             _gameInstallFolders = CreateGameInstallFolderMenuItems();
             tsmiGameInstallBrowse.Click += TsmiGameInstallBrowse_Click;
 
-            ApplyLinks(linkGameFolders, new[]
+            string[] urls = new[]
             {
                 Resources.Url_GameInstallFoldersHelp,
                 Resources.Url_GameOptionsFolderHelp,
                 Resources.Url_JournalFolderHelp,
-            });
+            };
+
+            ApplyLinks(linkGameFolders, urls);
         }
 
         public string GameInstallFolder
@@ -76,26 +78,33 @@ namespace EliteChroma.Forms
             set => pgColors.SelectedObject = value;
         }
 
+        public override bool ValidateChildren()
+        {
+            bool res = base.ValidateChildren();
+            tvSections.Refresh();
+            return res;
+        }
+
         private static void ApplyLinks(LinkLabel linkLabel, IEnumerable<string> urls)
         {
-            var template = linkLabel.Text;
+            string template = linkLabel.Text;
             var finalTxt = new StringBuilder(template.Length);
-            var j = -1;
+            int j = -1;
 
-            foreach (var url in urls)
+            foreach (string url in urls)
             {
-                var i = template.IndexOf('{', j + 1);
-                finalTxt.Append(template, j + 1, i - j - 1);
+                int i = template.IndexOf('{', j + 1);
+                _ = finalTxt.Append(template, j + 1, i - j - 1);
 
                 j = template.IndexOf('}', i + 1);
-                var l = j - i - 1;
-                var linkTxt = template.Substring(i + 1, l);
+                int l = j - i - 1;
+                string linkTxt = template.Substring(i + 1, l);
 
-                linkLabel.Links.Add(new LinkLabel.Link(finalTxt.Length, l, url));
-                finalTxt.Append(linkTxt);
+                _ = linkLabel.Links.Add(new LinkLabel.Link(finalTxt.Length, l, url));
+                _ = finalTxt.Append(linkTxt);
             }
 
-            finalTxt.Append(template, j + 1, template.Length - j - 1);
+            _ = finalTxt.Append(template, j + 1, template.Length - j - 1);
 
             linkLabel.Text = finalTxt.ToString();
         }
@@ -104,11 +113,11 @@ namespace EliteChroma.Forms
         {
             var res = new List<ToolStripMenuItem>();
 
-            var allPossibleFolders = EliteFiles.GameInstallFolder.DefaultPaths
+            IEnumerable<string> allPossibleFolders = EliteFiles.GameInstallFolder.DefaultPaths
                 .Concat(EliteFiles.GameInstallFolder.GetAlternatePaths())
                 .Where(Directory.Exists);
 
-            foreach (var folder in allPossibleFolders)
+            foreach (string folder in allPossibleFolders)
             {
                 var mi = new ToolStripMenuItem
                 {
@@ -135,17 +144,17 @@ namespace EliteChroma.Forms
 
             pgColors.SelectedGridItem = pgColors.GetGridItems()[0];
 
-            for (var i = 0; i < _gameInstallFolders.Count; i++)
+            for (int i = 0; i < _gameInstallFolders.Count; i++)
             {
                 ctxGameInstall.Items.Insert(i, _gameInstallFolders[i]);
             }
 
-            ValidateChildren();
+            _ = ValidateChildren();
         }
 
         private void CtxGameInstall_Opening(object sender, CancelEventArgs e)
         {
-            foreach (var item in _gameInstallFolders)
+            foreach (ToolStripMenuItem item in _gameInstallFolders)
             {
                 item.Checked = txtGameInstall.Text == (string)item.Tag;
             }
@@ -155,28 +164,28 @@ namespace EliteChroma.Forms
         {
             var item = (ToolStripMenuItem)sender;
             txtGameInstall.Text = (string)item.Tag;
-            ValidateChildren();
+            _ = ValidateChildren();
         }
 
         private void TsmiGameInstallBrowse_Click(object sender, EventArgs e)
         {
-            folderBrowser.Description = "Select the folder where Elite:Dangerous is installed:";
+            folderBrowser.Description = Resources.FolderDialogDescription_GameInstallFolder;
             folderBrowser.SelectedPath = txtGameInstall.Text;
 
             if (folderBrowser.ShowDialog() == DialogResult.OK)
             {
-                var path = folderBrowser.SelectedPath;
-                
+                string path = folderBrowser.SelectedPath;
+
                 if (!new GameInstallFolder(path).IsValid)
                 {
                     // Perhaps the user chose the base folder where all E:D variants are installed
-                    foreach (var edPath in new[]
+                    foreach (string edPath in new[]
                     {
                         @"Products\elite-dangerous-64",
-                        @"Products\elite-dangerous-odyssey-64"
+                        @"Products\elite-dangerous-odyssey-64",
                     })
                     {
-                        var ed64SubPath = Path.Combine(path, edPath);
+                        string ed64SubPath = Path.Combine(path, edPath);
 
                         if (new GameInstallFolder(ed64SubPath).IsValid)
                         {
@@ -187,31 +196,31 @@ namespace EliteChroma.Forms
                 }
 
                 txtGameInstall.Text = path;
-                ValidateChildren();
+                _ = ValidateChildren();
             }
         }
 
         private void BtnGameOptions_Click(object sender, EventArgs e)
         {
-            folderBrowser.Description = "Select the folder where Elite:Dangerous stores user-related game options:";
+            folderBrowser.Description = Resources.FolderDialogDescription_GameOptionsFolder;
             folderBrowser.SelectedPath = txtGameOptions.Text;
 
             if (folderBrowser.ShowDialog() == DialogResult.OK)
             {
                 txtGameOptions.Text = folderBrowser.SelectedPath;
-                ValidateChildren();
+                _ = ValidateChildren();
             }
         }
 
         private void BtnJournal_Click(object sender, EventArgs e)
         {
-            folderBrowser.Description = "Select the folder where Elite:Dangerous stores the player journal:";
+            folderBrowser.Description = Resources.FolderDialogDescription_JournalFolder;
             folderBrowser.SelectedPath = txtJournal.Text;
 
             if (folderBrowser.ShowDialog() == DialogResult.OK)
             {
                 txtJournal.Text = folderBrowser.SelectedPath;
-                ValidateChildren();
+                _ = ValidateChildren();
             }
         }
 
@@ -275,7 +284,7 @@ namespace EliteChroma.Forms
                 Verb = "open",
             };
 
-            Process.Start(ps);
+            _ = Process.Start(ps);
         }
 
         private void TvSections_AfterSelect(object sender, TreeViewEventArgs e)
@@ -295,7 +304,7 @@ namespace EliteChroma.Forms
 
         private void TvSections_DrawNode(object sender, DrawTreeNodeEventArgs e)
         {
-            var b = e.State.HasFlag(TreeNodeStates.Focused) ? SystemBrushes.HighlightText : SystemBrushes.ControlText;
+            Brush b = e.State.HasFlag(TreeNodeStates.Focused) ? SystemBrushes.HighlightText : SystemBrushes.ControlText;
             e.Graphics.DrawString(e.Node.Text, tvSections.Font, b, e.Bounds);
 
             if (!_sectionErrors.Contains(e.Node.Name))
@@ -303,17 +312,10 @@ namespace EliteChroma.Forms
                 return;
             }
 
-            var x = e.Bounds.Right - 4;
-            var y = e.Bounds.Top + (e.Bounds.Height - Resources.RedDot.Height) / 2;
+            int x = e.Bounds.Right - 4;
+            int y = e.Bounds.Top + ((e.Bounds.Height - Resources.RedDot.Height) / 2);
             var r = new Rectangle(new Point(x, y), Resources.RedDot.Size);
             e.Graphics.DrawImageUnscaledAndClipped(Resources.RedDot, r);
-        }
-
-        public override bool ValidateChildren()
-        {
-            var res = base.ValidateChildren();
-            tvSections.Refresh();
-            return res;
         }
 
         private void SetError(string sectionKey, Control control, string value)
@@ -322,11 +324,11 @@ namespace EliteChroma.Forms
 
             if (string.IsNullOrEmpty(value))
             {
-                _sectionErrors.Remove(sectionKey);
+                _ = _sectionErrors.Remove(sectionKey);
             }
             else
             {
-                _sectionErrors.Add(sectionKey);
+                _ = _sectionErrors.Add(sectionKey);
             }
         }
     }

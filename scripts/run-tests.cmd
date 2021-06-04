@@ -2,7 +2,7 @@
 
 pushd %~dp0..
 
-dotnet build -c Release
+dotnet build -c Release --no-incremental /warnaserror
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 dotnet test -c Release --no-build -s Common.runsettings

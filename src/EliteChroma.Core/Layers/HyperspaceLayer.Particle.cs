@@ -31,7 +31,7 @@ namespace EliteChroma.Core.Layers
 
             public void MoveAndRender(ChromaCanvas canvas, TimeSpan deltaT)
             {
-                var lastZ = Z;
+                double lastZ = Z;
                 Z += _zps * deltaT.TotalSeconds;
 
                 Color c;
@@ -43,7 +43,7 @@ namespace EliteChroma.Core.Layers
                 else
                 {
                     // We take the brightness from the nearest point in the light streak.
-                    var nearestZ = Math.Min(Math.Abs(lastZ), Math.Abs(Z));
+                    double nearestZ = Math.Min(Math.Abs(lastZ), Math.Abs(Z));
                     c = _color.Transform(1 / (1 + nearestZ));
                 }
 
@@ -69,8 +69,8 @@ namespace EliteChroma.Core.Layers
                 const double xCenter = (KeyboardConstants.MaxColumns - 1) / 2.0;
 
                 Debug.Assert(lastZ >= Z, "Z always decreases");
-                var xPrev = (lastZ > 0 ? Math.Min(1 / lastZ, 2) : 2) * xScale;
-                var xCurr = (Z > 0 ? Math.Min(1 / Z, 2) : 2) * xScale;
+                double xPrev = (lastZ > 0 ? Math.Min(1 / lastZ, 2) : 2) * xScale;
+                double xCurr = (Z > 0 ? Math.Min(1 / Z, 2) : 2) * xScale;
 
                 double x0, x1;
                 if (_angle >= 180)
@@ -84,21 +84,21 @@ namespace EliteChroma.Core.Layers
                     x0 = xCenter - xCurr;
                 }
 
-                var y = _angle % KeyboardConstants.MaxRows;
+                int y = _angle % KeyboardConstants.MaxRows;
 
                 // First pixel
-                var xi = (int)Math.Floor(x0);
+                int xi = (int)Math.Floor(x0);
                 if (xi >= 0 && xi < KeyboardConstants.MaxColumns)
                 {
-                    var caa = c.Transform(1 - (x0 - xi));
+                    Color caa = c.Transform(1 - (x0 - xi));
                     keyboard[y, xi] = keyboard[y, xi].Max(caa);
                 }
 
                 // Last pixel
-                var xj = (int)Math.Ceiling(x1);
+                int xj = (int)Math.Ceiling(x1);
                 if (xj >= 0 && xj < KeyboardConstants.MaxColumns)
                 {
-                    var caa = c.Transform(1 - (xj - x1));
+                    Color caa = c.Transform(1 - (xj - x1));
                     keyboard[y, xj] = keyboard[y, xj].Max(caa);
                 }
 
@@ -132,14 +132,16 @@ namespace EliteChroma.Core.Layers
                     case 1:
                         mouse[GridLed.Logo] = mouse[GridLed.Logo].Max(c);
                         return;
+                    default:
+                        break;
                 }
 
                 Debug.Assert(lastZ >= Z, "Z always decreases");
-                var yPrev = (lastZ < 0 ? Math.Max(1 / lastZ, -2) : -2) * yScale;
-                var yCurr = (Z < 0 ? Math.Max(1 / Z, -2) : -2) * yScale;
+                double yPrev = (lastZ < 0 ? Math.Max(1 / lastZ, -2) : -2) * yScale;
+                double yCurr = (Z < 0 ? Math.Max(1 / Z, -2) : -2) * yScale;
 
-                var y0 = (yScale + yPrev) + yMin;
-                var y1 = (yScale + yCurr) + yMin;
+                double y0 = (yScale + yPrev) + yMin;
+                double y1 = (yScale + yCurr) + yMin;
 
                 if (y1 < yMin)
                 {
@@ -149,19 +151,19 @@ namespace EliteChroma.Core.Layers
                 }
 
                 // First pixel
-                var yi = (int)Math.Floor(y0);
+                int yi = (int)Math.Floor(y0);
                 if (yi >= yMin && yi <= yMax)
                 {
-                    var caa = c.Transform(1 - (y0 - yi));
+                    Color caa = c.Transform(1 - (y0 - yi));
                     mouse[yi, 0] = mouse[yi, 0].Max(caa);
                     mouse[yi, xMax] = mouse[yi, 0];
                 }
 
                 // Last pixel
-                var yj = (int)Math.Ceiling(y1);
+                int yj = (int)Math.Ceiling(y1);
                 if (yj >= yMin && yj <= yMax)
                 {
-                    var caa = c.Transform(1 - (yj - y1));
+                    Color caa = c.Transform(1 - (yj - y1));
                     mouse[yj, 0] = mouse[yj, 0].Max(caa);
                     mouse[yj, xMax] = mouse[yj, 0];
                 }
@@ -183,11 +185,11 @@ namespace EliteChroma.Core.Layers
                     return;
                 }
 
-                var ia = _angle % MousepadConstants.MaxLeds;
-                var ib = (ia + 1) % MousepadConstants.MaxLeds;
-                var ic = (ia + 2) % MousepadConstants.MaxLeds;
+                int ia = _angle % MousepadConstants.MaxLeds;
+                int ib = (ia + 1) % MousepadConstants.MaxLeds;
+                int ic = (ia + 2) % MousepadConstants.MaxLeds;
 
-                var cf = c.Transform(0.25);
+                Color cf = c.Transform(0.25);
 
                 mousepad[ia] = mousepad[ia].Max(cf);
                 mousepad[ib] = mousepad[ib].Max(c);
@@ -209,7 +211,7 @@ namespace EliteChroma.Core.Layers
                     return;
                 }
 
-                var y = _angle % (KeypadConstants.MaxRows + 1);
+                int y = _angle % (KeypadConstants.MaxRows + 1);
 
                 if (y == KeypadConstants.MaxRows)
                 {
@@ -233,25 +235,25 @@ namespace EliteChroma.Core.Layers
                 }
 
                 Debug.Assert(lastZ >= Z, "Z always decreases");
-                var xPrev = (lastZ < 0 ? Math.Max(1 / lastZ, -2) : -2) * xScale;
-                var xCurr = Math.Max(1 / Z, -2) * xScale;
+                double xPrev = (lastZ < 0 ? Math.Max(1 / lastZ, -2) : -2) * xScale;
+                double xCurr = Math.Max(1 / Z, -2) * xScale;
 
-                var x0 = xMax - (xScale + xCurr);
-                var x1 = xMax - (xScale + xPrev);
+                double x0 = xMax - (xScale + xCurr);
+                double x1 = xMax - (xScale + xPrev);
 
                 // First pixel
-                var xi = (int)Math.Floor(x0);
+                int xi = (int)Math.Floor(x0);
                 if (xi >= 0 && xi <= xMax)
                 {
-                    var caa = c.Transform(1 - (x0 - xi));
+                    Color caa = c.Transform(1 - (x0 - xi));
                     MaxNoThumb(y, xi, caa);
                 }
 
                 // Last pixel
-                var xj = (int)Math.Ceiling(x1);
+                int xj = (int)Math.Ceiling(x1);
                 if (xj >= 0 && xj <= xMax)
                 {
-                    var caa = c.Transform(1 - (xj - x1));
+                    Color caa = c.Transform(1 - (xj - x1));
                     MaxNoThumb(y, xj, caa);
                 }
 
@@ -271,7 +273,7 @@ namespace EliteChroma.Core.Layers
                     return;
                 }
 
-                var i = _angle % HeadsetConstants.MaxLeds;
+                int i = _angle % HeadsetConstants.MaxLeds;
                 headset[i] = headset[i].Max(c);
             }
 

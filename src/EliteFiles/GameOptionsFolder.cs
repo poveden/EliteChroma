@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace EliteFiles
 {
@@ -24,7 +22,7 @@ namespace EliteFiles
 
         private static readonly Lazy<string> _defaultPath = new Lazy<string>(() =>
         {
-            var localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             return Path.Combine(localAppDataFolder, @"Frontier Developments\Elite Dangerous\Options");
         });
 

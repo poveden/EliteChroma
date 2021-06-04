@@ -33,7 +33,7 @@ namespace EliteFiles.Bindings
             _gameInstallFolder = GameInstallFolder.AssertValid(gameInstallFolder);
             _gameOptionsFolder = GameOptionsFolder.AssertValid(gameOptionsFolder);
 
-            var customBindingsPath = gameOptionsFolder.Bindings.FullName;
+            string customBindingsPath = gameOptionsFolder.Bindings.FullName;
 
             _startPresetWatcher = new EliteFileSystemWatcher(customBindingsPath, gameOptionsFolder.BindingsStartPreset.Name);
             _startPresetWatcher.Changed += Bindings_Changed;
@@ -100,7 +100,7 @@ namespace EliteFiles.Bindings
 
         private void Reload()
         {
-            var bindsFiles = FileOperations.RetryIfNull(
+            IReadOnlyDictionary<BindingCategory, string> bindsFiles = FileOperations.RetryIfNull(
                 () => BindingPreset.FindActivePresetFiles(_gameInstallFolder, _gameOptionsFolder),
                 _reloadRetries);
 
@@ -111,14 +111,14 @@ namespace EliteFiles.Bindings
 
             var uniquePresets = new Dictionary<string, BindingPreset>(StringComparer.Ordinal);
 
-            foreach (var bindsFile in bindsFiles.Values)
+            foreach (string bindsFile in bindsFiles.Values)
             {
                 if (uniquePresets.ContainsKey(bindsFile))
                 {
                     continue;
                 }
 
-                var bindingPreset = FileOperations.RetryIfNull(
+                BindingPreset bindingPreset = FileOperations.RetryIfNull(
                     () => BindingPreset.FromFile(bindsFile),
                     _reloadRetries);
 
