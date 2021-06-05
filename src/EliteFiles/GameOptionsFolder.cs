@@ -46,8 +46,7 @@ namespace EliteFiles
             IsValid = _di.Exists
                 && Bindings.Exists
                 && BindingsStartPreset.Exists
-                && Graphics.Exists
-                && GraphicsConfigurationOverride.Exists;
+                && Graphics.Exists;
         }
 
         /// <summary>

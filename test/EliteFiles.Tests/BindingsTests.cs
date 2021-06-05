@@ -60,6 +60,16 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
+        public void ReturnsNullWhenTheBindingPresetsFileHasMalformedXml()
+        {
+            using var dir = new TestFolder();
+            dir.WriteText("Malformed.binds", "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><Root>");
+
+            var binds = BindingPreset.FromFile(dir.Resolve("Malformed.binds"));
+            Assert.Null(binds);
+        }
+
+        [Fact]
         public void ToleratesMalformedBindingPresets()
         {
             var file = Path.Combine(_gof.FullName, @"Bindings\Malformed.3.0.binds");
