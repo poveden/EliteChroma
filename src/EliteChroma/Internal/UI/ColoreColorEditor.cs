@@ -21,9 +21,9 @@ namespace EliteChroma.Internal.UI
             return UITypeEditorEditStyle.DropDown;
         }
 
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public override object? EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            var wfes = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+            var wfes = (IWindowsFormsEditorService?)provider.GetService(typeof(IWindowsFormsEditorService));
 
             if (wfes == null)
             {

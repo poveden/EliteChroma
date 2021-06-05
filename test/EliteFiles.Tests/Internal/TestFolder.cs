@@ -14,7 +14,7 @@ namespace EliteFiles.Tests.Internal
         {
         }
 
-        public TestFolder(string templatePath)
+        public TestFolder(string? templatePath)
         {
             string path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             _di = Directory.CreateDirectory(path);

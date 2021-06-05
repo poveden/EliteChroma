@@ -68,7 +68,7 @@ namespace EliteChroma.Tests
 
         private static void AssertHasTypeConverterAttribute(PropertyInfo pi, Type expectedType)
         {
-            var tca = pi.GetCustomAttribute<TypeConverterAttribute>();
+            var tca = pi.GetCustomAttribute<TypeConverterAttribute>()!;
             Assert.NotNull(tca);
 
             Assert.Equal(expectedType.AssemblyQualifiedName, tca.ConverterTypeName);
@@ -76,7 +76,7 @@ namespace EliteChroma.Tests
 
         private static void AssertHasEditorAttributeAttribute(PropertyInfo pi, Type expectedType, Type expectedBaseType)
         {
-            var ea = pi.GetCustomAttribute<EditorAttribute>();
+            var ea = pi.GetCustomAttribute<EditorAttribute>()!;
             Assert.NotNull(ea);
 
             Assert.Equal(expectedType.AssemblyQualifiedName, ea.EditorTypeName);

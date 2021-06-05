@@ -21,7 +21,7 @@ namespace EliteFiles.Journal
 
         private readonly object _journalLock = new object();
 
-        private JournalReader _journalReader;
+        private JournalReader? _journalReader;
 
         private bool _watching;
         private bool _starting;
@@ -52,13 +52,13 @@ namespace EliteFiles.Journal
         /// <summary>
         /// Occurs when a new entry is read from the player journal.
         /// </summary>
-        public event EventHandler<JournalEntry> EntryAdded;
+        public event EventHandler<JournalEntry>? EntryAdded;
 
         /// <summary>
         /// Occurs when this instance has finished reading all journal entries
         /// recorded before and during the call to <see cref="Start()"/>.
         /// </summary>
-        public event EventHandler<EventArgs> Started;
+        public event EventHandler<EventArgs>? Started;
 
         /// <summary>
         /// Gets a value indicating whether this instance is done reading
@@ -154,9 +154,9 @@ namespace EliteFiles.Journal
         {
             lock (_journalLock)
             {
-                JournalEntry entry;
+                JournalEntry? entry;
 
-                while ((entry = _journalReader.ReadEntry()) != null)
+                while ((entry = _journalReader?.ReadEntry()) != null)
                 {
                     EntryAdded?.Invoke(this, entry);
                 }

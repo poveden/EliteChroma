@@ -118,7 +118,7 @@ namespace EliteChroma.Core.Tests
         public void EnUSOverrideIsAppliedInTheGameState()
         {
             using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
-            var watcher = cc.GetPrivateField<GameStateWatcher>("_watcher");
+            var watcher = cc.GetPrivateField<GameStateWatcher>("_watcher")!;
 
             Assert.False(cc.ForceEnUSKeyboardLayout);
             Assert.False(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
@@ -175,10 +175,10 @@ namespace EliteChroma.Core.Tests
                 },
             };
 
-            var game = cc.GetPrivateField<GameStateWatcher>("_watcher")
-                .GetPrivateField<GameState>("_gameState");
+            var game = cc.GetPrivateField<GameStateWatcher>("_watcher")!
+                .GetPrivateField<GameState>("_gameState")!;
 
-            var effect = cc.GetPrivateField<LayeredEffect>("_effect");
+            var effect = cc.GetPrivateField<LayeredEffect>("_effect")!;
 
             int nRenderCalls = 0;
             using var mre = new ManualResetEventSlim();
@@ -200,7 +200,7 @@ namespace EliteChroma.Core.Tests
 
             async Task RenderEffect()
             {
-                await cc.InvokePrivateMethod<Task>("RenderEffect").ConfigureAwait(false);
+                await cc.InvokePrivateMethod<Task>("RenderEffect")!.ConfigureAwait(false);
                 mre.Set();
             }
 

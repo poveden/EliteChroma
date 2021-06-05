@@ -27,17 +27,17 @@ namespace EliteFiles.Bindings
         /// <summary>
         /// Gets the name of the bindings preset.
         /// </summary>
-        public string PresetName { get; private set; }
+        public string? PresetName { get; private set; }
 
         /// <summary>
         /// Gets the game version for which this preset is targeted to.
         /// </summary>
-        public Version Version { get; private set; }
+        public Version? Version { get; private set; }
 
         /// <summary>
         /// Gets the keyboard layout.
         /// </summary>
-        public string KeyboardLayout { get; private set; }
+        public string? KeyboardLayout { get; private set; }
 
         /// <summary>
         /// Gets the collection of all bindings.
@@ -49,7 +49,7 @@ namespace EliteFiles.Bindings
         /// </summary>
         /// <param name="path">The path to the binding presets file.</param>
         /// <returns>The bindings preset, or <c>null</c> if the file couldn't be read (e.g. in the middle of an update).</returns>
-        public static BindingPreset FromFile(string path)
+        public static BindingPreset? FromFile(string path)
         {
             XDocument xml;
 
@@ -76,8 +76,8 @@ namespace EliteFiles.Bindings
                 KeyboardLayout = xml.Root.Element("KeyboardLayout")?.Value,
             };
 
-            string majorVersion = xml.Root.Attribute("MajorVersion")?.Value;
-            string minorVersion = xml.Root.Attribute("MinorVersion")?.Value;
+            string? majorVersion = xml.Root.Attribute("MajorVersion")?.Value;
+            string? minorVersion = xml.Root.Attribute("MinorVersion")?.Value;
 
             if (Version.TryParse($"{majorVersion}.{minorVersion}", out Version version))
             {
@@ -113,10 +113,10 @@ namespace EliteFiles.Bindings
         {
             _ = categoryBindingPresets ?? throw new ArgumentNullException(nameof(categoryBindingPresets));
 
-            T UniqueOrDefault<T>(Func<BindingPreset, T> selector, IEqualityComparer<T> comparer = null)
+            T UniqueOrDefault<T>(Func<BindingPreset, T> selector, IEqualityComparer<T>? comparer = null)
             {
                 var distinct = new HashSet<T>(categoryBindingPresets.Values.Select(selector), comparer);
-                return distinct.Count == 1 ? distinct.Single() : default;
+                return distinct.Count == 1 ? distinct.Single() : default!;
             }
 
             var res = new BindingPreset
@@ -150,7 +150,7 @@ namespace EliteFiles.Bindings
         /// <param name="gameInstallFolder">The path to the game installation folder.</param>
         /// <param name="gameOptionsFolder">The path to the game options folder.</param>
         /// <returns>The path to the file, or <c>null</c> if no active preset could be found.</returns>
-        public static IReadOnlyDictionary<BindingCategory, string> FindActivePresetFiles(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder)
+        public static IReadOnlyDictionary<BindingCategory, string>? FindActivePresetFiles(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder)
         {
             _ = GameInstallFolder.AssertValid(gameInstallFolder);
             _ = GameOptionsFolder.AssertValid(gameOptionsFolder);

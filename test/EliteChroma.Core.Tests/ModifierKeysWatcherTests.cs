@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Linq;
 using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite.Internal;
@@ -33,7 +32,7 @@ namespace EliteChroma.Core.Tests
 
             mkw.Watch(new[] { key1, key2, key3 }, "en-US", false);
 
-            var keys = mkw.InvokePrivateMethod<IEnumerable<DeviceKey>>("GetAllPressedModifiers").ToList();
+            var keys = mkw.InvokePrivateMethod<IEnumerable<DeviceKey>>("GetAllPressedModifiers")!.ToList();
 
             Assert.Contains(key1, keys);
             Assert.DoesNotContain(key2, keys);
@@ -80,9 +79,7 @@ namespace EliteChroma.Core.Tests
         {
             var xe = XElement.Parse(xml);
 
-            var fromXml = typeof(T).GetMethod("FromXml", BindingFlags.NonPublic | BindingFlags.Static);
-
-            return (T)fromXml.Invoke(null, new object[] { xe });
+            return typeof(T).InvokePrivateStaticMethod<T>("FromXml", xe)!;
         }
 
         private sealed class NativeMethodsMock : NativeMethodsStub

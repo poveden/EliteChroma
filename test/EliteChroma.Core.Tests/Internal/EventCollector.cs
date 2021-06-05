@@ -18,13 +18,13 @@ namespace EliteChroma.Core.Tests.Internal
             _name = name;
         }
 
-        public T Wait(Action trigger, int timeout = Timeout.Infinite)
+        public T? Wait(Action trigger, int timeout = Timeout.Infinite)
         {
-            T res = default;
+            T? res = default;
 
             using (var ss = new SemaphoreSlim(0, 1))
             {
-                void Handler(object sender, T e)
+                void Handler(object? sender, T e)
                 {
                     res = e;
                     ss.Release();
@@ -50,7 +50,7 @@ namespace EliteChroma.Core.Tests.Internal
 
             using (var ce = new CountdownEvent(count))
             {
-                void Handler(object sender, T e)
+                void Handler(object? sender, T e)
                 {
                     res.Add(e);
 

@@ -23,7 +23,7 @@ namespace EliteChroma.Core
 
         private ChromaColors _colors = new ChromaColors();
 
-        private IChroma _chroma;
+        private IChroma? _chroma;
         private int _rendering;
         private int _fps;
         private DateTimeOffset _chromaWarmupUntil;
@@ -248,7 +248,7 @@ namespace EliteChroma.Core
                 try
                 {
                     game.Now = DateTimeOffset.UtcNow;
-                    await _effect.Render(_chroma, new LayerRenderState(game, _colors)).ConfigureAwait(false);
+                    await _effect.Render(_chroma!, new LayerRenderState(game, _colors)).ConfigureAwait(false);
                 }
                 finally
                 {

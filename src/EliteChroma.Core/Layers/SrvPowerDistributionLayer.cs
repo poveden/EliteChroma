@@ -12,7 +12,7 @@ namespace EliteChroma.Core.Layers
 
         protected override void OnRender(ChromaCanvas canvas)
         {
-            if (!Game.InSrv)
+            if (!Game.InSrv || Game.Status?.Pips == null)
             {
                 return;
             }

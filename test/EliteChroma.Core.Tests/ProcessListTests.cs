@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite.Internal;
@@ -12,9 +11,6 @@ namespace EliteChroma.Core.Tests
 {
     public class ProcessListTests
     {
-        private static readonly FieldInfo _fiBuf = typeof(ProcessList).GetField("_buf", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo _fiN = typeof(ProcessList).GetField("_n", BindingFlags.NonPublic | BindingFlags.Instance);
-
         [Fact]
         public void RefreshReturnsAnOrderedListOfUniqueProcessIds()
         {
@@ -23,10 +19,10 @@ namespace EliteChroma.Core.Tests
 
             pl.Refresh();
 
-            int n = (int)_fiN.GetValue(pl);
+            int n = pl.GetPrivateField<int>("_n");
             Assert.Equal(4, n);
 
-            int[] buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
+            int[] buf = pl.GetPrivateField<int[]>("_buf")!.Take(n).ToArray();
             Assert.Equal(new[] { 1, 2, 3, 4 }, buf);
         }
 
@@ -66,13 +62,13 @@ namespace EliteChroma.Core.Tests
             var pl = new ProcessList(nm);
             pl.Refresh();
 
-            int n = (int)_fiN.GetValue(pl);
+            int n = pl.GetPrivateField<int>("_n");
             Assert.Equal(ids.Length, n);
 
             nm.ProcessIds = null;
             pl.Refresh();
 
-            int[] buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
+            int[] buf = pl.GetPrivateField<int[]>("_buf")!.Take(n).ToArray();
             Assert.Equal(ids, buf);
         }
 
@@ -89,10 +85,10 @@ namespace EliteChroma.Core.Tests
 
             Assert.True(pl.Remove(3));
 
-            int n = (int)_fiN.GetValue(pl);
+            int n = pl.GetPrivateField<int>("_n");
             Assert.Equal(8, n);
 
-            int[] buf = ((int[])_fiBuf.GetValue(pl)).Take(n).ToArray();
+            int[] buf = pl.GetPrivateField<int[]>("_buf")!.Take(n).ToArray();
             Assert.Equal(new[] { 1, 2, 4, 5, 6, 7, 8, 9 }, buf);
 
             nm.ProcessIds = new[] { 1 };
@@ -203,7 +199,7 @@ namespace EliteChroma.Core.Tests
 
         private sealed class NativeMethodsMock : NativeMethodsStub
         {
-            public IList<int> ProcessIds { get; set; }
+            public IList<int>? ProcessIds { get; set; }
 
             public override bool EnumProcesses(int[] lpidProcess, int cb, out int lpcbNeeded)
             {

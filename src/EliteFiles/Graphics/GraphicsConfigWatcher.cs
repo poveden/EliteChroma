@@ -43,7 +43,7 @@ namespace EliteFiles.Graphics
         /// <summary>
         /// Occurs when graphics configuration files have changed.
         /// </summary>
-        public event EventHandler<GraphicsConfig> Changed;
+        public event EventHandler<GraphicsConfig>? Changed;
 
         /// <summary>
         /// Starts watching for changes in the graphics configuration files.
@@ -100,11 +100,11 @@ namespace EliteFiles.Graphics
 
         private void Reload()
         {
-            GraphicsConfig gcMain = FileOperations.RetryIfNull(
+            GraphicsConfig? gcMain = FileOperations.RetryIfNull(
                 () => GraphicsConfig.FromFile(_mainFile.FullName),
                 _reloadRetries);
 
-            GraphicsConfig gcOverride = FileOperations.RetryIfNull(
+            GraphicsConfig? gcOverride = FileOperations.RetryIfNull(
                 () => GraphicsConfig.FromFile(_overrideFile.FullName),
                 _reloadRetries);
 
@@ -113,10 +113,7 @@ namespace EliteFiles.Graphics
                 return;
             }
 
-            if (gcOverride != null)
-            {
-                gcMain.OverrideWith(gcOverride);
-            }
+            gcMain.OverrideWith(gcOverride);
 
             Changed?.Invoke(this, gcMain);
         }

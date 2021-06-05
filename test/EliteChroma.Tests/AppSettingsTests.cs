@@ -121,7 +121,7 @@ namespace EliteChroma.Tests
             using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
             string settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
-            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile));
+            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile))!;
             jo.Remove("Colors");
             File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
 
@@ -138,8 +138,8 @@ namespace EliteChroma.Tests
             using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
             string settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
-            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile));
-            jo["Colors"]["DeviceDimBrightness"] = "NOT-A-NUMBER";
+            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile))!;
+            jo["Colors"]!["DeviceDimBrightness"] = "NOT-A-NUMBER";
             File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
 
             var settings = AppSettings.Load(settingsFile);
@@ -157,8 +157,8 @@ namespace EliteChroma.Tests
             using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
             string settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
-            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile));
-            jo["Colors"]["HardpointsToggle"] = JToken.FromObject(faultyValue);
+            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile))!;
+            jo["Colors"]!["HardpointsToggle"] = JToken.FromObject(faultyValue);
             File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
 
             var settings = AppSettings.Load(settingsFile);

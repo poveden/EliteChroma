@@ -14,18 +14,18 @@ namespace EliteChroma.Tests
 
             var assemblyInfo = new AssemblyInfo();
 
-            Assert.Equal(assemblyInfo.Title, appInfo.Element("title").Value);
-            Assert.Equal(assemblyInfo.Description, appInfo.Element("description").Value);
-            Assert.Equal("Jorge Poveda Coma", appInfo.Element("author").Attribute("name").Value);
-            Assert.Equal(assemblyInfo.Company, appInfo.Element("author").Attribute("contact").Value);
+            Assert.Equal(assemblyInfo.Title, appInfo.Element("title")!.Value);
+            Assert.Equal(assemblyInfo.Description, appInfo.Element("description")!.Value);
+            Assert.Equal("Jorge Poveda Coma", appInfo.Element("author")!.Attribute("name")!.Value);
+            Assert.Equal(assemblyInfo.Company, appInfo.Element("author")!.Attribute("contact")!.Value);
         }
 
         private static XElement LoadChromaAppInfo()
         {
             var a = typeof(AssemblyInfo).Assembly;
-            string xmlFile = Path.Combine(Path.GetDirectoryName(a.Location), "ChromaAppInfo.xml");
+            string xmlFile = Path.Combine(Path.GetDirectoryName(a.Location)!, "ChromaAppInfo.xml");
             var xml = XDocument.Load(xmlFile);
-            return xml.Root;
+            return xml.Root!;
         }
     }
 }

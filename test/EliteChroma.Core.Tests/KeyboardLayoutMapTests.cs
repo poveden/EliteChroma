@@ -21,7 +21,7 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void GetKeyboardLayoutThrowsOnNullKeyboardLayoutName()
         {
-            Assert.Throws<ArgumentNullException>("keyboardLayout", () => Elite.Internal.KeyboardLayoutMap.GetKeyboardLayout(null, NativeMethodsKeyboardMock.Instance));
+            Assert.Throws<ArgumentNullException>("keyboardLayout", () => Elite.Internal.KeyboardLayoutMap.GetKeyboardLayout(null!, NativeMethodsKeyboardMock.Instance));
         }
 
         [Fact]

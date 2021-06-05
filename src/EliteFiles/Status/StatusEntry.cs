@@ -23,6 +23,11 @@ namespace EliteFiles.Status
         }
 
         /// <summary>
+        /// Gets a <see cref="StatusEntry"/> instance with no values defined.
+        /// </summary>
+        public static StatusEntry Empty { get; } = new StatusEntry();
+
+        /// <summary>
         /// Gets the timestamp of the event.
         /// </summary>
         [JsonProperty("timestamp")]
@@ -32,7 +37,7 @@ namespace EliteFiles.Status
         /// Gets the type of event.
         /// </summary>
         [JsonProperty("event")]
-        public string Event { get; private set; }
+        public string? Event { get; private set; } = "Status";
 
         /// <summary>
         /// Gets the game status flags.
@@ -68,7 +73,7 @@ namespace EliteFiles.Status
         /// Gets the selected weapon when on foot.
         /// </summary>
         [JsonProperty("SelectedWeapon")]
-        public string SelectedWeapon { get; private set; }
+        public string? SelectedWeapon { get; private set; }
 
         /// <summary>
         /// Gets the gravity amount when on foot.
@@ -80,7 +85,7 @@ namespace EliteFiles.Status
         /// Gets the current ship's power distributor status.
         /// </summary>
         [JsonProperty("Pips")]
-        public PowerDistributor Pips { get; private set; }
+        public PowerDistributor? Pips { get; private set; }
 
         /// <summary>
         /// Gets the currently selected firegroup number.
@@ -98,7 +103,7 @@ namespace EliteFiles.Status
         /// Gets the current ship's fuel levels.
         /// </summary>
         [JsonProperty("Fuel")]
-        public Fuel Fuel { get; private set; }
+        public Fuel? Fuel { get; private set; }
 
         /// <summary>
         /// Gets the current cargo load in tons.
@@ -141,7 +146,7 @@ namespace EliteFiles.Status
         /// Gets the body name.
         /// </summary>
         [JsonProperty("BodyName")]
-        public string BodyName { get; private set; }
+        public string? BodyName { get; private set; }
 
         /// <summary>
         /// Gets the planet radius.
@@ -159,7 +164,7 @@ namespace EliteFiles.Status
         /// </summary>
         /// <param name="path">The path to the game status file.</param>
         /// <returns>The status entry, or <c>null</c> if the file couldn't be read (e.g. in the middle of an update).</returns>
-        public static StatusEntry FromFile(string path)
+        public static StatusEntry? FromFile(string path)
         {
             using FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
@@ -171,7 +176,7 @@ namespace EliteFiles.Status
             using var sr = new StreamReader(fs);
 
             var serializer = new JsonSerializer();
-            return (StatusEntry)serializer.Deserialize(sr, typeof(StatusEntry));
+            return (StatusEntry?)serializer.Deserialize(sr, typeof(StatusEntry));
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace EliteFiles.Bindings
     /// </summary>
     public sealed class DeviceKeyCombination : DeviceKeyBase
     {
-        private DeviceKeyCombination(string device, string key, IEnumerable<DeviceKey> modifiers)
+        private DeviceKeyCombination(string? device, string? key, IEnumerable<DeviceKey> modifiers)
             : base(device, key)
         {
             Modifiers = new DeviceKeySet(modifiers);
@@ -23,15 +23,15 @@ namespace EliteFiles.Bindings
         internal static DeviceKeyCombination Undefined { get; } =
             new DeviceKeyCombination(null, null, Enumerable.Empty<DeviceKey>());
 
-        internal static DeviceKeyCombination FromXml(XElement xml)
+        internal static DeviceKeyCombination? FromXml(XElement xml)
         {
             if (xml == null)
             {
                 return null;
             }
 
-            string device = xml.Attribute("Device")?.Value;
-            string key = xml.Attribute("Key")?.Value;
+            string? device = xml.Attribute("Device")?.Value;
+            string? key = xml.Attribute("Key")?.Value;
             IEnumerable<DeviceKey> modifiers = xml.Elements("Modifier").Select(DeviceKey.FromXml);
 
             return new DeviceKeyCombination(device, key, modifiers);

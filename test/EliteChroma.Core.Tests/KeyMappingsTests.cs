@@ -115,16 +115,14 @@ namespace EliteChroma.Core.Tests
 
         private static IReadOnlyDictionary<string, VirtualKey> GetDirectVirtualKeyMapping()
         {
-            return (IReadOnlyDictionary<string, VirtualKey>)typeof(Elite.Internal.KeyMappings)
-                .GetField("_keys", BindingFlags.NonPublic | BindingFlags.Static)
-                .GetValue(null);
+            return typeof(Elite.Internal.KeyMappings)
+                .GetPrivateStaticField<IReadOnlyDictionary<string, VirtualKey>>("_keys")!;
         }
 
         private static IReadOnlyDictionary<string, Key> GetDirectColoreKeyMapping()
         {
-            return (IReadOnlyDictionary<string, Key>)typeof(Core.Internal.KeyMappings)
-                .GetField("_keys", BindingFlags.NonPublic | BindingFlags.Static)
-                .GetValue(null);
+            return typeof(Core.Internal.KeyMappings)
+                .GetPrivateStaticField<IReadOnlyDictionary<string, Key>>("_keys")!;
         }
 
         private static Dictionary<string, KeyTypes> GetKeyboardKeys(KeyTypes types)
@@ -135,7 +133,7 @@ namespace EliteChroma.Core.Tests
             {
                 var allFnKeyNames = typeof(Keyboard)
                     .GetFields(BindingFlags.Public | BindingFlags.Static)
-                    .Select(x => (string)x.GetValue(null));
+                    .Select(x => (string)x.GetValue(null)!);
 
                 foreach (string keyName in allFnKeyNames)
                 {

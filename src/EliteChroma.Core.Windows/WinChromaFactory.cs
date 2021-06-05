@@ -23,9 +23,9 @@ namespace EliteChroma.Core.Windows
             _cw = new ChromaWindow();
         }
 
-        public IChromaApi ChromaApi { get; set; }
+        public IChromaApi? ChromaApi { get; set; }
 
-        public AppInfo ChromaAppInfo { get; set; }
+        public AppInfo? ChromaAppInfo { get; set; }
 
         public TimeSpan WarmupDelay => TimeSpan.Zero;
 

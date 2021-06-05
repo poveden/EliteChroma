@@ -37,7 +37,7 @@ namespace EliteFiles.Journal.Events
         /// Gets the name of the destination system on hyperspace FSD jumps.
         /// </summary>
         [JsonProperty("StarSystem")]
-        public string StarSystem { get; private set; }
+        public string? StarSystem { get; private set; }
 
         /// <summary>
         /// Gets the ID of the destination system on hyperspace FSD jumps.
@@ -49,6 +49,6 @@ namespace EliteFiles.Journal.Events
         /// Gets the main star class of the destination system on hyperspace FSD jumps.
         /// </summary>
         [JsonProperty("StarClass")]
-        public string StarClass { get; private set; }
+        public string? StarClass { get; private set; }
     }
 }

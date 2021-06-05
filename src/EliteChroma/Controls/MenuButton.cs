@@ -16,7 +16,7 @@ namespace EliteChroma.Controls
         }
 
         [DefaultValue(null)]
-        public ContextMenuStrip Menu { get; set; }
+        public ContextMenuStrip? Menu { get; set; }
 
         [DefaultValue(false)]
         public bool ShowMenuUnderCursor { get; set; }

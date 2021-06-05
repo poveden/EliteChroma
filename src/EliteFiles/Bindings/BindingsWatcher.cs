@@ -45,7 +45,7 @@ namespace EliteFiles.Bindings
         /// <summary>
         /// Occurs when binding presets have changed.
         /// </summary>
-        public event EventHandler<BindingPreset> Changed;
+        public event EventHandler<BindingPreset>? Changed;
 
         /// <summary>
         /// Starts watching for changes in the binding preset files.
@@ -100,7 +100,7 @@ namespace EliteFiles.Bindings
 
         private void Reload()
         {
-            IReadOnlyDictionary<BindingCategory, string> bindsFiles = FileOperations.RetryIfNull(
+            IReadOnlyDictionary<BindingCategory, string>? bindsFiles = FileOperations.RetryIfNull(
                 () => BindingPreset.FindActivePresetFiles(_gameInstallFolder, _gameOptionsFolder),
                 _reloadRetries);
 
@@ -118,7 +118,7 @@ namespace EliteFiles.Bindings
                     continue;
                 }
 
-                BindingPreset bindingPreset = FileOperations.RetryIfNull(
+                BindingPreset? bindingPreset = FileOperations.RetryIfNull(
                     () => BindingPreset.FromFile(bindsFile),
                     _reloadRetries);
 

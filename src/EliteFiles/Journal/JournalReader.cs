@@ -41,9 +41,9 @@ namespace EliteFiles.Journal
         /// Reads a journal entry from the current journal.
         /// </summary>
         /// <returns>The journal entry, or <c>null</c> if the end of the journal has been reached.</returns>
-        public JournalEntry ReadEntry()
+        public JournalEntry? ReadEntry()
         {
-            if (TryReadEntryFromBuffer(out JournalEntry entry))
+            if (TryReadEntryFromBuffer(out JournalEntry? entry))
             {
                 return entry;
             }
@@ -79,7 +79,7 @@ namespace EliteFiles.Journal
             _disposed = true;
         }
 
-        private bool TryReadEntryFromBuffer(out JournalEntry entry)
+        private bool TryReadEntryFromBuffer(out JournalEntry? entry)
         {
             entry = null;
 

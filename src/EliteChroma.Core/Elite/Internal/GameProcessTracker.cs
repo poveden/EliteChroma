@@ -130,12 +130,12 @@ namespace EliteChroma.Elite.Internal
 
         private bool TestIfGameProcessId(int processId, out bool failure)
         {
-            string filename = TryGetProcessFileName(processId);
+            string? filename = TryGetProcessFileName(processId);
             failure = filename == null;
             return _gameExePath.Equals(filename, StringComparison.OrdinalIgnoreCase);
         }
 
-        private string TryGetProcessFileName(int processId)
+        private string? TryGetProcessFileName(int processId)
         {
             using SafeProcessHandle p = NativeMethods.OpenProcess(ProcessAccess.QUERY_INFORMATION | ProcessAccess.VM_READ, false, processId);
 

@@ -15,7 +15,7 @@ namespace EliteChroma.Controls
         private const int _halfPickerHeight = 3;
 
         private bool _loading;
-        private PictureBox _hoverSlide;
+        private PictureBox? _hoverSlide;
 
         public RgbPicker()
         {

@@ -133,7 +133,7 @@ namespace EliteChroma.Forms
             return res;
         }
 
-        private void AppSettings_Load(object sender, EventArgs e)
+        private void AppSettings_Load(object? sender, EventArgs e)
         {
             tvSections.DrawMode = TreeViewDrawMode.OwnerDrawText;
             tvSections.Nodes[_gameFoldersSection].Tag = grpEDFolders;
@@ -160,14 +160,14 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void TsmiGameInstallFolder_Click(object sender, EventArgs e)
+        private void TsmiGameInstallFolder_Click(object? sender, EventArgs e)
         {
-            var item = (ToolStripMenuItem)sender;
+            var item = (ToolStripMenuItem)sender!;
             txtGameInstall.Text = (string)item.Tag;
             _ = ValidateChildren();
         }
 
-        private void TsmiGameInstallBrowse_Click(object sender, EventArgs e)
+        private void TsmiGameInstallBrowse_Click(object? sender, EventArgs e)
         {
             folderBrowser.Description = Resources.FolderDialogDescription_GameInstallFolder;
             folderBrowser.SelectedPath = txtGameInstall.Text;
@@ -200,7 +200,7 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void BtnGameOptions_Click(object sender, EventArgs e)
+        private void BtnGameOptions_Click(object? sender, EventArgs e)
         {
             folderBrowser.Description = Resources.FolderDialogDescription_GameOptionsFolder;
             folderBrowser.SelectedPath = txtGameOptions.Text;
@@ -212,7 +212,7 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void BtnJournal_Click(object sender, EventArgs e)
+        private void BtnJournal_Click(object? sender, EventArgs e)
         {
             folderBrowser.Description = Resources.FolderDialogDescription_JournalFolder;
             folderBrowser.SelectedPath = txtJournal.Text;
@@ -233,7 +233,7 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void TxtGameInstall_Validated(object sender, EventArgs e)
+        private void TxtGameInstall_Validated(object? sender, EventArgs e)
         {
             SetError(_gameFoldersSection, txtGameInstall, string.Empty);
         }
@@ -247,7 +247,7 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void TxtGameOptions_Validated(object sender, EventArgs e)
+        private void TxtGameOptions_Validated(object? sender, EventArgs e)
         {
             SetError(_gameFoldersSection, txtGameOptions, string.Empty);
         }
@@ -261,12 +261,12 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void TxtJournal_Validated(object sender, EventArgs e)
+        private void TxtJournal_Validated(object? sender, EventArgs e)
         {
             SetError(_gameFoldersSection, txtJournal, string.Empty);
         }
 
-        private void BtnOK_Click(object sender, EventArgs e)
+        private void BtnOK_Click(object? sender, EventArgs e)
         {
             if (ValidateChildren())
             {

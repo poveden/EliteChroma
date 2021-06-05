@@ -71,7 +71,7 @@ namespace EliteChroma.Core.Tests.Internal
 
             int id = hProcess.DangerousGetHandle().ToInt32();
 
-            if (!Processes.TryGetValue(id, out string exePath))
+            if (!Processes.TryGetValue(id, out string? exePath))
             {
                 return 0;
             }

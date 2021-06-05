@@ -28,12 +28,12 @@ namespace EliteFiles.Tests
         [Fact]
         public void DeserializesGraphicsConfigFiles()
         {
-            var config = GraphicsConfig.FromFile(_gif.GraphicsConfiguration.FullName);
+            var config = GraphicsConfig.FromFile(_gif.GraphicsConfiguration.FullName)!;
 
             Assert.NotNull(config);
-            Assert.Equal(3, config.GuiColour.Count);
+            Assert.Equal(3, config.GuiColour!.Count);
 
-            var gc = config.GuiColour.Default;
+            var gc = config.GuiColour.Default!;
             Assert.NotNull(gc);
             Assert.Equal("Standard", gc.LocalisationName);
 
@@ -77,7 +77,7 @@ namespace EliteFiles.Tests
             using var dir = new TestFolder();
             dir.WriteText("MinimalConfig.xml", _minimalConfig);
 
-            var status = GraphicsConfig.FromFile(dir.Resolve("MinimalConfig.xml"));
+            var status = GraphicsConfig.FromFile(dir.Resolve("MinimalConfig.xml"))!;
             Assert.Null(status.GuiColour);
         }
 
@@ -93,7 +93,7 @@ namespace EliteFiles.Tests
                 watcher.Stop();
             }).ConfigureAwait(false);
 
-            Assert.Null(config.GuiColour.Default.LocalisationName);
+            Assert.Null(config!.GuiColour!.Default!.LocalisationName);
         }
 
         [Fact]
@@ -112,13 +112,13 @@ namespace EliteFiles.Tests
             Assert.Null(config);
 
             config = await evs.WaitAsync(() => dirMain.WriteText(_mainFile, xmlMain)).ConfigureAwait(false);
-            Assert.Equal(0, config.GuiColour.Default[0, 0]);
+            Assert.Equal(0, config!.GuiColour!.Default![0, 0]);
 
             config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, string.Empty), 100).ConfigureAwait(false);
-            Assert.Equal(1, config.GuiColour.Default[0, 0]);
+            Assert.Equal(1, config!.GuiColour!.Default![0, 0]);
 
             config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, _minimalConfig)).ConfigureAwait(false);
-            Assert.Equal(1, config.GuiColour.Default[0, 0]);
+            Assert.Equal(1, config!.GuiColour!.Default![0, 0]);
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace EliteFiles.Tests
                 watcher.Stop();
             }).ConfigureAwait(false);
 
-            Assert.Equal("Standard", config.GuiColour.Default.LocalisationName);
+            Assert.Equal("Standard", config!.GuiColour!.Default!.LocalisationName);
         }
 
         [Fact]
@@ -158,7 +158,7 @@ namespace EliteFiles.Tests
                 watcher.Stop();
             }).ConfigureAwait(false);
 
-            Assert.Equal("Standard", config.GuiColour.Default.LocalisationName);
+            Assert.Equal("Standard", config!.GuiColour!.Default!.LocalisationName);
         }
 
         [Fact]
@@ -176,13 +176,13 @@ namespace EliteFiles.Tests
                 watcher.Stop();
             }).ConfigureAwait(false);
 
-            Assert.Equal("Standard", config.GuiColour.Default.LocalisationName);
+            Assert.Equal("Standard", config!.GuiColour!.Default!.LocalisationName);
         }
 
         [Fact]
         public void WatcherThrowsWhenTheGameInstallFolderIsNotAValidInstallFolder()
         {
-            Assert.Throws<ArgumentNullException>(() => { using var x = new GraphicsConfigWatcher(null, _gof); });
+            Assert.Throws<ArgumentNullException>(() => { using var x = new GraphicsConfigWatcher(null!, _gof); });
 
             var ex = Assert.Throws<ArgumentException>(() => { using var x = new GraphicsConfigWatcher(new GameInstallFolder(@"TestFiles"), _gof); });
             Assert.Contains("' is not a valid Elite:Dangerous game install folder.", ex.Message, StringComparison.Ordinal);
@@ -191,7 +191,7 @@ namespace EliteFiles.Tests
         [Fact]
         public void WatcherThrowsWhenTheGameOptionsFolderIsNotAValidOptionsFolder()
         {
-            Assert.Throws<ArgumentNullException>(() => { using var x = new GraphicsConfigWatcher(_gif, null); });
+            Assert.Throws<ArgumentNullException>(() => { using var x = new GraphicsConfigWatcher(_gif, null!); });
 
             var ex = Assert.Throws<ArgumentException>(() => { using var x = new GraphicsConfigWatcher(_gif, new GameOptionsFolder(@"TestFiles")); });
             Assert.Contains("' is not a valid Elite:Dangerous game options folder.", ex.Message, StringComparison.Ordinal);

@@ -34,7 +34,7 @@ namespace EliteFiles.Status
         /// <summary>
         /// Occurs when the game status has changed.
         /// </summary>
-        public event EventHandler<StatusEntry> Changed;
+        public event EventHandler<StatusEntry>? Changed;
 
         /// <summary>
         /// Starts watching for changes in the game status file.
@@ -86,7 +86,7 @@ namespace EliteFiles.Status
 
         private void Reload()
         {
-            StatusEntry status = FileOperations.RetryIfNull(
+            StatusEntry? status = FileOperations.RetryIfNull(
                 () => StatusEntry.FromFile(_statusFile.FullName),
                 _reloadRetries);
 

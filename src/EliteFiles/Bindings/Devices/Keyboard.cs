@@ -234,7 +234,7 @@ namespace EliteFiles.Bindings.Devices
         /// <param name="c">The character.</param>
         /// <param name="keyName">The matching key name.</param>
         /// <returns><c>true</c> if <paramref name="c"/> is a has a corresponding keyboard key name; otherwise, <c>false</c>.</returns>
-        public static bool TryGetKeyName(char c, out string keyName)
+        public static bool TryGetKeyName(char c, out string? keyName)
         {
             // Return named character bindings first (e.g. '*' -> "Key_Asterisk")
             if (_namedKeysInv.TryGetValue(c, out keyName))

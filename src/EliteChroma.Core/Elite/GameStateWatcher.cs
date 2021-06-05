@@ -62,7 +62,7 @@ namespace EliteChroma.Elite
             _gameState = new GameState();
         }
 
-        public event EventHandler<ChangeType> Changed;
+        public event EventHandler<ChangeType>? Changed;
 
         public enum ChangeType
         {
@@ -238,7 +238,7 @@ namespace EliteChroma.Elite
 
         private void GraphicsConfig_Changed(object sender, GraphicsConfig e)
         {
-            _gameState.GuiColour = e.GuiColour.Default;
+            _gameState.GuiColour = e.GuiColour?.Default ?? GuiColourMatrix.Default;
             OnChanged(ChangeType.GraphicsConfig);
         }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Colore;
 using Colore.Data;
@@ -39,9 +38,7 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void LayerComparerComparesCorrectly()
         {
-            var comparer = (IComparer<EffectLayer>)typeof(LayeredEffect)
-                .GetField("_comparer", BindingFlags.NonPublic | BindingFlags.Static)
-                .GetValue(null);
+            var comparer = typeof(LayeredEffect).GetPrivateStaticField<IComparer<EffectLayer>>("_comparer")!;
 
             var l1 = new Mock<EffectLayer>();
             l1.Setup(x => x.Order).Returns(500);
@@ -74,8 +71,8 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void LayerRenderStateThrowsOnNullArguments()
         {
-            Assert.Throws<ArgumentNullException>("gameState", () => new LayerRenderState(null, new ChromaColors()));
-            Assert.Throws<ArgumentNullException>("colors", () => new LayerRenderState(new GameState(), null));
+            Assert.Throws<ArgumentNullException>("gameState", () => new LayerRenderState(null!, new ChromaColors()));
+            Assert.Throws<ArgumentNullException>("colors", () => new LayerRenderState(new GameState(), null!));
         }
 
         [Fact]
@@ -86,7 +83,7 @@ namespace EliteChroma.Core.Tests
 
             var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => le.Render(chroma.Object, null)).ConfigureAwait(false);
+            await Assert.ThrowsAsync<ArgumentNullException>(() => le.Render(chroma.Object, null!)).ConfigureAwait(false);
         }
 
         [Theory]
@@ -97,7 +94,7 @@ namespace EliteChroma.Core.Tests
         {
             var colors = rgbColors.Select(x => Color.FromRgb((uint)x)).ToList();
 
-            var binds = BindingPreset.FromFile(Path.Combine(_gif.FullName, _mainFile));
+            var binds = BindingPreset.FromFile(Path.Combine(_gif.FullName, _mainFile))!;
             var hyperJumpKey = GetKey(binds, FlightMiscellaneous.HyperSuperCombination);
 
             var hyperspaceLayer = new HyperspaceLayer() { NativeMethods = new NativeMethodsStub() };
@@ -157,7 +154,7 @@ namespace EliteChroma.Core.Tests
             var expectedStartColor = startRgbColor.HasValue ? Color.FromRgb((uint)startRgbColor.Value) : (Color?)null;
             var expectedEndColor = endRgbColor.HasValue ? Color.FromRgb((uint)endRgbColor.Value) : (Color?)null;
 
-            var graphicsConfig = GraphicsConfig.FromFile(_gif.GraphicsConfiguration.FullName);
+            var graphicsConfig = GraphicsConfig.FromFile(_gif.GraphicsConfiguration.FullName)!;
 
             var bl = new GameInBackroundLayer();
             bl.SetPrivateField("_inBackground", wasInBackground);
@@ -175,7 +172,7 @@ namespace EliteChroma.Core.Tests
             var game = new GameState
             {
                 ProcessState = processState,
-                GuiColour = graphicsConfig.GuiColour.Default,
+                GuiColour = graphicsConfig.GuiColour!.Default!,
             };
 
             var state = new LayerRenderState(game, new ChromaColors());
@@ -197,7 +194,7 @@ namespace EliteChroma.Core.Tests
         private static Key GetKey(BindingPreset binds, string binding)
         {
             var bps = binds.Bindings[binding].Primary;
-            return KeyMappings.TryGetKey(bps.Key, "en-US", false, out var key, new NativeMethodsStub()) ? key : 0;
+            return KeyMappings.TryGetKey(bps.Key!, "en-US", false, out var key, new NativeMethodsStub()) ? key : 0;
         }
 
         private sealed class DummyLayer : LayerBase

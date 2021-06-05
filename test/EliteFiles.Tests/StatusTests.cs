@@ -20,7 +20,7 @@ namespace EliteFiles.Tests
         [Fact]
         public void DeserializesStatusFiles()
         {
-            var status = StatusEntry.FromFile(_jf.Status.FullName);
+            var status = StatusEntry.FromFile(_jf.Status.FullName)!;
 
             Assert.NotNull(status);
             Assert.Equal(new DateTimeOffset(2019, 1, 1, 0, 0, 39, TimeSpan.Zero), status.Timestamp);
@@ -32,12 +32,12 @@ namespace EliteFiles.Tests
             Assert.Equal(57.688763, status.Temperature);
             Assert.Equal("$humanoid_rechargetool_name;", status.SelectedWeapon);
             Assert.Equal(0.483871, status.Gravity);
-            Assert.Equal(4, status.Pips.Sys);
+            Assert.Equal(4, status.Pips!.Sys);
             Assert.Equal(8, status.Pips.Eng);
             Assert.Equal(0, status.Pips.Wep);
             Assert.Equal((byte)0, status.FireGroup);
             Assert.Equal(GuiFocus.None, status.GuiFocus);
-            Assert.Equal(32, status.Fuel.FuelMain);
+            Assert.Equal(32, status.Fuel!.FuelMain);
             Assert.Equal(0.63, status.Fuel.FuelReservoir);
             Assert.Equal(0, status.Cargo);
             Assert.Equal(LegalState.Clean, status.LegalState);
@@ -75,7 +75,7 @@ namespace EliteFiles.Tests
                 watcher.Stop();
             }).ConfigureAwait(false);
 
-            Assert.Equal("Status", status.Event);
+            Assert.Equal("Status", status!.Event);
         }
 
         [Fact]
@@ -88,19 +88,19 @@ namespace EliteFiles.Tests
             var ec = new EventCollector<StatusEntry>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatchesForChangesInTheStatusFile));
 
             var status = await ec.WaitAsync(() => dir.WriteText("Status.json", "{\"event\":\"One\"}\r\n")).ConfigureAwait(false);
-            Assert.Equal("One", status.Event);
+            Assert.Equal("One", status!.Event);
 
             status = await ec.WaitAsync(() => dir.WriteText("Status.json", string.Empty), 100).ConfigureAwait(false);
             Assert.Null(status);
 
             status = await ec.WaitAsync(() => dir.WriteText("Status.json", "{\"event\":\"Two\"}\r\n")).ConfigureAwait(false);
-            Assert.Equal("Two", status.Event);
+            Assert.Equal("Two", status!.Event);
         }
 
         [Fact]
         public void WatcherThrowsWhenTheStatusFolderIsNotAValidJournalFolder()
         {
-            Assert.Throws<ArgumentNullException>(() => { using var x = new StatusWatcher(null); });
+            Assert.Throws<ArgumentNullException>(() => { using var x = new StatusWatcher(null!); });
 
             var ex = Assert.Throws<ArgumentException>(() => { using var x = new StatusWatcher(new JournalFolder(@"TestFiles")); });
             Assert.Contains("' is not a valid Elite:Dangerous journal folder.", ex.Message, StringComparison.Ordinal);

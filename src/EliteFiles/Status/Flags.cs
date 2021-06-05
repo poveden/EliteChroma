@@ -22,7 +22,7 @@ namespace EliteFiles.Status
         /// <summary>Landing gear deployed.</summary>
         LandingGearDeployed = 1 << 2,
 
-        /// <summary>Shields up</summary>
+        /// <summary>Shields up.</summary>
         ShieldsUp = 1 << 3,
 
         /// <summary>In supercruise.</summary>

@@ -13,6 +13,9 @@ namespace EliteChroma.Core
 {
     public abstract class LayerBase : EffectLayer
     {
+        private GameState? _game;
+        private ChromaColors? _colors;
+
         [SuppressMessage("Design", "CA1027:Mark enums with FlagsAttribute", Justification = "No flags")]
         protected enum PulseColorType
         {
@@ -27,9 +30,9 @@ namespace EliteChroma.Core
 
         internal INativeMethods NativeMethods { get; set; } = Internal.NativeMethods.Instance;
 
-        protected GameState Game { get; private set; }
+        protected GameState Game => _game ?? throw new InvalidOperationException();
 
-        protected ChromaColors Colors { get; private set; }
+        protected ChromaColors Colors => _colors ?? throw new InvalidOperationException();
 
         protected DateTimeOffset Now => Game.Now;
 
@@ -40,9 +43,18 @@ namespace EliteChroma.Core
         protected override void OnRender(ChromaCanvas canvas, object state)
         {
             LayerRenderState rs = (LayerRenderState)state ?? throw new ArgumentNullException(nameof(state));
-            Game = rs.GameState;
-            Colors = rs.Colors;
-            OnRender(canvas);
+            _game = rs.GameState;
+            _colors = rs.Colors;
+
+            try
+            {
+                OnRender(canvas);
+            }
+            finally
+            {
+                _game = null;
+                _colors = null;
+            }
         }
 
         protected abstract void OnRender(ChromaCanvas canvas);
@@ -106,19 +118,26 @@ namespace EliteChroma.Core
 
         protected void ApplyColorToBinding(CustomKeyboardEffect grid, string bindingName, Color color)
         {
-            if (!Game.BindingPreset.Bindings.TryGetValue(bindingName, out Binding binding))
+            BindingPreset? bindingPreset = Game.BindingPreset;
+
+            if (bindingPreset == null)
+            {
+                return;
+            }
+
+            if (!bindingPreset.Bindings.TryGetValue(bindingName, out Binding binding))
             {
                 return;
             }
 
             foreach (DeviceKeyCombination bps in new[] { binding.Primary, binding.Secondary })
             {
-                if (bps.Device != Device.Keyboard)
+                if (bps.Device != Device.Keyboard || bps.Key == null)
                 {
                     continue;
                 }
 
-                if (!KeyMappings.TryGetKey(bps.Key, Game.BindingPreset.KeyboardLayout, Game.ForceEnUSKeyboardLayout, out Key key, NativeMethods))
+                if (!KeyMappings.TryGetKey(bps.Key, bindingPreset.KeyboardLayout, Game.ForceEnUSKeyboardLayout, out Key key, NativeMethods))
                 {
                     continue;
                 }

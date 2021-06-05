@@ -37,7 +37,7 @@ namespace EliteChroma.Elite.Internal
             {
                 var ci = CultureInfo.GetCultureInfo(keyboardLayout);
 
-                int n = nativeMethods.GetKeyboardLayoutList(0, null);
+                int n = nativeMethods.GetKeyboardLayoutList(0, null!);
                 var hkls = new IntPtr[n];
                 _ = nativeMethods.GetKeyboardLayoutList(n, hkls);
 

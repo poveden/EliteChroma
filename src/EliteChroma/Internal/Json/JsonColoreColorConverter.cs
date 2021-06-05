@@ -8,7 +8,7 @@ namespace EliteChroma.Internal.Json
 {
     internal sealed class JsonColoreColorConverter : JsonConverter<Color>
     {
-        public static bool TryParseRgbString(string str, out Color color)
+        public static bool TryParseRgbString(string? str, out Color color)
         {
             if (!uint.TryParse(str, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint rgb))
             {
@@ -33,7 +33,7 @@ namespace EliteChroma.Internal.Json
                 return existingValue;
             }
 
-            if (!TryParseRgbString((string)reader.Value, out Color color))
+            if (!TryParseRgbString((string?)reader.Value, out Color color))
             {
                 return existingValue;
             }

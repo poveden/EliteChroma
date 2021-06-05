@@ -183,7 +183,7 @@ namespace EliteChroma.Internal.UI
         public Color LandingMode { get; set; }
 
         [Browsable(false)]
-        public IReadOnlyList<Color> PowerDistributorScale { get; }
+        public IReadOnlyList<Color> PowerDistributorScale { get; } = Array.Empty<Color>();
 
         public static void InitTypeDescriptionProvider()
         {

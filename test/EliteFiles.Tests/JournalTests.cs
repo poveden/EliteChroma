@@ -34,7 +34,7 @@ namespace EliteFiles.Tests
             {
                 Assert.Equal(file, jr.Name);
 
-                JournalEntry entry;
+                JournalEntry? entry;
                 while ((entry = jr.ReadEntry()) != null)
                 {
                     entries.Enqueue(entry);
@@ -104,10 +104,10 @@ namespace EliteFiles.Tests
         [InlineData("StellarRemnantNebula", StarClass.StellarRemnantNebula, StarClass.Kind.Other)]
         public void StarClassIsParsedCorrectly(string starClass, string expectedBaseClass, StarClass.Kind expectedKind)
         {
-            var entry = (StartJump)JsonConvert.DeserializeObject<JournalEntry>($"{{ \"event\":\"StartJump\", \"StarClass\":\"{starClass}\" }}");
+            var entry = (StartJump)JsonConvert.DeserializeObject<JournalEntry>($"{{ \"event\":\"StartJump\", \"StarClass\":\"{starClass}\" }}")!;
             Assert.Equal(starClass, entry.StarClass);
 
-            var kind = StarClass.GetKind(entry.StarClass, out string baseClass);
+            var kind = StarClass.GetKind(entry.StarClass, out string? baseClass);
             Assert.Equal(expectedBaseClass, baseClass);
             Assert.Equal(expectedKind, kind);
         }
@@ -121,7 +121,7 @@ namespace EliteFiles.Tests
             dir.WriteText(file, body);
 
             using var jr = new JournalReader(dir.Resolve(file));
-            var entry = jr.ReadEntry();
+            var entry = jr.ReadEntry()!;
             Assert.Equal("One", entry.Event);
 
             var ex = Assert.Throws<InvalidDataException>(() => jr.ReadEntry());
@@ -174,11 +174,11 @@ namespace EliteFiles.Tests
             Assert.Null(ev);
 
             var entry = await ecEntries.WaitAsync(() => dir.WriteText(_journalFile1, "{ \"event\":\"One\" }\r\n", true)).ConfigureAwait(false);
-            Assert.Equal("One", entry.Event);
+            Assert.Equal("One", entry!.Event);
 
             string file2 = _journalFile1.Replace(".01.log", ".02.log", StringComparison.Ordinal);
             entry = await ecEntries.WaitAsync(() => dir.WriteText(file2, "{ \"event\":\"Two\" }\r\n")).ConfigureAwait(false);
-            Assert.Equal("Two", entry.Event);
+            Assert.Equal("Two", entry!.Event);
 
             watcher.Stop();
             Assert.False(watcher.IsWatching);
@@ -187,7 +187,7 @@ namespace EliteFiles.Tests
         [Fact]
         public void WatcherThrowsWhenTheJournalFolderIsNotAValidJournalFolder()
         {
-            Assert.Throws<ArgumentNullException>(() => { using var x = new JournalWatcher(null); });
+            Assert.Throws<ArgumentNullException>(() => { using var x = new JournalWatcher(null!); });
 
             var ex = Assert.Throws<ArgumentException>(() => { using var x = new JournalWatcher(new JournalFolder(@"TestFiles")); });
             Assert.Contains("' is not a valid Elite:Dangerous journal folder.", ex.Message, StringComparison.Ordinal);

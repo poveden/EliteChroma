@@ -25,7 +25,7 @@ namespace EliteFiles.Internal
 
         public static string DefaultPath => _defaultPath.Value;
 
-        public static SteamLibraryFolders FromFile(string path)
+        public static SteamLibraryFolders? FromFile(string path)
         {
             if (!File.Exists(path))
             {
@@ -46,7 +46,7 @@ namespace EliteFiles.Internal
 
             var folders = new List<string>();
 
-            string line = sr.ReadLine()?.Trim();
+            string? line = sr.ReadLine()?.Trim();
 
             while (line != null && line != "}")
             {

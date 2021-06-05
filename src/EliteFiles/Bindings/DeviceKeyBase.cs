@@ -7,7 +7,7 @@ namespace EliteFiles.Bindings
     /// </summary>
     public abstract class DeviceKeyBase : IEquatable<DeviceKeyBase>
     {
-        private protected DeviceKeyBase(string device, string key)
+        private protected DeviceKeyBase(string? device, string? key)
         {
             Device = device;
             Key = key;
@@ -17,20 +17,20 @@ namespace EliteFiles.Bindings
         /// Gets the device for the key.
         /// </summary>
         /// <see cref="Devices.Device"/>
-        public string Device { get; }
+        public string? Device { get; }
 
         /// <summary>
         /// Gets the key bound to the device.
         /// </summary>
         /// <see cref="Devices"/>
-        public string Key { get; }
+        public string? Key { get; }
 
         /// <summary>
         /// Determines wheter this instance and the given device key instance represent the same device key.
         /// </summary>
         /// <param name="other">The device key to compare against this instance.</param>
         /// <returns><c>true</c> if <paramref name="other"/> represents the same device key as this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(DeviceKeyBase other)
+        public bool Equals(DeviceKeyBase? other)
         {
             return other != null
                 && Device == other.Device
@@ -42,7 +42,7 @@ namespace EliteFiles.Bindings
         /// </summary>
         /// <param name="obj">The object to compare against this instance.</param>
         /// <returns><c>true</c> if <paramref name="obj"/> represents the same device key as this instance; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is DeviceKeyBase other && Equals(other);
         }

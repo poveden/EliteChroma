@@ -11,8 +11,11 @@ namespace EliteFiles.Bindings
     /// </summary>
     public sealed class Binding
     {
-        private Binding()
+        private Binding(string name, DeviceKeyCombination? primary, DeviceKeyCombination? secondary)
         {
+            Name = name;
+            Primary = primary ?? DeviceKeyCombination.Undefined;
+            Secondary = secondary ?? DeviceKeyCombination.Undefined;
         }
 
         /// <summary>
@@ -31,7 +34,7 @@ namespace EliteFiles.Bindings
         /// </summary>
         public DeviceKeyCombination Secondary { get; private set; }
 
-        internal static Binding FromXml(XElement xml)
+        internal static Binding? FromXml(XElement xml)
         {
             var primary = DeviceKeyCombination.FromXml(xml.Element("Primary"));
             var secondary = DeviceKeyCombination.FromXml(xml.Element("Secondary"));
@@ -41,12 +44,7 @@ namespace EliteFiles.Bindings
                 return null;
             }
 
-            return new Binding
-            {
-                Name = xml.Name.LocalName,
-                Primary = primary ?? DeviceKeyCombination.Undefined,
-                Secondary = secondary ?? DeviceKeyCombination.Undefined,
-            };
+            return new Binding(xml.Name.LocalName, primary, secondary);
         }
 
         internal static IReadOnlyCollection<string> BuildGroup(Type type)

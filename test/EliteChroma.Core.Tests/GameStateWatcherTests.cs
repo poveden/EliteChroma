@@ -101,7 +101,7 @@ namespace EliteChroma.Core.Tests
 
             void OnChanged()
             {
-                watcher.InvokePrivateMethod<object>("OnChanged", new object[] { null });
+                watcher.InvokePrivateMethod<object>("OnChanged", ChangeType.JournalDrain);
                 mre.Set();
             }
 
@@ -122,12 +122,12 @@ namespace EliteChroma.Core.Tests
             using var watcher = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, _journalFolder);
 
             Assert.False(watcher.ForceEnUSKeyboardLayout);
-            Assert.False(watcher.GetPrivateField<GameState>("_gameState").ForceEnUSKeyboardLayout);
+            Assert.False(watcher.GetPrivateField<GameState>("_gameState")!.ForceEnUSKeyboardLayout);
             Assert.False(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
 
             watcher.ForceEnUSKeyboardLayout = true;
             Assert.True(watcher.ForceEnUSKeyboardLayout);
-            Assert.True(watcher.GetPrivateField<GameState>("_gameState").ForceEnUSKeyboardLayout);
+            Assert.True(watcher.GetPrivateField<GameState>("_gameState")!.ForceEnUSKeyboardLayout);
             Assert.True(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
         }
     }

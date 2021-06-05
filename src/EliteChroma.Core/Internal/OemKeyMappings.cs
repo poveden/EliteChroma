@@ -46,7 +46,7 @@ namespace EliteChroma.Core.Internal
 
         private static readonly Dictionary<string, IReadOnlyDictionary<char, VirtualKey>> _layoutCache = new Dictionary<string, IReadOnlyDictionary<char, VirtualKey>>(StringComparer.OrdinalIgnoreCase);
 
-        public static bool TryGetKey(string keyboardLayout, char c, bool enUSOverride, out VirtualKey key, INativeMethods nativeMethods)
+        public static bool TryGetKey(string? keyboardLayout, char c, bool enUSOverride, out VirtualKey key, INativeMethods nativeMethods)
         {
             keyboardLayout ??= KeyboardLayoutMap.GetCurrentLayout(nativeMethods);
 

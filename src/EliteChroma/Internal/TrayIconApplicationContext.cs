@@ -58,17 +58,17 @@ namespace EliteChroma.Internal
             }
         }
 
-        private void Application_ApplicationExit(object sender, EventArgs e)
+        private void Application_ApplicationExit(object? sender, EventArgs e)
         {
             OnApplicationExit(e);
         }
 
-        private void TrayIcon_MouseClick(object sender, MouseEventArgs e)
+        private void TrayIcon_MouseClick(object? sender, MouseEventArgs e)
         {
             OnTrayIconClick(e);
         }
 
-        private void TrayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void TrayIcon_MouseDoubleClick(object? sender, MouseEventArgs e)
         {
             OnTrayIconDoubleClick(e);
         }

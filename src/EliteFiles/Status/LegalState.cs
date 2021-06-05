@@ -5,7 +5,7 @@
     /// </summary>
     public enum LegalState
     {
-        /// <summary>Clean</summary>
+        /// <summary>Clean.</summary>
         Clean = 0,
 
         /// <summary>Illegal cargo.</summary>

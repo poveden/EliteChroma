@@ -19,14 +19,14 @@ namespace EliteFiles.Graphics
         /// <summary>
         /// Gets the GUI colour configuration.
         /// </summary>
-        public GuiColourDictionary GuiColour { get; private set; }
+        public GuiColourDictionary? GuiColour { get; private set; }
 
         /// <summary>
         /// Read the graphics configuration from the given file.
         /// </summary>
         /// <param name="path">The path to the graphics configuration file.</param>
         /// <returns>The graphics configuration, or <c>null</c> if the file couldn't be read (e.g. in the middle of an update).</returns>
-        public static GraphicsConfig FromFile(string path)
+        public static GraphicsConfig? FromFile(string path)
         {
             if (!File.Exists(path))
             {
@@ -65,9 +65,9 @@ namespace EliteFiles.Graphics
         /// <remarks>
         /// Currently, only <c>GUIColour</c> settings are overriden.
         /// </remarks>
-        public void OverrideWith(GraphicsConfig other)
+        public void OverrideWith(GraphicsConfig? other)
         {
-            GuiColour.OverrideWith(other?.GuiColour);
+            GuiColour?.OverrideWith(other?.GuiColour);
         }
     }
 }

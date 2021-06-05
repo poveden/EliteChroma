@@ -10,7 +10,7 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void TransformThrowsOnNullTransformArgument()
         {
-            Assert.Throws<ArgumentNullException>("transform", () => ColorExtensions.Transform(Color.Blue, null));
+            Assert.Throws<ArgumentNullException>("transform", () => ColorExtensions.Transform(Color.Blue, null!));
         }
     }
 }

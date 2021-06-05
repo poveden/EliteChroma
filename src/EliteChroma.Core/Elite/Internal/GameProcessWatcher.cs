@@ -38,7 +38,7 @@ namespace EliteChroma.Elite.Internal
             _timer.Elapsed += Timer_Elapsed;
         }
 
-        public event EventHandler<GameProcessState> Changed;
+        public event EventHandler<GameProcessState>? Changed;
 
         public void Start()
         {

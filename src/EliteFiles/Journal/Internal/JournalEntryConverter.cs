@@ -22,13 +22,13 @@ namespace EliteFiles.Journal.Internal
             throw new NotSupportedException();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             var item = JObject.Load(reader);
 
-            string eventName = item["event"].Value<string>();
+            string? eventName = item["event"]?.Value<string>();
 
-            if (!_eventMap.TryGetValue(eventName, out Type type))
+            if (string.IsNullOrEmpty(eventName) || !_eventMap.TryGetValue(eventName, out Type type))
             {
                 type = typeof(JournalEntry);
             }
@@ -37,7 +37,7 @@ namespace EliteFiles.Journal.Internal
         }
 
         [ExcludeFromCodeCoverage]
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             throw new NotSupportedException();
         }
@@ -56,7 +56,7 @@ namespace EliteFiles.Journal.Internal
         // Reference: https://stackoverflow.com/questions/20995865/deserializing-json-to-abstract-class/30579193#30579193
         private sealed class JournalEntryContractResolver : DefaultContractResolver
         {
-            protected override JsonConverter ResolveContractConverter(Type objectType)
+            protected override JsonConverter? ResolveContractConverter(Type objectType)
             {
                 if (typeof(JournalEntry).IsAssignableFrom(objectType))
                 {

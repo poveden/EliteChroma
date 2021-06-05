@@ -182,7 +182,7 @@ namespace EliteChroma.Core.Internal
             { 0x70, Key.Jpn5 },
         };
 
-        public static bool TryGetKey(string keyName, string keyboardLayout, bool enUSOverride, out Key key, INativeMethods nativeMethods)
+        public static bool TryGetKey(string keyName, string? keyboardLayout, bool enUSOverride, out Key key, INativeMethods nativeMethods)
         {
             if (_keys.TryGetValue(keyName, out key))
             {
@@ -202,8 +202,8 @@ namespace EliteChroma.Core.Internal
 
         private static string GetKeyName(char c)
         {
-            _ = Keyboard.TryGetKeyName(c, out string keyName);
-            return keyName;
+            _ = Keyboard.TryGetKeyName(c, out string? keyName);
+            return keyName!;
         }
     }
 }

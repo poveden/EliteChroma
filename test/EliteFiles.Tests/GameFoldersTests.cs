@@ -48,7 +48,7 @@ namespace EliteFiles.Tests
         [Fact]
         public void SteamLibraryFoldersFromFileGetsTheListOfFolders()
         {
-            var slf = SteamLibraryFolders.FromFile(@"TestFiles\libraryfolders.vdf");
+            var slf = SteamLibraryFolders.FromFile(@"TestFiles\libraryfolders.vdf")!;
 
             Assert.Equal(2, slf.Count);
             Assert.Equal(@"C:\Games\Path1", slf[0]);

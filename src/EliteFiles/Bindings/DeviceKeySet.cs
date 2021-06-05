@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace EliteFiles.Bindings
 {
     /// <summary>
     /// Represents a collection of unique device keys.
     /// </summary>
-    [SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "Collection represents a unique set of device keys.")]
     public sealed class DeviceKeySet : IReadOnlyCollection<DeviceKey>, IEquatable<DeviceKeySet>
     {
         private readonly HashSet<DeviceKey> _modifiers;
@@ -35,7 +33,7 @@ namespace EliteFiles.Bindings
         /// </summary>
         /// <param name="other">The device key collection to compare against this instance.</param>
         /// <returns><c>true</c> if <paramref name="other"/> represents the same set of device key as this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(DeviceKeySet other)
+        public bool Equals(DeviceKeySet? other)
         {
             return other != null && _modifiers.SetEquals(other._modifiers);
         }
@@ -45,7 +43,7 @@ namespace EliteFiles.Bindings
         /// </summary>
         /// <param name="obj">The obj to compare against this instance.</param>
         /// <returns><c>true</c> if <paramref name="obj"/> represents the same set of device key as this instance; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is DeviceKeySet other && Equals(other);
         }

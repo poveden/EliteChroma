@@ -14,15 +14,18 @@ namespace EliteChroma.Elite
 
         internal GameState()
         {
+            Status = StatusEntry.Empty;
+            _guiColour = GuiColourMatrix.Default;
+            Colors = new GameColors(_guiColour);
         }
 
         public DateTimeOffset Now { get; internal set; }
 
         public GameProcessState ProcessState { get; internal set; }
 
-        public BindingPreset BindingPreset { get; internal set; }
+        public BindingPreset? BindingPreset { get; internal set; }
 
-        public DeviceKeySet PressedModifiers { get; internal set; }
+        public DeviceKeySet? PressedModifiers { get; internal set; }
 
         public bool ForceEnUSKeyboardLayout { get; internal set; }
 
@@ -31,7 +34,7 @@ namespace EliteChroma.Elite
         public GuiColourMatrix GuiColour
         {
             get => _guiColour;
-            set
+            internal set
             {
                 _guiColour = value;
                 Colors = new GameColors(_guiColour);
@@ -40,11 +43,11 @@ namespace EliteChroma.Elite
 
         public GameColors Colors { get; private set; }
 
-        public string MusicTrack { get; internal set; }
+        public string? MusicTrack { get; internal set; }
 
         public StartJump.FsdJumpType FsdJumpType { get; internal set; }
 
-        public string FsdJumpStarClass { get; internal set; }
+        public string? FsdJumpStarClass { get; internal set; }
 
         public DateTimeOffset FsdJumpChange { get; internal set; }
 
@@ -66,12 +69,17 @@ namespace EliteChroma.Elite
         {
             get
             {
+                if (Status == null)
+                {
+                    return false;
+                }
+
                 if ((Status.Flags & (Flags.InMainShip | Flags.InFighter | Flags.InSrv)) == Flags.None)
                 {
                     return false;
                 }
 
-                switch (Status.GuiFocus)
+                switch (Status.GuiFocus ?? default)
                 {
                     case GuiFocus.None:
                     case GuiFocus.InternalPanel:

@@ -16,7 +16,7 @@ namespace EliteChroma.Elite.Internal
         private readonly Dictionary<VirtualKey, DeviceKey> _watch;
         private readonly Timer _timer;
 
-        private DeviceKeySet _currPressed;
+        private DeviceKeySet? _currPressed;
         private bool _running;
         private bool _disposed;
 
@@ -34,15 +34,15 @@ namespace EliteChroma.Elite.Internal
             _timer.Elapsed += Timer_Elapsed;
         }
 
-        public event EventHandler<DeviceKeySet> Changed;
+        public event EventHandler<DeviceKeySet>? Changed;
 
-        public void Watch(IEnumerable<DeviceKey> modifiers, string keyboardLayout, bool enUSOverride)
+        public void Watch(IEnumerable<DeviceKey> modifiers, string? keyboardLayout, bool enUSOverride)
         {
             _watch.Clear();
 
-            foreach (DeviceKey m in modifiers.Where(x => x.Device == Device.Keyboard))
+            foreach (DeviceKey m in modifiers.Where(x => x.Device == Device.Keyboard && x.Key != null))
             {
-                if (KeyMappings.TryGetKey(m.Key, keyboardLayout, enUSOverride, out VirtualKey key, NativeMethods))
+                if (KeyMappings.TryGetKey(m.Key!, keyboardLayout, enUSOverride, out VirtualKey key, NativeMethods))
                 {
                     _watch[key] = m;
                 }

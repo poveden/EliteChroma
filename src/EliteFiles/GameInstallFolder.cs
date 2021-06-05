@@ -106,7 +106,7 @@ namespace EliteFiles
         public static IEnumerable<string> GetAlternatePaths()
         {
             // Reference: https://github.com/Bemoliph/Elite-Dangerous-Downloader/blob/master/downloader.py
-            string launcherPath = (string)Registry.GetValue(
+            string? launcherPath = (string?)Registry.GetValue(
                 @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{696F8871-C91D-4CB1-825D-36BE18065575}_is1",
                 "InstallLocation",
                 null);

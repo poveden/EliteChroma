@@ -19,7 +19,7 @@ namespace EliteChroma.Core.Layers
 
         private DateTimeOffset? _lastTick;
         private HazardLevel _hazardLevel;
-        private IReadOnlyCollection<ParticlePopulation> _population;
+        private IReadOnlyCollection<ParticlePopulation> _population = Array.Empty<ParticlePopulation>();
 
         private enum HazardLevel
         {
@@ -93,7 +93,7 @@ namespace EliteChroma.Core.Layers
             RenderHazardLevel(canvas);
         }
 
-        private static HazardLevel GetHazardLevel(string starClass)
+        private static HazardLevel GetHazardLevel(string? starClass)
         {
             switch (StarClass.GetKind(starClass, out _))
             {

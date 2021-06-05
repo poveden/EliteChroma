@@ -19,11 +19,11 @@ namespace EliteChroma.Internal
         {
         }
 
-        public string GameInstallFolder { get; set; }
+        public string? GameInstallFolder { get; set; }
 
-        public string GameOptionsFolder { get; set; }
+        public string? GameOptionsFolder { get; set; }
 
-        public string JournalFolder { get; set; }
+        public string? JournalFolder { get; set; }
 
         public bool ForceEnUSKeyboardLayout { get; set; }
 
@@ -34,7 +34,7 @@ namespace EliteChroma.Internal
             try
             {
                 string json = File.ReadAllText(path);
-                return JsonConvert.DeserializeObject<AppSettings>(json, _settings);
+                return JsonConvert.DeserializeObject<AppSettings>(json, _settings) ?? BuildDefaultSettings();
             }
             catch (IOException)
             {
@@ -75,7 +75,12 @@ namespace EliteChroma.Internal
 
         public void Save(string path)
         {
-            _ = Directory.CreateDirectory(Path.GetDirectoryName(path));
+            string? dirName = Path.GetDirectoryName(path);
+            if (dirName != null)
+            {
+                _ = Directory.CreateDirectory(dirName);
+            }
+
             string json = JsonConvert.SerializeObject(this, _settings);
             File.WriteAllText(path, json);
         }

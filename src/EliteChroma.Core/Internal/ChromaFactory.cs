@@ -9,9 +9,9 @@ namespace EliteChroma.Core.Internal
 {
     internal sealed class ChromaFactory : IChromaFactory
     {
-        public IChromaApi ChromaApi { get; set; }
+        public IChromaApi? ChromaApi { get; set; }
 
-        public AppInfo ChromaAppInfo { get; set; }
+        public AppInfo? ChromaAppInfo { get; set; }
 
         public TimeSpan WarmupDelay { get; } = TimeSpan.FromSeconds(1);
 

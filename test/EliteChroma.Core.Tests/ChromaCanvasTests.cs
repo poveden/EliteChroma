@@ -73,7 +73,7 @@ namespace EliteChroma.Core.Tests
         public void SetEffectThrowsOnNullChromaObject()
         {
             var cc = new ChromaCanvas();
-            Assert.ThrowsAsync<ArgumentNullException>("chroma", () => cc.SetEffect(null));
+            Assert.ThrowsAsync<ArgumentNullException>("chroma", () => cc.SetEffect(null!));
         }
     }
 }
