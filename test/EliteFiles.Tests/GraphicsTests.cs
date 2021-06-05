@@ -62,6 +62,16 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
+        public void ReturnsNullWhenTheGraphicsConfigFileHasMalformedXml()
+        {
+            using var dir = new TestFolder();
+            dir.WriteText("MalformedConfig.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><GraphicsConfig>");
+
+            var status = GraphicsConfig.FromFile(dir.Resolve("MalformedConfig.xml"));
+            Assert.Null(status);
+        }
+
+        [Fact]
         public void DeserializesMinimalGraphicsConfigFiles()
         {
             using var dir = new TestFolder();
@@ -112,10 +122,50 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
+        public async Task WatcherToleratesMissingGraphicsConfigurationOverrideFiles()
+        {
+            using var dirOpts = new TestFolder(_gof.FullName);
+            dirOpts.DeleteFile(_overrideFile);
+
+            var gof = new GameOptionsFolder(dirOpts.Name);
+            Assert.True(gof.IsValid);
+            Assert.False(gof.GraphicsConfigurationOverride.Exists);
+
+            using var watcher = new GraphicsConfigWatcher(_gif, gof);
+            var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatcherRaisesTheChangedEventOnStart));
+
+            var config = await evs.WaitAsync(() =>
+            {
+                watcher.Start();
+                watcher.Stop();
+            }).ConfigureAwait(false);
+
+            Assert.Equal("Standard", config.GuiColour.Default.LocalisationName);
+        }
+
+        [Fact]
         public async Task WatcherToleratesEmptyGraphicsConfigurationOverrideFiles()
         {
             using var dirOpts = new TestFolder(_gof.FullName);
             dirOpts.WriteText(_overrideFile, string.Empty);
+
+            using var watcher = new GraphicsConfigWatcher(_gif, new GameOptionsFolder(dirOpts.Name));
+            var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatcherRaisesTheChangedEventOnStart));
+
+            var config = await evs.WaitAsync(() =>
+            {
+                watcher.Start();
+                watcher.Stop();
+            }).ConfigureAwait(false);
+
+            Assert.Equal("Standard", config.GuiColour.Default.LocalisationName);
+        }
+
+        [Fact]
+        public async Task WatcherToleratesMalformedGraphicsConfigurationOverrideFiles()
+        {
+            using var dirOpts = new TestFolder(_gof.FullName);
+            dirOpts.WriteText(_overrideFile, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><GraphicsConfig>");
 
             using var watcher = new GraphicsConfigWatcher(_gif, new GameOptionsFolder(dirOpts.Name));
             var evs = new EventCollector<GraphicsConfig>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatcherRaisesTheChangedEventOnStart));

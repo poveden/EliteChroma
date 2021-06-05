@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
 using EliteFiles.Bindings.Binds;
 
@@ -59,7 +60,14 @@ namespace EliteFiles.Bindings
                     return null;
                 }
 
-                xml = XDocument.Load(fs);
+                try
+                {
+                    xml = XDocument.Load(fs);
+                }
+                catch (XmlException)
+                {
+                    return null;
+                }
             }
 
             var res = new BindingPreset

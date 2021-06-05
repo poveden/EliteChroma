@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace EliteFiles.Graphics
@@ -41,7 +42,14 @@ namespace EliteFiles.Graphics
                     return null;
                 }
 
-                xml = XDocument.Load(fs);
+                try
+                {
+                    xml = XDocument.Load(fs);
+                }
+                catch (XmlException)
+                {
+                    return null;
+                }
             }
 
             return new GraphicsConfig

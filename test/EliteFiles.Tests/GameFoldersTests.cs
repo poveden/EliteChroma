@@ -103,7 +103,7 @@ namespace EliteFiles.Tests
             DeleteFileAndAssertFalse(templateFolder, @"Bindings\StartPreset.start", IsValidFolder);
 
             DeleteFolderAndAssertFalse(templateFolder, "Graphics", IsValidFolder);
-            DeleteFileAndAssertFalse(templateFolder, @"Graphics\GraphicsConfigurationOverride.xml", IsValidFolder);
+            DeleteFileAndAssertTrue(templateFolder, @"Graphics\GraphicsConfigurationOverride.xml", IsValidFolder);
         }
 
         [Fact]
@@ -126,6 +126,13 @@ namespace EliteFiles.Tests
             using var dir = new TestFolder(templatePath);
             dir.DeleteFile(fileToDelete);
             Assert.False(testFunc(dir.Name));
+        }
+
+        private static void DeleteFileAndAssertTrue(string templatePath, string fileToDelete, Func<string, bool> testFunc)
+        {
+            using var dir = new TestFolder(templatePath);
+            dir.DeleteFile(fileToDelete);
+            Assert.True(testFunc(dir.Name));
         }
 
         private static void DeleteFolderAndAssertFalse(string templatePath, string folderToDelete, Func<string, bool> testFunc)
