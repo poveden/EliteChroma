@@ -14,25 +14,25 @@ namespace EliteChroma.Core.Tests
         {
             var cc = new ChromaColors();
 
-            var pi = typeof(ChromaColors).GetProperty(propertyName);
+            var pi = typeof(ChromaColors).GetProperty(propertyName)!;
 
             pi.SetValue(cc, 0.23);
-            Assert.Equal(0.23, (double)pi.GetValue(cc));
+            Assert.Equal(0.23, (double)pi.GetValue(cc)!);
 
             pi.SetValue(cc, double.NaN);
-            Assert.Equal(0.23, (double)pi.GetValue(cc));
+            Assert.Equal(0.23, (double)pi.GetValue(cc)!);
 
             pi.SetValue(cc, -8.23);
-            Assert.Equal(0.0, (double)pi.GetValue(cc));
+            Assert.Equal(0.0, (double)pi.GetValue(cc)!);
 
             pi.SetValue(cc, 2.11);
-            Assert.Equal(1.0, (double)pi.GetValue(cc));
+            Assert.Equal(1.0, (double)pi.GetValue(cc)!);
 
             pi.SetValue(cc, double.NegativeInfinity);
-            Assert.Equal(0.0, (double)pi.GetValue(cc));
+            Assert.Equal(0.0, (double)pi.GetValue(cc)!);
 
             pi.SetValue(cc, double.PositiveInfinity);
-            Assert.Equal(1.0, (double)pi.GetValue(cc));
+            Assert.Equal(1.0, (double)pi.GetValue(cc)!);
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace EliteChroma.Core.Tests
             foreach (var pi in colorProps)
             {
                 pi.SetValue(cc, c);
-                var c2 = (Color)pi.GetValue(cc);
+                var c2 = (Color)pi.GetValue(cc)!;
                 Assert.Equal(c, c2);
             }
         }

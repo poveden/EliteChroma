@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace EliteChroma.Tests.Internal
 {
@@ -16,9 +14,9 @@ namespace EliteChroma.Tests.Internal
         {
         }
 
-        public TestFolder(string templatePath)
+        public TestFolder(string? templatePath)
         {
-            var path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            string path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             _di = Directory.CreateDirectory(path);
 
             if (templatePath != null)

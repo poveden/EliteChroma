@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace EliteFiles.Journal
@@ -112,7 +110,7 @@ namespace EliteFiles.Journal
         /// <param name="starClass">The star class.</param>
         /// <param name="baseClass">The base star class, or <c>null</c> is the kind is unknown.</param>
         /// <returns>The star class kind.</returns>
-        public static Kind GetKind(string starClass, out string baseClass)
+        public static Kind GetKind(string? starClass, out string? baseClass)
         {
             if (string.IsNullOrEmpty(starClass))
             {
@@ -120,9 +118,9 @@ namespace EliteFiles.Journal
                 return Kind.Unknown;
             }
 
-            foreach (var (kind, rx) in _rx)
+            foreach ((Kind kind, Regex rx) in _rx)
             {
-                var m = rx.Match(starClass);
+                Match m = rx.Match(starClass);
 
                 if (m.Success)
                 {

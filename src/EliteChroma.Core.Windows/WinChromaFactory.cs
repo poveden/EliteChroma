@@ -23,17 +23,17 @@ namespace EliteChroma.Core.Windows
             _cw = new ChromaWindow();
         }
 
-        public IChromaApi ChromaApi { get; set; }
+        public IChromaApi? ChromaApi { get; set; }
 
-        public AppInfo ChromaAppInfo { get; set; }
+        public AppInfo? ChromaAppInfo { get; set; }
 
         public TimeSpan WarmupDelay => TimeSpan.Zero;
 
         public async Task<IChroma> CreateAsync()
         {
-            var chromaApi = ChromaApi ?? new NativeApi();
-            var res = await ColoreProvider.CreateAsync(ChromaAppInfo, chromaApi).ConfigureAwait(false);
-            await WaitForAccessGranted(res).ConfigureAwait(false);
+            IChromaApi chromaApi = ChromaApi ?? new NativeApi();
+            IChroma res = await ColoreProvider.CreateAsync(ChromaAppInfo, chromaApi).ConfigureAwait(false);
+            _ = await WaitForAccessGranted(res).ConfigureAwait(false);
             return res;
         }
 
@@ -62,10 +62,10 @@ namespace EliteChroma.Core.Windows
             chroma.DeviceAccess += callback;
 
             using var ctsTimeout = new CancellationTokenSource();
-            var tTimeout = Task.Delay(_accessGrantedTimeout, ctsTimeout.Token)
+            Task<bool> tTimeout = Task.Delay(_accessGrantedTimeout, ctsTimeout.Token)
                 .ContinueWith(t => false, TaskScheduler.Default);
 
-            var tRes = await Task.WhenAny(tTimeout, tcs.Task).ConfigureAwait(false);
+            Task<bool> tRes = await Task.WhenAny(tTimeout, tcs.Task).ConfigureAwait(false);
 
             if (tRes == tcs.Task)
             {

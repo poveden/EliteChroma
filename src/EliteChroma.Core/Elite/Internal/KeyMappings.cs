@@ -159,14 +159,14 @@ namespace EliteChroma.Elite.Internal
             { Keyboard.RightCommand, 0 },
         };
 
-        public static bool TryGetKey(string keyName, string keyboardLayout, bool enUSOverride, out VirtualKey key, INativeMethods nativeMethods)
+        public static bool TryGetKey(string keyName, string? keyboardLayout, bool enUSOverride, out VirtualKey key, INativeMethods nativeMethods)
         {
             if (_keys.TryGetValue(keyName, out key))
             {
                 return true;
             }
 
-            if (!Keyboard.TryGetKeyChar(keyName, out var c))
+            if (!Keyboard.TryGetKeyChar(keyName, out char c))
             {
                 return false;
             }
@@ -176,8 +176,8 @@ namespace EliteChroma.Elite.Internal
 
         private static string GetKeyName(char c)
         {
-            _ = Keyboard.TryGetKeyName(c, out var keyName);
-            return keyName;
+            _ = Keyboard.TryGetKeyName(c, out string? keyName);
+            return keyName!;
         }
     }
 }

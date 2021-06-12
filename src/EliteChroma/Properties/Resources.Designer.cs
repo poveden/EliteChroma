@@ -441,6 +441,33 @@ namespace EliteChroma.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select the folder where Elite:Dangerous is installed:.
+        /// </summary>
+        internal static string FolderDialogDescription_GameInstallFolder {
+            get {
+                return ResourceManager.GetString("FolderDialogDescription_GameInstallFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the folder where Elite:Dangerous stores user-related game options:.
+        /// </summary>
+        internal static string FolderDialogDescription_GameOptionsFolder {
+            get {
+                return ResourceManager.GetString("FolderDialogDescription_GameOptionsFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the folder where Elite:Dangerous stores the player journal:.
+        /// </summary>
+        internal static string FolderDialogDescription_JournalFolder {
+            get {
+                return ResourceManager.GetString("FolderDialogDescription_JournalFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Brightness must be a percentage value in the range 0-100..
         /// </summary>
         internal static string FormatException_InvalidBrightnessValue {

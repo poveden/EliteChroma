@@ -9,12 +9,12 @@ namespace EliteChroma.Internal
         {
             var a = Assembly.GetExecutingAssembly();
 
-            Title = a.GetCustomAttribute<AssemblyTitleAttribute>().Title;
-            Version = a.GetName().Version;
-            Description = a.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
-            Product = a.GetCustomAttribute<AssemblyProductAttribute>().Product;
-            Copyright = a.GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright;
-            Company = a.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
+            Title = a.GetCustomAttribute<AssemblyTitleAttribute>()!.Title;
+            Version = a.GetName().Version!;
+            Description = a.GetCustomAttribute<AssemblyDescriptionAttribute>()!.Description;
+            Product = a.GetCustomAttribute<AssemblyProductAttribute>()!.Product;
+            Copyright = a.GetCustomAttribute<AssemblyCopyrightAttribute>()!.Copyright;
+            Company = a.GetCustomAttribute<AssemblyCompanyAttribute>()!.Company;
         }
 
         public string Title { get; }

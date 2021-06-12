@@ -9,7 +9,7 @@ namespace EliteFiles.Tests
         [Fact]
         public void TryGetKeyThrowsOnNullKeyName()
         {
-            Assert.Throws<ArgumentNullException>("keyName", () => Keyboard.TryGetKeyChar(null, out _));
+            Assert.Throws<ArgumentNullException>("keyName", () => Keyboard.TryGetKeyChar(null!, out _));
         }
 
         [Theory]
@@ -18,7 +18,7 @@ namespace EliteFiles.Tests
         [InlineData("Mouse_1", false, default(char))]
         public void TryGetKeyCharReturnsExpectedValues(string keyName, bool expectedOk, char expectedChar)
         {
-            var ok = Keyboard.TryGetKeyChar(keyName, out var c);
+            bool ok = Keyboard.TryGetKeyChar(keyName, out char c);
 
             Assert.Equal(expectedOk, ok);
             Assert.Equal(expectedChar, c);
@@ -31,7 +31,7 @@ namespace EliteFiles.Tests
         [InlineData('\u001b', false, null)]
         public void TryGetKeyNameReturnsExpectedValues(char c, bool expectedOk, string expectedKeyName)
         {
-            var ok = Keyboard.TryGetKeyName(c, out var keyName);
+            bool ok = Keyboard.TryGetKeyName(c, out string? keyName);
 
             Assert.Equal(expectedOk, ok);
             Assert.Equal(expectedKeyName, keyName);

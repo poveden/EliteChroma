@@ -33,7 +33,7 @@ namespace EliteChroma.Core.Tests
         {
             var nm = new NativeMethodsMock(sdkAvailable);
 
-            var available = ChromaController.IsChromaSdkAvailable(nm);
+            bool available = ChromaController.IsChromaSdkAvailable(nm);
 
             Assert.Equal(sdkAvailable, available);
         }
@@ -57,7 +57,9 @@ namespace EliteChroma.Core.Tests
                 dirJournal = new TestFolder();
 
             dirJournal.WriteText(statusFile, EventSequence.BuildEvent("Status", new { Flags = 0 }));
+#pragma warning disable IDE0050
             dirJournal.WriteText(journalFile, EventSequence.BuildEvent("Fileheader", new { part = 1, language = @"English\UK", gameversion = "3.5.0.200 EDH", build = "r210198/r0 " }));
+#pragma warning restore IDE0050
 
             using var cc = new ChromaController(dirRoot.Name, dirOpts.Name, dirJournal.Name)
             {
@@ -116,7 +118,7 @@ namespace EliteChroma.Core.Tests
         public void EnUSOverrideIsAppliedInTheGameState()
         {
             using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
-            var watcher = cc.GetPrivateField<GameStateWatcher>("_watcher");
+            var watcher = cc.GetPrivateField<GameStateWatcher>("_watcher")!;
 
             Assert.False(cc.ForceEnUSKeyboardLayout);
             Assert.False(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
@@ -131,7 +133,10 @@ namespace EliteChroma.Core.Tests
         {
             using var watcher = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
 
-            bool IsRunning() => watcher.GetPrivateField<bool>("_running");
+            bool IsRunning()
+            {
+                return watcher.GetPrivateField<bool>("_running");
+            }
 
             Assert.False(IsRunning());
 
@@ -170,12 +175,12 @@ namespace EliteChroma.Core.Tests
                 },
             };
 
-            var game = cc.GetPrivateField<GameStateWatcher>("_watcher")
-                .GetPrivateField<GameState>("_gameState");
+            var game = cc.GetPrivateField<GameStateWatcher>("_watcher")!
+                .GetPrivateField<GameState>("_gameState")!;
 
-            var effect = cc.GetPrivateField<LayeredEffect>("_effect");
+            var effect = cc.GetPrivateField<LayeredEffect>("_effect")!;
 
-            var nRenderCalls = 0;
+            int nRenderCalls = 0;
             using var mre = new ManualResetEventSlim();
 
             var layer = new Mock<EffectLayer>();
@@ -195,7 +200,7 @@ namespace EliteChroma.Core.Tests
 
             async Task RenderEffect()
             {
-                await cc.InvokePrivateMethod<Task>("RenderEffect").ConfigureAwait(false);
+                await cc.InvokePrivateMethod<Task>("RenderEffect")!.ConfigureAwait(false);
                 mre.Set();
             }
 
@@ -224,7 +229,9 @@ namespace EliteChroma.Core.Tests
                 { "UnderAttack", new { Target = "You" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp },
                 { Flags.FsdCharging | Flags.InMainShip | Flags.ShieldsUp },
+#pragma warning disable IDE0050
                 { "StartJump", new { JumpType = "Hyperspace", StarClass = "G" }, true },
+#pragma warning restore IDE0050
                 { Flags.FsdJump | Flags.InMainShip | Flags.ShieldsUp },
                 { "FSDJump", new { StarSystem = "Wolf 1301" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
@@ -253,27 +260,30 @@ namespace EliteChroma.Core.Tests
 
             public static string BuildEvent(string eventName, object data)
             {
-                var tsJson = JsonConvert.SerializeObject(new
+#pragma warning disable IDE0050
+                string tsJson = JsonConvert.SerializeObject(new
                 {
                     timestamp = DateTimeOffset.UtcNow,
                     @event = eventName,
                 });
+#pragma warning restore IDE0050
 
-                var entryJson = JsonConvert.SerializeObject(data);
+                string entryJson = JsonConvert.SerializeObject(data);
 
-                var json = $"{tsJson[0..^1]},{entryJson[1..]}";
+                string json = $"{tsJson[0..^1]},{entryJson[1..]}";
 
                 return $"{json}\r\n";
             }
 
             public void Add(string eventName, object data, bool changesGameState)
             {
-                var json = BuildEvent(eventName, data);
+                string json = BuildEvent(eventName, data);
                 _events.Add(new Event(eventName == "Status", json, changesGameState));
             }
 
             public void Add(Flags flags, GuiFocus guiFocus = GuiFocus.None)
             {
+#pragma warning disable IDE0050
                 var data = new
                 {
                     Flags = flags,
@@ -281,6 +291,7 @@ namespace EliteChroma.Core.Tests
                     FireGroup = 0,
                     GuiFocus = guiFocus,
                 };
+#pragma warning restore IDE0050
 
                 Add("Status", data, true);
             }
@@ -316,9 +327,15 @@ namespace EliteChroma.Core.Tests
                 }
             }
 
-            public IEnumerator<Event> GetEnumerator() => _events.GetEnumerator();
+            public IEnumerator<Event> GetEnumerator()
+            {
+                return _events.GetEnumerator();
+            }
 
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
         }
 
         private sealed class Event

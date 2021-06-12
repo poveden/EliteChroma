@@ -30,11 +30,11 @@ namespace EliteChroma.Tests
              */
 
             _ = frmType ?? throw new ArgumentNullException(nameof(frmType));
-            using var frm = (Form)frmType.GetConstructor(Type.EmptyTypes).Invoke(null);
+            using var frm = (Form)frmType.GetConstructor(Type.EmptyTypes)!.Invoke(null);
 
             var pbs = from fld in frmType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                       where fld.FieldType == typeof(PictureBox)
-                      select (PictureBox)fld.GetValue(frm);
+                      select (PictureBox?)fld.GetValue(frm);
 
             var noImg = from pb in pbs
                         where pb.Image == null

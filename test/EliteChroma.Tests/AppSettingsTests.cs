@@ -19,7 +19,7 @@ namespace EliteChroma.Tests
         [Fact]
         public void GetsTheDefaultPath()
         {
-            var path = AppSettings.GetDefaultPath();
+            string path = AppSettings.GetDefaultPath();
             Assert.EndsWith(@"\EliteChroma\Settings.json", path, StringComparison.Ordinal);
         }
 
@@ -67,7 +67,7 @@ namespace EliteChroma.Tests
         public void ValidatesSettingsValues()
         {
             using var tf = new TestFolder("TestFiles");
-            var settingsFile = PrepareValidSettingsFile(tf);
+            string settingsFile = PrepareValidSettingsFile(tf);
 
             var actions = new List<Action<AppSettings>>
             {
@@ -91,7 +91,7 @@ namespace EliteChroma.Tests
         public void SaveSettingsToAFile()
         {
             using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
-            var settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
+            string settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
             var settings = AppSettings.Load(settingsFile);
             Assert.True(settings.ForceEnUSKeyboardLayout);
@@ -119,9 +119,9 @@ namespace EliteChroma.Tests
         public void AddDefaultColorsWhenMissingFromTheSettingsFile()
         {
             using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
-            var settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
+            string settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
-            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile));
+            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile))!;
             jo.Remove("Colors");
             File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
 
@@ -136,10 +136,10 @@ namespace EliteChroma.Tests
             var ccDefaults = new ChromaColors();
 
             using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
-            var settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
+            string settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
-            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile));
-            jo["Colors"]["DeviceDimBrightness"] = "NOT-A-NUMBER";
+            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile))!;
+            jo["Colors"]!["DeviceDimBrightness"] = "NOT-A-NUMBER";
             File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
 
             var settings = AppSettings.Load(settingsFile);
@@ -155,10 +155,10 @@ namespace EliteChroma.Tests
             var ccDefaults = new ChromaColors();
 
             using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
-            var settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
+            string settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
-            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile));
-            jo["Colors"]["HardpointsToggle"] = JToken.FromObject(faultyValue);
+            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile))!;
+            jo["Colors"]!["HardpointsToggle"] = JToken.FromObject(faultyValue);
             File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
 
             var settings = AppSettings.Load(settingsFile);
@@ -168,7 +168,7 @@ namespace EliteChroma.Tests
 
         internal static string PrepareValidSettingsFile(TestFolder baseFolder)
         {
-            var settingsFile = baseFolder.Resolve("Settings.json");
+            string settingsFile = baseFolder.Resolve("Settings.json");
 
             var settings = AppSettings.Load(settingsFile);
             settings.GameInstallFolder = baseFolder.Resolve("GameRoot");

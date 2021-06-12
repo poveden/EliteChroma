@@ -34,14 +34,14 @@ namespace EliteFiles.Tests
         [Fact]
         public void DeserializesBindingPresetsFiles()
         {
-            var binds = BindingPreset.FromFile(Path.Combine(_gif.FullName, _mainFile));
+            var binds = BindingPreset.FromFile(Path.Combine(_gif.FullName, _mainFile))!;
 
             Assert.NotNull(binds);
             Assert.Equal("Keyboard", binds.PresetName);
             Assert.Null(binds.Version);
             Assert.Null(binds.KeyboardLayout);
 
-            binds = BindingPreset.FromFile(Path.Combine(_gof.FullName, _customFile));
+            binds = BindingPreset.FromFile(Path.Combine(_gof.FullName, _customFile))!;
 
             Assert.NotNull(binds);
             Assert.Equal("Custom", binds.PresetName);
@@ -72,8 +72,8 @@ namespace EliteFiles.Tests
         [Fact]
         public void ToleratesMalformedBindingPresets()
         {
-            var file = Path.Combine(_gof.FullName, @"Bindings\Malformed.3.0.binds");
-            var binds = BindingPreset.FromFile(file);
+            string file = Path.Combine(_gof.FullName, @"Bindings\Malformed.3.0.binds");
+            var binds = BindingPreset.FromFile(file)!;
 
             Assert.Null(binds.PresetName);
             Assert.Null(binds.Version);
@@ -107,10 +107,10 @@ namespace EliteFiles.Tests
             var gof = new GameOptionsFolder(dirOpts.Name);
             Assert.True(gof.IsValid);
 
-            var files = BindingPreset.FindActivePresetFiles(_gif, gof);
+            var files = BindingPreset.FindActivePresetFiles(_gif, gof)!;
             Assert.Equal(_bindingCategories, files.Count);
 
-            var expectedFile = dirOpts.Resolve(@"Bindings\Custom.3.0.binds");
+            string expectedFile = dirOpts.Resolve(@"Bindings\Custom.3.0.binds");
             Assert.All(files.Values, x => Assert.Equal(expectedFile, x));
         }
 
@@ -123,7 +123,7 @@ namespace EliteFiles.Tests
             var gof = new GameOptionsFolder(dirOpts.Name);
             Assert.True(gof.IsValid);
 
-            var files = BindingPreset.FindActivePresetFiles(_gif, gof);
+            var files = BindingPreset.FindActivePresetFiles(_gif, gof)!;
             Assert.Equal(_bindingCategories, files.Count);
 
             var expected = new Dictionary<BindingCategory, string>
@@ -175,7 +175,7 @@ namespace EliteFiles.Tests
             var gof = new GameOptionsFolder(dirOpts.Name);
             Assert.True(gof.IsValid);
 
-            var files = BindingPreset.FindActivePresetFiles(_gif, gof);
+            var files = BindingPreset.FindActivePresetFiles(_gif, gof)!;
             Assert.Equal(_bindingCategories + 1, files.Count);
 
             var expected = new Dictionary<BindingCategory, string>
@@ -205,7 +205,7 @@ namespace EliteFiles.Tests
                 watcher.Stop();
             }).ConfigureAwait(false);
 
-            Assert.Null(binds.PresetName); // "Custom" and "Custom2" get merged to null.
+            Assert.Null(binds!.PresetName); // "Custom" and "Custom2" get merged to null.
             Assert.Equal(new Version(3, 0), binds.Version);
             Assert.Equal("es-ES", binds.KeyboardLayout);
 
@@ -230,7 +230,7 @@ namespace EliteFiles.Tests
 
             var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatchesForChangesInTheBidingsFiles));
 
-            var bindsCustom = dirOpts.ReadText(_customFile);
+            string bindsCustom = dirOpts.ReadText(_customFile);
 
             var binds = await evs.WaitAsync(() => dirOpts.WriteText(_customFile, string.Empty), 100).ConfigureAwait(false);
             Assert.Null(binds);
@@ -253,8 +253,8 @@ namespace EliteFiles.Tests
 
             foreach (var type in types)
             {
-                var pi = type.GetProperty("All", BindingFlags.Public | BindingFlags.Static);
-                var all = (IReadOnlyCollection<string>)pi.GetValue(null);
+                var pi = type.GetProperty("All", BindingFlags.Public | BindingFlags.Static)!;
+                var all = (IReadOnlyCollection<string>)pi.GetValue(null)!;
 
                 Assert.NotEmpty(all);
             }
@@ -273,10 +273,10 @@ namespace EliteFiles.Tests
 
             foreach (var type in types)
             {
-                var pi = type.GetProperty("All", BindingFlags.Public | BindingFlags.Static);
-                var all = (IReadOnlyCollection<string>)pi.GetValue(null);
+                var pi = type.GetProperty("All", BindingFlags.Public | BindingFlags.Static)!;
+                var all = (IReadOnlyCollection<string>)pi.GetValue(null)!;
 
-                foreach (var bind in all)
+                foreach (string bind in all)
                 {
                     Assert.True(allBinds.Add(bind));
                 }
@@ -289,7 +289,7 @@ namespace EliteFiles.Tests
             var allValues = (BindingCategory[])Enum.GetValues(typeof(BindingCategory));
             Assert.Equal(_bindingCategories, allValues.Length);
 
-            for (var i = 0; i < allValues.Length; i++)
+            for (int i = 0; i < allValues.Length; i++)
             {
                 Assert.Equal(i, (int)allValues[i]);
             }
@@ -306,8 +306,8 @@ namespace EliteFiles.Tests
 
             foreach (var type in types)
             {
-                var fi = type.GetField("Category", BindingFlags.Public | BindingFlags.Static);
-                var category = (BindingCategory)fi.GetValue(null);
+                var fi = type.GetField("Category", BindingFlags.Public | BindingFlags.Static)!;
+                var category = (BindingCategory)fi.GetValue(null)!;
 
                 Assert.True(Enum.IsDefined(typeof(BindingCategory), category));
             }
@@ -332,7 +332,10 @@ namespace EliteFiles.Tests
         {
             using var watcher = new BindingsWatcher(_gif, _gof);
 
-            bool IsRunning() => watcher.GetPrivateField<bool>("_running");
+            bool IsRunning()
+            {
+                return watcher.GetPrivateField<bool>("_running");
+            }
 
             Assert.False(IsRunning());
 
@@ -375,16 +378,16 @@ namespace EliteFiles.Tests
             Assert.Equal<object>(key2, key1);
             Assert.NotEqual<object>(key1, key3);
             Assert.NotEqual<object>(key3, key1);
-            Assert.False(key1.Equals(null));
-            Assert.False(key2.Equals(null));
             Assert.False(key1.Equals("Not a device key"));
             Assert.False(key2.Equals("Not a device key"));
+            Assert.False(key1.Equals(null));
+            Assert.False(key2.Equals(null));
         }
 
         [Fact]
         public void DeviceKeySetThrowsOnANullListOfDeviceKeys()
         {
-            Assert.Throws<ArgumentNullException>("modifiers", () => new DeviceKeySet(null));
+            Assert.Throws<ArgumentNullException>("modifiers", () => new DeviceKeySet(null!));
         }
 
         [Fact]
@@ -407,12 +410,12 @@ namespace EliteFiles.Tests
             Assert.True(set2.Equals((object)set1));
             Assert.NotEqual<object>(set1, set3);
             Assert.NotEqual<object>(set3, set1);
+            Assert.False(set1.Equals("Not a device key set"));
+            Assert.False(set2.Equals("Not a device key set"));
 #pragma warning disable CA1508
             Assert.False(set1.Equals(null));
             Assert.False(set2.Equals(null));
 #pragma warning restore CA1508
-            Assert.False(set1.Equals("Not a device key set"));
-            Assert.False(set2.Equals("Not a device key set"));
         }
 
         private static T FromXml<T>(string xml)
@@ -420,9 +423,7 @@ namespace EliteFiles.Tests
         {
             var xe = XElement.Parse(xml);
 
-            var fromXml = typeof(T).GetMethod("FromXml", BindingFlags.NonPublic | BindingFlags.Static);
-
-            return (T)fromXml.Invoke(null, new object[] { xe });
+            return typeof(T).InvokePrivateStaticMethod<T>("FromXml", xe)!;
         }
     }
 }

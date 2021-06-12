@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using EliteFiles.Bindings;
 using EliteFiles.Graphics;
 using EliteFiles.Journal.Events;
@@ -15,15 +14,18 @@ namespace EliteChroma.Elite
 
         internal GameState()
         {
+            Status = StatusEntry.Empty;
+            _guiColour = GuiColourMatrix.Default;
+            Colors = new GameColors(_guiColour);
         }
 
         public DateTimeOffset Now { get; internal set; }
 
         public GameProcessState ProcessState { get; internal set; }
 
-        public BindingPreset BindingPreset { get; internal set; }
+        public BindingPreset? BindingPreset { get; internal set; }
 
-        public DeviceKeySet PressedModifiers { get; internal set; }
+        public DeviceKeySet? PressedModifiers { get; internal set; }
 
         public bool ForceEnUSKeyboardLayout { get; internal set; }
 
@@ -32,7 +34,7 @@ namespace EliteChroma.Elite
         public GuiColourMatrix GuiColour
         {
             get => _guiColour;
-            set
+            internal set
             {
                 _guiColour = value;
                 Colors = new GameColors(_guiColour);
@@ -41,11 +43,11 @@ namespace EliteChroma.Elite
 
         public GameColors Colors { get; private set; }
 
-        public string MusicTrack { get; internal set; }
+        public string? MusicTrack { get; internal set; }
 
         public StartJump.FsdJumpType FsdJumpType { get; internal set; }
 
-        public string FsdJumpStarClass { get; internal set; }
+        public string? FsdJumpStarClass { get; internal set; }
 
         public DateTimeOffset FsdJumpChange { get; internal set; }
 
@@ -59,33 +61,25 @@ namespace EliteChroma.Elite
 
         public DateTimeOffset AttackTargetChange { get; internal set; }
 
-        public bool InCockpit
-        {
-            get
-            {
-                return (Status.HasFlag(Flags.InMainShip) || Status.HasFlag(Flags.InFighter))
-                    && AtHelm;
-            }
-        }
+        public bool InCockpit => (Status.HasFlag(Flags.InMainShip) || Status.HasFlag(Flags.InFighter)) && AtHelm;
 
-        public bool InSrv
-        {
-            get
-            {
-                return Status.HasFlag(Flags.InSrv) && AtHelm;
-            }
-        }
+        public bool InSrv => Status.HasFlag(Flags.InSrv) && AtHelm;
 
         public bool AtHelm
         {
             get
             {
+                if (Status == null)
+                {
+                    return false;
+                }
+
                 if ((Status.Flags & (Flags.InMainShip | Flags.InFighter | Flags.InSrv)) == Flags.None)
                 {
                     return false;
                 }
 
-                switch (Status.GuiFocus)
+                switch (Status.GuiFocus ?? default)
                 {
                     case GuiFocus.None:
                     case GuiFocus.InternalPanel:
@@ -94,7 +88,12 @@ namespace EliteChroma.Elite
                     case GuiFocus.RolePanel:
                     case GuiFocus.StationServices:
                         return !InGalacticPowers && !InSquadronsView;
-
+                    case GuiFocus.GalaxyMap:
+                    case GuiFocus.SystemMap:
+                    case GuiFocus.Orrery:
+                    case GuiFocus.FssMode:
+                    case GuiFocus.SaaMode:
+                    case GuiFocus.Codex:
                     default:
                         return false;
                 }
@@ -107,6 +106,9 @@ namespace EliteChroma.Elite
 
         public bool DockedOrLanded => (Status.Flags & (Flags.Docked | Flags.Landed)) != Flags.None;
 
-        public GameState Copy() => (GameState)MemberwiseClone();
+        public GameState Copy()
+        {
+            return (GameState)MemberwiseClone();
+        }
     }
 }

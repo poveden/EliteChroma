@@ -19,11 +19,11 @@ namespace EliteChroma.Internal
         {
         }
 
-        public string GameInstallFolder { get; set; }
+        public string? GameInstallFolder { get; set; }
 
-        public string GameOptionsFolder { get; set; }
+        public string? GameOptionsFolder { get; set; }
 
-        public string JournalFolder { get; set; }
+        public string? JournalFolder { get; set; }
 
         public bool ForceEnUSKeyboardLayout { get; set; }
 
@@ -33,13 +33,24 @@ namespace EliteChroma.Internal
         {
             try
             {
-                var json = File.ReadAllText(path);
-                return JsonConvert.DeserializeObject<AppSettings>(json, _settings);
+                string json = File.ReadAllText(path);
+                return JsonConvert.DeserializeObject<AppSettings>(json, _settings) ?? BuildDefaultSettings();
             }
-            catch (IOException) {}
-            catch (JsonException) {}
+            catch (IOException)
+            {
+            }
+            catch (JsonException)
+            {
+            }
 
             return BuildDefaultSettings();
+        }
+
+        public static string GetDefaultPath()
+        {
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string folder = Path.Combine(appData, "EliteChroma");
+            return Path.Combine(folder, "Settings.json");
         }
 
         public bool IsValid()
@@ -64,26 +75,24 @@ namespace EliteChroma.Internal
 
         public void Save(string path)
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
-            var json = JsonConvert.SerializeObject(this, _settings);
-            File.WriteAllText(path, json);
-        }
+            string? dirName = Path.GetDirectoryName(path);
+            if (dirName != null)
+            {
+                _ = Directory.CreateDirectory(dirName);
+            }
 
-        public static string GetDefaultPath()
-        {
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var folder = Path.Combine(appData, "EliteChroma");
-            return Path.Combine(folder, "Settings.json");
+            string json = JsonConvert.SerializeObject(this, _settings);
+            File.WriteAllText(path, json);
         }
 
         private static AppSettings BuildDefaultSettings()
         {
-            var gameInstall = EliteFiles.GameInstallFolder.DefaultPaths
+            string gameInstall = EliteFiles.GameInstallFolder.DefaultPaths
                 .Concat(EliteFiles.GameInstallFolder.GetAlternatePaths())
                 .FirstOrDefault(Directory.Exists)
                 ?? EliteFiles.GameInstallFolder.DefaultPaths.First();
-            var gameOptions = EliteFiles.GameOptionsFolder.DefaultPath;
-            var journal = EliteFiles.JournalFolder.DefaultPath;
+            string gameOptions = EliteFiles.GameOptionsFolder.DefaultPath;
+            string journal = EliteFiles.JournalFolder.DefaultPath;
 
             return new AppSettings
             {

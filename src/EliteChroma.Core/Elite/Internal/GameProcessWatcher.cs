@@ -38,7 +38,7 @@ namespace EliteChroma.Elite.Internal
             _timer.Elapsed += Timer_Elapsed;
         }
 
-        public event EventHandler<GameProcessState> Changed;
+        public event EventHandler<GameProcessState>? Changed;
 
         public void Start()
         {
@@ -76,8 +76,8 @@ namespace EliteChroma.Elite.Internal
 
         private bool CheckGameForegroundState()
         {
-            var hWnd = NativeMethods.GetForegroundWindow();
-            var threadId = NativeMethods.GetWindowThreadProcessId(hWnd, out var processId);
+            IntPtr hWnd = NativeMethods.GetForegroundWindow();
+            int threadId = NativeMethods.GetWindowThreadProcessId(hWnd, out int processId);
 
             if (threadId == 0 || processId == 0)
             {
@@ -90,7 +90,7 @@ namespace EliteChroma.Elite.Internal
         private bool CheckGameRunningState()
         {
             _processCheckCycle = (_processCheckCycle + 1) % _processCheckWaitCycles;
-            var fullScan = _processCheckCycle == 0;
+            bool fullScan = _processCheckCycle == 0;
 
             return _gameProcessTracker.IsGameRunning(fullScan);
         }
@@ -120,7 +120,7 @@ namespace EliteChroma.Elite.Internal
 
             try
             {
-                var newState = GetProcessState();
+                GameProcessState newState = GetProcessState();
 
                 if (newState == _processState)
                 {
@@ -133,12 +133,12 @@ namespace EliteChroma.Elite.Internal
             }
             catch (Exception ex)
             {
-                // Reference: https://docs.microsoft.com/en-us/dotnet/api/system.timers.timer?view=netcore-3.1#remarks
+                // Reference: https://docs.microsoft.com/en-us/dotnet/api/system.timers.timer?view=netcore-5.0#remarks
                 await Task.FromException(ex).ConfigureAwait(false);
             }
             finally
             {
-                System.Threading.Interlocked.Exchange(ref _checking, 0);
+                _ = System.Threading.Interlocked.Exchange(ref _checking, 0);
             }
         }
     }

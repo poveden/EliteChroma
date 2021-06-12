@@ -20,7 +20,7 @@ namespace EliteChroma.Core.Windows.Internal
             });
         }
 
-        public IChroma Chroma { get; set; }
+        public IChroma? Chroma { get; set; }
 
         public void Dispose()
         {

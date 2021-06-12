@@ -23,12 +23,12 @@ namespace EliteChroma.Core.Layers
 
             if (Game.Status.HasFlag(Flags.CargoScoopDeployed))
             {
-                StartAnimation();
+                _ = StartAnimation();
                 lColor = PulseColor(Color.Black, Colors.CargoScoopDeployed, TimeSpan.FromSeconds(1));
             }
             else
             {
-                StopAnimation();
+                _ = StopAnimation();
                 lColor = Colors.CargoScoopRetracted;
             }
 

@@ -19,7 +19,7 @@ namespace EliteChroma.Core.Layers
 
         private DateTimeOffset? _lastTick;
         private HazardLevel _hazardLevel;
-        private IReadOnlyCollection<ParticlePopulation> _population;
+        private IReadOnlyCollection<ParticlePopulation> _population = Array.Empty<ParticlePopulation>();
 
         private enum HazardLevel
         {
@@ -60,20 +60,20 @@ namespace EliteChroma.Core.Layers
         {
             if (Game.FsdJumpType == FsdJumpType.None)
             {
-                StopAnimation();
+                _ = StopAnimation();
                 _particleField.Clear();
                 _lastTick = null;
                 return;
             }
 
-            StartAnimation();
+            _ = StartAnimation();
 
-            var deltaT = Now - (_lastTick ?? Now);
+            TimeSpan deltaT = Now - (_lastTick ?? Now);
             _lastTick = Now;
 
             JumpPhase phase = GetJumpPhase();
 
-            foreach (var p in _population)
+            foreach (ParticlePopulation p in _population)
             {
                 if (p.JumpPhase != phase)
                 {
@@ -93,7 +93,7 @@ namespace EliteChroma.Core.Layers
             RenderHazardLevel(canvas);
         }
 
-        private static HazardLevel GetHazardLevel(string starClass)
+        private static HazardLevel GetHazardLevel(string? starClass)
         {
             switch (StarClass.GetKind(starClass, out _))
             {
@@ -105,6 +105,12 @@ namespace EliteChroma.Core.Layers
                 case StarClass.Kind.BlackHole:
                     return HazardLevel.High;
 
+                case StarClass.Kind.Unknown:
+                case StarClass.Kind.BrownDwarf:
+                case StarClass.Kind.Protostar:
+                case StarClass.Kind.Carbon:
+                case StarClass.Kind.WolfRayet:
+                case StarClass.Kind.Other:
                 default:
                     return HazardLevel.Medium;
             }
@@ -112,7 +118,7 @@ namespace EliteChroma.Core.Layers
 
         private JumpPhase GetJumpPhase()
         {
-            var tJump = Now - Game.FsdJumpChange;
+            TimeSpan tJump = Now - Game.FsdJumpChange;
 
             if (tJump < _jumpTunnelThreshold)
             {
@@ -147,6 +153,7 @@ namespace EliteChroma.Core.Layers
                     pulseType = PulseColorType.Square;
                     break;
 
+                case HazardLevel.Low:
                 default:
                     hazardColor = GameColors.GreenAlert;
                     period = TimeSpan.FromSeconds(1);
@@ -154,7 +161,7 @@ namespace EliteChroma.Core.Layers
                     break;
             }
 
-            var color = PulseColor(Color.Black, hazardColor, period, pulseType);
+            Color color = PulseColor(Color.Black, hazardColor, period, pulseType);
             ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.HyperSuperCombination, color);
             ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Hyperspace, color);
         }

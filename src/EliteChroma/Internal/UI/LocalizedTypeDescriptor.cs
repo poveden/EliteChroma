@@ -27,7 +27,7 @@ namespace EliteChroma.Internal.UI
 
             foreach (PropertyDescriptor property in properties)
             {
-                res.Add(new LocalizedPropertyDescriptor(property, _resourceNamePrefix));
+                _ = res.Add(new LocalizedPropertyDescriptor(property, _resourceNamePrefix));
             }
 
             return res;

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace EliteFiles.Bindings
 {
     /// <summary>
     /// Represents a collection of unique device keys.
     /// </summary>
-    [SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "Collection represents a unique set of device keys.")]
     public sealed class DeviceKeySet : IReadOnlyCollection<DeviceKey>, IEquatable<DeviceKeySet>
     {
         private readonly HashSet<DeviceKey> _modifiers;
@@ -35,7 +33,7 @@ namespace EliteFiles.Bindings
         /// </summary>
         /// <param name="other">The device key collection to compare against this instance.</param>
         /// <returns><c>true</c> if <paramref name="other"/> represents the same set of device key as this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(DeviceKeySet other)
+        public bool Equals(DeviceKeySet? other)
         {
             return other != null && _modifiers.SetEquals(other._modifiers);
         }
@@ -45,7 +43,7 @@ namespace EliteFiles.Bindings
         /// </summary>
         /// <param name="obj">The obj to compare against this instance.</param>
         /// <returns><c>true</c> if <paramref name="obj"/> represents the same set of device key as this instance; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is DeviceKeySet other && Equals(other);
         }
@@ -54,18 +52,27 @@ namespace EliteFiles.Bindings
         /// Calculates the hash code for the current <see cref="DeviceKeySet"/> instance.
         /// </summary>
         /// <returns>The hash code.</returns>
-        public override int GetHashCode() => _hashCode;
+        public override int GetHashCode()
+        {
+            return _hashCode;
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through the set of device keys.
         /// </summary>
         /// <returns>An enumerator for this object.</returns>
-        public IEnumerator<DeviceKey> GetEnumerator() => _modifiers.GetEnumerator();
+        public IEnumerator<DeviceKey> GetEnumerator()
+        {
+            return _modifiers.GetEnumerator();
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through the set of device keys.
         /// </summary>
         /// <returns>An enumerator for this object.</returns>
-        IEnumerator IEnumerable.GetEnumerator() => _modifiers.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _modifiers.GetEnumerator();
+        }
     }
 }

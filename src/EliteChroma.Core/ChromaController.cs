@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
@@ -22,7 +23,7 @@ namespace EliteChroma.Core
 
         private ChromaColors _colors = new ChromaColors();
 
-        private IChroma _chroma;
+        private IChroma? _chroma;
         private int _rendering;
         private int _fps;
         private DateTimeOffset _chromaWarmupUntil;
@@ -90,7 +91,10 @@ namespace EliteChroma.Core
             set => _colors = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        public static bool IsChromaSdkAvailable() => IsChromaSdkAvailable(NativeMethods.Instance);
+        public static bool IsChromaSdkAvailable()
+        {
+            return IsChromaSdkAvailable(NativeMethods.Instance);
+        }
 
         public void Start()
         {
@@ -137,13 +141,13 @@ namespace EliteChroma.Core
         internal static bool IsChromaSdkAvailable(INativeMethods nativeMethods)
         {
             bool is64Bit = Environment.Is64BitProcess && Environment.Is64BitOperatingSystem;
-            var dllName = is64Bit ? "RzChromaSDK64.dll" : "RzChromaSDK.dll";
+            string dllName = is64Bit ? "RzChromaSDK64.dll" : "RzChromaSDK.dll";
 
-            var hModule = nativeMethods.LoadLibrary(dllName);
+            IntPtr hModule = nativeMethods.LoadLibrary(dllName);
 
             if (hModule != IntPtr.Zero)
             {
-                nativeMethods.FreeLibrary(hModule);
+                _ = nativeMethods.FreeLibrary(hModule);
                 return true;
             }
 
@@ -152,16 +156,16 @@ namespace EliteChroma.Core
 
         private static LayeredEffect InitChromaEffect()
         {
-            var layers =
+            IEnumerable<LayerBase> layers =
                 from type in typeof(LayerBase).Assembly.GetTypes()
                 where type.IsSubclassOf(typeof(LayerBase)) && !type.IsAbstract
                 select (LayerBase)Activator.CreateInstance(type);
 
             var res = new LayeredEffect();
 
-            foreach (var layer in layers)
+            foreach (LayerBase layer in layers)
             {
-                res.Add(layer);
+                _ = res.Add(layer);
             }
 
             return res;
@@ -182,7 +186,7 @@ namespace EliteChroma.Core
             }
             finally
             {
-                _chromaLock.Release();
+                _ = _chromaLock.Release();
             }
         }
 
@@ -201,7 +205,7 @@ namespace EliteChroma.Core
             }
             finally
             {
-                _chromaLock.Release();
+                _ = _chromaLock.Release();
             }
         }
 
@@ -230,7 +234,7 @@ namespace EliteChroma.Core
 
             try
             {
-                var game = _watcher.GetGameStateSnapshot();
+                GameState game = _watcher.GetGameStateSnapshot();
 
                 if (game.ProcessState == GameProcessState.NotRunning)
                 {
@@ -244,11 +248,11 @@ namespace EliteChroma.Core
                 try
                 {
                     game.Now = DateTimeOffset.UtcNow;
-                    await _effect.Render(_chroma, new LayerRenderState(game, _colors)).ConfigureAwait(false);
+                    await _effect.Render(_chroma!, new LayerRenderState(game, _colors)).ConfigureAwait(false);
                 }
                 finally
                 {
-                    _chromaLock.Release();
+                    _ = _chromaLock.Release();
                 }
 
                 _animation.Enabled = AnimationFrameRate > 0
@@ -256,7 +260,7 @@ namespace EliteChroma.Core
             }
             finally
             {
-                Interlocked.Exchange(ref _rendering, 0);
+                _ = Interlocked.Exchange(ref _rendering, 0);
             }
         }
     }

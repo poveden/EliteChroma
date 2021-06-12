@@ -16,7 +16,7 @@ namespace EliteChroma.Elite.Internal
         private readonly Dictionary<VirtualKey, DeviceKey> _watch;
         private readonly Timer _timer;
 
-        private DeviceKeySet _currPressed;
+        private DeviceKeySet? _currPressed;
         private bool _running;
         private bool _disposed;
 
@@ -34,15 +34,15 @@ namespace EliteChroma.Elite.Internal
             _timer.Elapsed += Timer_Elapsed;
         }
 
-        public event EventHandler<DeviceKeySet> Changed;
+        public event EventHandler<DeviceKeySet>? Changed;
 
-        public void Watch(IEnumerable<DeviceKey> modifiers, string keyboardLayout, bool enUSOverride)
+        public void Watch(IEnumerable<DeviceKey> modifiers, string? keyboardLayout, bool enUSOverride)
         {
             _watch.Clear();
 
-            foreach (var m in modifiers.Where(x => x.Device == Device.Keyboard))
+            foreach (DeviceKey m in modifiers.Where(x => x.Device == Device.Keyboard && x.Key != null))
             {
-                if (KeyMappings.TryGetKey(m.Key, keyboardLayout, enUSOverride, out var key, NativeMethods))
+                if (KeyMappings.TryGetKey(m.Key!, keyboardLayout, enUSOverride, out VirtualKey key, NativeMethods))
                 {
                     _watch[key] = m;
                 }
@@ -98,14 +98,14 @@ namespace EliteChroma.Elite.Internal
             }
             catch (Exception ex)
             {
-                // Reference: https://docs.microsoft.com/en-us/dotnet/api/system.timers.timer?view=netcore-3.1#remarks
+                // Reference: https://docs.microsoft.com/en-us/dotnet/api/system.timers.timer?view=netcore-5.0#remarks
                 await Task.FromException(ex).ConfigureAwait(false);
             }
         }
 
         private IEnumerable<DeviceKey> GetAllPressedModifiers()
         {
-            foreach (var kv in _watch)
+            foreach (KeyValuePair<VirtualKey, DeviceKey> kv in _watch)
             {
                 if ((NativeMethods.GetAsyncKeyState(kv.Key) & 0x8000) != 0)
                 {

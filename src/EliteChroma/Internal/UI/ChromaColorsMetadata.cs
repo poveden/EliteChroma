@@ -183,7 +183,7 @@ namespace EliteChroma.Internal.UI
         public Color LandingMode { get; set; }
 
         [Browsable(false)]
-        public IReadOnlyList<Color> PowerDistributorScale { get; }
+        public IReadOnlyList<Color> PowerDistributorScale { get; } = Array.Empty<Color>();
 
         public static void InitTypeDescriptionProvider()
         {
@@ -199,7 +199,7 @@ namespace EliteChroma.Internal.UI
 
             public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
             {
-                var baseDescriptor = base.GetTypeDescriptor(objectType, instance);
+                ICustomTypeDescriptor baseDescriptor = base.GetTypeDescriptor(objectType, instance);
                 return new LocalizedTypeDescriptor(baseDescriptor, _resourceNamePrefix);
             }
         }

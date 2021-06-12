@@ -22,7 +22,7 @@ namespace EliteFiles.Journal.Events
         /// Gets the journal file language code.
         /// </summary>
         [JsonProperty("language")]
-        public string Language { get; private set; }
+        public string? Language { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether the current journal is an Odyssey one.
@@ -34,12 +34,12 @@ namespace EliteFiles.Journal.Events
         /// Gets the version of the game that created the journal file.
         /// </summary>
         [JsonProperty("gameversion")]
-        public string GameVersion { get; private set; }
+        public string? GameVersion { get; private set; }
 
         /// <summary>
         /// Gets the game build number.
         /// </summary>
         [JsonProperty("build")]
-        public string Build { get; private set; }
+        public string? Build { get; private set; }
     }
 }

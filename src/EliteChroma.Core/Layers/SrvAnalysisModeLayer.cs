@@ -19,7 +19,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            var colorOn = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? Game.Colors.AnalysisMode : Colors.HardpointsToggle;
+            Color colorOn = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? Game.Colors.AnalysisMode : Colors.HardpointsToggle;
 
             ApplyColorToBinding(canvas.Keyboard, DrivingModeSwitches.PlayerHUDModeToggle, colorOn);
 
@@ -28,27 +28,27 @@ namespace EliteChroma.Core.Layers
             ApplyColorToBinding(canvas.Keyboard, Driving.CycleFireGroupNext, colorOn);
             ApplyColorToBinding(canvas.Keyboard, Driving.CycleFireGroupPrevious, colorOn);
 
-            var hardpointsDeployed = !Game.Status.HasFlag(Flags.SrvTurretRetracted);
+            bool hardpointsDeployed = !Game.Status.HasFlag(Flags.SrvTurretRetracted);
 
             Color hColor;
             if (hardpointsDeployed)
             {
-                StartAnimation();
+                _ = StartAnimation();
                 hColor = PulseColor(Color.Black, colorOn, TimeSpan.FromSeconds(1));
             }
             else
             {
-                StopAnimation();
+                _ = StopAnimation();
                 hColor = colorOn;
             }
 
             ApplyColorToBinding(canvas.Keyboard, Driving.ToggleTurret, hColor);
 
-            var colorOff = Game.Status.HasFlag(Flags.HudInAnalysisMode)
+            Color colorOff = Game.Status.HasFlag(Flags.HudInAnalysisMode)
                 ? Game.Colors.AnalysisMode.Transform(Colors.DeviceDimBrightness)
                 : Game.Colors.Hud.Transform(Colors.DeviceDimBrightness);
 
-            var c = hardpointsDeployed ? colorOn : colorOff;
+            Color c = hardpointsDeployed ? colorOn : colorOff;
 
             canvas.Mouse.Set(c);
             canvas.Mousepad.Set(c);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Colore.Api;
@@ -29,7 +28,7 @@ namespace EliteChroma.Core.Tests
 
             Assert.Equal(TimeSpan.Zero, cf.WarmupDelay);
 
-            var cw = GetChromaWindowInstance(cf);
+            var cw = cf.GetPrivateField<ChromaWindow>("_cw")!;
 
             var tcs = new TaskCompletionSource<IntPtr>();
             chromaApi
@@ -72,19 +71,11 @@ namespace EliteChroma.Core.Tests
 #pragma warning restore IDISP016, IDISP017
         }
 
-        private static ChromaWindow GetChromaWindowInstance(WinChromaFactory cf)
-        {
-            return (ChromaWindow)cf.GetType()
-                .GetField("_cw", BindingFlags.NonPublic | BindingFlags.Instance)
-                .GetValue(cf);
-        }
-
         private static void SendChromaEventMessage(ChromaWindow cw, int wParam, int lParam)
         {
-            var miWndProc = cw.GetType().GetMethod("WndProc", BindingFlags.NonPublic | BindingFlags.Instance);
-
             var m = Message.Create(cw.Handle, (int)Constants.WmChromaEvent, new IntPtr(wParam), new IntPtr(lParam));
-            miWndProc.Invoke(cw, new object[] { m });
+
+            cw.InvokePrivateMethod<object>("WndProc", m);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace EliteChroma.Elite.Internal
 
         public void Refresh()
         {
-            if (!NativeMethods.EnumProcesses(_buf, _capacityBytes, out var retSize))
+            if (!NativeMethods.EnumProcesses(_buf, _capacityBytes, out int retSize))
             {
                 return;
             }
@@ -33,13 +33,13 @@ namespace EliteChroma.Elite.Internal
 
         public IEnumerable<(int ProcessId, bool Added)> Diff(ProcessList other)
         {
-            var i = 0;
-            var j = 0;
+            int i = 0;
+            int j = 0;
 
             while (i < _n && j < other._n)
             {
-                var pi = _buf[i];
-                var pj = other._buf[j];
+                int pi = _buf[i];
+                int pj = other._buf[j];
 
                 if (pi == pj)
                 {
@@ -73,7 +73,7 @@ namespace EliteChroma.Elite.Internal
                 }
             }
 
-            exhausted:
+        exhausted:
 
             while (i < _n)
             {
@@ -88,14 +88,14 @@ namespace EliteChroma.Elite.Internal
 
         public bool Remove(int processId)
         {
-            var i = Array.BinarySearch(_buf, 0, _n, processId);
+            int i = Array.BinarySearch(_buf, 0, _n, processId);
 
             if (i < 0)
             {
                 return false;
             }
 
-            var n = _n - 1;
+            int n = _n - 1;
 
             Array.Copy(_buf, i + 1, _buf, i, n - i);
 

@@ -40,7 +40,7 @@ namespace EliteChroma.Tests
             var c = (Color)tc.ConvertFromString("AABBCC");
             Assert.Equal(Color.FromRgb(0xAABBCC), c);
 
-            var s = tc.ConvertToString(Color.FromRgb(0x445566));
+            string s = tc.ConvertToString(Color.FromRgb(0x445566));
             Assert.Equal("445566", s);
         }
 
@@ -63,10 +63,10 @@ namespace EliteChroma.Tests
             Assert.False(tc.CanConvertFrom(typeof(object)));
             Assert.True(tc.CanConvertTo(typeof(string)));
 
-            var v = (double)tc.ConvertFromString("25 %");
+            double v = (double)tc.ConvertFromString("25 %");
             Assert.Equal(0.25, v);
 
-            var s = tc.ConvertToString(0.78);
+            string s = tc.ConvertToString(0.78);
             Assert.Equal("78 %", s);
         }
 

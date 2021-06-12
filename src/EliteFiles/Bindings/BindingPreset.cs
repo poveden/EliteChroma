@@ -27,17 +27,17 @@ namespace EliteFiles.Bindings
         /// <summary>
         /// Gets the name of the bindings preset.
         /// </summary>
-        public string PresetName { get; private set; }
+        public string? PresetName { get; private set; }
 
         /// <summary>
         /// Gets the game version for which this preset is targeted to.
         /// </summary>
-        public Version Version { get; private set; }
+        public Version? Version { get; private set; }
 
         /// <summary>
         /// Gets the keyboard layout.
         /// </summary>
-        public string KeyboardLayout { get; private set; }
+        public string? KeyboardLayout { get; private set; }
 
         /// <summary>
         /// Gets the collection of all bindings.
@@ -49,11 +49,11 @@ namespace EliteFiles.Bindings
         /// </summary>
         /// <param name="path">The path to the binding presets file.</param>
         /// <returns>The bindings preset, or <c>null</c> if the file couldn't be read (e.g. in the middle of an update).</returns>
-        public static BindingPreset FromFile(string path)
+        public static BindingPreset? FromFile(string path)
         {
             XDocument xml;
 
-            using (var fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 if (fs.Length == 0)
                 {
@@ -76,15 +76,15 @@ namespace EliteFiles.Bindings
                 KeyboardLayout = xml.Root.Element("KeyboardLayout")?.Value,
             };
 
-            var majorVersion = xml.Root.Attribute("MajorVersion")?.Value;
-            var minorVersion = xml.Root.Attribute("MinorVersion")?.Value;
+            string? majorVersion = xml.Root.Attribute("MajorVersion")?.Value;
+            string? minorVersion = xml.Root.Attribute("MinorVersion")?.Value;
 
-            if (Version.TryParse($"{majorVersion}.{minorVersion}", out var version))
+            if (Version.TryParse($"{majorVersion}.{minorVersion}", out Version version))
             {
                 res.Version = version;
             }
 
-            foreach (var xSetting in xml.Root.Elements())
+            foreach (XElement xSetting in xml.Root.Elements())
             {
                 var binding = Binding.FromXml(xSetting);
 
@@ -113,10 +113,10 @@ namespace EliteFiles.Bindings
         {
             _ = categoryBindingPresets ?? throw new ArgumentNullException(nameof(categoryBindingPresets));
 
-            T UniqueOrDefault<T>(Func<BindingPreset, T> selector, IEqualityComparer<T> comparer = null)
+            T UniqueOrDefault<T>(Func<BindingPreset, T> selector, IEqualityComparer<T>? comparer = null)
             {
                 var distinct = new HashSet<T>(categoryBindingPresets.Values.Select(selector), comparer);
-                return distinct.Count == 1 ? distinct.Single() : default;
+                return distinct.Count == 1 ? distinct.Single() : default!;
             }
 
             var res = new BindingPreset
@@ -126,14 +126,14 @@ namespace EliteFiles.Bindings
                 KeyboardLayout = UniqueOrDefault(x => x.KeyboardLayout, StringComparer.OrdinalIgnoreCase),
             };
 
-            foreach (var kv in _bindNameCategories)
+            foreach (KeyValuePair<string, BindingCategory> kv in _bindNameCategories)
             {
-                if (!categoryBindingPresets.TryGetValue(kv.Value, out var bindingPreset) || bindingPreset == null)
+                if (!categoryBindingPresets.TryGetValue(kv.Value, out BindingPreset bindingPreset) || bindingPreset == null)
                 {
                     continue;
                 }
 
-                if (!bindingPreset.Bindings.TryGetValue(kv.Key, out var binding))
+                if (!bindingPreset.Bindings.TryGetValue(kv.Key, out Binding binding))
                 {
                     continue;
                 }
@@ -150,38 +150,37 @@ namespace EliteFiles.Bindings
         /// <param name="gameInstallFolder">The path to the game installation folder.</param>
         /// <param name="gameOptionsFolder">The path to the game options folder.</param>
         /// <returns>The path to the file, or <c>null</c> if no active preset could be found.</returns>
-        public static IReadOnlyDictionary<BindingCategory, string> FindActivePresetFiles(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder)
+        public static IReadOnlyDictionary<BindingCategory, string>? FindActivePresetFiles(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder)
         {
-            GameInstallFolder.AssertValid(gameInstallFolder);
-            GameOptionsFolder.AssertValid(gameOptionsFolder);
+            _ = GameInstallFolder.AssertValid(gameInstallFolder);
+            _ = GameOptionsFolder.AssertValid(gameOptionsFolder);
 
             var bindsFiles = new Dictionary<BindingCategory, string>(_numBindingCategories);
 
-            using (var fs = gameOptionsFolder.BindingsStartPreset.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (FileStream fs = gameOptionsFolder.BindingsStartPreset.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                using (var sr = new StreamReader(fs))
+                using var sr = new StreamReader(fs);
+
+                string bindsName;
+                for (int i = 0; (bindsName = sr.ReadLine()) != null; i++)
                 {
-                    string bindsName;
-                    for (var i = 0; (bindsName = sr.ReadLine()) != null; i++)
+                    string bindsFile =
+                        TryGetBindingsFilePath(gameOptionsFolder.Bindings, bindsName)
+                        ?? TryGetBindingsFilePath(gameInstallFolder.ControlSchemes, bindsName);
+
+                    if (bindsFile == null)
                     {
-                        var bindsFile =
-                            TryGetBindingsFilePath(gameOptionsFolder.Bindings, bindsName)
-                            ?? TryGetBindingsFilePath(gameInstallFolder.ControlSchemes, bindsName);
-
-                        if (bindsFile == null)
-                        {
-                            return null;
-                        }
-
-                        bindsFiles.Add((BindingCategory)i, bindsFile);
+                        return null;
                     }
+
+                    bindsFiles.Add((BindingCategory)i, bindsFile);
                 }
             }
 
             if (bindsFiles.Count == 1)
             {
                 // Pre-Odyssey behaviour.
-                for (var i = 1; i < _numBindingCategories; i++)
+                for (int i = 1; i < _numBindingCategories; i++)
                 {
                     bindsFiles[(BindingCategory)i] = bindsFiles[0];
                 }
@@ -199,7 +198,7 @@ namespace EliteFiles.Bindings
 
         private static string TryGetBindingsFilePath(DirectoryInfo path, string bindsName)
         {
-            var matches =
+            IEnumerable<string> matches =
                 from file in path.EnumerateFiles($"{bindsName}.*")
                 let m = Regex.Match(file.Name, @"(?:\.(\d\.\d))?\.binds$")
                 where m.Success
@@ -213,16 +212,16 @@ namespace EliteFiles.Bindings
         {
             var res = new Dictionary<string, BindingCategory>(StringComparer.Ordinal);
 
-            var allBinds =
+            IEnumerable<(BindingCategory, IReadOnlyCollection<string>)> allBinds =
                 from type in typeof(InterfaceMode).Assembly.GetTypes()
                 where type.Namespace == typeof(InterfaceMode).Namespace
                 let category = (BindingCategory)type.GetField(nameof(InterfaceMode.Category), BindingFlags.Public | BindingFlags.Static).GetValue(null)
                 let allNames = (IReadOnlyCollection<string>)type.GetProperty(nameof(InterfaceMode.All), BindingFlags.Public | BindingFlags.Static).GetValue(null)
                 select (category, allNames);
 
-            foreach (var (category, allNames) in allBinds)
+            foreach ((BindingCategory category, IReadOnlyCollection<string> allNames) in allBinds)
             {
-                foreach (var name in allNames)
+                foreach (string name in allNames)
                 {
                     res.Add(name, category);
                 }

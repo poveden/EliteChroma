@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Colore.Data;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 using EliteFiles.Status;
@@ -18,12 +19,12 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            var lColor = Game.Status.HasFlag(Flags.LightsOn) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsOff;
+            Color lColor = Game.Status.HasFlag(Flags.LightsOn) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsOff;
             ApplyColorToBinding(canvas.Keyboard, Miscellaneous.ShipSpotLightToggle, lColor);
 
             if (!Game.DockedOrLanded)
             {
-                var nColor = Game.Status.HasFlag(Flags.NightVision) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsOff;
+                Color nColor = Game.Status.HasFlag(Flags.NightVision) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsOff;
                 ApplyColorToBinding(canvas.Keyboard, Miscellaneous.NightVisionToggle, nColor);
             }
         }

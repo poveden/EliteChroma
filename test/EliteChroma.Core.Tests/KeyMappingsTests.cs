@@ -69,7 +69,7 @@ namespace EliteChroma.Core.Tests
         [InlineData("Key_Slash", null, true, VirtualKey.VK_OEM_2)]
         public void TryGetVirtualKeyReturnsExpectedValues(string keyName, string keyboardLayout, bool expectedOk, Enum expectedKey)
         {
-            var ok = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, false, out var virtualKey, NativeMethodsKeyboardMock.Instance);
+            bool ok = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, false, out var virtualKey, NativeMethodsKeyboardMock.Instance);
 
             Assert.Equal(expectedOk, ok);
             Assert.Equal((VirtualKey)expectedKey, virtualKey);
@@ -85,7 +85,7 @@ namespace EliteChroma.Core.Tests
         [InlineData("Key_Slash", null, true, Key.OemSlash)]
         public void TryGetChromaKeyReturnsExpectedValues(string keyName, string keyboardLayout, bool expectedOk, Key expectedKey)
         {
-            var ok = Core.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, false, out var chromaKey, NativeMethodsKeyboardMock.Instance);
+            bool ok = Core.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, false, out var chromaKey, NativeMethodsKeyboardMock.Instance);
 
             Assert.Equal(expectedOk, ok);
             Assert.Equal(expectedKey, chromaKey);
@@ -96,7 +96,7 @@ namespace EliteChroma.Core.Tests
         [InlineData("Key_Slash", null, true, VirtualKey.VK_OEM_2)]
         public void TryGetVirtualKeyReturnsEnUSOverrides(string keyName, string keyboardLayout, bool expectedOk, Enum expectedKey)
         {
-            var ok = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, true, out var virtualKey, NativeMethodsKeyboardMock.Instance);
+            bool ok = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, true, out var virtualKey, NativeMethodsKeyboardMock.Instance);
 
             Assert.Equal(expectedOk, ok);
             Assert.Equal((VirtualKey)expectedKey, virtualKey);
@@ -107,7 +107,7 @@ namespace EliteChroma.Core.Tests
         [InlineData("Key_Slash", null, true, Key.OemSlash)]
         public void TryGetChromaKeyReturnsEnUSOverrides(string keyName, string keyboardLayout, bool expectedOk, Key expectedKey)
         {
-            var ok = Core.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, true, out var chromaKey, NativeMethodsKeyboardMock.Instance);
+            bool ok = Core.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, true, out var chromaKey, NativeMethodsKeyboardMock.Instance);
 
             Assert.Equal(expectedOk, ok);
             Assert.Equal(expectedKey, chromaKey);
@@ -115,16 +115,14 @@ namespace EliteChroma.Core.Tests
 
         private static IReadOnlyDictionary<string, VirtualKey> GetDirectVirtualKeyMapping()
         {
-            return (IReadOnlyDictionary<string, VirtualKey>)typeof(Elite.Internal.KeyMappings)
-                .GetField("_keys", BindingFlags.NonPublic | BindingFlags.Static)
-                .GetValue(null);
+            return typeof(Elite.Internal.KeyMappings)
+                .GetPrivateStaticField<IReadOnlyDictionary<string, VirtualKey>>("_keys")!;
         }
 
         private static IReadOnlyDictionary<string, Key> GetDirectColoreKeyMapping()
         {
-            return (IReadOnlyDictionary<string, Key>)typeof(Core.Internal.KeyMappings)
-                .GetField("_keys", BindingFlags.NonPublic | BindingFlags.Static)
-                .GetValue(null);
+            return typeof(Core.Internal.KeyMappings)
+                .GetPrivateStaticField<IReadOnlyDictionary<string, Key>>("_keys")!;
         }
 
         private static Dictionary<string, KeyTypes> GetKeyboardKeys(KeyTypes types)
@@ -135,9 +133,9 @@ namespace EliteChroma.Core.Tests
             {
                 var allFnKeyNames = typeof(Keyboard)
                     .GetFields(BindingFlags.Public | BindingFlags.Static)
-                    .Select(x => (string)x.GetValue(null));
+                    .Select(x => (string)x.GetValue(null)!);
 
-                foreach (var keyName in allFnKeyNames)
+                foreach (string keyName in allFnKeyNames)
                 {
                     res.Add(keyName, KeyTypes.Common);
                 }
@@ -145,7 +143,7 @@ namespace EliteChroma.Core.Tests
 
             if (types.HasFlag(KeyTypes.Character))
             {
-                foreach (var charKeyName in _characterKeyNames)
+                foreach (string charKeyName in _characterKeyNames)
                 {
                     res.Add(charKeyName, KeyTypes.Character);
                 }

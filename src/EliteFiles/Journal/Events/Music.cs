@@ -16,6 +16,6 @@ namespace EliteFiles.Journal.Events
         /// Gets the name of the music track.
         /// </summary>
         [JsonProperty("MusicTrack")]
-        public string MusicTrack { get; private set; }
+        public string? MusicTrack { get; private set; }
     }
 }

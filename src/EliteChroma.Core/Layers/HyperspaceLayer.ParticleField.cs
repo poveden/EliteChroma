@@ -43,7 +43,7 @@ namespace EliteChroma.Core.Layers
 
                 Trim();
 
-                foreach (var star in _particles)
+                foreach (Particle star in _particles)
                 {
                     star.MoveAndRender(canvas, deltaT);
                 }
@@ -58,7 +58,7 @@ namespace EliteChroma.Core.Layers
             {
                 while (_particles.Count != 0 && _particles.Peek().Z < _backZ)
                 {
-                    _particles.Dequeue();
+                    _ = _particles.Dequeue();
                 }
             }
         }

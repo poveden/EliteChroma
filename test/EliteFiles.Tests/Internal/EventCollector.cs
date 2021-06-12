@@ -19,13 +19,13 @@ namespace EliteFiles.Tests.Internal
             _name = name;
         }
 
-        public async Task<T> WaitAsync(Action trigger, int timeout = Timeout.Infinite)
+        public async Task<T?> WaitAsync(Action trigger, int timeout = Timeout.Infinite)
         {
-            T res = default;
+            T? res = default;
 
             using (var ss = new SemaphoreSlim(0, 1))
             {
-                void Handler(object sender, T e)
+                void Handler(object? sender, T e)
                 {
                     res = e;
                     ss.Release();
@@ -46,13 +46,13 @@ namespace EliteFiles.Tests.Internal
 
             using (var ce = new CountdownEvent(count))
             {
-                void Handler(object sender, T e)
+                void Handler(object? sender, T e)
                 {
                     res.Add(e);
 
                     if (ce.IsSet)
                     {
-                        var list = string.Join(',', res.Select(x => $"{x}"));
+                        string list = string.Join(',', res.Select(x => $"{x}"));
                         throw new InvalidOperationException($"More than {count} events received in collector '{_name}': {list}.");
                     }
 
@@ -61,12 +61,12 @@ namespace EliteFiles.Tests.Internal
 
                 _attach(Handler);
                 trigger();
-                var ok = await Task.Run(() => ce.Wait(timeout)).ConfigureAwait(false);
+                bool ok = await Task.Run(() => ce.Wait(timeout)).ConfigureAwait(false);
                 _detach(Handler);
 
                 if (!ok)
                 {
-                    var list = string.Join(',', res.Select(x => $"{x}"));
+                    string list = string.Join(',', res.Select(x => $"{x}"));
                     throw new TimeoutException($"Timeout in collector '{_name}' after receiving the following events: {list}.");
                 }
             }

@@ -21,13 +21,13 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void GetKeyboardLayoutThrowsOnNullKeyboardLayoutName()
         {
-            Assert.Throws<ArgumentNullException>("keyboardLayout", () => Elite.Internal.KeyboardLayoutMap.GetKeyboardLayout(null, NativeMethodsKeyboardMock.Instance));
+            Assert.Throws<ArgumentNullException>("keyboardLayout", () => Elite.Internal.KeyboardLayoutMap.GetKeyboardLayout(null!, NativeMethodsKeyboardMock.Instance));
         }
 
         [Fact]
         public void GetCurrentLayoutFallsBackToEnUSOnUnknownKeyboardLayout()
         {
-            var res = Elite.Internal.KeyboardLayoutMap.GetCurrentLayout(new BadKeyboardLayoutKeyboardMock());
+            string res = Elite.Internal.KeyboardLayoutMap.GetCurrentLayout(new BadKeyboardLayoutKeyboardMock());
 
             Assert.Equal("en-US", res);
         }

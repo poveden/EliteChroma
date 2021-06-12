@@ -21,9 +21,9 @@ namespace EliteChroma.Internal.UI
             return UITypeEditorEditStyle.DropDown;
         }
 
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public override object? EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            var wfes = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+            var wfes = (IWindowsFormsEditorService?)provider.GetService(typeof(IWindowsFormsEditorService));
 
             if (wfes == null)
             {
@@ -42,15 +42,19 @@ namespace EliteChroma.Internal.UI
 
         public override void PaintValue(PaintValueEventArgs e)
         {
-            var c = FromColoreColor((Colore.Data.Color)e.Value);
+            Color c = FromColoreColor((Colore.Data.Color)e.Value);
             using var b = new SolidBrush(c);
             e.Graphics.FillRectangle(b, e.Bounds);
         }
 
         private static Colore.Data.Color ToColoreColor(Color color)
-            => new Colore.Data.Color(color.R, color.G, color.B);
+        {
+            return new Colore.Data.Color(color.R, color.G, color.B);
+        }
 
         private static Color FromColoreColor(Colore.Data.Color color)
-            => Color.FromArgb(color.R, color.G, color.B);
+        {
+            return Color.FromArgb(color.R, color.G, color.B);
+        }
     }
 }

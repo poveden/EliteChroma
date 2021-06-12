@@ -15,20 +15,22 @@ namespace EliteChroma
         private readonly string _appSettingsPath;
         private readonly WinChromaFactory _chromaFactory;
 
-        private ChromaController _cc;
-        private AppSettings _currentSettings;
+        private ChromaController? _cc;
+        private AppSettings? _currentSettings;
 
-        public AppContext(string appSettingsPath = null)
+        public AppContext(string? appSettingsPath = null)
         {
             _appSettingsPath = appSettingsPath ?? AppSettings.GetDefaultPath();
 
-            this.TrayIcon.Icon = Resources.EliteChromaIcon;
+            TrayIcon.Icon = Resources.EliteChromaIcon;
 
-            ContextMenu.Items.Add("&Settings...", null, Settings_Click);
-            ContextMenu.Items.Add("-");
-            ContextMenu.Items.Add("&About...", null, About_Click);
-            ContextMenu.Items.Add("-");
-            ContextMenu.Items.Add("E&xit", null, Exit_Click);
+#pragma warning disable IDISP004
+            _ = ContextMenu.Items.Add("&Settings...", null, Settings_Click);
+            _ = ContextMenu.Items.Add("-");
+            _ = ContextMenu.Items.Add("&About...", null, About_Click);
+            _ = ContextMenu.Items.Add("-");
+            _ = ContextMenu.Items.Add("E&xit", null, Exit_Click);
+#pragma warning restore IDISP004
 
             _chromaFactory = new WinChromaFactory();
         }
@@ -37,7 +39,7 @@ namespace EliteChroma
         {
             if (!ChromaController.IsChromaSdkAvailable())
             {
-                MessageBox.Show(
+                _ = MessageBox.Show(
                     Resources.MsgBox_RazerChromaSdkNotFound,
                     new AssemblyInfo().Title,
                     MessageBoxButtons.OK,
@@ -50,7 +52,7 @@ namespace EliteChroma
 
             if (!settings.IsValid())
             {
-                MessageBox.Show(
+                _ = MessageBox.Show(
                     Resources.MsgBox_UnableToIdentifyFolders,
                     new AssemblyInfo().Title,
                     MessageBoxButtons.OK,
@@ -70,11 +72,15 @@ namespace EliteChroma
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            _cc?.Dispose();
-            _chromaFactory.Dispose();
+
+            if (disposing)
+            {
+                _cc?.Dispose();
+                _chromaFactory.Dispose();
+            }
         }
 
-        private void Settings_Click(object sender, EventArgs eventArgs)
+        private void Settings_Click(object? sender, EventArgs eventArgs)
         {
             var settings = AppSettings.Load(_appSettingsPath);
 
@@ -88,15 +94,15 @@ namespace EliteChroma
             CycleChromaController(settings);
         }
 
-        private void About_Click(object sender, EventArgs eventArgs)
+        private void About_Click(object? sender, EventArgs eventArgs)
         {
             using var frm = new FrmAboutBox();
-            frm.ShowDialog(ContextMenu);
+            _ = frm.ShowDialog(ContextMenu);
         }
 
-        private void Exit_Click(object sender, EventArgs eventArgs)
+        private void Exit_Click(object? sender, EventArgs eventArgs)
         {
-            _cc.Stop();
+            _cc?.Stop();
             ExitThread();
         }
 
@@ -104,9 +110,9 @@ namespace EliteChroma
         {
             using var frm = new FrmAppSettings
             {
-                GameInstallFolder = settings.GameInstallFolder,
-                GameOptionsFolder = settings.GameOptionsFolder,
-                JournalFolder = settings.JournalFolder,
+                GameInstallFolder = settings.GameInstallFolder!,
+                GameOptionsFolder = settings.GameOptionsFolder!,
+                JournalFolder = settings.JournalFolder!,
                 ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout,
                 Colors = settings.Colors,
             };
@@ -126,7 +132,7 @@ namespace EliteChroma
 
         private void CycleChromaController(AppSettings settings)
         {
-            if (CanSoftCycle(settings))
+            if (_cc != null && CanSoftCycle(settings))
             {
                 _cc.ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout;
                 _cc.Colors = settings.Colors;
@@ -136,7 +142,7 @@ namespace EliteChroma
             }
 
             _cc?.Dispose();
-            _cc = new ChromaController(settings.GameInstallFolder, settings.GameOptionsFolder, settings.JournalFolder)
+            _cc = new ChromaController(settings.GameInstallFolder!, settings.GameOptionsFolder!, settings.JournalFolder!)
             {
                 ChromaFactory = _chromaFactory,
                 ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout,

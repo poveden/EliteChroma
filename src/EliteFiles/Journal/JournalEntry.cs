@@ -35,7 +35,7 @@ namespace EliteFiles.Journal
         /// Gets the type of event.
         /// </summary>
         [JsonProperty("event")]
-        public string Event { get; private set; }
+        public string? Event { get; private set; }
 
         /// <summary>
         /// Gets a collection of additional fields that may be included in the event.

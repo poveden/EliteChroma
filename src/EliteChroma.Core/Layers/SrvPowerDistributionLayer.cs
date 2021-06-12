@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Colore.Data;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 
@@ -11,14 +12,14 @@ namespace EliteChroma.Core.Layers
 
         protected override void OnRender(ChromaCanvas canvas)
         {
-            if (!Game.InSrv)
+            if (!Game.InSrv || Game.Status?.Pips == null)
             {
                 return;
             }
 
-            var cSys = Colors.PowerDistributorScale[Game.Status.Pips.Sys];
-            var cEng = Colors.PowerDistributorScale[Game.Status.Pips.Eng];
-            var cWep = Colors.PowerDistributorScale[Game.Status.Pips.Wep];
+            Color cSys = Colors.PowerDistributorScale[Game.Status.Pips.Sys];
+            Color cEng = Colors.PowerDistributorScale[Game.Status.Pips.Eng];
+            Color cWep = Colors.PowerDistributorScale[Game.Status.Pips.Wep];
 
             ApplyColorToBinding(canvas.Keyboard, DrivingMiscellaneous.IncreaseSystemsPower, cSys);
             ApplyColorToBinding(canvas.Keyboard, DrivingMiscellaneous.IncreaseWeaponsPower, cWep);

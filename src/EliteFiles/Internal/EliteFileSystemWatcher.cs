@@ -34,12 +34,12 @@ namespace EliteFiles.Internal
             _watcher.Changed += Watcher_Changed;
         }
 
-        public event EventHandler<FileSystemEventArgs> Changed;
+        public event EventHandler<FileSystemEventArgs>? Changed;
 
         public string Filter
         {
-            get { return _watcher.Filter; }
-            set { _watcher.Filter = value; }
+            get => _watcher.Filter;
+            set => _watcher.Filter = value;
         }
 
         public void Start()

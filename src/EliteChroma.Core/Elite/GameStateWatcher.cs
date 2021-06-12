@@ -62,7 +62,7 @@ namespace EliteChroma.Elite
             _gameState = new GameState();
         }
 
-        public event EventHandler<ChangeType> Changed;
+        public event EventHandler<ChangeType>? Changed;
 
         public enum ChangeType
         {
@@ -154,16 +154,16 @@ namespace EliteChroma.Elite
         {
             var res = new HashSet<DeviceKey>();
 
-            foreach (var binding in bindings)
+            foreach (Binding binding in bindings)
             {
-                foreach (var modifier in binding.Primary.Modifiers)
+                foreach (DeviceKey modifier in binding.Primary.Modifiers)
                 {
-                    res.Add(modifier);
+                    _ = res.Add(modifier);
                 }
 
-                foreach (var modifier in binding.Secondary.Modifiers)
+                foreach (DeviceKey modifier in binding.Secondary.Modifiers)
                 {
-                    res.Add(modifier);
+                    _ = res.Add(modifier);
                 }
             }
 
@@ -238,7 +238,7 @@ namespace EliteChroma.Elite
 
         private void GraphicsConfig_Changed(object sender, GraphicsConfig e)
         {
-            _gameState.GuiColour = e.GuiColour.Default;
+            _gameState.GuiColour = e.GuiColour?.Default ?? GuiColourMatrix.Default;
             OnChanged(ChangeType.GraphicsConfig);
         }
 
@@ -272,7 +272,7 @@ namespace EliteChroma.Elite
             }
             finally
             {
-                Interlocked.Exchange(ref _dispatching, 0);
+                _ = Interlocked.Exchange(ref _dispatching, 0);
             }
         }
     }

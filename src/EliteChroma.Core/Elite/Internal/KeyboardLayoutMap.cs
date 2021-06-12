@@ -11,7 +11,7 @@ namespace EliteChroma.Elite.Internal
 
         public static string GetCurrentLayout(INativeMethods nativeMethods)
         {
-            var hkl = nativeMethods.GetKeyboardLayout(0);
+            IntPtr hkl = nativeMethods.GetKeyboardLayout(0);
 
             try
             {
@@ -28,7 +28,7 @@ namespace EliteChroma.Elite.Internal
         {
             _ = keyboardLayout ?? throw new ArgumentNullException(nameof(keyboardLayout));
 
-            if (_keyboardLayouts.TryGetValue(keyboardLayout, out var hkl1))
+            if (_keyboardLayouts.TryGetValue(keyboardLayout, out IntPtr hkl1))
             {
                 return hkl1;
             }
@@ -37,11 +37,11 @@ namespace EliteChroma.Elite.Internal
             {
                 var ci = CultureInfo.GetCultureInfo(keyboardLayout);
 
-                var n = nativeMethods.GetKeyboardLayoutList(0, null);
+                int n = nativeMethods.GetKeyboardLayoutList(0, null!);
                 var hkls = new IntPtr[n];
                 _ = nativeMethods.GetKeyboardLayoutList(n, hkls);
 
-                foreach (var hkl2 in hkls)
+                foreach (IntPtr hkl2 in hkls)
                 {
                     if ((hkl2.ToInt32() & 0xffff) == ci.LCID)
                     {

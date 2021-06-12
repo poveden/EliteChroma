@@ -26,13 +26,15 @@ namespace EliteChroma.Core.Tests.Internal
 
         public override uint MapVirtualKeyEx(uint uCode, MAPVK uMapType, IntPtr dwhkl)
         {
-            var keyboardLayout = dwhkl.ToInt32();
+            int keyboardLayout = dwhkl.ToInt32();
 
             return uMapType switch
             {
                 MAPVK.VK_TO_CHAR => GetChar(keyboardLayout, (VirtualKey)uCode),
                 MAPVK.VK_TO_VSC_EX => GetScanCode(keyboardLayout, (VirtualKey)uCode),
                 MAPVK.VSC_TO_VK_EX => GetVirtualKey(keyboardLayout, uCode),
+                MAPVK.VK_TO_VSC => throw new NotImplementedException(),
+                MAPVK.VSC_TO_VK => throw new NotImplementedException(),
                 _ => 0,
             };
         }
@@ -49,9 +51,9 @@ namespace EliteChroma.Core.Tests.Internal
                 return _layouts.Length;
             }
 
-            var n = Math.Min(lpList.Length, _layouts.Length);
+            int n = Math.Min(lpList.Length, _layouts.Length);
 
-            for (var i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
                 lpList[i] = new IntPtr(_layouts[i]);
             }
@@ -60,18 +62,24 @@ namespace EliteChroma.Core.Tests.Internal
         }
 
         private static char GetChar(int keyboardLayout, VirtualKey virtualKey)
-            => _map.TryGetValue((keyboardLayout, virtualKey), out var res)
-            ? res.Character
-            : '\0';
+        {
+            return _map.TryGetValue((keyboardLayout, virtualKey), out var res)
+                       ? res.Character
+                       : '\0';
+        }
 
         private static uint GetScanCode(int keyboardLayout, VirtualKey virtualKey)
-            => _map.TryGetValue((keyboardLayout, virtualKey), out var res)
-            ? res.ScanCode
-            : 0;
+        {
+            return _map.TryGetValue((keyboardLayout, virtualKey), out var res)
+                       ? res.ScanCode
+                       : 0;
+        }
 
         private static uint GetVirtualKey(int keyboardLayout, uint scanCode)
-            => _map.Where(kv => kv.Key.Layout == keyboardLayout && kv.Value.ScanCode == scanCode)
-            .Select(kv => (uint)kv.Key.VirtualKey)
-            .FirstOrDefault();
+        {
+            return _map.Where(kv => kv.Key.Layout == keyboardLayout && kv.Value.ScanCode == scanCode)
+                       .Select(kv => (uint)kv.Key.VirtualKey)
+                       .FirstOrDefault();
+        }
     }
 }

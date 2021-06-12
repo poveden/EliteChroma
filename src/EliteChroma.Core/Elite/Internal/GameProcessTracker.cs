@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EliteChroma.Core.Internal;
+using Microsoft.Win32.SafeHandles;
 using static EliteChroma.Core.Internal.NativeMethods;
 
 namespace EliteChroma.Elite.Internal
@@ -41,7 +42,7 @@ namespace EliteChroma.Elite.Internal
             if (_gameProcessId != 0)
             {
                 // The game is running, and this process is not the game's process, so we just clear it.
-                _clearedProcessIds.Add(processId);
+                _ = _clearedProcessIds.Add(processId);
                 return false;
             }
 
@@ -51,12 +52,12 @@ namespace EliteChroma.Elite.Internal
                 return false;
             }
 
-            if (!TestIfGameProcessId(processId, out var failure))
+            if (!TestIfGameProcessId(processId, out bool failure))
             {
                 if (failure)
                 {
-                    _clearedProcessIds.Remove(processId);
-                    _plCurr.Remove(processId);
+                    _ = _clearedProcessIds.Remove(processId);
+                    _ = _plCurr.Remove(processId);
                 }
 
                 return false;
@@ -70,15 +71,15 @@ namespace EliteChroma.Elite.Internal
         {
             if (_gameProcessId != 0)
             {
-                if (TestIfGameProcessId(_gameProcessId, out var failure))
+                if (TestIfGameProcessId(_gameProcessId, out bool failure))
                 {
                     return true;
                 }
 
                 if (failure)
                 {
-                    _clearedProcessIds.Remove(_gameProcessId);
-                    _plCurr.Remove(_gameProcessId);
+                    _ = _clearedProcessIds.Remove(_gameProcessId);
+                    _ = _plCurr.Remove(_gameProcessId);
                 }
 
                 _gameProcessId = 0;
@@ -95,29 +96,29 @@ namespace EliteChroma.Elite.Internal
 
         private void UpdateProcessIndex()
         {
-            var swap = _plPrev;
+            ProcessList swap = _plPrev;
             _plPrev = _plCurr;
             _plCurr = swap;
 
             _plCurr.Refresh();
 
-            foreach (var (processId, added) in _plCurr.Diff(_plPrev))
+            foreach ((int processId, bool added) in _plCurr.Diff(_plPrev))
             {
                 if (added)
                 {
-                    if (TestIfGameProcessId(processId, out var failure))
+                    if (TestIfGameProcessId(processId, out bool failure))
                     {
                         _gameProcessId = processId;
                     }
 
                     if (!failure)
                     {
-                        _clearedProcessIds.Add(processId);
+                        _ = _clearedProcessIds.Add(processId);
                     }
                 }
                 else
                 {
-                    _clearedProcessIds.Remove(processId);
+                    _ = _clearedProcessIds.Remove(processId);
 
                     if (processId == _gameProcessId)
                     {
@@ -129,37 +130,36 @@ namespace EliteChroma.Elite.Internal
 
         private bool TestIfGameProcessId(int processId, out bool failure)
         {
-            var filename = TryGetProcessFileName(processId);
+            string? filename = TryGetProcessFileName(processId);
             failure = filename == null;
             return _gameExePath.Equals(filename, StringComparison.OrdinalIgnoreCase);
         }
 
-        private string TryGetProcessFileName(int processId)
+        private string? TryGetProcessFileName(int processId)
         {
-            using (var p = NativeMethods.OpenProcess(ProcessAccess.QUERY_INFORMATION | ProcessAccess.VM_READ, false, processId))
+            using SafeProcessHandle p = NativeMethods.OpenProcess(ProcessAccess.QUERY_INFORMATION | ProcessAccess.VM_READ, false, processId);
+
+            if (p.IsInvalid)
             {
-                if (p.IsInvalid)
-                {
-                    return null;
-                }
-
-                var buf = new IntPtr[1]; // We are only interested in the main module
-                var bufSize = buf.Length * IntPtr.Size;
-
-                if (!NativeMethods.EnumProcessModules(p, buf, bufSize, out var retSize) || retSize < bufSize)
-                {
-                    return null;
-                }
-
-                var n = NativeMethods.GetModuleFileNameEx(p, buf[0], _buf, _buf.Length);
-
-                if (n == 0)
-                {
-                    return null;
-                }
-
-                return new string(_buf, 0, n);
+                return null;
             }
+
+            var buf = new IntPtr[1]; // We are only interested in the main module
+            int bufSize = buf.Length * IntPtr.Size;
+
+            if (!NativeMethods.EnumProcessModules(p, buf, bufSize, out int retSize) || retSize < bufSize)
+            {
+                return null;
+            }
+
+            int n = NativeMethods.GetModuleFileNameEx(p, buf[0], _buf, _buf.Length);
+
+            if (n == 0)
+            {
+                return null;
+            }
+
+            return new string(_buf, 0, n);
         }
     }
 }

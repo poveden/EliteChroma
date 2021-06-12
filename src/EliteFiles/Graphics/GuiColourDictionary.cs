@@ -18,9 +18,9 @@ namespace EliteFiles.Graphics
         /// <summary>
         /// Gets the default <see cref="GuiColourMatrix"/> instance.
         /// </summary>
-        public GuiColourMatrix Default => Dictionary.TryGetValue("Default", out var gcm) ? gcm : null;
+        public GuiColourMatrix? Default => Dictionary.TryGetValue("Default", out GuiColourMatrix gcm) ? gcm : null;
 
-        internal static GuiColourDictionary FromXml(XElement xml)
+        internal static GuiColourDictionary? FromXml(XElement? xml)
         {
             if (xml == null)
             {
@@ -29,7 +29,7 @@ namespace EliteFiles.Graphics
 
             var res = new GuiColourDictionary();
 
-            foreach (var elem in xml.Elements())
+            foreach (XElement elem in xml.Elements())
             {
                 res.Dictionary[elem.Name.LocalName] = GuiColourMatrix.FromXml(elem);
             }
@@ -37,14 +37,14 @@ namespace EliteFiles.Graphics
             return res;
         }
 
-        internal void OverrideWith(GuiColourDictionary other)
+        internal void OverrideWith(GuiColourDictionary? other)
         {
             if (other == null)
             {
                 return;
             }
 
-            foreach (var elem in other)
+            foreach (KeyValuePair<string, GuiColourMatrix> elem in other)
             {
                 Dictionary[elem.Key] = elem.Value;
             }

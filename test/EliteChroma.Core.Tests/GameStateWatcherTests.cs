@@ -49,7 +49,10 @@ namespace EliteChroma.Core.Tests
         {
             using var watcher = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, _journalFolder);
 
-            bool IsRunning() => watcher.GetPrivateField<bool>("_running");
+            bool IsRunning()
+            {
+                return watcher.GetPrivateField<bool>("_running");
+            }
 
             Assert.False(IsRunning());
 
@@ -87,7 +90,7 @@ namespace EliteChroma.Core.Tests
             var evs = new EventCollector<ChangeType>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(OnChangedIsNotReentrant));
             evs.Wait(watcher.Start, 5000);
 
-            var nOnChangedCalls = 0;
+            int nOnChangedCalls = 0;
             using var mre = new ManualResetEventSlim();
 
             watcher.Changed += (sender, e) =>
@@ -98,7 +101,7 @@ namespace EliteChroma.Core.Tests
 
             void OnChanged()
             {
-                watcher.InvokePrivateMethod<object>("OnChanged", new object[] { null });
+                watcher.InvokePrivateMethod<object>("OnChanged", ChangeType.JournalDrain);
                 mre.Set();
             }
 
@@ -119,12 +122,12 @@ namespace EliteChroma.Core.Tests
             using var watcher = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, _journalFolder);
 
             Assert.False(watcher.ForceEnUSKeyboardLayout);
-            Assert.False(watcher.GetPrivateField<GameState>("_gameState").ForceEnUSKeyboardLayout);
+            Assert.False(watcher.GetPrivateField<GameState>("_gameState")!.ForceEnUSKeyboardLayout);
             Assert.False(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
 
             watcher.ForceEnUSKeyboardLayout = true;
             Assert.True(watcher.ForceEnUSKeyboardLayout);
-            Assert.True(watcher.GetPrivateField<GameState>("_gameState").ForceEnUSKeyboardLayout);
+            Assert.True(watcher.GetPrivateField<GameState>("_gameState")!.ForceEnUSKeyboardLayout);
             Assert.True(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
         }
     }

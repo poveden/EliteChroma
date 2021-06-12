@@ -14,7 +14,7 @@ namespace EliteChroma.Internal.Json
                 return existingValue;
             }
 
-            var num = Convert.ToDouble(reader.Value, CultureInfo.InvariantCulture);
+            double num = Convert.ToDouble(reader.Value, CultureInfo.InvariantCulture);
             return num / 100;
         }
 

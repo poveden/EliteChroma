@@ -22,13 +22,13 @@ namespace EliteFiles.Journal.Internal
             throw new NotSupportedException();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
-            JObject item = JObject.Load(reader);
+            var item = JObject.Load(reader);
 
-            var eventName = item["event"].Value<string>();
+            string? eventName = item["event"]?.Value<string>();
 
-            if (!_eventMap.TryGetValue(eventName, out var type))
+            if (string.IsNullOrEmpty(eventName) || !_eventMap.TryGetValue(eventName, out Type type))
             {
                 type = typeof(JournalEntry);
             }
@@ -37,22 +37,18 @@ namespace EliteFiles.Journal.Internal
         }
 
         [ExcludeFromCodeCoverage]
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             throw new NotSupportedException();
         }
 
         private static Dictionary<string, Type> BuildJournayEntryEventMap()
         {
-            var journalEventTypes =
+            IEnumerable<(string EventName, Type Type)> journalEventTypes =
                 from type in typeof(JournalEntry).Assembly.GetExportedTypes()
                 where type.IsSubclassOf(typeof(JournalEntry))
                 from JournalEntryAttribute attr in type.GetCustomAttributes(typeof(JournalEntryAttribute), false)
-                select new
-                {
-                    attr.EventName,
-                    Type = type,
-                };
+                select (attr.EventName, type);
 
             return journalEventTypes.ToDictionary(x => x.EventName, x => x.Type, StringComparer.Ordinal);
         }
@@ -60,7 +56,7 @@ namespace EliteFiles.Journal.Internal
         // Reference: https://stackoverflow.com/questions/20995865/deserializing-json-to-abstract-class/30579193#30579193
         private sealed class JournalEntryContractResolver : DefaultContractResolver
         {
-            protected override JsonConverter ResolveContractConverter(Type objectType)
+            protected override JsonConverter? ResolveContractConverter(Type objectType)
             {
                 if (typeof(JournalEntry).IsAssignableFrom(objectType))
                 {

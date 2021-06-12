@@ -18,13 +18,13 @@ namespace EliteChroma.Core.Tests.Internal
             _name = name;
         }
 
-        public T Wait(Action trigger, int timeout = Timeout.Infinite)
+        public T? Wait(Action trigger, int timeout = Timeout.Infinite)
         {
-            T res = default;
+            T? res = default;
 
             using (var ss = new SemaphoreSlim(0, 1))
             {
-                void Handler(object sender, T e)
+                void Handler(object? sender, T e)
                 {
                     res = e;
                     ss.Release();
@@ -32,7 +32,7 @@ namespace EliteChroma.Core.Tests.Internal
 
                 _attach(Handler);
                 trigger();
-                var ok = ss.Wait(timeout);
+                bool ok = ss.Wait(timeout);
                 _detach(Handler);
 
                 if (!ok)
@@ -50,13 +50,13 @@ namespace EliteChroma.Core.Tests.Internal
 
             using (var ce = new CountdownEvent(count))
             {
-                void Handler(object sender, T e)
+                void Handler(object? sender, T e)
                 {
                     res.Add(e);
 
                     if (ce.IsSet)
                     {
-                        var list = string.Join(',', res.Select(x => $"{x}"));
+                        string list = string.Join(',', res.Select(x => $"{x}"));
                         throw new InvalidOperationException($"More than {count} events received in collector '{_name}': {list}.");
                     }
 
@@ -65,12 +65,12 @@ namespace EliteChroma.Core.Tests.Internal
 
                 _attach(Handler);
                 trigger();
-                var ok = ce.Wait(timeout);
+                bool ok = ce.Wait(timeout);
                 _detach(Handler);
 
                 if (!ok)
                 {
-                    var list = string.Join(',', res.Select(x => $"{x}"));
+                    string list = string.Join(',', res.Select(x => $"{x}"));
                     throw new TimeoutException($"Timeout in collector '{_name}' after receiving the following events: {list}.");
                 }
             }

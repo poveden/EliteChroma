@@ -9,7 +9,7 @@ namespace EliteChroma.Internal
         [ExcludeFromCodeCoverage]
         public static GridItemCollection GetGridItems(this PropertyGrid propertyGrid)
         {
-            var gi = propertyGrid.SelectedGridItem;
+            GridItem gi = propertyGrid.SelectedGridItem;
 
             while (gi.GridItemType != GridItemType.Root)
             {

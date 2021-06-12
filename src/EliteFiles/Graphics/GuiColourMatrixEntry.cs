@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -11,11 +12,18 @@ namespace EliteFiles.Graphics
     {
         private readonly double[] _v = new double[3];
 
-        private GuiColourMatrixEntry(double r, double g, double b)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GuiColourMatrixEntry"/> class,
+        /// with the provided red, green and blue values.
+        /// </summary>
+        /// <param name="r">The red component in the -1.0 to 1.0 range.</param>
+        /// <param name="g">The green component in the -1.0 to 1.0 range.</param>
+        /// <param name="b">The blue component in the -1.0 to 1.0 range.</param>
+        public GuiColourMatrixEntry(double r, double g, double b)
         {
-            _v[0] = r;
-            _v[1] = g;
-            _v[2] = b;
+            _v[0] = Math.Clamp(-1, r, 1);
+            _v[1] = Math.Clamp(-1, g, 1);
+            _v[2] = Math.Clamp(-1, b, 1);
         }
 
         /// <summary>
@@ -37,7 +45,7 @@ namespace EliteFiles.Graphics
 
         internal static GuiColourMatrixEntry FromXml(XElement xml)
         {
-            var values = xml.Value.Split(',')
+            double[] values = xml.Value.Split(',')
                 .Select(x => double.Parse(x, CultureInfo.InvariantCulture))
                 .ToArray();
 

@@ -17,8 +17,7 @@ namespace EliteChroma.Core.Tests
 
         private static readonly GameInstallFolder _gif = new GameInstallFolder(_gameRootFolder);
 
-        private static readonly ConstructorInfo _ciElapsedEventArgs = typeof(ElapsedEventArgs).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(long) }, null);
-        private static readonly MethodInfo _miTimerElapsed = typeof(GameProcessWatcher).GetMethod("Timer_Elapsed", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly ConstructorInfo _ciElapsedEventArgs = typeof(ElapsedEventArgs).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(long) }, null)!;
 
         [Fact]
         public void WatchesForGameProcessChanges()
@@ -67,7 +66,7 @@ namespace EliteChroma.Core.Tests
 
             using var gpw = new GameProcessWatcher(_gif, nm);
 
-            var nOnChangedCalls = 0;
+            int nOnChangedCalls = 0;
             using var mre = new ManualResetEventSlim();
 
             gpw.Changed += (sender, e) =>
@@ -97,7 +96,10 @@ namespace EliteChroma.Core.Tests
         {
             using var gpw = new GameProcessWatcher(_gif, new NativeMethodsMock());
 
-            bool IsRunning() => gpw.GetPrivateField<bool>("_running");
+            bool IsRunning()
+            {
+                return gpw.GetPrivateField<bool>("_running");
+            }
 
             Assert.False(IsRunning());
 
@@ -126,10 +128,10 @@ namespace EliteChroma.Core.Tests
 
         private static void InvokeTimerElapsed(GameProcessWatcher instance)
         {
-            // HACK: Hopefully will no longer be needed when .NET 5.0 arrives (https://github.com/dotnet/runtime/issues/31204)
+            // HACK: Hopefully will no longer be needed when .NET 6.0 arrives (https://github.com/dotnet/runtime/issues/31204)
             var e = (ElapsedEventArgs)_ciElapsedEventArgs.Invoke(new object[] { DateTime.Now.ToFileTime() });
 
-            _miTimerElapsed.Invoke(instance, new object[] { instance, e });
+            instance.InvokePrivateMethod<object>("Timer_Elapsed", instance, e);
         }
 
         private sealed class NativeMethodsMock : NativeMethodsProcessMock

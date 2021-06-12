@@ -18,22 +18,22 @@ namespace EliteChroma.Core.Layers
         {
             if (Game.ProcessState == Elite.GameProcessState.NotRunning)
             {
-                StopAnimation();
+                _ = StopAnimation();
                 _inBackground = false;
                 return;
             }
 
-            var inBackground = Game.ProcessState == Elite.GameProcessState.InBackground;
+            bool inBackground = Game.ProcessState == Elite.GameProcessState.InBackground;
 
             if (inBackground != _inBackground)
             {
-                StartAnimation();
+                _ = StartAnimation();
                 _inBackground = inBackground;
             }
 
             if (Animated && AnimationElapsed >= _fadeDuration)
             {
-                StopAnimation();
+                _ = StopAnimation();
             }
 
             if (!inBackground && !Animated)
@@ -41,7 +41,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            var pct = Animated
+            double pct = Animated
                 ? Math.Min(1, AnimationElapsed.TotalSeconds / _fadeDuration.TotalSeconds)
                 : 1;
 
@@ -50,12 +50,12 @@ namespace EliteChroma.Core.Layers
                 pct = 1 - pct;
             }
 
-            canvas.Keyboard.Combine(Game.Colors.Hud, pct);
-            canvas.Mouse.Combine(Game.Colors.Hud, pct);
-            canvas.Mousepad.Combine(Game.Colors.Hud, pct);
-            canvas.Keypad.Combine(Game.Colors.Hud, pct);
-            canvas.Headset.Combine(Game.Colors.Hud, pct);
-            canvas.ChromaLink.Combine(Game.Colors.Hud, pct);
+            _ = canvas.Keyboard.Combine(Game.Colors.Hud, pct);
+            _ = canvas.Mouse.Combine(Game.Colors.Hud, pct);
+            _ = canvas.Mousepad.Combine(Game.Colors.Hud, pct);
+            _ = canvas.Keypad.Combine(Game.Colors.Hud, pct);
+            _ = canvas.Headset.Combine(Game.Colors.Hud, pct);
+            _ = canvas.ChromaLink.Combine(Game.Colors.Hud, pct);
         }
     }
 }

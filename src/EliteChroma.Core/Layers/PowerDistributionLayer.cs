@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Colore.Data;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 using static EliteFiles.Journal.Events.StartJump;
@@ -12,14 +13,14 @@ namespace EliteChroma.Core.Layers
 
         protected override void OnRender(ChromaCanvas canvas)
         {
-            if (!Game.InCockpit || Game.DockedOrLanded || Game.FsdJumpType != FsdJumpType.None)
+            if (!Game.InCockpit || Game.DockedOrLanded || Game.FsdJumpType != FsdJumpType.None || Game.Status?.Pips == null)
             {
                 return;
             }
 
-            var cSys = Colors.PowerDistributorScale[Game.Status.Pips.Sys];
-            var cEng = Colors.PowerDistributorScale[Game.Status.Pips.Eng];
-            var cWep = Colors.PowerDistributorScale[Game.Status.Pips.Wep];
+            Color cSys = Colors.PowerDistributorScale[Game.Status.Pips.Sys];
+            Color cEng = Colors.PowerDistributorScale[Game.Status.Pips.Eng];
+            Color cWep = Colors.PowerDistributorScale[Game.Status.Pips.Wep];
 
             ApplyColorToBinding(canvas.Keyboard, Miscellaneous.IncreaseSystemsPower, cSys);
             ApplyColorToBinding(canvas.Keyboard, Miscellaneous.IncreaseWeaponsPower, cWep);

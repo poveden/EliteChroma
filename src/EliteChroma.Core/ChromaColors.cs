@@ -139,7 +139,7 @@ namespace EliteChroma.Core
 
         private void BuildPipsColors()
         {
-            for (var i = 1; i < _maxPips; i++)
+            for (int i = 1; i < _maxPips; i++)
             {
                 _pips[i] = PowerDistributor0.Combine(PowerDistributor100, (double)i / _maxPips);
             }
