@@ -7,6 +7,8 @@ namespace EliteChroma.Internal
     [ExcludeFromCodeCoverage]
     internal abstract class TrayIconApplicationContext : ApplicationContext
     {
+        private bool _disposed;
+
         protected TrayIconApplicationContext()
         {
             ContextMenu = new ContextMenuStrip();
@@ -30,13 +32,14 @@ namespace EliteChroma.Internal
 
         protected virtual void OnApplicationExit(EventArgs e)
         {
-            ContextMenu?.Dispose();
-
-            if (TrayIcon != null)
+            if (_disposed)
             {
-                TrayIcon.Visible = false;
-                TrayIcon.Dispose();
+                return;
             }
+
+            ContextMenu.Dispose();
+            TrayIcon.Visible = false;
+            TrayIcon.Dispose();
         }
 
         protected virtual void OnTrayIconClick(MouseEventArgs e)
@@ -49,6 +52,11 @@ namespace EliteChroma.Internal
 
         protected override void Dispose(bool disposing)
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             base.Dispose(disposing);
 
             if (disposing)
@@ -56,6 +64,8 @@ namespace EliteChroma.Internal
                 ContextMenu.Dispose();
                 TrayIcon.Dispose();
             }
+
+            _disposed = true;
         }
 
         private void Application_ApplicationExit(object? sender, EventArgs e)
