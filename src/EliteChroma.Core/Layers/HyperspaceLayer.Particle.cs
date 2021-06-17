@@ -52,7 +52,7 @@ namespace EliteChroma.Core.Layers
                 Render(canvas.Mousepad, c);
                 Render(canvas.Keypad, c, lastZ);
                 Render(canvas.Headset, c);
-                Render(canvas.ChromaLink, c, lastZ);
+                Render(canvas.ChromaLink, lastZ);
             }
 
             private void Render(CustomKeyboardEffect keyboard, Color c, double lastZ)
@@ -277,66 +277,36 @@ namespace EliteChroma.Core.Layers
                 headset[i] = headset[i].Max(c);
             }
 
-            private void Render(CustomChromaLinkEffect chromaLink, Color c, double lastZ)
+            private void Render(CustomChromaLinkEffect chromaLink, double lastZ)
             {
-                // Particles are drawn either as moving to the left or to the right, front to back.
-                //                  Front
-                //               ┌───┐ ┌───┐
-                //  ┌───┐        │CL3│ │CL4│
-                //  │CL1│  Left ┌┴──┬┘↓└┬──┴┐ Right
-                //  └───┘       │CL2│   │CL5│
-                //  Base        └───┘   └───┘
-                //                  Back
+                // Particles are drawn as moving front to back.
+                //             4   2   0  -2  -4
+                //  ┌───┐      ┌───┬───┬───┬───┐
+                //  │CL1│      │CL2│CL3│CL4│CL5│
+                //  └───┘      └───┴───┴───┴───┘
+                //  Base     Front     →      Back
                 // Reference: https://developer.razer.com/works-with-chroma/chroma-link-guide/
-                Debug.Assert(ChromaLinkConstants.MaxLeds >= 5, "ChromaLink is expected to have LEDs CL1-CL5");
-                const int CL1 = 0;
-                const int CL2 = 1;
-                const int CL3 = 2;
-                const int CL4 = 3;
-                const int CL5 = 4;
+                const double Step = 2;
+                const double Spread = 6;
+                const double Gamma = 1.25;
 
-                const double ZBleed = 1;
-
-                if (_angle > 60)
+                if (_angle > 30)
                 {
                     return;
                 }
 
-                chromaLink[CL1] = chromaLink[CL1].Max(c);
+                ReadOnlySpan<double> offsets = stackalloc double[ChromaLinkConstants.MaxLeds - 1] { 1.5, 0.5, -0.5, -1.5 };
+                double maxB = 0;
 
-                Color c1, c2;
-
-                if (lastZ > ZBleed)
+                for (int i = 0; i < offsets.Length; i++)
                 {
-                    c1 = c;
-                    c2 = 0;
-                }
-                else if (lastZ < -ZBleed)
-                {
-                    c1 = 0;
-                    c2 = c;
-                }
-                else if (lastZ >= 0)
-                {
-                    c1 = c;
-                    c2 = c.Transform(1 - (lastZ / ZBleed));
-                }
-                else
-                {
-                    c1 = c.Transform(1 - (lastZ / -ZBleed));
-                    c2 = c;
+                    double bi = Math.Clamp(Gamma - Math.Abs(((offsets[i] * Step) - lastZ) / Spread), 0, 1);
+                    maxB = Math.Max(maxB, bi);
+                    Color ci = _color.Transform(bi);
+                    chromaLink[i + 1] = chromaLink[i + 1].Max(ci);
                 }
 
-                if ((_angle % 2) == 0)
-                {
-                    chromaLink[CL3] = chromaLink[CL3].Max(c1);
-                    chromaLink[CL2] = chromaLink[CL2].Max(c2);
-                }
-                else
-                {
-                    chromaLink[CL4] = chromaLink[CL4].Max(c1);
-                    chromaLink[CL5] = chromaLink[CL5].Max(c2);
-                }
+                chromaLink[0] = chromaLink[0].Max(_color.Transform(maxB));
             }
         }
     }
