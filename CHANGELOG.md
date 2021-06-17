@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Add support for Odyssey's binding preset categories
 - Add Odyssey journal fields
+- Add game detection mode option to the settings dialog box
 
 ### Changed
 

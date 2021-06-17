@@ -25,6 +25,8 @@ namespace EliteChroma.Internal
 
         public string? JournalFolder { get; set; }
 
+        public bool DetectGameInForeground { get; set; } = true;
+
         public bool ForceEnUSKeyboardLayout { get; set; }
 
         public ChromaColors Colors { get; } = new ChromaColors();
