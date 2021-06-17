@@ -30,8 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Game folders");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Keyboard");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Colors");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("General");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Keyboard");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Colors");
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAppSettings));
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
@@ -56,11 +58,15 @@
             this.chEnUSOverride = new System.Windows.Forms.CheckBox();
             this.pnlColors = new System.Windows.Forms.Panel();
             this.pgColors = new System.Windows.Forms.PropertyGrid();
+            this.pnlGeneral = new System.Windows.Forms.Panel();
+            this.lblDetectGameProcess = new System.Windows.Forms.Label();
+            this.chDetectGameProcess = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.grpEDFolders.SuspendLayout();
             this.ctxGameInstall.SuspendLayout();
             this.pnlKeyboard.SuspendLayout();
             this.pnlColors.SuspendLayout();
+            this.pnlGeneral.SuspendLayout();
             this.SuspendLayout();
             // 
             // folderBrowser
@@ -274,14 +280,17 @@
             this.tvSections.Name = "tvSections";
             treeNode1.Name = "GameFolders";
             treeNode1.Text = "Game folders";
-            treeNode2.Name = "Keyboard";
-            treeNode2.Text = "Keyboard";
-            treeNode3.Name = "Colors";
-            treeNode3.Text = "Colors";
+            treeNode2.Name = "General";
+            treeNode2.Text = "General";
+            treeNode3.Name = "Keyboard";
+            treeNode3.Text = "Keyboard";
+            treeNode4.Name = "Colors";
+            treeNode4.Text = "Colors";
             this.tvSections.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2,
-            treeNode3});
+            treeNode3,
+            treeNode4});
             this.tvSections.ShowLines = false;
             this.tvSections.ShowRootLines = false;
             this.tvSections.Size = new System.Drawing.Size(156, 267);
@@ -300,7 +309,7 @@
             this.pnlKeyboard.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlKeyboard.Name = "pnlKeyboard";
             this.pnlKeyboard.Size = new System.Drawing.Size(478, 266);
-            this.pnlKeyboard.TabIndex = 2;
+            this.pnlKeyboard.TabIndex = 3;
             // 
             // lblEnUSOverride
             // 
@@ -336,7 +345,7 @@
             this.pnlColors.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlColors.Name = "pnlColors";
             this.pnlColors.Size = new System.Drawing.Size(478, 266);
-            this.pnlColors.TabIndex = 3;
+            this.pnlColors.TabIndex = 4;
             // 
             // pgColors
             // 
@@ -348,6 +357,35 @@
             this.pgColors.Size = new System.Drawing.Size(478, 266);
             this.pgColors.TabIndex = 2;
             // 
+            // pnlGeneral
+            // 
+            this.pnlGeneral.Controls.Add(this.lblDetectGameProcess);
+            this.pnlGeneral.Controls.Add(this.chDetectGameProcess);
+            this.pnlGeneral.Location = new System.Drawing.Point(177, 9);
+            this.pnlGeneral.Name = "pnlGeneral";
+            this.pnlGeneral.Size = new System.Drawing.Size(478, 267);
+            this.pnlGeneral.TabIndex = 2;
+            // 
+            // lblDetectGameProcess
+            // 
+            this.lblDetectGameProcess.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDetectGameProcess.Location = new System.Drawing.Point(18, 23);
+            this.lblDetectGameProcess.Name = "lblDetectGameProcess";
+            this.lblDetectGameProcess.Size = new System.Drawing.Size(440, 111);
+            this.lblDetectGameProcess.TabIndex = 1;
+            this.lblDetectGameProcess.Text = resources.GetString("lblDetectGameProcess.Text");
+            // 
+            // chDetectGameProcess
+            // 
+            this.chDetectGameProcess.AutoSize = true;
+            this.chDetectGameProcess.Location = new System.Drawing.Point(0, 0);
+            this.chDetectGameProcess.Name = "chDetectGameProcess";
+            this.chDetectGameProcess.Size = new System.Drawing.Size(376, 19);
+            this.chDetectGameProcess.TabIndex = 0;
+            this.chDetectGameProcess.Text = "Detect when Elite:Dangerous process is running on the foreground";
+            this.chDetectGameProcess.UseVisualStyleBackColor = true;
+            // 
             // FrmAppSettings
             // 
             this.AcceptButton = this.btnOK;
@@ -357,6 +395,7 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(665, 326);
             this.Controls.Add(this.pnlColors);
+            this.Controls.Add(this.pnlGeneral);
             this.Controls.Add(this.pnlKeyboard);
             this.Controls.Add(this.tvSections);
             this.Controls.Add(this.grpEDFolders);
@@ -377,6 +416,8 @@
             this.pnlKeyboard.ResumeLayout(false);
             this.pnlKeyboard.PerformLayout();
             this.pnlColors.ResumeLayout(false);
+            this.pnlGeneral.ResumeLayout(false);
+            this.pnlGeneral.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -407,5 +448,8 @@
         private System.Windows.Forms.ContextMenuStrip ctxGameInstall;
         private System.Windows.Forms.ToolStripSeparator tssGameInstall;
         private System.Windows.Forms.ToolStripMenuItem tsmiGameInstallBrowse;
+        private System.Windows.Forms.Panel pnlGeneral;
+        private System.Windows.Forms.CheckBox chDetectGameProcess;
+        private System.Windows.Forms.Label lblDetectGameProcess;
     }
 }

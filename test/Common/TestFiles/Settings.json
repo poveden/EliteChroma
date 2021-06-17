@@ -2,6 +2,7 @@
   "GameInstallFolder": "C:\\ELITE_INSTALL_FOLDER",
   "GameOptionsFolder": "C:\\GAME_OPTIONS_FOLDER",
   "JournalFolder": "C:\\JOURNAL_FOLDER",
+  "DetectGameInForeground": true,
   "ForceEnUSKeyboardLayout": true,
   "Colors": {
     "DeviceDimBrightness": 12,

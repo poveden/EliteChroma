@@ -113,6 +113,7 @@ namespace EliteChroma
                 GameInstallFolder = settings.GameInstallFolder!,
                 GameOptionsFolder = settings.GameOptionsFolder!,
                 JournalFolder = settings.JournalFolder!,
+                DetectGameInForeground = settings.DetectGameInForeground,
                 ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout,
                 Colors = settings.Colors,
             };
@@ -125,6 +126,7 @@ namespace EliteChroma
             settings.GameInstallFolder = frm.GameInstallFolder;
             settings.GameOptionsFolder = frm.GameOptionsFolder;
             settings.JournalFolder = frm.JournalFolder;
+            settings.DetectGameInForeground = frm.DetectGameInForeground;
             settings.ForceEnUSKeyboardLayout = frm.ForceEnUSKeyboardLayout;
 
             return true;
@@ -145,6 +147,7 @@ namespace EliteChroma
             _cc = new ChromaController(settings.GameInstallFolder!, settings.GameOptionsFolder!, settings.JournalFolder!)
             {
                 ChromaFactory = _chromaFactory,
+                DetectGameInForeground = settings.DetectGameInForeground,
                 ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout,
                 Colors = settings.Colors,
             };
@@ -161,7 +164,8 @@ namespace EliteChroma
 
             return string.Equals(_currentSettings.GameInstallFolder, newSettings.GameInstallFolder, StringComparison.OrdinalIgnoreCase)
                 && string.Equals(_currentSettings.GameOptionsFolder, newSettings.GameOptionsFolder, StringComparison.OrdinalIgnoreCase)
-                && string.Equals(_currentSettings.JournalFolder, newSettings.JournalFolder, StringComparison.OrdinalIgnoreCase);
+                && string.Equals(_currentSettings.JournalFolder, newSettings.JournalFolder, StringComparison.OrdinalIgnoreCase)
+                && _currentSettings.DetectGameInForeground == newSettings.DetectGameInForeground;
         }
     }
 }

@@ -20,6 +20,7 @@ namespace EliteChroma.Forms
     internal partial class FrmAppSettings : Form
     {
         private const string _gameFoldersSection = "GameFolders";
+        private const string _generalSection = "General";
         private const string _keyboardSection = "Keyboard";
         private const string _colorsSection = "Colors";
 
@@ -64,6 +65,12 @@ namespace EliteChroma.Forms
         {
             get => txtJournal.Text;
             set => txtJournal.Text = value;
+        }
+
+        public bool DetectGameInForeground
+        {
+            get => chDetectGameProcess.Checked;
+            set => chDetectGameProcess.Checked = value;
         }
 
         public bool ForceEnUSKeyboardLayout
@@ -137,6 +144,7 @@ namespace EliteChroma.Forms
         {
             tvSections.DrawMode = TreeViewDrawMode.OwnerDrawText;
             tvSections.Nodes[_gameFoldersSection].Tag = grpEDFolders;
+            tvSections.Nodes[_generalSection].Tag = pnlGeneral;
             tvSections.Nodes[_keyboardSection].Tag = pnlKeyboard;
             tvSections.Nodes[_colorsSection].Tag = pnlColors;
 

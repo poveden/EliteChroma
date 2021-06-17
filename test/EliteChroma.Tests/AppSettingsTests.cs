@@ -57,6 +57,7 @@ namespace EliteChroma.Tests
             Assert.Equal(@"C:\ELITE_INSTALL_FOLDER", settings.GameInstallFolder);
             Assert.Equal(@"C:\GAME_OPTIONS_FOLDER", settings.GameOptionsFolder);
             Assert.Equal(@"C:\JOURNAL_FOLDER", settings.JournalFolder);
+            Assert.True(settings.DetectGameInForeground);
             Assert.True(settings.ForceEnUSKeyboardLayout);
             Assert.NotNull(settings.Colors);
             Assert.Equal(0.12, settings.Colors.DeviceDimBrightness);
@@ -94,12 +95,14 @@ namespace EliteChroma.Tests
             string settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
             var settings = AppSettings.Load(settingsFile);
+            Assert.True(settings.DetectGameInForeground);
             Assert.True(settings.ForceEnUSKeyboardLayout);
             Assert.NotNull(settings.Colors);
             Assert.Equal(0.12, settings.Colors.DeviceDimBrightness);
             Assert.Equal(Color.FromRgb(0x34AB12), settings.Colors.HardpointsToggle);
 
             settings.GameOptionsFolder = @"C:\ANOTHER_GAME_OPTIONS_FOLDER";
+            settings.DetectGameInForeground = false;
             settings.ForceEnUSKeyboardLayout = false;
             settings.Colors.DeviceDimBrightness = 0.77;
             settings.Colors.HardpointsToggle = Color.FromRgb(0xA0110A);
@@ -110,6 +113,7 @@ namespace EliteChroma.Tests
             Assert.Equal(settings.GameInstallFolder, settings2.GameInstallFolder);
             Assert.Equal(settings.GameOptionsFolder, settings2.GameOptionsFolder);
             Assert.Equal(settings.JournalFolder, settings2.JournalFolder);
+            Assert.False(settings.DetectGameInForeground);
             Assert.False(settings.ForceEnUSKeyboardLayout);
             Assert.Equal(settings.Colors.DeviceDimBrightness, settings2.Colors.DeviceDimBrightness);
             Assert.Equal(settings.Colors.HardpointsToggle, settings2.Colors.HardpointsToggle);
