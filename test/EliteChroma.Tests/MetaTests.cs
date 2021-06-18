@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using Xunit;
 
 namespace EliteChroma.Tests
@@ -41,6 +45,52 @@ namespace EliteChroma.Tests
                         select pb.Name;
 
             Assert.Empty(noImg);
+        }
+
+        [Fact]
+        public void WixInstallerTargetFrameworkMatchesTheTargetFrameworkOfTheProject()
+        {
+            const string EliteChromaProjectPath = @"src\EliteChroma\EliteChroma.csproj";
+            const string EliteChromaXPath = "/Project/PropertyGroup/TargetFramework";
+
+            const string WixInstallerProjectPath = @"setup\EliteChromaSetup.wixproj";
+            const string WixInstallerNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
+            const string WixInstallerXPath = @"/x:Project/x:ItemGroup/x:ProjectReference[@Include='..\src\EliteChroma\EliteChroma.csproj']/x:TargetFrameworkIdentifier";
+
+            const string ExpectedTargetFramework = "net5.0-windows";
+
+            string solutionDir = GetSolutionDirectory();
+
+            string? eliteChromaPath = Path.Combine(solutionDir, EliteChromaProjectPath);
+            var eliteChromaProject = XDocument.Load(eliteChromaPath);
+            var ecTargetFramework = eliteChromaProject.XPathSelectElement(EliteChromaXPath);
+            Assert.NotNull(ecTargetFramework);
+            Assert.Equal(ExpectedTargetFramework, ecTargetFramework!.Value);
+
+            string wixInstallerPath = Path.Combine(solutionDir, WixInstallerProjectPath);
+            var wixInstallerProject = XDocument.Load(wixInstallerPath);
+            var ns = new XmlNamespaceManager(new NameTable());
+            ns.AddNamespace("x", WixInstallerNamespace);
+            var wixTargetFramework = wixInstallerProject.XPathSelectElement(WixInstallerXPath, ns);
+            Assert.NotNull(wixTargetFramework);
+            Assert.Equal(ExpectedTargetFramework, wixTargetFramework!.Value);
+        }
+
+        private static string GetSolutionDirectory()
+        {
+            const string SolutionFilename = "EliteChroma.sln";
+
+            var fi = new FileInfo(typeof(MetaTests).Assembly.Location);
+
+            for (var di = fi.Directory; di != null; di = di.Parent)
+            {
+                if (di.GetFiles(SolutionFilename, SearchOption.TopDirectoryOnly).Length != 0)
+                {
+                    return di.FullName;
+                }
+            }
+
+            throw new InvalidOperationException("Solution directory could not be found.");
         }
     }
 }
