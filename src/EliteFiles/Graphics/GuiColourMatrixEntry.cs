@@ -21,9 +21,9 @@ namespace EliteFiles.Graphics
         /// <param name="b">The blue component in the -1.0 to 1.0 range.</param>
         public GuiColourMatrixEntry(double r, double g, double b)
         {
-            _v[0] = Math.Clamp(-1, r, 1);
-            _v[1] = Math.Clamp(-1, g, 1);
-            _v[2] = Math.Clamp(-1, b, 1);
+            _v[0] = Math.Clamp(r, -1, 1);
+            _v[1] = Math.Clamp(g, -1, 1);
+            _v[2] = Math.Clamp(b, -1, 1);
         }
 
         /// <summary>

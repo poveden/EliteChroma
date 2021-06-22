@@ -231,5 +231,23 @@ namespace EliteFiles.Tests
             watcher.Dispose();
 #pragma warning restore IDISP016, IDISP017
         }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(1, 1)]
+        [InlineData(2, 1)]
+        [InlineData(-1, -1)]
+        [InlineData(-2, -1)]
+        public void GuiColourMatrixEntryClampsValuesToTheMinus1Plus1Range(double value, double expected)
+        {
+            var entry = new GuiColourMatrixEntry(value, 0.1, 0.2);
+            Assert.Equal(expected, entry.Red);
+
+            entry = new GuiColourMatrixEntry(0.3, value, 0.4);
+            Assert.Equal(expected, entry.Green);
+
+            entry = new GuiColourMatrixEntry(0.5, 0.6, value);
+            Assert.Equal(expected, entry.Blue);
+        }
     }
 }
