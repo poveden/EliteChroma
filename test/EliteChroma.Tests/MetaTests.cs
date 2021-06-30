@@ -76,7 +76,7 @@ namespace EliteChroma.Tests
             Assert.Equal(ExpectedTargetFramework, wixTargetFramework!.Value);
         }
 
-        private static string GetSolutionDirectory()
+        internal static string GetSolutionDirectory()
         {
             const string SolutionFilename = "EliteChroma.sln";
 
