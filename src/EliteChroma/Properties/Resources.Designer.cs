@@ -115,6 +115,15 @@ namespace EliteChroma.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to On Foot.
+        /// </summary>
+        internal static string Colors_Category_OnFoot {
+            get {
+                return ResourceManager.GetString("Colors_Category_OnFoot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Power Distributor.
         /// </summary>
         internal static string Colors_Category_PowerDistributor {
@@ -273,6 +282,60 @@ namespace EliteChroma.Properties {
         internal static string Colors_Miscellaneous {
             get {
                 return ResourceManager.GetString("Colors_Miscellaneous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Headlook controls.
+        /// </summary>
+        internal static string Colors_OnFootHeadlook {
+            get {
+                return ResourceManager.GetString("Colors_OnFootHeadlook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interact with environment.
+        /// </summary>
+        internal static string Colors_OnFootInteract {
+            get {
+                return ResourceManager.GetString("Colors_OnFootInteract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flashlight/night vision.
+        /// </summary>
+        internal static string Colors_OnFootLightsToggle {
+            get {
+                return ResourceManager.GetString("Colors_OnFootLightsToggle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Panel/mode switches.
+        /// </summary>
+        internal static string Colors_OnFootModeSwitches {
+            get {
+                return ResourceManager.GetString("Colors_OnFootModeSwitches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Movement controls.
+        /// </summary>
+        internal static string Colors_OnFootMovement {
+            get {
+                return ResourceManager.GetString("Colors_OnFootMovement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shields toggle.
+        /// </summary>
+        internal static string Colors_OnFootShieldsToggle {
+            get {
+                return ResourceManager.GetString("Colors_OnFootShieldsToggle", resourceCulture);
             }
         }
         

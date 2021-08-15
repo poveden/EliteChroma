@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace EliteFiles.Bindings.Binds
 {
@@ -72,5 +73,106 @@ namespace EliteFiles.Bindings.Binds
         /// Gets the collection of all <see cref="OnFoot"/> bind names.
         /// </summary>
         public static IReadOnlyCollection<string> All { get; } = Binding.BuildGroup(typeof(OnFoot));
+
+        /// <summary>
+        /// Gets the collection of all headlook-related <see cref="OnFoot"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> Headlook { get; } = new ReadOnlyCollection<string>(new[]
+        {
+            MouseXMode,
+            MouseYMode,
+            MouseSensitivity,
+            RotateAxis,
+            RotateSensitivity,
+            RotateLeftButton,
+            RotateRightButton,
+            PitchAxis,
+            PitchSensitivity,
+            PitchUpButton,
+            PitchDownButton,
+        });
+
+        /// <summary>
+        /// Gets the collection of all movement-related <see cref="OnFoot"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> Movement { get; } = new ReadOnlyCollection<string>(new[]
+        {
+            ForwardAxis,
+            ForwardButton,
+            BackwardButton,
+            StrafeAxis,
+            StrafeLeftButton,
+            StrafeRightButton,
+            SprintButton,
+            WalkButton,
+            CrouchButton,
+            JumpButton,
+        });
+
+        /// <summary>
+        /// Gets the collection of all interaction-related <see cref="OnFoot"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> Interaction { get; } = new ReadOnlyCollection<string>(new[]
+        {
+            PrimaryInteractButton,
+            SecondaryInteractButton,
+        });
+
+        /// <summary>
+        /// Gets the collection of all item wheel-related <see cref="OnFoot"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> ItemWheel { get; } = new ReadOnlyCollection<string>(new[]
+        {
+            ItemWheelButton,
+            ItemWheelButtonXAxis,
+            ItemWheelButtonXLeft,
+            ItemWheelButtonXRight,
+            ItemWheelButtonYAxis,
+            ItemWheelButtonYUp,
+            ItemWheelButtonYDown,
+            ItemWheelAcceptMouseInput,
+        });
+
+        /// <summary>
+        /// Gets the collection of all weapons-related <see cref="OnFoot"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> Weapons { get; } = new ReadOnlyCollection<string>(new[]
+        {
+            PrimaryFireButton,
+            ZoomButton,
+            ThrowGrenadeButton,
+            MeleeButton,
+            ReloadButton,
+            SwitchWeapon,
+            SelectPrimaryWeaponButton,
+            SelectSecondaryWeaponButton,
+            SelectNextWeaponButton,
+            SelectPreviousWeaponButton,
+            HideWeaponButton,
+            SelectNextGrenadeTypeButton,
+            SelectPreviousGrenadeTypeButton,
+        });
+
+        /// <summary>
+        /// Gets the collection of all tools-related <see cref="OnFoot"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> Tools { get; } = new ReadOnlyCollection<string>(new[]
+        {
+            SelectUtilityWeaponButton,
+            SwitchToRechargeTool,
+            SwitchToCompAnalyser,
+            SwitchToSuitTool,
+            ToggleToolModeButton,
+        });
+
+        /// <summary>
+        /// Gets the collection of all suit-related <see cref="OnFoot"/> bind names.
+        /// </summary>
+        public static IReadOnlyCollection<string> Suit { get; } = new ReadOnlyCollection<string>(new[]
+        {
+            ToggleFlashlightButton,
+            ToggleNightVisionButton,
+            ToggleShieldsButton,
+        });
     }
 }

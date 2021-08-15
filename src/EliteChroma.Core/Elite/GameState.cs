@@ -57,6 +57,14 @@ namespace EliteChroma.Elite
 
         public bool InSquadronsView => MusicTrack == "Squadrons";
 
+        public bool InGalaxyMap => MusicTrack == "GalaxyMap";
+
+        public bool InSystemMap => MusicTrack == "SystemMap";
+
+        public bool InCodex => MusicTrack == "Codex";
+
+        public bool InFleetCarrierManagement => MusicTrack == "FleetCarrier_Managment";
+
         public UnderAttack.AttackTarget AttackTarget { get; internal set; }
 
         public DateTimeOffset AttackTargetChange { get; internal set; }
@@ -92,6 +100,19 @@ namespace EliteChroma.Elite
                     default:
                         return false;
                 }
+            }
+        }
+
+        public bool IsWalking
+        {
+            get
+            {
+                if (!Status.HasFlag(Flags2.OnFoot) || InGalaxyMap || InSystemMap || InGalacticPowers || InSquadronsView || InCodex || InFleetCarrierManagement)
+                {
+                    return false;
+                }
+
+                return true;
             }
         }
 

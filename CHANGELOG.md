@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fix lighting while in taxi
 
+### Added
+
+- Add support for Odyssey's on-foot bindings
+
 ## [1.13.1](https://github.com/poveden/EliteChroma/compare/v1.13.0...v1.13.1) — 2021-06-22
 
 ### Fixed
