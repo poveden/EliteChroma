@@ -69,11 +69,6 @@ namespace EliteChroma.Elite
         {
             get
             {
-                if (Status == null)
-                {
-                    return false;
-                }
-
                 if ((Status.Flags & (Flags.InMainShip | Flags.InFighter | Flags.InSrv)) == Flags.None)
                 {
                     return false;
