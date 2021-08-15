@@ -17,6 +17,7 @@ namespace EliteChroma.Core.Layers
         {
             if (!Game.InCockpit
                 || Game.DockedOrLanded
+                || Game.Status.HasFlag(Flags2.InTaxi)
                 || Game.FsdJumpType != FsdJumpType.None
                 || Game.Status.HasFlag(Flags.Supercruise))
             {

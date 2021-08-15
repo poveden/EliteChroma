@@ -2,6 +2,7 @@
 using Colore.Data;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
+using EliteFiles.Status;
 using static EliteFiles.Journal.Events.StartJump;
 
 namespace EliteChroma.Core.Layers
@@ -13,7 +14,7 @@ namespace EliteChroma.Core.Layers
 
         protected override void OnRender(ChromaCanvas canvas)
         {
-            if (!Game.InCockpit || Game.DockedOrLanded || Game.FsdJumpType != FsdJumpType.None || Game.Status?.Pips == null)
+            if (!Game.InCockpit || Game.DockedOrLanded || Game.Status.HasFlag(Flags2.InTaxi) || Game.FsdJumpType != FsdJumpType.None || Game.Status?.Pips == null)
             {
                 return;
             }

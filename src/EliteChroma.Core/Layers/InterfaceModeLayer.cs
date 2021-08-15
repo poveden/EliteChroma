@@ -21,6 +21,12 @@ namespace EliteChroma.Core.Layers
             CustomKeyboardEffect k = canvas.Keyboard;
             k[Key.Escape] = Colors.InterfaceMode;
 
+            if (Game.Status.HasFlag(Flags2.InTaxi))
+            {
+                ApplyColorToBinding(canvas.Keyboard, InterfaceMode.Select, Colors.InterfaceMode);
+                return;
+            }
+
             ApplyColorToBinding(canvas.Keyboard, InterfaceMode.All, Colors.InterfaceMode);
         }
     }
