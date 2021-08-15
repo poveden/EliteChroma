@@ -10,9 +10,9 @@ namespace EliteChroma.Internal.UI
     internal sealed class LocalizedPropertyDescriptor : PropertyDescriptor
     {
         private readonly PropertyDescriptor _descriptor;
-        private readonly Lazy<string?> _category;
-        private readonly Lazy<string?> _description;
-        private readonly Lazy<string?> _displayName;
+        private readonly Lazy<string> _category;
+        private readonly Lazy<string> _description;
+        private readonly Lazy<string> _displayName;
 
         public LocalizedPropertyDescriptor(PropertyDescriptor baseDescriptor, string resourceNamePrefix)
             : base(baseDescriptor)
@@ -23,16 +23,16 @@ namespace EliteChroma.Internal.UI
 
             string baseName = $"{resourceNamePrefix}{_descriptor.Name}";
 
-            _category = new Lazy<string?>(() => rm.GetString(baseName + "_Category", ci) ?? rm.GetString(base.Category, ci));
-            _description = new Lazy<string?>(() => rm.GetString(baseName + "_Description", ci) ?? rm.GetString(base.Description, ci));
-            _displayName = new Lazy<string?>(() => rm.GetString(baseName, ci) ?? rm.GetString(base.DisplayName, ci));
+            _category = new Lazy<string>(() => rm.GetString(baseName + "_Category", ci) ?? rm.GetString(_descriptor.Category, ci) ?? _descriptor.Category);
+            _description = new Lazy<string>(() => rm.GetString(baseName + "_Description", ci) ?? rm.GetString(_descriptor.Description, ci) ?? _descriptor.Description);
+            _displayName = new Lazy<string>(() => rm.GetString(baseName, ci) ?? rm.GetString(_descriptor.DisplayName, ci) ?? _descriptor.DisplayName);
         }
 
-        public override string? Category => _category.Value;
+        public override string Category => _category.Value;
 
-        public override string? Description => _description.Value;
+        public override string Description => _description.Value;
 
-        public override string? DisplayName => _displayName.Value;
+        public override string DisplayName => _displayName.Value;
 
         [ExcludeFromCodeCoverage]
         public override Type ComponentType => _descriptor.ComponentType;

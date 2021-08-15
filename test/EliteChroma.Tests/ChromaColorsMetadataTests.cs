@@ -35,6 +35,24 @@ namespace EliteChroma.Tests
         }
 
         [Fact]
+        public void AllCategoriesHaveAResourceStringDefined()
+        {
+            var cNames = GetPublicReadWriteProperties<ChromaColorsMetadata>()
+                .Select(x => x.GetCustomAttribute<CategoryAttribute>()!.Category)
+                .Distinct(StringComparer.Ordinal);
+
+            Assert.All(cNames, AssertResourceStringIsDefined);
+        }
+
+        [Fact]
+        public void AllMappedPropertiesHaveADisplayNameResourceStringDefined()
+        {
+            var ccm = GetPublicReadWriteProperties<ChromaColorsMetadata>();
+
+            Assert.All(ccm, pi => AssertResourceStringIsDefined($"Colors_{pi.Name}"));
+        }
+
+        [Fact]
         public void AllMappedColorPropertiesHaveTheExpectedTypeConverterAttribute()
         {
             var ccm = GetPublicReadWriteProperties<ChromaColorsMetadata>().Where(x => x.PropertyType == typeof(Color));
@@ -81,6 +99,15 @@ namespace EliteChroma.Tests
 
             Assert.Equal(expectedType.AssemblyQualifiedName, ea.EditorTypeName);
             Assert.Equal(expectedBaseType.AssemblyQualifiedName, ea.EditorBaseTypeName);
+        }
+
+        private static void AssertResourceStringIsDefined(string name)
+        {
+            var rm = Properties.Resources.ResourceManager;
+            var ci = Properties.Resources.Culture;
+
+            string? rs = rm.GetString(name, ci);
+            Assert.False(string.IsNullOrEmpty(rs));
         }
 
         // Reference: https://stackoverflow.com/questions/824802/c-how-to-get-all-public-both-get-and-set-string-properties-of-a-type/824854#824854
