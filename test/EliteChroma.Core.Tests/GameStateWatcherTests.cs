@@ -27,6 +27,7 @@ namespace EliteChroma.Core.Tests
                 ChangeType.JournalEntry,
                 ChangeType.JournalEntry,
                 ChangeType.JournalEntry,
+                ChangeType.JournalEntry,
                 ChangeType.JournalDrain,
             };
 
