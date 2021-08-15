@@ -15,7 +15,7 @@ namespace EliteChroma.Core.Layers
 
         protected override void OnRender(ChromaCanvas canvas)
         {
-            if (!Game.InCockpit || Game.DockedOrLanded || Game.FsdJumpType != FsdJumpType.None || Game.Status.HasFlag(Flags.Supercruise))
+            if (!Game.InCockpit || Game.DockedOrLanded || Game.Status.HasFlag(Flags2.InTaxi) || Game.FsdJumpType != FsdJumpType.None || Game.Status.HasFlag(Flags.Supercruise))
             {
                 return;
             }

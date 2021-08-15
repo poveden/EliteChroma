@@ -21,6 +21,7 @@ namespace EliteChroma.Internal.UI
         private const string _thrustAttitudeCategory = _categoryPrefix + "ThrustAttitude";
         private const string _weaponsTargetingCategory = _categoryPrefix + "WeaponsTargeting";
         private const string _ambientColorsCategory = _categoryPrefix + "AmbientColors";
+        private const string _onFootCategory = _categoryPrefix + "OnFoot";
 
         [Category(_brightnessCategory)]
         [TypeConverter(typeof(BrightnessConverter))]
@@ -181,6 +182,36 @@ namespace EliteChroma.Internal.UI
         [TypeConverter(typeof(ColoreColorConverter))]
         [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
         public Color LandingMode { get; set; }
+
+        [Category(_onFootCategory)]
+        [TypeConverter(typeof(ColoreColorConverter))]
+        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
+        public Color OnFootHeadlook { get; set; } = Color.White;
+
+        [Category(_onFootCategory)]
+        [TypeConverter(typeof(ColoreColorConverter))]
+        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
+        public Color OnFootMovement { get; set; } = Color.Orange;
+
+        [Category(_onFootCategory)]
+        [TypeConverter(typeof(ColoreColorConverter))]
+        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
+        public Color OnFootModeSwitches { get; set; } = Color.Green;
+
+        [Category(_onFootCategory)]
+        [TypeConverter(typeof(ColoreColorConverter))]
+        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
+        public Color OnFootLightsToggle { get; set; } = Color.Blue;
+
+        [Category(_onFootCategory)]
+        [TypeConverter(typeof(ColoreColorConverter))]
+        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
+        public Color OnFootShieldsToggle { get; set; }
+
+        [Category(_onFootCategory)]
+        [TypeConverter(typeof(ColoreColorConverter))]
+        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
+        public Color OnFootInteract { get; set; }
 
         [Browsable(false)]
         public IReadOnlyList<Color> PowerDistributorScale { get; } = Array.Empty<Color>();

@@ -114,6 +114,18 @@ namespace EliteChroma.Core
 
         public Color LandingMode { get; set; } = Color.Blue;
 
+        public Color OnFootHeadlook { get; set; } = Color.White;
+
+        public Color OnFootMovement { get; set; } = Color.Orange;
+
+        public Color OnFootModeSwitches { get; set; } = Color.Green;
+
+        public Color OnFootLightsToggle { get; set; } = Color.Blue;
+
+        public Color OnFootShieldsToggle { get; set; } = new Color(0.0, 1.0, 1.0);
+
+        public Color OnFootInteract { get; set; } = Color.Purple;
+
         public IReadOnlyList<Color> PowerDistributorScale => _pips;
 
         private static double Clamp(double value, double min, double max, double nanFallback)

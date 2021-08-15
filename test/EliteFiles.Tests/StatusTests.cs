@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using EliteFiles.Status;
 using EliteFiles.Tests.Internal;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace EliteFiles.Tests
@@ -61,6 +62,32 @@ namespace EliteFiles.Tests
             var status = StatusEntry.FromFile(dir.Resolve("Status.json"));
 
             Assert.Null(status);
+        }
+
+        [Theory]
+        [InlineData("", OnFootWeapon.Kind.Unknown)]
+        [InlineData("DUMMY-NAME", OnFootWeapon.Kind.Unknown)]
+        [InlineData("humanoid_fists", OnFootWeapon.Kind.Unarmed)]
+        [InlineData("humanoid_rechargetool", OnFootWeapon.Kind.Energylink)]
+        [InlineData("humanoid_companalyser", OnFootWeapon.Kind.ProfileAnalyser)]
+        [InlineData("humanoid_sampletool", OnFootWeapon.Kind.GeneticSampler)]
+        [InlineData("humanoid_repairtool", OnFootWeapon.Kind.ArcCutter)]
+        [InlineData("wpn_m_assaultrifle_kinetic_fauto", OnFootWeapon.Kind.Weapon)]
+        [InlineData("wpn_m_assaultrifle_plasma_fauto", OnFootWeapon.Kind.Weapon)]
+        [InlineData("wpn_s_pistol_plasma_charged", OnFootWeapon.Kind.Weapon)]
+        [InlineData("wpn_m_assaultrifle_laser_fauto", OnFootWeapon.Kind.Weapon)]
+        public void SelectedWeaponIsParsedCorrectly(string weaponName, OnFootWeapon.Kind expectedKind)
+        {
+            var kind = OnFootWeapon.GetKind(weaponName);
+            Assert.Equal(expectedKind, kind);
+
+            string placeholder = $"${weaponName}_name;";
+
+            var entry = JsonConvert.DeserializeObject<StatusEntry>($"{{ \"event\":\"Status\", \"SelectedWeapon\":\"{placeholder}\" }}")!;
+            Assert.Equal(placeholder, entry.SelectedWeapon);
+
+            kind = OnFootWeapon.GetKind(entry.SelectedWeapon);
+            Assert.Equal(expectedKind, kind);
         }
 
         [Fact]

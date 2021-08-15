@@ -23,7 +23,7 @@ namespace EliteChroma.Tests
             var pd = GetPropertyDescriptor("KeyboardDimBrightness");
 
             Assert.Equal("Brightness Levels", pd.Category);
-            Assert.Null(pd.Description);
+            Assert.Equal(string.Empty, pd.Description);
             Assert.Equal("Keyboard dim brightness", pd.DisplayName);
         }
 

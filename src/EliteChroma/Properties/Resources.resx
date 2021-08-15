@@ -294,4 +294,25 @@ Please choose the right folders in the following window.</value>
   <data name="FolderDialogDescription_JournalFolder" xml:space="preserve">
     <value>Select the folder where Elite:Dangerous stores the player journal:</value>
   </data>
+  <data name="Colors_Category_OnFoot" xml:space="preserve">
+    <value>On Foot</value>
+  </data>
+  <data name="Colors_OnFootInteract" xml:space="preserve">
+    <value>Interact with environment</value>
+  </data>
+  <data name="Colors_OnFootShieldsToggle" xml:space="preserve">
+    <value>Shields toggle</value>
+  </data>
+  <data name="Colors_OnFootHeadlook" xml:space="preserve">
+    <value>Headlook controls</value>
+  </data>
+  <data name="Colors_OnFootLightsToggle" xml:space="preserve">
+    <value>Flashlight/night vision</value>
+  </data>
+  <data name="Colors_OnFootModeSwitches" xml:space="preserve">
+    <value>Panel/mode switches</value>
+  </data>
+  <data name="Colors_OnFootMovement" xml:space="preserve">
+    <value>Movement controls</value>
+  </data>
 </root>
