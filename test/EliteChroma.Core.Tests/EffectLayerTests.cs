@@ -113,7 +113,7 @@ namespace EliteChroma.Core.Tests
                 FsdJumpType = StartJump.FsdJumpType.Hyperspace,
                 FsdJumpStarClass = starClass,
                 FsdJumpChange = DateTimeOffset.UtcNow,
-                BindingPreset = binds,
+                Bindings = new GameBindings(binds),
                 PressedModifiers = new DeviceKeySet(Enumerable.Empty<DeviceKey>()),
             };
 

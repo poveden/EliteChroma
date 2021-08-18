@@ -23,7 +23,7 @@ namespace EliteChroma.Elite
 
         public GameProcessState ProcessState { get; internal set; }
 
-        public BindingPreset? BindingPreset { get; internal set; }
+        public GameBindings? Bindings { get; internal set; }
 
         public DeviceKeySet? PressedModifiers { get; internal set; }
 
@@ -68,6 +68,12 @@ namespace EliteChroma.Elite
         public UnderAttack.AttackTarget AttackTarget { get; internal set; }
 
         public DateTimeOffset AttackTargetChange { get; internal set; }
+
+        public bool Horizons { get; internal set; }
+
+        public bool Odyssey { get; internal set; }
+
+        public LoadGame.PlayMode GameMode { get; internal set; }
 
         public bool InCockpit => (Status.HasFlag(Flags.InMainShip) || Status.HasFlag(Flags.InFighter)) && AtHelm;
 
