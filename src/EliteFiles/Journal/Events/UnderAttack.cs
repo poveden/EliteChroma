@@ -8,10 +8,6 @@ namespace EliteFiles.Journal.Events
     [JournalEntry("UnderAttack")]
     public sealed class UnderAttack : JournalEntry
     {
-        private UnderAttack()
-        {
-        }
-
         /// <summary>
         /// Specifies the possible attack targets.
         /// </summary>
@@ -31,9 +27,9 @@ namespace EliteFiles.Journal.Events
         }
 
         /// <summary>
-        /// Gets the target of the attack.
+        /// Gets or sets the target of the attack.
         /// </summary>
         [JsonProperty("Target")]
-        public AttackTarget Target { get; private set; }
+        public AttackTarget Target { get; set; }
     }
 }

@@ -8,10 +8,6 @@ namespace EliteFiles.Journal.Events
     [JournalEntry("StartJump")]
     public sealed class StartJump : JournalEntry
     {
-        private StartJump()
-        {
-        }
-
         /// <summary>
         /// Specifies the kind of FSD jump.
         /// </summary>
@@ -28,27 +24,27 @@ namespace EliteFiles.Journal.Events
         }
 
         /// <summary>
-        /// Gets the FSD jump type.
+        /// Gets or sets the FSD jump type.
         /// </summary>
         [JsonProperty("JumpType")]
-        public FsdJumpType JumpType { get; private set; }
+        public FsdJumpType JumpType { get; set; }
 
         /// <summary>
-        /// Gets the name of the destination system on hyperspace FSD jumps.
+        /// Gets or sets the name of the destination system on hyperspace FSD jumps.
         /// </summary>
         [JsonProperty("StarSystem")]
-        public string? StarSystem { get; private set; }
+        public string? StarSystem { get; set; }
 
         /// <summary>
-        /// Gets the ID of the destination system on hyperspace FSD jumps.
+        /// Gets or sets the ID of the destination system on hyperspace FSD jumps.
         /// </summary>
         [JsonProperty("SystemAddress")]
-        public long SystemAddress { get; private set; }
+        public long SystemAddress { get; set; }
 
         /// <summary>
-        /// Gets the main star class of the destination system on hyperspace FSD jumps.
+        /// Gets or sets the main star class of the destination system on hyperspace FSD jumps.
         /// </summary>
         [JsonProperty("StarClass")]
-        public string? StarClass { get; private set; }
+        public string? StarClass { get; set; }
     }
 }

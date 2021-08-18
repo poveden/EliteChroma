@@ -8,38 +8,34 @@ namespace EliteFiles.Journal.Events
     [JournalEntry("Fileheader")]
     public sealed class FileHeader : JournalEntry
     {
-        private FileHeader()
-        {
-        }
-
         /// <summary>
-        /// Gets the journal file part number.
+        /// Gets or sets the journal file part number.
         /// </summary>
         [JsonProperty("part")]
-        public int Part { get; private set; }
+        public int Part { get; set; }
 
         /// <summary>
-        /// Gets the journal file language code.
+        /// Gets or sets the journal file language code.
         /// </summary>
         [JsonProperty("language")]
-        public string? Language { get; private set; }
+        public string? Language { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether the current journal is an Odyssey one.
+        /// Gets or sets a value indicating whether the current journal is an Odyssey one.
         /// </summary>
         [JsonProperty("Odyssey")]
-        public bool Odyssey { get; private set; }
+        public bool Odyssey { get; set; }
 
         /// <summary>
-        /// Gets the version of the game that created the journal file.
+        /// Gets or sets the version of the game that created the journal file.
         /// </summary>
         [JsonProperty("gameversion")]
-        public string? GameVersion { get; private set; }
+        public string? GameVersion { get; set; }
 
         /// <summary>
-        /// Gets the game build number.
+        /// Gets or sets the game build number.
         /// </summary>
         [JsonProperty("build")]
-        public string? Build { get; private set; }
+        public string? Build { get; set; }
     }
 }

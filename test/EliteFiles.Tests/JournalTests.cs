@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using EliteFiles.Journal;
 using EliteFiles.Journal.Events;
@@ -14,13 +16,59 @@ namespace EliteFiles.Tests
     {
         private const string _journalFolder = @"TestFiles\Journal";
         private const string _journalFile1 = "Journal.190101020000.01.log";
-        private const int _journalFile1Count = 6;
+        private const int _journalFile1Count = 7;
 
         private readonly JournalFolder _jf;
 
         public JournalTests()
         {
             _jf = new JournalFolder(_journalFolder);
+        }
+
+        public static IEnumerable<object[]> AllJournalEntryTypes()
+        {
+            return typeof(JournalEntry).Assembly.GetExportedTypes()
+                .Where(x => x.IsSubclassOf(typeof(JournalEntry)))
+                .Select(x => new object[] { x });
+        }
+
+        [Fact]
+        public void CanCreateCompleteJournalEntryInstance()
+        {
+            var entry = new TestEntry
+            {
+                Timestamp = DateTimeOffset.UtcNow,
+                Event = "TestEntry",
+                AdditionalFields =
+                {
+                    ["ExtraField"] = "Extra value",
+                },
+            };
+
+            Assert.Single(entry.AdditionalFields);
+        }
+
+        [Theory]
+        [MemberData(nameof(AllJournalEntryTypes))]
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Always not null")]
+        public void AllJournalEntryTypesHaveAJournalEntryAttribute(Type type)
+        {
+            var jea = (JournalEntryAttribute)type.GetCustomAttributes(typeof(JournalEntryAttribute), false).Single();
+
+            Assert.NotNull(jea.EventName);
+        }
+
+        [Theory]
+        [MemberData(nameof(AllJournalEntryTypes))]
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Always not null")]
+        public void AllJournalEntryFieldsAreReadWritable(Type type)
+        {
+            var pNames = type.GetProperties()
+                .Where(x => x.Name != nameof(JournalEntry.AdditionalFields) && (x.CanRead && x.GetGetMethod(false) != null) ^ (x.CanWrite && x.GetSetMethod(false) != null))
+                .Select(x => x.Name)
+                .ToList();
+
+            Assert.Empty(pNames);
         }
 
         [Fact]
@@ -46,8 +94,30 @@ namespace EliteFiles.Tests
             var fh = Assert.IsType<FileHeader>(entries.Dequeue());
             Assert.Equal(1, fh.Part);
             Assert.Equal("English\\UK", fh.Language);
-            Assert.Equal("3.5.0.200 EDH", fh.GameVersion);
-            Assert.Equal("r210198/r0 ", fh.Build);
+            Assert.Equal("4.0.0.701", fh.GameVersion);
+            Assert.Equal("r273365/r0 ", fh.Build);
+
+            var lg = Assert.IsType<LoadGame>(entries.Dequeue());
+            Assert.Equal("F123456", lg.FID);
+            Assert.Equal("Jameson", lg.Commander);
+            Assert.True(lg.Horizons);
+            Assert.True(lg.Odyssey);
+            Assert.Equal("Krait_Light", lg.Ship);
+            Assert.Equal("Krait Phantom", lg.ShipLocalized);
+            Assert.Equal(1, lg.ShipID);
+            Assert.Equal("Nameless", lg.ShipName);
+            Assert.Equal("ASD-FG", lg.ShipIdent);
+            Assert.Equal(31.370001, lg.FuelLevel);
+            Assert.Equal(32, lg.FuelCapacity);
+            Assert.True(lg.StartLanded);
+            Assert.False(lg.StartDead);
+            Assert.Equal(LoadGame.PlayMode.Group, lg.GameMode);
+            Assert.Equal("FleetComm", lg.Group);
+            Assert.Equal(1234567890, lg.Credits);
+            Assert.Equal(0, lg.Loan);
+            Assert.Equal("English/UK", lg.Language);
+            Assert.Equal("4.0.0.701", lg.GameVersion);
+            Assert.Equal("r273365/r0 ", lg.Build);
 
             var mu = Assert.IsType<Music>(entries.Dequeue());
             Assert.Equal("NoTrack", mu.MusicTrack);
@@ -151,6 +221,7 @@ namespace EliteFiles.Tests
 
             Assert.Equal(_journalFile1Count, entries.Count);
             Assert.IsType<FileHeader>(entries.Dequeue());
+            Assert.IsType<LoadGame>(entries.Dequeue());
             Assert.IsType<Music>(entries.Dequeue());
             Assert.IsType<UnderAttack>(entries.Dequeue());
             Assert.IsType<StartJump>(entries.Dequeue());
@@ -212,6 +283,10 @@ namespace EliteFiles.Tests
             jr.Dispose();
             jr.Dispose();
 #pragma warning restore IDISP016, IDISP017
+        }
+
+        private class TestEntry : JournalEntry
+        {
         }
     }
 }

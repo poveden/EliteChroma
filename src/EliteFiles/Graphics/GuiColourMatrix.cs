@@ -9,6 +9,16 @@ namespace EliteFiles.Graphics
     {
         private readonly GuiColourMatrixEntry[] _v = new GuiColourMatrixEntry[3];
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GuiColourMatrix"/> class.
+        /// </summary>
+        public GuiColourMatrix()
+        {
+            _v[0] = new GuiColourMatrixEntry();
+            _v[1] = new GuiColourMatrixEntry();
+            _v[2] = new GuiColourMatrixEntry();
+        }
+
         private GuiColourMatrix(GuiColourMatrixEntry r, GuiColourMatrixEntry g, GuiColourMatrixEntry b)
         {
             _v[0] = r;
@@ -20,14 +30,14 @@ namespace EliteFiles.Graphics
         /// Gets the default GUI colour transformation matrix.
         /// </summary>
         public static GuiColourMatrix Default { get; } = new GuiColourMatrix(
-            new GuiColourMatrixEntry(1, 0, 0),
-            new GuiColourMatrixEntry(0, 1, 0),
-            new GuiColourMatrixEntry(0, 0, 1));
+            new GuiColourMatrixEntry { Red = 1, Green = 0, Blue = 0 },
+            new GuiColourMatrixEntry { Red = 0, Green = 1, Blue = 0 },
+            new GuiColourMatrixEntry { Red = 0, Green = 0, Blue = 1 });
 
         /// <summary>
-        /// Gets the localisation name.
+        /// Gets or sets the localisation name.
         /// </summary>
-        public string? LocalisationName { get; private set; }
+        public string? LocalisationName { get; set; }
 
         /// <summary>
         /// Gets the red matrix component.
@@ -50,7 +60,11 @@ namespace EliteFiles.Graphics
         /// <param name="row">The matrix row.</param>
         /// <param name="col">The matrix column.</param>
         /// <returns>The matrix value.</returns>
-        public double this[int row, int col] => _v[col][row];
+        public double this[int row, int col]
+        {
+            get => _v[col][row];
+            set => _v[col][row] = value;
+        }
 
         internal static GuiColourMatrix FromXml(XElement xml)
         {

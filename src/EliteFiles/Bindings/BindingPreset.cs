@@ -20,29 +20,25 @@ namespace EliteFiles.Bindings
 
         private readonly Dictionary<string, Binding> _dict = new Dictionary<string, Binding>(StringComparer.Ordinal);
 
-        private BindingPreset()
-        {
-        }
+        /// <summary>
+        /// Gets or sets the name of the bindings preset.
+        /// </summary>
+        public string? PresetName { get; set; }
 
         /// <summary>
-        /// Gets the name of the bindings preset.
+        /// Gets or sets the game version for which this preset is targeted to.
         /// </summary>
-        public string? PresetName { get; private set; }
+        public Version? Version { get; set; }
 
         /// <summary>
-        /// Gets the game version for which this preset is targeted to.
+        /// Gets or sets the keyboard layout.
         /// </summary>
-        public Version? Version { get; private set; }
-
-        /// <summary>
-        /// Gets the keyboard layout.
-        /// </summary>
-        public string? KeyboardLayout { get; private set; }
+        public string? KeyboardLayout { get; set; }
 
         /// <summary>
         /// Gets the collection of all bindings.
         /// </summary>
-        public IReadOnlyDictionary<string, Binding> Bindings => _dict;
+        public IDictionary<string, Binding> Bindings => _dict;
 
         /// <summary>
         /// Read the binding presets from the given file.

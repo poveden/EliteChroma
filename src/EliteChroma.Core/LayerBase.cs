@@ -118,26 +118,26 @@ namespace EliteChroma.Core
 
         protected void ApplyColorToBinding(CustomKeyboardEffect grid, string bindingName, Color color)
         {
-            BindingPreset? bindingPreset = Game.BindingPreset;
+            GameBindings? gameBindings = Game.Bindings;
 
-            if (bindingPreset == null)
+            if (gameBindings == null)
             {
                 return;
             }
 
-            if (!bindingPreset.Bindings.TryGetValue(bindingName, out Binding binding))
+            if (!gameBindings.TryGetValue(bindingName, out Binding binding))
             {
                 return;
             }
 
-            foreach (DeviceKeyCombination bps in new[] { binding.Primary, binding.Secondary })
+            foreach (DeviceKeyCombination bps in new[] { binding!.Primary, binding.Secondary })
             {
                 if (bps.Device != Device.Keyboard || bps.Key == null)
                 {
                     continue;
                 }
 
-                if (!KeyMappings.TryGetKey(bps.Key, bindingPreset.KeyboardLayout, Game.ForceEnUSKeyboardLayout, out Key key, NativeMethods))
+                if (!KeyMappings.TryGetKey(bps.Key, gameBindings.KeyboardLayout, Game.ForceEnUSKeyboardLayout, out Key key, NativeMethods))
                 {
                     continue;
                 }

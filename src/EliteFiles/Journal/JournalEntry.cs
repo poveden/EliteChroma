@@ -26,20 +26,20 @@ namespace EliteFiles.Journal
         }
 
         /// <summary>
-        /// Gets the timestamp of the event.
+        /// Gets or sets the timestamp of the event.
         /// </summary>
         [JsonProperty("timestamp")]
-        public DateTimeOffset Timestamp { get; private set; }
+        public DateTimeOffset Timestamp { get; set; }
 
         /// <summary>
-        /// Gets the type of event.
+        /// Gets or sets the type of event.
         /// </summary>
         [JsonProperty("event")]
-        public string? Event { get; private set; }
+        public string? Event { get; set; }
 
         /// <summary>
         /// Gets a collection of additional fields that may be included in the event.
         /// </summary>
-        public IReadOnlyDictionary<string, JToken> AdditionalFields => _additionalFields;
+        public IDictionary<string, JToken> AdditionalFields => _additionalFields;
     }
 }

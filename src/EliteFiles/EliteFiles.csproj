@@ -16,10 +16,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>EliteFiles.Tests</_Parameter1>
-    </AssemblyAttribute>
-  </ItemGroup>
-
 </Project>

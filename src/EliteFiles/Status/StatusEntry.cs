@@ -18,146 +18,137 @@ namespace EliteFiles.Status
         [JsonExtensionData]
         private readonly Dictionary<string, JToken> _additionalFields = new Dictionary<string, JToken>(StringComparer.Ordinal);
 
-        private StatusEntry()
-        {
-        }
-
         /// <summary>
-        /// Gets a <see cref="StatusEntry"/> instance with no values defined.
-        /// </summary>
-        public static StatusEntry Empty { get; } = new StatusEntry();
-
-        /// <summary>
-        /// Gets the timestamp of the event.
+        /// Gets or sets the timestamp of the event.
         /// </summary>
         [JsonProperty("timestamp")]
-        public DateTimeOffset Timestamp { get; private set; }
+        public DateTimeOffset Timestamp { get; set; }
 
         /// <summary>
-        /// Gets the type of event.
+        /// Gets or sets the type of event.
         /// </summary>
         [JsonProperty("event")]
-        public string? Event { get; private set; } = "Status";
+        public string? Event { get; set; } = "Status";
 
         /// <summary>
-        /// Gets the game status flags.
+        /// Gets or sets the game status flags.
         /// </summary>
         [JsonProperty("Flags")]
-        public Flags Flags { get; private set; }
+        public Flags Flags { get; set; }
 
         /// <summary>
-        /// Gets the game status flags.
+        /// Gets or sets the game status flags.
         /// </summary>
         [JsonProperty("Flags2")]
-        public Flags2 Flags2 { get; private set; }
+        public Flags2 Flags2 { get; set; }
 
         /// <summary>
-        /// Gets the oxygen level when on foot.
+        /// Gets or sets the oxygen level when on foot.
         /// </summary>
         [JsonProperty("Oxygen")]
-        public double? Oxygen { get; private set; }
+        public double? Oxygen { get; set; }
 
         /// <summary>
-        /// Gets the health level when on foot.
+        /// Gets or sets the health level when on foot.
         /// </summary>
         [JsonProperty("Health")]
-        public double? Health { get; private set; }
+        public double? Health { get; set; }
 
         /// <summary>
-        /// Gets the ambient temperature when on foot.
+        /// Gets or sets the ambient temperature when on foot.
         /// </summary>
         [JsonProperty("Temperature")]
-        public double? Temperature { get; private set; }
+        public double? Temperature { get; set; }
 
         /// <summary>
-        /// Gets the selected weapon when on foot.
+        /// Gets or sets the selected weapon when on foot.
         /// </summary>
         [JsonProperty("SelectedWeapon")]
-        public string? SelectedWeapon { get; private set; }
+        public string? SelectedWeapon { get; set; }
 
         /// <summary>
-        /// Gets the gravity amount when on foot.
+        /// Gets or sets the gravity amount when on foot.
         /// </summary>
         [JsonProperty("Gravity")]
-        public double? Gravity { get; private set; }
+        public double? Gravity { get; set; }
 
         /// <summary>
-        /// Gets the current ship's power distributor status.
+        /// Gets or sets the current ship's power distributor status.
         /// </summary>
         [JsonProperty("Pips")]
-        public PowerDistributor? Pips { get; private set; }
+        public PowerDistributor? Pips { get; set; }
 
         /// <summary>
-        /// Gets the currently selected firegroup number.
+        /// Gets or sets the currently selected firegroup number.
         /// </summary>
         [JsonProperty("FireGroup")]
-        public byte? FireGroup { get; private set; }
+        public byte? FireGroup { get; set; }
 
         /// <summary>
-        /// Gets the currently selected GUI screen.
+        /// Gets or sets the currently selected GUI screen.
         /// </summary>
         [JsonProperty("GuiFocus")]
-        public GuiFocus? GuiFocus { get; private set; }
+        public GuiFocus? GuiFocus { get; set; }
 
         /// <summary>
-        /// Gets the current ship's fuel levels.
+        /// Gets or sets the current ship's fuel levels.
         /// </summary>
         [JsonProperty("Fuel")]
-        public Fuel? Fuel { get; private set; }
+        public Fuel? Fuel { get; set; }
 
         /// <summary>
-        /// Gets the current cargo load in tons.
+        /// Gets or sets the current cargo load in tons.
         /// </summary>
         [JsonProperty("Cargo")]
-        public double? Cargo { get; private set; }
+        public double? Cargo { get; set; }
 
         /// <summary>
-        /// Gets the pilot's legal state.
+        /// Gets or sets the pilot's legal state.
         /// </summary>
         [JsonProperty("LegalState")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public LegalState? LegalState { get; private set; }
+        public LegalState? LegalState { get; set; }
 
         /// <summary>
-        /// Gets the ship's latitude.
+        /// Gets or sets the ship's latitude.
         /// </summary>
         [JsonProperty("Latitude")]
-        public double? Latitude { get; private set; }
+        public double? Latitude { get; set; }
 
         /// <summary>
-        /// Gets the ship's longitude.
+        /// Gets or sets the ship's longitude.
         /// </summary>
         [JsonProperty("Longitude")]
-        public double? Longitude { get; private set; }
+        public double? Longitude { get; set; }
 
         /// <summary>
-        /// Gets the ship's heading.
+        /// Gets or sets the ship's heading.
         /// </summary>
         [JsonProperty("Heading")]
-        public double? Heading { get; private set; }
+        public double? Heading { get; set; }
 
         /// <summary>
-        /// Gets the ship's altitude.
+        /// Gets or sets the ship's altitude.
         /// </summary>
         [JsonProperty("Altitude")]
-        public double? Altitude { get; private set; }
+        public double? Altitude { get; set; }
 
         /// <summary>
-        /// Gets the body name.
+        /// Gets or sets the body name.
         /// </summary>
         [JsonProperty("BodyName")]
-        public string? BodyName { get; private set; }
+        public string? BodyName { get; set; }
 
         /// <summary>
-        /// Gets the planet radius.
+        /// Gets or sets the planet radius.
         /// </summary>
         [JsonProperty("PlanetRadius")]
-        public double? PlanetRadius { get; private set; }
+        public double? PlanetRadius { get; set; }
 
         /// <summary>
         /// Gets a collection of additional fields that may be included in the status.
         /// </summary>
-        public IReadOnlyDictionary<string, JToken> AdditionalFields => _additionalFields;
+        public IDictionary<string, JToken> AdditionalFields => _additionalFields;
 
         /// <summary>
         /// Reads the game status from the given file.

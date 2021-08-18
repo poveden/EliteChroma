@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using EliteChroma.Core.Internal;
 using EliteChroma.Elite.Internal;
@@ -150,26 +149,6 @@ namespace EliteChroma.Elite
             _disposed = true;
         }
 
-        private static IEnumerable<DeviceKey> GetAllModifiers(IEnumerable<Binding> bindings)
-        {
-            var res = new HashSet<DeviceKey>();
-
-            foreach (Binding binding in bindings)
-            {
-                foreach (DeviceKey modifier in binding.Primary.Modifiers)
-                {
-                    _ = res.Add(modifier);
-                }
-
-                foreach (DeviceKey modifier in binding.Secondary.Modifiers)
-                {
-                    _ = res.Add(modifier);
-                }
-            }
-
-            return res;
-        }
-
         private void JournalWatcher_Started(object sender, EventArgs e)
         {
             OnChanged(ChangeType.JournalDrain);
@@ -181,10 +160,12 @@ namespace EliteChroma.Elite
             {
                 case FileHeader _ when !DetectForegroundProcess:
                     _gameState.ProcessState = GameProcessState.InForeground;
+                    _gameState.GameMode = LoadGame.PlayMode.None;
                     break;
 
                 case Shutdown _ when !DetectForegroundProcess:
                     _gameState.ProcessState = GameProcessState.NotRunning;
+                    _gameState.GameMode = LoadGame.PlayMode.None;
                     break;
 
                 case StartJump fsdJump:
@@ -195,11 +176,23 @@ namespace EliteChroma.Elite
 
                 case Music music:
                     _gameState.MusicTrack = music.MusicTrack;
+
+                    if (_gameState.InMainMenu)
+                    {
+                        _gameState.GameMode = LoadGame.PlayMode.None;
+                    }
+
                     break;
 
                 case UnderAttack underAttack:
                     _gameState.AttackTarget = underAttack.Target;
                     _gameState.AttackTargetChange = DateTimeOffset.UtcNow;
+                    break;
+
+                case LoadGame loadGame:
+                    _gameState.Horizons = loadGame.Horizons;
+                    _gameState.Odyssey = loadGame.Odyssey;
+                    _gameState.GameMode = loadGame.GameMode;
                     break;
 
                 default:
@@ -231,8 +224,9 @@ namespace EliteChroma.Elite
 
         private void BindingsWatcher_Changed(object sender, BindingPreset e)
         {
-            _modifierKeysWatcher.Watch(GetAllModifiers(e.Bindings.Values), e.KeyboardLayout, _gameState.ForceEnUSKeyboardLayout);
-            _gameState.BindingPreset = e;
+            var gb = new GameBindings(e);
+            _gameState.Bindings = gb;
+            _modifierKeysWatcher.Watch(gb.Modifiers, gb.KeyboardLayout, _gameState.ForceEnUSKeyboardLayout);
             OnChanged(ChangeType.BindingPreset);
         }
 

@@ -8,14 +8,10 @@ namespace EliteFiles.Journal.Events
     [JournalEntry("Music")]
     public sealed class Music : JournalEntry
     {
-        private Music()
-        {
-        }
-
         /// <summary>
-        /// Gets the name of the music track.
+        /// Gets or sets the name of the music track.
         /// </summary>
         [JsonProperty("MusicTrack")]
-        public string? MusicTrack { get; private set; }
+        public string? MusicTrack { get; set; }
     }
 }
