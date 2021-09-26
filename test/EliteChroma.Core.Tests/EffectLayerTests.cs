@@ -53,6 +53,9 @@ namespace EliteChroma.Core.Tests
 
             Assert.Equal(h1.CompareTo(h2), comparer.Compare(l1.Object, l2.Object));
             Assert.Equal(h2.CompareTo(h1), comparer.Compare(l2.Object, l1.Object));
+
+            Assert.Equal(-1, comparer.Compare(null, l1.Object));
+            Assert.Equal(1, comparer.Compare(l1.Object, null));
         }
 
         [Fact]

@@ -88,7 +88,7 @@ namespace EliteChroma.Core.Layers
 
                 // First pixel
                 int xi = (int)Math.Floor(x0);
-                if (xi >= 0 && xi < KeyboardConstants.MaxColumns)
+                if (xi is >= 0 and < KeyboardConstants.MaxColumns)
                 {
                     Color caa = c.Transform(1 - (x0 - xi));
                     keyboard[y, xi] = keyboard[y, xi].Max(caa);
@@ -96,7 +96,7 @@ namespace EliteChroma.Core.Layers
 
                 // Last pixel
                 int xj = (int)Math.Ceiling(x1);
-                if (xj >= 0 && xj < KeyboardConstants.MaxColumns)
+                if (xj is >= 0 and < KeyboardConstants.MaxColumns)
                 {
                     Color caa = c.Transform(1 - (xj - x1));
                     keyboard[y, xj] = keyboard[y, xj].Max(caa);
@@ -152,7 +152,7 @@ namespace EliteChroma.Core.Layers
 
                 // First pixel
                 int yi = (int)Math.Floor(y0);
-                if (yi >= yMin && yi <= yMax)
+                if (yi is >= yMin and <= yMax)
                 {
                     Color caa = c.Transform(1 - (y0 - yi));
                     mouse[yi, 0] = mouse[yi, 0].Max(caa);
@@ -161,7 +161,7 @@ namespace EliteChroma.Core.Layers
 
                 // Last pixel
                 int yj = (int)Math.Ceiling(y1);
-                if (yj >= yMin && yj <= yMax)
+                if (yj is >= yMin and <= yMax)
                 {
                     Color caa = c.Transform(1 - (yj - y1));
                     mouse[yj, 0] = mouse[yj, 0].Max(caa);
@@ -243,7 +243,7 @@ namespace EliteChroma.Core.Layers
 
                 // First pixel
                 int xi = (int)Math.Floor(x0);
-                if (xi >= 0 && xi <= xMax)
+                if (xi is >= 0 and <= xMax)
                 {
                     Color caa = c.Transform(1 - (x0 - xi));
                     MaxNoThumb(y, xi, caa);
@@ -251,7 +251,7 @@ namespace EliteChroma.Core.Layers
 
                 // Last pixel
                 int xj = (int)Math.Ceiling(x1);
-                if (xj >= 0 && xj <= xMax)
+                if (xj is >= 0 and <= xMax)
                 {
                     Color caa = c.Transform(1 - (xj - x1));
                     MaxNoThumb(y, xj, caa);

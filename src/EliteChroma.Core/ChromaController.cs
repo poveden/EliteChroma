@@ -159,7 +159,7 @@ namespace EliteChroma.Core
             IEnumerable<LayerBase> layers =
                 from type in typeof(LayerBase).Assembly.GetTypes()
                 where type.IsSubclassOf(typeof(LayerBase)) && !type.IsAbstract
-                select (LayerBase)Activator.CreateInstance(type);
+                select (LayerBase)Activator.CreateInstance(type)!;
 
             var res = new LayeredEffect();
 
@@ -209,7 +209,7 @@ namespace EliteChroma.Core
             }
         }
 
-        private async void GameState_Changed(object sender, GameStateWatcher.ChangeType e)
+        private async void GameState_Changed(object? sender, GameStateWatcher.ChangeType e)
         {
             if (_animation.Enabled)
             {
@@ -220,7 +220,7 @@ namespace EliteChroma.Core
             await RenderEffect().ConfigureAwait(false);
         }
 
-        private async void Animation_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private async void Animation_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             await RenderEffect().ConfigureAwait(false);
         }

@@ -125,7 +125,7 @@ namespace EliteChroma.Core
                 return;
             }
 
-            if (!gameBindings.TryGetValue(bindingName, out Binding binding))
+            if (!gameBindings.TryGetValue(bindingName, out Binding? binding))
             {
                 return;
             }

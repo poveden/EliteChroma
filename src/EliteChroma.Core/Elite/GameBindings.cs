@@ -55,7 +55,7 @@ namespace EliteChroma.Elite
 
         public IEnumerable<DeviceKey> Modifiers => _modifiers;
 
-        public bool TryGetValue(string bindingName, out Binding binding)
+        public bool TryGetValue(string bindingName, out Binding? binding)
         {
             return _bindings.TryGetValue(bindingName, out binding);
         }
