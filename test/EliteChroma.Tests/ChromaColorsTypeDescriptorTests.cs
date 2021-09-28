@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Core;
 using EliteChroma.Internal.UI;
 using Xunit;
@@ -37,10 +37,10 @@ namespace EliteChroma.Tests
             Assert.False(tc.CanConvertFrom(typeof(object)));
             Assert.True(tc.CanConvertTo(typeof(string)));
 
-            var c = (Color)tc.ConvertFromString("AABBCC");
-            Assert.Equal(Color.FromRgb(0xAABBCC), c);
+            var c = (ChromaColor)tc.ConvertFromString("AABBCC");
+            Assert.Equal(ChromaColor.FromRgb(0xAABBCC), c);
 
-            string s = tc.ConvertToString(Color.FromRgb(0x445566));
+            string s = tc.ConvertToString(ChromaColor.FromRgb(0x445566));
             Assert.Equal("445566", s);
         }
 

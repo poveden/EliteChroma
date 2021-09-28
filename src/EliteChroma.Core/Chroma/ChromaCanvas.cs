@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Colore;
-using Colore.Effects.ChromaLink;
-using Colore.Effects.Headset;
-using Colore.Effects.Keyboard;
-using Colore.Effects.Keypad;
-using Colore.Effects.Mouse;
-using Colore.Effects.Mousepad;
+using ChromaWrapper.ChromaLink;
+using ChromaWrapper.Headset;
+using ChromaWrapper.Keyboard;
+using ChromaWrapper.Keypad;
+using ChromaWrapper.Mouse;
+using ChromaWrapper.Mousepad;
+using ChromaWrapper.Sdk;
 
 namespace EliteChroma.Chroma
 {
     public sealed class ChromaCanvas
     {
-        private readonly Lazy<CustomKeyboardEffect> _keyboard = new Lazy<CustomKeyboardEffect>(CustomKeyboardEffect.Create);
-        private readonly Lazy<CustomMouseEffect> _mouse = new Lazy<CustomMouseEffect>(CustomMouseEffect.Create);
-        private readonly Lazy<CustomHeadsetEffect> _headset = new Lazy<CustomHeadsetEffect>(CustomHeadsetEffect.Create);
-        private readonly Lazy<CustomMousepadEffect> _mousepad = new Lazy<CustomMousepadEffect>(CustomMousepadEffect.Create);
-        private readonly Lazy<CustomKeypadEffect> _keypad = new Lazy<CustomKeypadEffect>(CustomKeypadEffect.Create);
-        private readonly Lazy<CustomChromaLinkEffect> _chromaLink = new Lazy<CustomChromaLinkEffect>(CustomChromaLinkEffect.Create);
+        private readonly Lazy<CustomKeyKeyboardEffect> _keyboard = new Lazy<CustomKeyKeyboardEffect>();
+        private readonly Lazy<CustomMouseEffect2> _mouse = new Lazy<CustomMouseEffect2>();
+        private readonly Lazy<CustomHeadsetEffect> _headset = new Lazy<CustomHeadsetEffect>();
+        private readonly Lazy<CustomMousepadEffect> _mousepad = new Lazy<CustomMousepadEffect>();
+        private readonly Lazy<CustomKeypadEffect> _keypad = new Lazy<CustomKeypadEffect>();
+        private readonly Lazy<CustomChromaLinkEffect> _chromaLink = new Lazy<CustomChromaLinkEffect>();
 
-        public CustomKeyboardEffect Keyboard => _keyboard.Value;
+        public CustomKeyKeyboardEffect Keyboard => _keyboard.Value;
 
-        public CustomMouseEffect Mouse => _mouse.Value;
+        public CustomMouseEffect2 Mouse => _mouse.Value;
 
         public CustomHeadsetEffect Headset => _headset.Value;
 
@@ -32,46 +31,51 @@ namespace EliteChroma.Chroma
 
         public CustomChromaLinkEffect ChromaLink => _chromaLink.Value;
 
-        public Task SetEffect(IChroma chroma)
+        public IReadOnlyCollection<Guid> SetEffect(IChromaSdk chroma)
         {
             if (chroma == null)
             {
                 throw new ArgumentNullException(nameof(chroma));
             }
 
-            var tasks = new List<Task<Guid>>();
+            var effectIds = new List<Guid>(6);
 
             if (_keyboard.IsValueCreated)
             {
-                tasks.Add(chroma.Keyboard.SetCustomAsync(Keyboard));
+                effectIds.Add(chroma.CreateEffect(Keyboard));
             }
 
             if (_mouse.IsValueCreated)
             {
-                tasks.Add(chroma.Mouse.SetGridAsync(Mouse));
+                effectIds.Add(chroma.CreateEffect(Mouse));
             }
 
             if (_headset.IsValueCreated)
             {
-                tasks.Add(chroma.Headset.SetCustomAsync(Headset));
+                effectIds.Add(chroma.CreateEffect(Headset));
             }
 
             if (_mousepad.IsValueCreated)
             {
-                tasks.Add(chroma.Mousepad.SetCustomAsync(Mousepad));
+                effectIds.Add(chroma.CreateEffect(Mousepad));
             }
 
             if (_keypad.IsValueCreated)
             {
-                tasks.Add(chroma.Keypad.SetCustomAsync(Keypad));
+                effectIds.Add(chroma.CreateEffect(Keypad));
             }
 
             if (_chromaLink.IsValueCreated)
             {
-                tasks.Add(chroma.ChromaLink.SetCustomAsync(ChromaLink));
+                effectIds.Add(chroma.CreateEffect(ChromaLink));
             }
 
-            return Task.WhenAll(tasks);
+            foreach (Guid effectId in effectIds)
+            {
+                chroma.SetEffect(effectId);
+            }
+
+            return effectIds;
         }
     }
 }

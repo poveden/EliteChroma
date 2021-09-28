@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Core;
 using EliteChroma.Internal;
 using EliteChroma.Tests.Internal;
@@ -46,7 +46,7 @@ namespace EliteChroma.Tests
             Assert.Equal(JournalFolder.DefaultPath, settings.JournalFolder);
             Assert.NotNull(settings.Colors);
             Assert.Equal(0.5, settings.Colors.DeviceDimBrightness);
-            Assert.Equal(Color.Red, settings.Colors.HardpointsToggle);
+            Assert.Equal(ChromaColor.Red, settings.Colors.HardpointsToggle);
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace EliteChroma.Tests
             Assert.True(settings.ForceEnUSKeyboardLayout);
             Assert.NotNull(settings.Colors);
             Assert.Equal(0.12, settings.Colors.DeviceDimBrightness);
-            Assert.Equal(Color.FromRgb(0x34AB12), settings.Colors.HardpointsToggle);
+            Assert.Equal(ChromaColor.FromRgb(0x34AB12), settings.Colors.HardpointsToggle);
         }
 
         [Fact]
@@ -99,13 +99,13 @@ namespace EliteChroma.Tests
             Assert.True(settings.ForceEnUSKeyboardLayout);
             Assert.NotNull(settings.Colors);
             Assert.Equal(0.12, settings.Colors.DeviceDimBrightness);
-            Assert.Equal(Color.FromRgb(0x34AB12), settings.Colors.HardpointsToggle);
+            Assert.Equal(ChromaColor.FromRgb(0x34AB12), settings.Colors.HardpointsToggle);
 
             settings.GameOptionsFolder = @"C:\ANOTHER_GAME_OPTIONS_FOLDER";
             settings.DetectGameInForeground = false;
             settings.ForceEnUSKeyboardLayout = false;
             settings.Colors.DeviceDimBrightness = 0.77;
-            settings.Colors.HardpointsToggle = Color.FromRgb(0xA0110A);
+            settings.Colors.HardpointsToggle = ChromaColor.FromRgb(0xA0110A);
             settings.Save(settingsFile);
 
             var settings2 = AppSettings.Load(settingsFile);

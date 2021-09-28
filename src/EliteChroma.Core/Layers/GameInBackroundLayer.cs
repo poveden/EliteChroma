@@ -50,7 +50,7 @@ namespace EliteChroma.Core.Layers
                 pct = 1 - pct;
             }
 
-            _ = canvas.Keyboard.Combine(Game.Colors.Hud, pct);
+            _ = canvas.Keyboard.CombineKey(Game.Colors.Hud, pct);
             _ = canvas.Mouse.Combine(Game.Colors.Hud, pct);
             _ = canvas.Mousepad.Combine(Game.Colors.Hud, pct);
             _ = canvas.Keypad.Combine(Game.Colors.Hud, pct);

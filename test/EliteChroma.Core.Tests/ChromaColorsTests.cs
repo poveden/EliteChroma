@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Colore.Data;
+using ChromaWrapper;
 using Xunit;
 
 namespace EliteChroma.Core.Tests
@@ -40,40 +40,40 @@ namespace EliteChroma.Core.Tests
         {
             var cc = new ChromaColors();
 
-            Assert.Equal(Color.Red, cc.PowerDistributor0);
-            Assert.Equal(Color.Yellow, cc.PowerDistributor100);
+            Assert.Equal(ChromaColor.Red, cc.PowerDistributor0);
+            Assert.Equal(ChromaColor.Yellow, cc.PowerDistributor100);
 
-            Assert.Equal(Color.Red, cc.PowerDistributorScale[0]);
-            Assert.Equal(Color.FromRgb(0xFF7F00), cc.PowerDistributorScale[4]);
-            Assert.Equal(Color.Yellow, cc.PowerDistributorScale[8]);
+            Assert.Equal(ChromaColor.Red, cc.PowerDistributorScale[0]);
+            Assert.Equal(ChromaColor.FromRgb(0xFF7F00), cc.PowerDistributorScale[4]);
+            Assert.Equal(ChromaColor.Yellow, cc.PowerDistributorScale[8]);
 
-            cc.PowerDistributor0 = Color.Blue;
+            cc.PowerDistributor0 = ChromaColor.Blue;
 
-            Assert.Equal(Color.Blue, cc.PowerDistributorScale[0]);
-            Assert.Equal(Color.FromRgb(0x7F7F7F), cc.PowerDistributorScale[4]);
-            Assert.Equal(Color.Yellow, cc.PowerDistributorScale[8]);
+            Assert.Equal(ChromaColor.Blue, cc.PowerDistributorScale[0]);
+            Assert.Equal(ChromaColor.FromRgb(0x7F7F7F), cc.PowerDistributorScale[4]);
+            Assert.Equal(ChromaColor.Yellow, cc.PowerDistributorScale[8]);
 
-            cc.PowerDistributor100 = Color.Green;
+            cc.PowerDistributor100 = ChromaColor.Green;
 
-            Assert.Equal(Color.Blue, cc.PowerDistributorScale[0]);
-            Assert.Equal(Color.FromRgb(0x007F7F), cc.PowerDistributorScale[4]);
-            Assert.Equal(Color.Green, cc.PowerDistributorScale[8]);
+            Assert.Equal(ChromaColor.Blue, cc.PowerDistributorScale[0]);
+            Assert.Equal(ChromaColor.FromRgb(0x007F7F), cc.PowerDistributorScale[4]);
+            Assert.Equal(ChromaColor.Green, cc.PowerDistributorScale[8]);
         }
 
         [Fact]
         public void AllColorFieldsAreReadWriteable()
         {
             var cc = new ChromaColors();
-            var c = Color.Yellow;
+            var c = ChromaColor.Yellow;
 
             var colorProps = typeof(ChromaColors)
                 .GetProperties()
-                .Where(x => x.PropertyType == typeof(Color));
+                .Where(x => x.PropertyType == typeof(ChromaColor));
 
             foreach (var pi in colorProps)
             {
                 pi.SetValue(cc, c);
-                var c2 = (Color)pi.GetValue(cc)!;
+                var c2 = (ChromaColor)pi.GetValue(cc)!;
                 Assert.Equal(c, c2);
             }
         }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
-using Colore.Data;
-using Colore.Effects.ChromaLink;
-using Colore.Effects.Headset;
-using Colore.Effects.Keyboard;
-using Colore.Effects.Keypad;
-using Colore.Effects.Mouse;
-using Colore.Effects.Mousepad;
+using ChromaWrapper;
+using ChromaWrapper.ChromaLink;
+using ChromaWrapper.Headset;
+using ChromaWrapper.Keyboard;
+using ChromaWrapper.Keypad;
+using ChromaWrapper.Mouse;
+using ChromaWrapper.Mousepad;
 using EliteChroma.Chroma;
 
 namespace EliteChroma.Core.Layers
@@ -15,11 +15,11 @@ namespace EliteChroma.Core.Layers
     {
         private sealed class Particle
         {
-            private readonly Color _color;
+            private readonly ChromaColor _color;
             private readonly double _zps;
             private readonly int _angle;
 
-            public Particle(Color color, double z0, double zps, int angle)
+            public Particle(ChromaColor color, double z0, double zps, int angle)
             {
                 _color = color;
                 _zps = zps;
@@ -34,7 +34,7 @@ namespace EliteChroma.Core.Layers
                 double lastZ = Z;
                 Z += _zps * deltaT.TotalSeconds;
 
-                Color c;
+                ChromaColor c;
                 if (lastZ > 0 && Z < 0)
                 {
                     // Particle just zoomed by. We apply full brightness.
@@ -55,7 +55,7 @@ namespace EliteChroma.Core.Layers
                 Render(canvas.ChromaLink, lastZ);
             }
 
-            private void Render(CustomKeyboardEffect keyboard, Color c, double lastZ)
+            private void Render(CustomKeyKeyboardEffect keyboard, ChromaColor c, double lastZ)
             {
                 // Particles are drawn as stretched lines, simulating movement.
                 // Lines are antialiased at both ends.
@@ -65,8 +65,8 @@ namespace EliteChroma.Core.Layers
                 //  │   │▒▒▒│███│███│▒▒▒│   │
                 //  └───┴───┴───┴───┴───┴───┘
                 //   -1   0   1   2   3   4
-                const double xScale = KeyboardConstants.MaxColumns / 2.0;
-                const double xCenter = (KeyboardConstants.MaxColumns - 1) / 2.0;
+                const double xScale = CustomKeyKeyboardEffect.TotalColumns / 2.0;
+                const double xCenter = (CustomKeyKeyboardEffect.TotalColumns - 1) / 2.0;
 
                 Debug.Assert(lastZ >= Z, "Z always decreases");
                 double xPrev = (lastZ > 0 ? Math.Min(1 / lastZ, 2) : 2) * xScale;
@@ -84,40 +84,40 @@ namespace EliteChroma.Core.Layers
                     x0 = xCenter - xCurr;
                 }
 
-                int y = _angle % KeyboardConstants.MaxRows;
+                int y = _angle % CustomKeyKeyboardEffect.TotalRows;
 
                 // First pixel
                 int xi = (int)Math.Floor(x0);
-                if (xi is >= 0 and < KeyboardConstants.MaxColumns)
+                if (xi is >= 0 and < CustomKeyKeyboardEffect.TotalColumns)
                 {
-                    Color caa = c.Transform(1 - (x0 - xi));
-                    keyboard[y, xi] = keyboard[y, xi].Max(caa);
+                    ChromaColor caa = c.Transform(1 - (x0 - xi));
+                    keyboard.Color[y, xi] = keyboard.Color[y, xi].Max(caa);
                 }
 
                 // Last pixel
                 int xj = (int)Math.Ceiling(x1);
-                if (xj is >= 0 and < KeyboardConstants.MaxColumns)
+                if (xj is >= 0 and < CustomKeyKeyboardEffect.TotalColumns)
                 {
-                    Color caa = c.Transform(1 - (xj - x1));
-                    keyboard[y, xj] = keyboard[y, xj].Max(caa);
+                    ChromaColor caa = c.Transform(1 - (xj - x1));
+                    keyboard.Color[y, xj] = keyboard.Color[y, xj].Max(caa);
                 }
 
                 // Middle pixels
                 xi = Math.Max(0, xi + 1);
-                xj = Math.Min(xj, KeyboardConstants.MaxColumns);
+                xj = Math.Min(xj, CustomKeyKeyboardEffect.TotalColumns);
                 for (; xi < xj; xi++)
                 {
-                    keyboard[y, xi] = keyboard[y, xi].Max(c);
+                    keyboard.Color[y, xi] = keyboard.Color[y, xi].Max(c);
                 }
             }
 
-            private void Render(CustomMouseEffect mouse, Color c, double lastZ)
+            private void Render(CustomMouseEffect2 mouse, ChromaColor c, double lastZ)
             {
                 // Particles are drawn as stretched lines, as with keyboard.
                 const int yMin = 1;
-                const int yMax = MouseConstants.MaxRows - 1;
-                const int xMax = MouseConstants.MaxColumns - 1;
-                const double yScale = MouseConstants.MaxRows - yMin;
+                const int yMax = CustomMouseEffect2.TotalRows - 1;
+                const int xMax = CustomMouseEffect2.TotalColumns - 1;
+                const double yScale = CustomMouseEffect2.TotalRows - yMin;
 
                 if (_angle > 90)
                 {
@@ -127,10 +127,10 @@ namespace EliteChroma.Core.Layers
                 switch (_angle % 4)
                 {
                     case 0:
-                        mouse[GridLed.ScrollWheel] = mouse[GridLed.ScrollWheel].Max(c);
+                        mouse.Color[MouseLed2.ScrollWheel] = mouse.Color[MouseLed2.ScrollWheel].Max(c);
                         return;
                     case 1:
-                        mouse[GridLed.Logo] = mouse[GridLed.Logo].Max(c);
+                        mouse.Color[MouseLed2.Logo] = mouse.Color[MouseLed2.Logo].Max(c);
                         return;
                     default:
                         break;
@@ -145,8 +145,8 @@ namespace EliteChroma.Core.Layers
 
                 if (y1 < yMin)
                 {
-                    mouse[yMin, 0] = mouse[yMin, 0].Max(c);
-                    mouse[yMin, xMax] = mouse[yMin, 0];
+                    mouse.Color[yMin, 0] = mouse.Color[yMin, 0].Max(c);
+                    mouse.Color[yMin, xMax] = mouse.Color[yMin, 0];
                     return;
                 }
 
@@ -154,18 +154,18 @@ namespace EliteChroma.Core.Layers
                 int yi = (int)Math.Floor(y0);
                 if (yi is >= yMin and <= yMax)
                 {
-                    Color caa = c.Transform(1 - (y0 - yi));
-                    mouse[yi, 0] = mouse[yi, 0].Max(caa);
-                    mouse[yi, xMax] = mouse[yi, 0];
+                    ChromaColor caa = c.Transform(1 - (y0 - yi));
+                    mouse.Color[yi, 0] = mouse.Color[yi, 0].Max(caa);
+                    mouse.Color[yi, xMax] = mouse.Color[yi, 0];
                 }
 
                 // Last pixel
                 int yj = (int)Math.Ceiling(y1);
                 if (yj is >= yMin and <= yMax)
                 {
-                    Color caa = c.Transform(1 - (yj - y1));
-                    mouse[yj, 0] = mouse[yj, 0].Max(caa);
-                    mouse[yj, xMax] = mouse[yj, 0];
+                    ChromaColor caa = c.Transform(1 - (yj - y1));
+                    mouse.Color[yj, 0] = mouse.Color[yj, 0].Max(caa);
+                    mouse.Color[yj, xMax] = mouse.Color[yj, 0];
                 }
 
                 // Middle pixels
@@ -173,49 +173,49 @@ namespace EliteChroma.Core.Layers
                 yj = Math.Min(yj, yMax);
                 for (; yi <= yj; yi++)
                 {
-                    mouse[yi, 0] = mouse[yi, 0].Max(c);
-                    mouse[yi, xMax] = mouse[yi, 0];
+                    mouse.Color[yi, 0] = mouse.Color[yi, 0].Max(c);
+                    mouse.Color[yi, xMax] = mouse.Color[yi, 0];
                 }
             }
 
-            private void Render(CustomMousepadEffect mousepad, Color c)
+            private void Render(CustomMousepadEffect mousepad, ChromaColor c)
             {
                 if (_angle > 180)
                 {
                     return;
                 }
 
-                int ia = _angle % MousepadConstants.MaxLeds;
-                int ib = (ia + 1) % MousepadConstants.MaxLeds;
-                int ic = (ia + 2) % MousepadConstants.MaxLeds;
+                int ia = _angle % CustomMousepadEffect.TotalLeds;
+                int ib = (ia + 1) % CustomMousepadEffect.TotalLeds;
+                int ic = (ia + 2) % CustomMousepadEffect.TotalLeds;
 
-                Color cf = c.Transform(0.25);
+                ChromaColor cf = c.Transform(0.25);
 
-                mousepad[ia] = mousepad[ia].Max(cf);
-                mousepad[ib] = mousepad[ib].Max(c);
-                mousepad[ic] = mousepad[ic].Max(cf);
+                mousepad.Color[ia] = mousepad.Color[ia].Max(cf);
+                mousepad.Color[ib] = mousepad.Color[ib].Max(c);
+                mousepad.Color[ic] = mousepad.Color[ic].Max(cf);
             }
 
-            private void Render(CustomKeypadEffect keypad, Color c, double lastZ)
+            private void Render(CustomKeypadEffect keypad, ChromaColor c, double lastZ)
             {
                 // Particles are drawn as stretched lines, as with keyboard.
-                const int xMax = KeypadConstants.MaxColumns - 1;
-                const double xScale = KeypadConstants.MaxColumns;
+                const int xMax = CustomKeypadEffect.TotalColumns - 1;
+                const double xScale = CustomKeypadEffect.TotalColumns;
 
-                const int thumbKey = KeypadConstants.MaxKeys - 1;
-                const int thumbKeyColumn = KeypadConstants.MaxColumns - 1;
-                const int thumbKeyRow = KeypadConstants.MaxRows - 1;
+                const int thumbKey = CustomKeypadEffect.TotalLeds - 1;
+                const int thumbKeyColumn = CustomKeypadEffect.TotalColumns - 1;
+                const int thumbKeyRow = CustomKeypadEffect.TotalRows - 1;
 
                 if (_angle >= 180)
                 {
                     return;
                 }
 
-                int y = _angle % (KeypadConstants.MaxRows + 1);
+                int y = _angle % (CustomKeypadEffect.TotalRows + 1);
 
-                if (y == KeypadConstants.MaxRows)
+                if (y == CustomKeypadEffect.TotalRows)
                 {
-                    keypad[thumbKey] = keypad[thumbKey].Max(c);
+                    keypad.Color[thumbKey] = keypad.Color[thumbKey].Max(c);
                     return;
                 }
 
@@ -224,14 +224,14 @@ namespace EliteChroma.Core.Layers
                     return;
                 }
 
-                void MaxNoThumb(int row, int column, Color color)
+                void MaxNoThumb(int row, int column, ChromaColor color)
                 {
                     if (row == thumbKeyRow && column == thumbKeyColumn)
                     {
                         return;
                     }
 
-                    keypad[row, column] = keypad[row, column].Max(color);
+                    keypad.Color[row, column] = keypad.Color[row, column].Max(color);
                 }
 
                 Debug.Assert(lastZ >= Z, "Z always decreases");
@@ -245,7 +245,7 @@ namespace EliteChroma.Core.Layers
                 int xi = (int)Math.Floor(x0);
                 if (xi is >= 0 and <= xMax)
                 {
-                    Color caa = c.Transform(1 - (x0 - xi));
+                    ChromaColor caa = c.Transform(1 - (x0 - xi));
                     MaxNoThumb(y, xi, caa);
                 }
 
@@ -253,7 +253,7 @@ namespace EliteChroma.Core.Layers
                 int xj = (int)Math.Ceiling(x1);
                 if (xj is >= 0 and <= xMax)
                 {
-                    Color caa = c.Transform(1 - (xj - x1));
+                    ChromaColor caa = c.Transform(1 - (xj - x1));
                     MaxNoThumb(y, xj, caa);
                 }
 
@@ -266,15 +266,15 @@ namespace EliteChroma.Core.Layers
                 }
             }
 
-            private void Render(CustomHeadsetEffect headset, Color c)
+            private void Render(CustomHeadsetEffect headset, ChromaColor c)
             {
                 if (_angle > 90)
                 {
                     return;
                 }
 
-                int i = _angle % HeadsetConstants.MaxLeds;
-                headset[i] = headset[i].Max(c);
+                int i = _angle % CustomHeadsetEffect.TotalLeds;
+                headset.Color[i] = headset.Color[i].Max(c);
             }
 
             private void Render(CustomChromaLinkEffect chromaLink, double lastZ)
@@ -295,18 +295,18 @@ namespace EliteChroma.Core.Layers
                     return;
                 }
 
-                ReadOnlySpan<double> offsets = stackalloc double[ChromaLinkConstants.MaxLeds - 1] { 1.5, 0.5, -0.5, -1.5 };
+                ReadOnlySpan<double> offsets = stackalloc double[CustomChromaLinkEffect.TotalLeds - 1] { 1.5, 0.5, -0.5, -1.5 };
                 double maxB = 0;
 
                 for (int i = 0; i < offsets.Length; i++)
                 {
                     double bi = Math.Clamp(Gamma - Math.Abs(((offsets[i] * Step) - lastZ) / Spread), 0, 1);
                     maxB = Math.Max(maxB, bi);
-                    Color ci = _color.Transform(bi);
-                    chromaLink[i + 1] = chromaLink[i + 1].Max(ci);
+                    ChromaColor ci = _color.Transform(bi);
+                    chromaLink.Color[i + 1] = chromaLink.Color[i + 1].Max(ci);
                 }
 
-                chromaLink[0] = chromaLink[0].Max(_color.Transform(maxB));
+                chromaLink.Color[0] = chromaLink.Color[0].Max(_color.Transform(maxB));
             }
         }
     }

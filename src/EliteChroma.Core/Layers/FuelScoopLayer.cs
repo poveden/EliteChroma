@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
-using Colore.Effects.Keyboard;
-using Colore.Effects.Keypad;
+using ChromaWrapper;
+using ChromaWrapper.Keyboard;
+using ChromaWrapper.Keypad;
 using EliteChroma.Chroma;
 using EliteFiles.Status;
 
@@ -25,13 +25,13 @@ namespace EliteChroma.Core.Layers
 
             _ = StartAnimation();
 
-            const double offsetStep = -2.0 / KeyboardConstants.MaxColumns;
+            const double offsetStep = -2.0 / CustomKeyKeyboardEffect.TotalColumns;
             double offsetPct = 0;
-            for (int col = 0; col < KeyboardConstants.MaxColumns; col++, offsetPct += offsetStep)
+            for (int col = 0; col < CustomKeyKeyboardEffect.TotalColumns; col++, offsetPct += offsetStep)
             {
-                Color c = PulseColor(Color.Black, Game.Colors.Hud, TimeSpan.FromMilliseconds(_periodMs), offsetPct: offsetPct);
+                ChromaColor c = PulseColor(ChromaColor.Black, Game.Colors.Hud, TimeSpan.FromMilliseconds(_periodMs), offsetPct: offsetPct);
 
-                for (int row = 0; row < KeyboardConstants.MaxRows; row++)
+                for (int row = 0; row < CustomKeyKeyboardEffect.TotalRows; row++)
                 {
                     _ = canvas.Keyboard.MaxAt(row, col, c);
                 }
@@ -39,14 +39,14 @@ namespace EliteChroma.Core.Layers
 
             CustomKeypadEffect keypad = canvas.Keypad;
 
-            offsetPct = (double)KeypadConstants.MaxColumns / KeyboardConstants.MaxColumns;
-            for (int col = 0; col < KeypadConstants.MaxColumns; col++, offsetPct += offsetStep)
+            offsetPct = (double)CustomKeypadEffect.TotalColumns / CustomKeyKeyboardEffect.TotalColumns;
+            for (int col = 0; col < CustomKeypadEffect.TotalColumns; col++, offsetPct += offsetStep)
             {
-                Color c = PulseColor(Color.Black, Game.Colors.Hud, TimeSpan.FromMilliseconds(_periodMs), offsetPct: offsetPct);
+                ChromaColor c = PulseColor(ChromaColor.Black, Game.Colors.Hud, TimeSpan.FromMilliseconds(_periodMs), offsetPct: offsetPct);
 
-                for (int row = 0; row < KeypadConstants.MaxRows; row++)
+                for (int row = 0; row < CustomKeypadEffect.TotalRows; row++)
                 {
-                    keypad[row, col] = keypad[row, col].Max(c);
+                    keypad.Color[row, col] = keypad.Color[row, col].Max(c);
                 }
             }
         }

@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
     <IsPublishable>false</IsPublishable>
   </PropertyGroup>
 
@@ -19,10 +18,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1591;SA1600;SA1602</NoWarn>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Colore" Version="6.0.0" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EliteChroma.Core\EliteChroma.Core.csproj" />

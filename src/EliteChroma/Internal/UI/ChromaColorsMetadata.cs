@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 using System.Drawing.Design;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Core;
 
 namespace EliteChroma.Internal.UI
@@ -39,182 +40,182 @@ namespace EliteChroma.Internal.UI
         public double SecondaryBindingBrightness { get; set; }
 
         [Category(_weaponsTargetingCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color HardpointsToggle { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor HardpointsToggle { get; set; }
 
         [Category(_subsystemsCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color CargoScoopDeployed { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor CargoScoopDeployed { get; set; }
 
         [Category(_subsystemsCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color CargoScoopRetracted { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor CargoScoopRetracted { get; set; }
 
         [Category(_hudCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color InterfaceMode { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor InterfaceMode { get; set; }
 
         [Category(_thrustAttitudeCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleRotation { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleRotation { get; set; }
 
         [Category(_thrustAttitudeCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleThrust { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleThrust { get; set; }
 
         [Category(_thrustAttitudeCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleAlternate { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleAlternate { get; set; }
 
         [Category(_thrustAttitudeCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleThrottle { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleThrottle { get; set; }
 
         [Category(_thrustAttitudeCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleMiscellaneous { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleMiscellaneous { get; set; }
 
         [Category(_weaponsTargetingCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleTargeting { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleTargeting { get; set; }
 
         [Category(_weaponsTargetingCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleWeapons { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleWeapons { get; set; }
 
         [Category(_subsystemsCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleCooling { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleCooling { get; set; }
 
         [Category(_hudCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleModeSwitches { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleModeSwitches { get; set; }
 
         [Category(_subsystemsCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color LandingGearDeployed { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor LandingGearDeployed { get; set; }
 
         [Category(_subsystemsCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color LandingGearRetracted { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor LandingGearRetracted { get; set; }
 
         [Category(_subsystemsCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleLightsOff { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleLightsOff { get; set; }
 
         [Category(_subsystemsCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleLightsMidBeam { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleLightsMidBeam { get; set; }
 
         [Category(_subsystemsCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color VehicleLightsHighBeam { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor VehicleLightsHighBeam { get; set; }
 
         [Category(_subsystemsCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color Miscellaneous { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor Miscellaneous { get; set; }
 
         [Category(_fssCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color FullSpectrumSystemScanner { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor FullSpectrumSystemScanner { get; set; }
 
         [Category(_fssCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color FssCamera { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor FssCamera { get; set; }
 
         [Category(_fssCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color FssZoom { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor FssZoom { get; set; }
 
         [Category(_fssCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color FssTuning { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor FssTuning { get; set; }
 
         [Category(_fssCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color FssTarget { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor FssTarget { get; set; }
 
         [Category(_subsystemsCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color FrameShiftDriveControls { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor FrameShiftDriveControls { get; set; }
 
         [Category(_powerDistributorCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color PowerDistributor0 { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor PowerDistributor0 { get; set; }
 
         [Category(_powerDistributorCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color PowerDistributor100 { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor PowerDistributor100 { get; set; }
 
         [Category(_powerDistributorCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color PowerDistributorReset { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor PowerDistributorReset { get; set; }
 
         [Category(_ambientColorsCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color LandingMode { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor LandingMode { get; set; }
 
         [Category(_onFootCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color OnFootHeadlook { get; set; } = Color.White;
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor OnFootHeadlook { get; set; } = ChromaColor.White;
 
         [Category(_onFootCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color OnFootMovement { get; set; } = Color.Orange;
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor OnFootMovement { get; set; } = ChromaColor.FromColor(Color.Orange);
 
         [Category(_onFootCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color OnFootModeSwitches { get; set; } = Color.Green;
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor OnFootModeSwitches { get; set; } = ChromaColor.Green;
 
         [Category(_onFootCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color OnFootLightsToggle { get; set; } = Color.Blue;
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor OnFootLightsToggle { get; set; } = ChromaColor.Blue;
 
         [Category(_onFootCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color OnFootShieldsToggle { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor OnFootShieldsToggle { get; set; }
 
         [Category(_onFootCategory)]
-        [TypeConverter(typeof(ColoreColorConverter))]
-        [Editor(typeof(ColoreColorEditor), typeof(UITypeEditor))]
-        public Color OnFootInteract { get; set; }
+        [TypeConverter(typeof(ChromaColorConverter))]
+        [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
+        public ChromaColor OnFootInteract { get; set; }
 
         [Browsable(false)]
-        public IReadOnlyList<Color> PowerDistributorScale { get; } = Array.Empty<Color>();
+        public IReadOnlyList<ChromaColor> PowerDistributorScale { get; } = Array.Empty<ChromaColor>();
 
         public static void InitTypeDescriptionProvider()
         {

@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Colore;
-using Colore.Api;
-using Colore.Data;
-using Colore.Native;
+using ChromaWrapper;
+using ChromaWrapper.Data;
+using ChromaWrapper.Sdk;
 
 namespace EliteChroma.Core.Internal
 {
     internal sealed class ChromaFactory : IChromaFactory
     {
-        public IChromaApi? ChromaApi { get; set; }
-
-        public AppInfo? ChromaAppInfo { get; set; }
+        public ChromaAppInfo? ChromaAppInfo { get; set; }
 
         public TimeSpan WarmupDelay { get; } = TimeSpan.FromSeconds(1);
 
-        public async Task<IChroma> CreateAsync()
+        public Task<IChromaSdk> CreateAsync()
         {
-            IChromaApi chromaApi = ChromaApi ?? new NativeApi();
-            IChroma res = await ColoreProvider.CreateAsync(ChromaAppInfo, chromaApi).ConfigureAwait(false);
-            return res;
+            return Task.FromResult<IChromaSdk>(new ChromaSdk(ChromaAppInfo, false));
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Chroma;
 using EliteChroma.Elite;
 using EliteFiles.Bindings.Binds;
@@ -136,7 +136,7 @@ namespace EliteChroma.Core.Layers
 
         private void RenderHazardLevel(ChromaCanvas canvas)
         {
-            Color hazardColor;
+            ChromaColor hazardColor;
             TimeSpan period;
             PulseColorType pulseType;
 
@@ -162,7 +162,7 @@ namespace EliteChroma.Core.Layers
                     break;
             }
 
-            Color color = PulseColor(Color.Black, hazardColor, period, pulseType);
+            ChromaColor color = PulseColor(ChromaColor.Black, hazardColor, period, pulseType);
             ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.HyperSuperCombination, color);
             ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Hyperspace, color);
         }

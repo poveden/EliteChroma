@@ -5,11 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Colore.Api;
-using Colore.Data;
-using Colore.Effects.Keyboard;
+using ChromaWrapper.Keyboard;
 using EliteChroma.Chroma;
-using EliteChroma.Core.Internal;
 using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite;
 using EliteFiles.Status;
@@ -44,12 +41,8 @@ namespace EliteChroma.Core.Tests
             const string statusFile = "Status.json";
             const string journalFile = "Journal.190101020000.01.log";
 
-            using var cpl = ColoreProviderLock.GetLock();
-
-            var chromaApi = new Mock<IChromaApi> { DefaultValue = DefaultValue.Mock };
-            var mockIA = chromaApi.Setup(x => x.InitializeAsync(It.IsAny<AppInfo>()));
-            var mockCKEA = chromaApi.Setup(x => x.CreateKeyboardEffectAsync(It.IsAny<KeyboardEffectType>(), It.IsAny<It.IsValueType>()));
-            var mockUA = chromaApi.Setup(x => x.UninitializeAsync());
+            var factory = new ChromaMockFactory();
+            var mockCKEA = factory.Mock.Setup(x => x.CreateEffect(It.IsAny<IKeyboardEffect>()));
 
             using TestFolder
                 dirRoot = new TestFolder(_gameRootFolder),
@@ -63,29 +56,18 @@ namespace EliteChroma.Core.Tests
 
             using var cc = new ChromaController(dirRoot.Name, dirOpts.Name, dirJournal.Name)
             {
-                ChromaFactory = new ChromaFactory
-                {
-                    ChromaApi = chromaApi.Object,
-                    ChromaAppInfo = null,
-                },
+                ChromaFactory = factory,
                 AnimationFrameRate = 0,
                 DetectGameInForeground = false,
             };
 
             Assert.False(cc.DetectGameInForeground);
 
-            using var ceIA = new CountdownEvent(1);
-            mockIA.Callback(() => ceIA.Signal());
-
             using var ceCKEA = new CountdownEvent(1);
             mockCKEA.Callback(() => ceCKEA.Signal());
 
-            using var ceUA = new CountdownEvent(1);
-            mockUA.Callback(() => ceUA.Signal());
-
             cc.Start();
 
-            Assert.True(ceIA.Wait(1000));
             Assert.True(ceCKEA.Wait(1000));
 
             var seq = BuildEventSequence();
@@ -96,8 +78,6 @@ namespace EliteChroma.Core.Tests
             Assert.True(ceCKEA.Wait(200 * seq.Count));
 
             cc.Stop();
-
-            Assert.True(ceUA.Wait(1000));
         }
 
         [Fact]
@@ -168,11 +148,7 @@ namespace EliteChroma.Core.Tests
         {
             using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder)
             {
-                ChromaFactory = new ChromaFactory
-                {
-                    ChromaApi = new Mock<IChromaApi>().Object,
-                    ChromaAppInfo = null,
-                },
+                ChromaFactory = new ChromaMockFactory(),
             };
 
             var game = cc.GetPrivateField<GameStateWatcher>("_watcher")!

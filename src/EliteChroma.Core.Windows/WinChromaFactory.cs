@@ -1,64 +1,42 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Colore;
-using Colore.Api;
-using Colore.Data;
-using Colore.Events;
-using Colore.Native;
-using EliteChroma.Core.Windows.Internal;
+using ChromaWrapper;
+using ChromaWrapper.Data;
+using ChromaWrapper.Events;
+using ChromaWrapper.Sdk;
 
 namespace EliteChroma.Core.Windows
 {
-    public sealed class WinChromaFactory : IChromaFactory, IDisposable
+    public class WinChromaFactory : IChromaFactory
     {
         private const int _accessGrantedTimeout = 2000;
 
-        private readonly ChromaWindow _cw;
-
-        private bool _disposed;
-
-        public WinChromaFactory()
-        {
-            _cw = new ChromaWindow();
-        }
-
-        public IChromaApi? ChromaApi { get; set; }
-
-        public AppInfo? ChromaAppInfo { get; set; }
+        public ChromaAppInfo? ChromaAppInfo { get; set; }
 
         public TimeSpan WarmupDelay => TimeSpan.Zero;
 
-        public async Task<IChroma> CreateAsync()
+        public async Task<IChromaSdk> CreateAsync()
         {
-            IChromaApi chromaApi = ChromaApi ?? new NativeApi();
-            IChroma res = await ColoreProvider.CreateAsync(ChromaAppInfo, chromaApi).ConfigureAwait(false);
+            IChromaSdk res = Create();
             _ = await WaitForAccessGranted(res).ConfigureAwait(false);
             return res;
         }
 
-        public void Dispose()
+        protected virtual IChromaSdk Create()
         {
-            if (_disposed)
-            {
-                return;
-            }
-
-            _cw.Dispose();
-            _disposed = true;
+            return new ChromaSdk(ChromaAppInfo, false);
         }
 
-        private async Task<bool> WaitForAccessGranted(IChroma chroma)
+        private static async Task<bool> WaitForAccessGranted(IChromaSdk chroma)
         {
             var tcs = new TaskCompletionSource<bool>();
 
-            var callback = new EventHandler<DeviceAccessEventArgs>((s, e) =>
+            var callback = new EventHandler<ChromaDeviceAccessEventArgs>((s, e) =>
             {
-                tcs.SetResult(e.Granted);
+                tcs.SetResult(e.AccessGranted);
             });
 
-            _cw.Chroma = chroma;
-            chroma.Register(_cw.Handle);
             chroma.DeviceAccess += callback;
 
             using var ctsTimeout = new CancellationTokenSource();
@@ -73,8 +51,6 @@ namespace EliteChroma.Core.Windows
             }
 
             chroma.DeviceAccess -= callback;
-            chroma.Unregister();
-            _cw.Chroma = null;
 
             return await tRes.ConfigureAwait(false);
         }

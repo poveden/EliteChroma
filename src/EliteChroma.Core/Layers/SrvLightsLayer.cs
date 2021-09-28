@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 using EliteFiles.Status;
@@ -18,12 +18,12 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            Color lColor = Game.Status.HasFlag(Flags.LightsOn)
+            ChromaColor lColor = Game.Status.HasFlag(Flags.LightsOn)
                 ? (Game.Status.HasFlag(Flags.SrvHighBeam) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsMidBeam)
                 : Colors.VehicleLightsOff;
             ApplyColorToBinding(canvas.Keyboard, Driving.Headlights, lColor);
 
-            Color nColor = Game.Status.HasFlag(Flags.NightVision) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsOff;
+            ChromaColor nColor = Game.Status.HasFlag(Flags.NightVision) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsOff;
             ApplyColorToBinding(canvas.Keyboard, Miscellaneous.NightVisionToggle, nColor);
         }
     }

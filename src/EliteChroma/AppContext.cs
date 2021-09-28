@@ -76,7 +76,6 @@ namespace EliteChroma
             if (disposing)
             {
                 _cc?.Dispose();
-                _chromaFactory.Dispose();
             }
         }
 

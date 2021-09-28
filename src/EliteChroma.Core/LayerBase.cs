@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
-using Colore.Effects.Keyboard;
+using ChromaWrapper;
+using ChromaWrapper.Keyboard;
+using ChromaWrapper.Sdk;
 using EliteChroma.Chroma;
 using EliteChroma.Core.Internal;
 using EliteChroma.Elite;
@@ -82,7 +83,7 @@ namespace EliteChroma.Core
             return true;
         }
 
-        protected Color PulseColor(Color c1, Color c2, TimeSpan period, PulseColorType pulseType = PulseColorType.Triangle, double offsetPct = 0)
+        protected ChromaColor PulseColor(ChromaColor c1, ChromaColor c2, TimeSpan period, PulseColorType pulseType = PulseColorType.Triangle, double offsetPct = 0)
         {
             double max = period.TotalSeconds;
             double offset = max * (offsetPct - Math.Floor(offsetPct));
@@ -100,10 +101,10 @@ namespace EliteChroma.Core
             double g = (c1.G / 255.0 * (1 - x)) + (c2.G / 255.0 * x);
             double b = (c1.B / 255.0 * (1 - x)) + (c2.B / 255.0 * x);
 
-            return new Color(r, g, b);
+            return ChromaColor.FromRgb(r, g, b);
         }
 
-        protected void ApplyColorToBinding(CustomKeyboardEffect grid, IEnumerable<string> bindingNames, Color color)
+        protected void ApplyColorToBinding(IKeyGridEffect grid, IEnumerable<string> bindingNames, ChromaColor color)
         {
             if (bindingNames == null)
             {
@@ -116,8 +117,13 @@ namespace EliteChroma.Core
             }
         }
 
-        protected void ApplyColorToBinding(CustomKeyboardEffect grid, string bindingName, Color color)
+        protected void ApplyColorToBinding(IKeyGridEffect grid, string bindingName, ChromaColor color)
         {
+            if (grid == null)
+            {
+                throw new ArgumentNullException(nameof(grid));
+            }
+
             GameBindings? gameBindings = Game.Bindings;
 
             if (gameBindings == null)
@@ -137,7 +143,7 @@ namespace EliteChroma.Core
                     continue;
                 }
 
-                if (!KeyMappings.TryGetKey(bps.Key, gameBindings.KeyboardLayout, Game.ForceEnUSKeyboardLayout, out Key key, NativeMethods))
+                if (!KeyMappings.TryGetKey(bps.Key, gameBindings.KeyboardLayout, Game.ForceEnUSKeyboardLayout, out KeyboardKey key, NativeMethods))
                 {
                     continue;
                 }
@@ -152,7 +158,7 @@ namespace EliteChroma.Core
                     continue;
                 }
 
-                grid[key] = color;
+                grid.Key[key] = color;
 
                 color = color.Transform(Colors.SecondaryBindingBrightness);
             }

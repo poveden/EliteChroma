@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Linq;
 using System.Reflection;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Core;
 using EliteChroma.Internal.UI;
 using Xunit;
@@ -55,17 +55,17 @@ namespace EliteChroma.Tests
         [Fact]
         public void AllMappedColorPropertiesHaveTheExpectedTypeConverterAttribute()
         {
-            var ccm = GetPublicReadWriteProperties<ChromaColorsMetadata>().Where(x => x.PropertyType == typeof(Color));
+            var ccm = GetPublicReadWriteProperties<ChromaColorsMetadata>().Where(x => x.PropertyType == typeof(ChromaColor));
 
-            Assert.All(ccm, pi => AssertHasTypeConverterAttribute(pi, typeof(ColoreColorConverter)));
+            Assert.All(ccm, pi => AssertHasTypeConverterAttribute(pi, typeof(ChromaColorConverter)));
         }
 
         [Fact]
         public void AllMappedColorPropertiesHaveTheExpectedEditorAttribute()
         {
-            var ccm = GetPublicReadWriteProperties<ChromaColorsMetadata>().Where(x => x.PropertyType == typeof(Color));
+            var ccm = GetPublicReadWriteProperties<ChromaColorsMetadata>().Where(x => x.PropertyType == typeof(ChromaColor));
 
-            Assert.All(ccm, pi => AssertHasEditorAttributeAttribute(pi, typeof(ColoreColorEditor), typeof(UITypeEditor)));
+            Assert.All(ccm, pi => AssertHasEditorAttributeAttribute(pi, typeof(ChromaColorEditor), typeof(UITypeEditor)));
         }
 
         [Fact]

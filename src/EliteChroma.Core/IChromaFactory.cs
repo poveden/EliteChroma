@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Colore;
+using ChromaWrapper.Sdk;
 
 namespace EliteChroma.Core
 {
@@ -8,6 +8,6 @@ namespace EliteChroma.Core
     {
         TimeSpan WarmupDelay { get; }
 
-        Task<IChroma> CreateAsync();
+        Task<IChromaSdk> CreateAsync();
     }
 }

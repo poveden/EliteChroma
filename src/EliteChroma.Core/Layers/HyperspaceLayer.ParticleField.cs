@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Chroma;
 
 namespace EliteChroma.Core.Layers
@@ -18,7 +18,7 @@ namespace EliteChroma.Core.Layers
             private readonly Queue<Particle> _particles = new Queue<Particle>();
 
             [SuppressMessage("Security", "CA5394:Do not use insecure randomness", Justification = "Simple randomness for particle generation.")]
-            public void Add(double probability, Color color, double zps)
+            public void Add(double probability, ChromaColor color, double zps)
             {
                 while (probability >= 1)
                 {
@@ -34,12 +34,12 @@ namespace EliteChroma.Core.Layers
 
             public void MoveAndDraw(TimeSpan deltaT, ChromaCanvas canvas)
             {
-                canvas.Keyboard.Set(Color.Black);
-                canvas.Mouse.Set(Color.Black);
-                canvas.Mousepad.Set(Color.Black);
-                canvas.Keypad.Set(Color.Black);
-                canvas.Headset.Set(Color.Black);
-                canvas.ChromaLink.Set(Color.Black);
+                canvas.Keyboard.Color.Clear();
+                canvas.Mouse.Color.Clear();
+                canvas.Mousepad.Color.Clear();
+                canvas.Keypad.Color.Clear();
+                canvas.Headset.Color.Clear();
+                canvas.ChromaLink.Color.Clear();
 
                 Trim();
 

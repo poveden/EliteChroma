@@ -1,12 +1,12 @@
 ﻿using System;
-using Colore.Data;
+using ChromaWrapper;
 using EliteFiles.Graphics;
 
 namespace EliteChroma.Chroma
 {
     public static class ColorExtensions
     {
-        public static Color Combine(this Color c1, Color c2, double c2pct = 0.5)
+        public static ChromaColor Combine(this ChromaColor c1, ChromaColor c2, double c2pct = 0.5)
         {
             double c1pct = 1.0 - c2pct;
 
@@ -22,19 +22,19 @@ namespace EliteChroma.Chroma
             double g = Math.Clamp((g1 + g2) / 255.0, 0, 1);
             double b = Math.Clamp((b1 + b2) / 255.0, 0, 1);
 
-            return new Color(r, g, b);
+            return ChromaColor.FromRgb(r, g, b);
         }
 
-        public static Color Max(this Color c1, Color c2)
+        public static ChromaColor Max(this ChromaColor c1, ChromaColor c2)
         {
             byte r = Math.Max(c1.R, c2.R);
             byte g = Math.Max(c1.G, c2.G);
             byte b = Math.Max(c1.B, c2.B);
 
-            return new Color(r, g, b);
+            return ChromaColor.FromRgb(r, g, b);
         }
 
-        public static Color Transform(this Color color, IRgbTransformMatrix transform)
+        public static ChromaColor Transform(this ChromaColor color, IRgbTransformMatrix transform)
         {
             if (transform == null)
             {
@@ -64,10 +64,10 @@ namespace EliteChroma.Chroma
             g = Math.Clamp(g, 0, 1);
             b = Math.Clamp(b, 0, 1);
 
-            return new Color(r, g, b);
+            return ChromaColor.FromRgb(r, g, b);
         }
 
-        public static Color Transform(this Color color, double multiply, double gamma = 1.0)
+        public static ChromaColor Transform(this ChromaColor color, double multiply, double gamma = 1.0)
         {
             double r = color.R / 255.0;
             double g = color.G / 255.0;
@@ -91,7 +91,7 @@ namespace EliteChroma.Chroma
             g = Math.Clamp(g, 0, 1);
             b = Math.Clamp(b, 0, 1);
 
-            return new Color(r, g, b);
+            return ChromaColor.FromRgb(r, g, b);
         }
     }
 }

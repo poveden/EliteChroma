@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased](https://github.com/poveden/EliteChroma/compare/v1.14.0...HEAD)
+
+### Changed
+
+- Replace [Colore](https://www.nuget.org/packages/Colore/) with [ChromaWrapper](https://www.nuget.org/packages/ChromaWrapper/)
+
 ## [1.14.0](https://github.com/poveden/EliteChroma/compare/v1.13.1...v1.14.0) — 2021-08-19
 
 ### Fixed

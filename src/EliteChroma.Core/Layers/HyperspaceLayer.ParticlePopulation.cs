@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Elite;
 
 namespace EliteChroma.Core.Layers
@@ -23,7 +23,7 @@ namespace EliteChroma.Core.Layers
                 new ParticlePopulation(JumpPhase.Jump, 5, -10, GameColors.HyperspaceBrightStar),
             };
 
-            private ParticlePopulation(JumpPhase jumpPhase, double spawnsPerSecond, double zSpeedPerSecond, Color color)
+            private ParticlePopulation(JumpPhase jumpPhase, double spawnsPerSecond, double zSpeedPerSecond, ChromaColor color)
             {
                 JumpPhase = jumpPhase;
                 SpawnsPerSecond = spawnsPerSecond;
@@ -37,7 +37,7 @@ namespace EliteChroma.Core.Layers
 
             public double ZSpeedPerSecond { get; }
 
-            public Color Color { get; }
+            public ChromaColor Color { get; }
         }
     }
 }

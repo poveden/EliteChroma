@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Colore" Version="6.0.0" />
+    <PackageReference Include="ChromaWrapper" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>

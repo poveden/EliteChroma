@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Colore.Data;
-using Colore.Effects.Keyboard;
+using ChromaWrapper;
+using ChromaWrapper.Keyboard;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 using EliteFiles.Status;
@@ -29,8 +29,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            CustomKeyboardEffect k = canvas.Keyboard;
-            k[Key.Escape] = Colors.InterfaceMode;
+            canvas.Keyboard.Key[KeyboardKey.Esc] = Colors.InterfaceMode;
 
             if (Game.Status.HasFlag(Flags2.InTaxi))
             {
@@ -59,7 +58,7 @@ namespace EliteChroma.Core.Layers
             if (Game.Status.HasFlag(Flags.FsdCharging))
             {
                 _ = StartAnimation();
-                Color jumpColor = PulseColor(Colors.FrameShiftDriveControls, Color.Black, TimeSpan.FromSeconds(1));
+                ChromaColor jumpColor = PulseColor(Colors.FrameShiftDriveControls, ChromaColor.Black, TimeSpan.FromSeconds(1));
                 ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.HyperSuperCombination, jumpColor);
                 ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Supercruise, jumpColor);
                 ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Hyperspace, jumpColor);

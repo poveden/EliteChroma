@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
-using Colore.Effects.Keyboard;
+using ChromaWrapper;
+using ChromaWrapper.Keyboard;
 using EliteChroma.Chroma;
 using EliteChroma.Elite;
 using EliteFiles.Status;
@@ -69,20 +69,19 @@ namespace EliteChroma.Core.Layers
                 c.Logo = PulseColor(_animC1.Logo, _animC2.Logo, _fadeDuration, PulseColorType.Sawtooth);
             }
 
-            canvas.Keyboard.Set(c.Keyboard);
-            canvas.Keypad.Set(c.Keyboard);
-            canvas.Mouse.Set(c.Device);
-            canvas.Mousepad.Set(c.Device);
-            canvas.Headset.Set(c.Device);
-            canvas.ChromaLink.Set(c.Device);
+            canvas.Keyboard.Color.Fill(c.Keyboard);
+            canvas.Keypad.Color.Fill(c.Keyboard);
+            canvas.Mouse.Color.Fill(c.Device);
+            canvas.Mousepad.Color.Fill(c.Device);
+            canvas.Headset.Color.Fill(c.Device);
+            canvas.ChromaLink.Color.Fill(c.Device);
 
-            CustomKeyboardEffect k = canvas.Keyboard;
-            k[Key.Logo] = c.Logo;
+            canvas.Keyboard.Key[KeyboardKey.Logo] = c.Logo;
         }
 
         private AmbientColors GetAmbientColors(bool hardpointsDeployed, VehicleMode mode)
         {
-            Color c = mode switch
+            ChromaColor c = mode switch
             {
                 VehicleMode.Combat => Game.Colors.Hud,
                 VehicleMode.Analysis => Game.Colors.AnalysisMode,
@@ -100,11 +99,11 @@ namespace EliteChroma.Core.Layers
 
         private struct AmbientColors
         {
-            public Color Keyboard { get; set; }
+            public ChromaColor Keyboard { get; set; }
 
-            public Color Device { get; set; }
+            public ChromaColor Device { get; set; }
 
-            public Color Logo { get; set; }
+            public ChromaColor Logo { get; set; }
         }
     }
 }

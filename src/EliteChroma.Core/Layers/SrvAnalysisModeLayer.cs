@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 using EliteFiles.Status;
@@ -19,7 +19,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            Color colorOn = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? Game.Colors.AnalysisMode : Colors.HardpointsToggle;
+            ChromaColor colorOn = Game.Status.HasFlag(Flags.HudInAnalysisMode) ? Game.Colors.AnalysisMode : Colors.HardpointsToggle;
 
             ApplyColorToBinding(canvas.Keyboard, DrivingModeSwitches.PlayerHUDModeToggle, colorOn);
 
@@ -30,11 +30,11 @@ namespace EliteChroma.Core.Layers
 
             bool hardpointsDeployed = !Game.Status.HasFlag(Flags.SrvTurretRetracted);
 
-            Color hColor;
+            ChromaColor hColor;
             if (hardpointsDeployed)
             {
                 _ = StartAnimation();
-                hColor = PulseColor(Color.Black, colorOn, TimeSpan.FromSeconds(1));
+                hColor = PulseColor(ChromaColor.Black, colorOn, TimeSpan.FromSeconds(1));
             }
             else
             {
@@ -44,16 +44,16 @@ namespace EliteChroma.Core.Layers
 
             ApplyColorToBinding(canvas.Keyboard, Driving.ToggleTurret, hColor);
 
-            Color colorOff = Game.Status.HasFlag(Flags.HudInAnalysisMode)
+            ChromaColor colorOff = Game.Status.HasFlag(Flags.HudInAnalysisMode)
                 ? Game.Colors.AnalysisMode.Transform(Colors.DeviceDimBrightness)
                 : Game.Colors.Hud.Transform(Colors.DeviceDimBrightness);
 
-            Color c = hardpointsDeployed ? colorOn : colorOff;
+            ChromaColor c = hardpointsDeployed ? colorOn : colorOff;
 
-            canvas.Mouse.Set(c);
-            canvas.Mousepad.Set(c);
-            canvas.Headset.Set(c);
-            canvas.ChromaLink.Set(c);
+            canvas.Mouse.Color.Fill(c);
+            canvas.Mousepad.Color.Fill(c);
+            canvas.Headset.Color.Fill(c);
+            canvas.ChromaLink.Color.Fill(c);
         }
     }
 }

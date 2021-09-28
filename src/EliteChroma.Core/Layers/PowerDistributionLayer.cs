@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 using EliteFiles.Status;
@@ -19,9 +19,9 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            Color cSys = Colors.PowerDistributorScale[Game.Status.Pips.Sys];
-            Color cEng = Colors.PowerDistributorScale[Game.Status.Pips.Eng];
-            Color cWep = Colors.PowerDistributorScale[Game.Status.Pips.Wep];
+            ChromaColor cSys = Colors.PowerDistributorScale[Game.Status.Pips.Sys];
+            ChromaColor cEng = Colors.PowerDistributorScale[Game.Status.Pips.Eng];
+            ChromaColor cWep = Colors.PowerDistributorScale[Game.Status.Pips.Wep];
 
             ApplyColorToBinding(canvas.Keyboard, Miscellaneous.IncreaseSystemsPower, cSys);
             ApplyColorToBinding(canvas.Keyboard, Miscellaneous.IncreaseWeaponsPower, cWep);
