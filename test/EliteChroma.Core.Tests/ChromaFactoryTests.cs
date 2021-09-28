@@ -3,13 +3,13 @@ using System.Reflection;
 using System.Threading.Tasks;
 using ChromaWrapper.Events;
 using ChromaWrapper.Sdk;
+using EliteChroma.Core.Internal;
 using EliteChroma.Core.Tests.Internal;
-using EliteChroma.Core.Windows;
 using Xunit;
 
 namespace EliteChroma.Core.Tests
 {
-    public class WinChromaFactoryTests
+    public class ChromaFactoryTests
     {
         [Fact]
         public async Task WaitsForChromaSdkDeviceAccessEvent()
@@ -24,7 +24,7 @@ namespace EliteChroma.Core.Tests
             Assert.NotNull(chroma);
         }
 
-        private sealed class Factory : WinChromaFactory
+        private sealed class Factory : ChromaFactory
         {
             protected override IChromaSdk Create()
             {
