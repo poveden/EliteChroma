@@ -63,5 +63,28 @@ namespace EliteChroma.Core.Tests
             var cc = new ChromaCanvas();
             Assert.Throws<ArgumentNullException>("chroma", () => cc.SetEffect(null!));
         }
+
+        [Fact]
+        public void ClearsAllColors()
+        {
+            var cc = new ChromaCanvas();
+            cc.Keyboard.Color.Fill(ChromaColor.Blue);
+            cc.Keyboard.Key.Fill(ChromaColor.Red);
+            cc.Mouse.Color.Fill(ChromaColor.Green);
+            cc.Headset.Color.Fill(ChromaColor.FromColor(Color.HotPink));
+            cc.Mousepad.Color.Fill(ChromaColor.FromColor(Color.Orange));
+            cc.Keypad.Color.Fill(ChromaColor.FromColor(Color.Pink));
+            cc.ChromaLink.Color.Fill(ChromaColor.FromColor(Color.Purple));
+
+            cc.ClearCanvas();
+
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomKeyKeyboardEffect>("_keyboard")!.Color[0]);
+            Assert.Equal(ChromaColor.Transparent, cc.GetPrivateField<CustomKeyKeyboardEffect>("_keyboard")!.Key[0]);
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomMouseEffect2>("_mouse")!.Color[0]);
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomHeadsetEffect>("_headset")!.Color[0]);
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomMousepadEffect>("_mousepad")!.Color[0]);
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomKeypadEffect>("_keypad")!.Color[0]);
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomChromaLinkEffect>("_chromaLink")!.Color[0]);
+        }
     }
 }
