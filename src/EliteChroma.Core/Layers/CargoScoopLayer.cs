@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 using EliteFiles.Status;
@@ -20,12 +20,12 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            Color lColor;
+            ChromaColor lColor;
 
             if (Game.Status.HasFlag(Flags.CargoScoopDeployed))
             {
                 _ = StartAnimation();
-                lColor = PulseColor(Color.Black, Colors.CargoScoopDeployed, TimeSpan.FromSeconds(1));
+                lColor = PulseColor(ChromaColor.Black, Colors.CargoScoopDeployed, TimeSpan.FromSeconds(1));
             }
             else
             {

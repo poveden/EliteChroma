@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using Colore.Data;
+using System.Drawing;
+using ChromaWrapper;
 using EliteChroma.Chroma;
 
 namespace EliteChroma.Core
@@ -9,7 +10,7 @@ namespace EliteChroma.Core
     {
         private const int _maxPips = 8;
 
-        private readonly Color[] _pips = new Color[_maxPips + 1];
+        private readonly ChromaColor[] _pips = new ChromaColor[_maxPips + 1];
 
         private double _keyboardDimBrightness = 0.04;
         private double _deviceDimBrightness = 0.5;
@@ -17,8 +18,8 @@ namespace EliteChroma.Core
 
         public ChromaColors()
         {
-            _pips[0] = Color.Red;
-            _pips[_maxPips] = Color.Yellow;
+            _pips[0] = ChromaColor.Red;
+            _pips[_maxPips] = ChromaColor.Yellow;
             BuildPipsColors();
         }
 
@@ -40,57 +41,57 @@ namespace EliteChroma.Core
             set => _secondaryBindingBrightness = Clamp(value, 0, 1, _secondaryBindingBrightness);
         }
 
-        public Color HardpointsToggle { get; set; } = Color.Red;
+        public ChromaColor HardpointsToggle { get; set; } = ChromaColor.Red;
 
-        public Color CargoScoopDeployed { get; set; } = Color.Orange;
+        public ChromaColor CargoScoopDeployed { get; set; } = ChromaColor.FromColor(Color.Orange);
 
-        public Color CargoScoopRetracted { get; set; } = Color.Blue;
+        public ChromaColor CargoScoopRetracted { get; set; } = ChromaColor.Blue;
 
-        public Color InterfaceMode { get; set; } = Color.White;
+        public ChromaColor InterfaceMode { get; set; } = ChromaColor.White;
 
-        public Color VehicleRotation { get; set; } = Color.White;
+        public ChromaColor VehicleRotation { get; set; } = ChromaColor.White;
 
-        public Color VehicleThrust { get; set; } = Color.Orange;
+        public ChromaColor VehicleThrust { get; set; } = ChromaColor.FromColor(Color.Orange);
 
-        public Color VehicleAlternate { get; set; } = Color.White;
+        public ChromaColor VehicleAlternate { get; set; } = ChromaColor.White;
 
-        public Color VehicleThrottle { get; set; } = Color.Yellow;
+        public ChromaColor VehicleThrottle { get; set; } = ChromaColor.Yellow;
 
-        public Color VehicleMiscellaneous { get; set; } = Color.Pink;
+        public ChromaColor VehicleMiscellaneous { get; set; } = ChromaColor.Magenta;
 
-        public Color VehicleTargeting { get; set; } = Color.Green;
+        public ChromaColor VehicleTargeting { get; set; } = ChromaColor.Green;
 
-        public Color VehicleWeapons { get; set; } = Color.Red;
+        public ChromaColor VehicleWeapons { get; set; } = ChromaColor.Red;
 
-        public Color VehicleCooling { get; set; } = Color.HotPink;
+        public ChromaColor VehicleCooling { get; set; } = ChromaColor.FromColor(Color.HotPink);
 
-        public Color VehicleModeSwitches { get; set; } = Color.Green;
+        public ChromaColor VehicleModeSwitches { get; set; } = ChromaColor.Green;
 
-        public Color LandingGearDeployed { get; set; } = Color.Orange;
+        public ChromaColor LandingGearDeployed { get; set; } = ChromaColor.FromColor(Color.Orange);
 
-        public Color LandingGearRetracted { get; set; } = Color.Blue;
+        public ChromaColor LandingGearRetracted { get; set; } = ChromaColor.Blue;
 
-        public Color VehicleLightsOff { get; set; } = Color.Blue;
+        public ChromaColor VehicleLightsOff { get; set; } = ChromaColor.Blue;
 
-        public Color VehicleLightsMidBeam { get; set; } = new Color(0.5, 0.5, 1.0);
+        public ChromaColor VehicleLightsMidBeam { get; set; } = ChromaColor.FromRgb(0.5, 0.5, 1.0);
 
-        public Color VehicleLightsHighBeam { get; set; } = Color.White;
+        public ChromaColor VehicleLightsHighBeam { get; set; } = ChromaColor.White;
 
-        public Color Miscellaneous { get; set; } = Color.Blue;
+        public ChromaColor Miscellaneous { get; set; } = ChromaColor.Blue;
 
-        public Color FullSpectrumSystemScanner { get; set; } = Color.Blue;
+        public ChromaColor FullSpectrumSystemScanner { get; set; } = ChromaColor.Blue;
 
-        public Color FssCamera { get; set; } = Color.Green;
+        public ChromaColor FssCamera { get; set; } = ChromaColor.Green;
 
-        public Color FssZoom { get; set; } = Color.Blue;
+        public ChromaColor FssZoom { get; set; } = ChromaColor.Blue;
 
-        public Color FssTuning { get; set; } = Color.Purple;
+        public ChromaColor FssTuning { get; set; } = ChromaColor.FromColor(Color.Purple);
 
-        public Color FssTarget { get; set; } = Color.Yellow;
+        public ChromaColor FssTarget { get; set; } = ChromaColor.Yellow;
 
-        public Color FrameShiftDriveControls { get; set; } = Color.Pink;
+        public ChromaColor FrameShiftDriveControls { get; set; } = ChromaColor.Magenta;
 
-        public Color PowerDistributor0
+        public ChromaColor PowerDistributor0
         {
             get => _pips[0];
             set
@@ -100,7 +101,7 @@ namespace EliteChroma.Core
             }
         }
 
-        public Color PowerDistributor100
+        public ChromaColor PowerDistributor100
         {
             get => _pips[_maxPips];
             set
@@ -110,23 +111,23 @@ namespace EliteChroma.Core
             }
         }
 
-        public Color PowerDistributorReset { get; set; } = new Color(0.5, 0.5, 0.5);
+        public ChromaColor PowerDistributorReset { get; set; } = ChromaColor.FromRgb(0.5, 0.5, 0.5);
 
-        public Color LandingMode { get; set; } = Color.Blue;
+        public ChromaColor LandingMode { get; set; } = ChromaColor.Blue;
 
-        public Color OnFootHeadlook { get; set; } = Color.White;
+        public ChromaColor OnFootHeadlook { get; set; } = ChromaColor.White;
 
-        public Color OnFootMovement { get; set; } = Color.Orange;
+        public ChromaColor OnFootMovement { get; set; } = ChromaColor.FromColor(Color.Orange);
 
-        public Color OnFootModeSwitches { get; set; } = Color.Green;
+        public ChromaColor OnFootModeSwitches { get; set; } = ChromaColor.Green;
 
-        public Color OnFootLightsToggle { get; set; } = Color.Blue;
+        public ChromaColor OnFootLightsToggle { get; set; } = ChromaColor.Blue;
 
-        public Color OnFootShieldsToggle { get; set; } = new Color(0.0, 1.0, 1.0);
+        public ChromaColor OnFootShieldsToggle { get; set; } = ChromaColor.Cyan;
 
-        public Color OnFootInteract { get; set; } = Color.Purple;
+        public ChromaColor OnFootInteract { get; set; } = ChromaColor.FromColor(Color.Purple);
 
-        public IReadOnlyList<Color> PowerDistributorScale => _pips;
+        public IReadOnlyList<ChromaColor> PowerDistributorScale => _pips;
 
         private static double Clamp(double value, double min, double max, double nanFallback)
         {

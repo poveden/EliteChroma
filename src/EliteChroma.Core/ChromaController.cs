@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Colore;
+using ChromaWrapper.Sdk;
 using EliteChroma.Chroma;
 using EliteChroma.Core.Internal;
 using EliteChroma.Elite;
@@ -23,7 +23,7 @@ namespace EliteChroma.Core
 
         private ChromaColors _colors = new ChromaColors();
 
-        private IChroma? _chroma;
+        private IChromaSdk? _chroma;
         private int _rendering;
         private int _fps;
         private DateTimeOffset _chromaWarmupUntil;
@@ -159,7 +159,7 @@ namespace EliteChroma.Core
             IEnumerable<LayerBase> layers =
                 from type in typeof(LayerBase).Assembly.GetTypes()
                 where type.IsSubclassOf(typeof(LayerBase)) && !type.IsAbstract
-                select (LayerBase)Activator.CreateInstance(type);
+                select (LayerBase)Activator.CreateInstance(type)!;
 
             var res = new LayeredEffect();
 
@@ -200,7 +200,7 @@ namespace EliteChroma.Core
                     return;
                 }
 
-                await _chroma.UninitializeAsync().ConfigureAwait(false);
+                _chroma.Dispose();
                 _chroma = null;
             }
             finally
@@ -209,7 +209,7 @@ namespace EliteChroma.Core
             }
         }
 
-        private async void GameState_Changed(object sender, GameStateWatcher.ChangeType e)
+        private async void GameState_Changed(object? sender, GameStateWatcher.ChangeType e)
         {
             if (_animation.Enabled)
             {
@@ -220,7 +220,7 @@ namespace EliteChroma.Core
             await RenderEffect().ConfigureAwait(false);
         }
 
-        private async void Animation_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private async void Animation_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             await RenderEffect().ConfigureAwait(false);
         }
@@ -248,7 +248,7 @@ namespace EliteChroma.Core
                 try
                 {
                     game.Now = DateTimeOffset.UtcNow;
-                    await _effect.Render(_chroma!, new LayerRenderState(game, _colors)).ConfigureAwait(false);
+                    _effect.Render(_chroma!, new LayerRenderState(game, _colors));
                 }
                 finally
                 {

@@ -1,77 +1,177 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Colore;
-using Colore.Effects.ChromaLink;
-using Colore.Effects.Headset;
-using Colore.Effects.Keyboard;
-using Colore.Effects.Keypad;
-using Colore.Effects.Mouse;
-using Colore.Effects.Mousepad;
+using ChromaWrapper.ChromaLink;
+using ChromaWrapper.Headset;
+using ChromaWrapper.Keyboard;
+using ChromaWrapper.Keypad;
+using ChromaWrapper.Mouse;
+using ChromaWrapper.Mousepad;
+using ChromaWrapper.Sdk;
 
 namespace EliteChroma.Chroma
 {
     public sealed class ChromaCanvas
     {
-        private readonly Lazy<CustomKeyboardEffect> _keyboard = new Lazy<CustomKeyboardEffect>(CustomKeyboardEffect.Create);
-        private readonly Lazy<CustomMouseEffect> _mouse = new Lazy<CustomMouseEffect>(CustomMouseEffect.Create);
-        private readonly Lazy<CustomHeadsetEffect> _headset = new Lazy<CustomHeadsetEffect>(CustomHeadsetEffect.Create);
-        private readonly Lazy<CustomMousepadEffect> _mousepad = new Lazy<CustomMousepadEffect>(CustomMousepadEffect.Create);
-        private readonly Lazy<CustomKeypadEffect> _keypad = new Lazy<CustomKeypadEffect>(CustomKeypadEffect.Create);
-        private readonly Lazy<CustomChromaLinkEffect> _chromaLink = new Lazy<CustomChromaLinkEffect>(CustomChromaLinkEffect.Create);
+        private readonly CustomKeyKeyboardEffect _keyboard = new CustomKeyKeyboardEffect();
+        private readonly CustomMouseEffect2 _mouse = new CustomMouseEffect2();
+        private readonly CustomHeadsetEffect _headset = new CustomHeadsetEffect();
+        private readonly CustomMousepadEffect _mousepad = new CustomMousepadEffect();
+        private readonly CustomKeypadEffect _keypad = new CustomKeypadEffect();
+        private readonly CustomChromaLinkEffect _chromaLink = new CustomChromaLinkEffect();
 
-        public CustomKeyboardEffect Keyboard => _keyboard.Value;
+        private bool _keyboardAccessed;
+        private bool _mouseAccessed;
+        private bool _headsetAccessed;
+        private bool _mousepadAccessed;
+        private bool _keypadAccessed;
+        private bool _chromaLinkAccessed;
 
-        public CustomMouseEffect Mouse => _mouse.Value;
+        public CustomKeyKeyboardEffect Keyboard
+        {
+            get
+            {
+                _keyboardAccessed = true;
+                return _keyboard;
+            }
+        }
 
-        public CustomHeadsetEffect Headset => _headset.Value;
+        public CustomMouseEffect2 Mouse
+        {
+            get
+            {
+                _mouseAccessed = true;
+                return _mouse;
+            }
+        }
 
-        public CustomMousepadEffect Mousepad => _mousepad.Value;
+        public CustomHeadsetEffect Headset
+        {
+            get
+            {
+                _headsetAccessed = true;
+                return _headset;
+            }
+        }
 
-        public CustomKeypadEffect Keypad => _keypad.Value;
+        public CustomMousepadEffect Mousepad
+        {
+            get
+            {
+                _mousepadAccessed = true;
+                return _mousepad;
+            }
+        }
 
-        public CustomChromaLinkEffect ChromaLink => _chromaLink.Value;
+        public CustomKeypadEffect Keypad
+        {
+            get
+            {
+                _keypadAccessed = true;
+                return _keypad;
+            }
+        }
 
-        public Task SetEffect(IChroma chroma)
+        public CustomChromaLinkEffect ChromaLink
+        {
+            get
+            {
+                _chromaLinkAccessed = true;
+                return _chromaLink;
+            }
+        }
+
+        public IReadOnlyCollection<Guid> SetEffect(IChromaSdk chroma)
         {
             if (chroma == null)
             {
                 throw new ArgumentNullException(nameof(chroma));
             }
 
-            var tasks = new List<Task<Guid>>();
+            List<Guid> effectIds = CreateAccessedEffects(chroma);
 
-            if (_keyboard.IsValueCreated)
+            foreach (Guid effectId in effectIds)
             {
-                tasks.Add(chroma.Keyboard.SetCustomAsync(Keyboard));
+                chroma.SetEffect(effectId);
             }
 
-            if (_mouse.IsValueCreated)
+            return effectIds;
+        }
+
+        public void ClearCanvas()
+        {
+            if (_keyboardAccessed)
             {
-                tasks.Add(chroma.Mouse.SetGridAsync(Mouse));
+                _keyboard.Color.Clear();
+                _keyboard.Key.Clear();
+                _keyboardAccessed = false;
             }
 
-            if (_headset.IsValueCreated)
+            if (_mouseAccessed)
             {
-                tasks.Add(chroma.Headset.SetCustomAsync(Headset));
+                _mouse.Color.Clear();
+                _mouseAccessed = false;
             }
 
-            if (_mousepad.IsValueCreated)
+            if (_headsetAccessed)
             {
-                tasks.Add(chroma.Mousepad.SetCustomAsync(Mousepad));
+                _headset.Color.Clear();
+                _headsetAccessed = false;
             }
 
-            if (_keypad.IsValueCreated)
+            if (_mousepadAccessed)
             {
-                tasks.Add(chroma.Keypad.SetCustomAsync(Keypad));
+                _mousepad.Color.Clear();
+                _mousepadAccessed = false;
             }
 
-            if (_chromaLink.IsValueCreated)
+            if (_keypadAccessed)
             {
-                tasks.Add(chroma.ChromaLink.SetCustomAsync(ChromaLink));
+                _keypad.Color.Clear();
+                _keypadAccessed = false;
             }
 
-            return Task.WhenAll(tasks);
+            if (_chromaLinkAccessed)
+            {
+                _chromaLink.Color.Clear();
+                _chromaLinkAccessed = false;
+            }
+        }
+
+        private List<Guid> CreateAccessedEffects(IChromaSdk chroma)
+        {
+            var effectIds = new List<Guid>(6);
+
+            if (_keyboardAccessed)
+            {
+                effectIds.Add(chroma.CreateEffect(_keyboard));
+            }
+
+            if (_mouseAccessed)
+            {
+                effectIds.Add(chroma.CreateEffect(_mouse));
+            }
+
+            if (_headsetAccessed)
+            {
+                effectIds.Add(chroma.CreateEffect(_headset));
+            }
+
+            if (_mousepadAccessed)
+            {
+                effectIds.Add(chroma.CreateEffect(_mousepad));
+            }
+
+            if (_keypadAccessed)
+            {
+                effectIds.Add(chroma.CreateEffect(_keypad));
+            }
+
+            if (_chromaLinkAccessed)
+            {
+                effectIds.Add(chroma.CreateEffect(_chromaLink));
+            }
+
+            return effectIds;
         }
     }
 }

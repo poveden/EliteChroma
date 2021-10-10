@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\EliteChroma.Core.Windows\EliteChroma.Core.Windows.csproj" />
     <ProjectReference Include="..\..\src\EliteChroma.Core\EliteChroma.Core.csproj" />
   </ItemGroup>
 

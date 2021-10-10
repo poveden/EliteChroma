@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Colore;
-using Colore.Data;
-using Colore.Effects.ChromaLink;
-using Colore.Effects.Headset;
-using Colore.Effects.Keyboard;
-using Colore.Effects.Keypad;
-using Colore.Effects.Mouse;
-using Colore.Effects.Mousepad;
+using System.Drawing;
+using ChromaWrapper;
+using ChromaWrapper.ChromaLink;
+using ChromaWrapper.Headset;
+using ChromaWrapper.Keyboard;
+using ChromaWrapper.Keypad;
+using ChromaWrapper.Mouse;
+using ChromaWrapper.Mousepad;
 using EliteChroma.Chroma;
+using EliteChroma.Core.Tests.Internal;
 using Moq;
 using Xunit;
 
@@ -17,63 +17,74 @@ namespace EliteChroma.Core.Tests
     public class ChromaCanvasTests
     {
         [Fact]
-        public async Task SetEffectOnlyAppliesAccessedEffects()
+        public void SetEffectOnlyAppliesAccessedEffects()
         {
-            var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
+            var chroma = ChromaMockFactory.Create();
 
             var cc = new ChromaCanvas();
-            cc.Keyboard.Set(Color.Blue);
+            cc.Keyboard.Color.Fill(ChromaColor.Blue);
 
-            await cc.SetEffect(chroma.Object).ConfigureAwait(false);
+            Assert.Single(cc.SetEffect(chroma.Object));
 
-            Mock.Get(chroma.Object.Keyboard)
-                .Verify(x => x.SetCustomAsync(It.Is<CustomKeyboardEffect>(y => y[0] == Color.Blue)), Times.Once);
-            Mock.Get(chroma.Object.Mouse)
-                .Verify(x => x.SetGridAsync(It.IsAny<CustomMouseEffect>()), Times.Never);
-            Mock.Get(chroma.Object.Headset)
-                .Verify(x => x.SetCustomAsync(It.IsAny<CustomHeadsetEffect>()), Times.Never);
-            Mock.Get(chroma.Object.Mousepad)
-                .Verify(x => x.SetCustomAsync(It.IsAny<CustomMousepadEffect>()), Times.Never);
-            Mock.Get(chroma.Object.Keypad)
-                .Verify(x => x.SetCustomAsync(It.IsAny<CustomKeypadEffect>()), Times.Never);
-            Mock.Get(chroma.Object.ChromaLink)
-                .Verify(x => x.SetCustomAsync(It.IsAny<CustomChromaLinkEffect>()), Times.Never);
+            chroma.Verify(x => x.CreateEffect(It.Is<CustomKeyKeyboardEffect>(y => y.Color[0] == ChromaColor.Blue)), Times.Once);
+            chroma.Verify(x => x.CreateEffect(It.IsAny<CustomMouseEffect2>()), Times.Never);
+            chroma.Verify(x => x.CreateEffect(It.IsAny<CustomHeadsetEffect>()), Times.Never);
+            chroma.Verify(x => x.CreateEffect(It.IsAny<CustomMousepadEffect>()), Times.Never);
+            chroma.Verify(x => x.CreateEffect(It.IsAny<CustomKeypadEffect>()), Times.Never);
+            chroma.Verify(x => x.CreateEffect(It.IsAny<CustomChromaLinkEffect>()), Times.Never);
         }
 
         [Fact]
-        public async Task RazerEffectsAreAccessible()
+        public void RazerEffectsAreAccessible()
         {
-            var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
+            var chroma = ChromaMockFactory.Create();
 
             var cc = new ChromaCanvas();
-            cc.Keyboard.Set(Color.Blue);
-            cc.Mouse.Set(Color.Green);
-            cc.Headset.Set(Color.HotPink);
-            cc.Mousepad.Set(Color.Orange);
-            cc.Keypad.Set(Color.Pink);
-            cc.ChromaLink.Set(Color.Purple);
+            cc.Keyboard.Color.Fill(ChromaColor.Blue);
+            cc.Mouse.Color.Fill(ChromaColor.Green);
+            cc.Headset.Color.Fill(ChromaColor.FromColor(Color.HotPink));
+            cc.Mousepad.Color.Fill(ChromaColor.FromColor(Color.Orange));
+            cc.Keypad.Color.Fill(ChromaColor.FromColor(Color.Pink));
+            cc.ChromaLink.Color.Fill(ChromaColor.FromColor(Color.Purple));
 
-            await cc.SetEffect(chroma.Object).ConfigureAwait(false);
+            cc.SetEffect(chroma.Object);
 
-            Mock.Get(chroma.Object.Keyboard)
-                .Verify(x => x.SetCustomAsync(It.Is<CustomKeyboardEffect>(y => y[0] == Color.Blue)));
-            Mock.Get(chroma.Object.Mouse)
-                .Verify(x => x.SetGridAsync(It.Is<CustomMouseEffect>(y => y[0] == Color.Green)));
-            Mock.Get(chroma.Object.Headset)
-                .Verify(x => x.SetCustomAsync(It.Is<CustomHeadsetEffect>(y => y[0] == Color.HotPink)));
-            Mock.Get(chroma.Object.Mousepad)
-                .Verify(x => x.SetCustomAsync(It.Is<CustomMousepadEffect>(y => y[0] == Color.Orange)));
-            Mock.Get(chroma.Object.Keypad)
-                .Verify(x => x.SetCustomAsync(It.Is<CustomKeypadEffect>(y => y[0] == Color.Pink)));
-            Mock.Get(chroma.Object.ChromaLink)
-                .Verify(x => x.SetCustomAsync(It.Is<CustomChromaLinkEffect>(y => y[0] == Color.Purple)));
+            chroma.Verify(x => x.CreateEffect(It.Is<CustomKeyKeyboardEffect>(y => y.Color[0] == ChromaColor.Blue)));
+            chroma.Verify(x => x.CreateEffect(It.Is<CustomMouseEffect2>(y => y.Color[0] == ChromaColor.Green)));
+            chroma.Verify(x => x.CreateEffect(It.Is<CustomHeadsetEffect>(y => y.Color[0] == ChromaColor.FromColor(Color.HotPink))));
+            chroma.Verify(x => x.CreateEffect(It.Is<CustomMousepadEffect>(y => y.Color[0] == ChromaColor.FromColor(Color.Orange))));
+            chroma.Verify(x => x.CreateEffect(It.Is<CustomKeypadEffect>(y => y.Color[0] == ChromaColor.FromColor(Color.Pink))));
+            chroma.Verify(x => x.CreateEffect(It.Is<CustomChromaLinkEffect>(y => y.Color[0] == ChromaColor.FromColor(Color.Purple))));
         }
 
         [Fact]
         public void SetEffectThrowsOnNullChromaObject()
         {
             var cc = new ChromaCanvas();
-            Assert.ThrowsAsync<ArgumentNullException>("chroma", () => cc.SetEffect(null!));
+            Assert.Throws<ArgumentNullException>("chroma", () => cc.SetEffect(null!));
+        }
+
+        [Fact]
+        public void ClearsAllColors()
+        {
+            var cc = new ChromaCanvas();
+            cc.Keyboard.Color.Fill(ChromaColor.Blue);
+            cc.Keyboard.Key.Fill(ChromaColor.Red);
+            cc.Mouse.Color.Fill(ChromaColor.Green);
+            cc.Headset.Color.Fill(ChromaColor.FromColor(Color.HotPink));
+            cc.Mousepad.Color.Fill(ChromaColor.FromColor(Color.Orange));
+            cc.Keypad.Color.Fill(ChromaColor.FromColor(Color.Pink));
+            cc.ChromaLink.Color.Fill(ChromaColor.FromColor(Color.Purple));
+
+            cc.ClearCanvas();
+
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomKeyKeyboardEffect>("_keyboard")!.Color[0]);
+            Assert.Equal(ChromaColor.Transparent, cc.GetPrivateField<CustomKeyKeyboardEffect>("_keyboard")!.Key[0]);
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomMouseEffect2>("_mouse")!.Color[0]);
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomHeadsetEffect>("_headset")!.Color[0]);
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomMousepadEffect>("_mousepad")!.Color[0]);
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomKeypadEffect>("_keypad")!.Color[0]);
+            Assert.Equal(ChromaColor.Black, cc.GetPrivateField<CustomChromaLinkEffect>("_chromaLink")!.Color[0]);
         }
     }
 }

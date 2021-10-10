@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 using EliteChroma.Core;
-using EliteChroma.Core.Windows;
 using EliteChroma.Forms;
 using EliteChroma.Internal;
 using EliteChroma.Properties;
@@ -13,7 +12,6 @@ namespace EliteChroma
     internal class AppContext : TrayIconApplicationContext
     {
         private readonly string _appSettingsPath;
-        private readonly WinChromaFactory _chromaFactory;
 
         private ChromaController? _cc;
         private AppSettings? _currentSettings;
@@ -31,8 +29,6 @@ namespace EliteChroma
             _ = ContextMenu.Items.Add("-");
             _ = ContextMenu.Items.Add("E&xit", null, Exit_Click);
 #pragma warning restore IDISP004
-
-            _chromaFactory = new WinChromaFactory();
         }
 
         public bool Start()
@@ -76,7 +72,6 @@ namespace EliteChroma
             if (disposing)
             {
                 _cc?.Dispose();
-                _chromaFactory.Dispose();
             }
         }
 
@@ -146,7 +141,6 @@ namespace EliteChroma
             _cc?.Dispose();
             _cc = new ChromaController(settings.GameInstallFolder!, settings.GameOptionsFolder!, settings.JournalFolder!)
             {
-                ChromaFactory = _chromaFactory,
                 DetectGameInForeground = settings.DetectGameInForeground,
                 ForceEnUSKeyboardLayout = settings.ForceEnUSKeyboardLayout,
                 Colors = settings.Colors,

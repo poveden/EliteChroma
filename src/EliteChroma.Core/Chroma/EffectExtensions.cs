@@ -1,169 +1,90 @@
-﻿using Colore.Data;
-using Colore.Effects.ChromaLink;
-using Colore.Effects.Headset;
-using Colore.Effects.Keyboard;
-using Colore.Effects.Keypad;
-using Colore.Effects.Mouse;
-using Colore.Effects.Mousepad;
+﻿using System;
+using ChromaWrapper;
+using ChromaWrapper.Sdk;
 
 namespace EliteChroma.Chroma
 {
     public static class EffectExtensions
     {
-        private static readonly Key[] _allKeys = GetAllKeys();
-
-        public static CustomKeyboardEffect Combine(this CustomKeyboardEffect keyboard, Color c, double cPct = 0.5)
+        public static IKeyGridEffect CombineKey(this IKeyGridEffect effect, ChromaColor c, double cPct = 0.5)
         {
-            for (int i = 0; i < _allKeys.Length; i++)
+            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+
+            for (int i = 0; i < effect.Key.Count; i++)
             {
-                Key key = _allKeys[i];
-                keyboard[key] = keyboard[key].Combine(c, cPct);
+                effect.Key[i] = ((ChromaColor)effect.Key[i]).Combine(c, cPct);
             }
 
-            return keyboard;
+            return effect;
         }
 
-        public static CustomKeyboardEffect Max(this CustomKeyboardEffect keyboard, Color c)
+        public static IKeyGridEffect MaxKey(this IKeyGridEffect effect, ChromaColor c)
         {
-            for (int i = 0; i < _allKeys.Length; i++)
+            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+
+            for (int i = 0; i < effect.Key.Count; i++)
             {
-                Key key = _allKeys[i];
-                keyboard[key] = keyboard[key].Max(c);
+                effect.Key[i] = ((ChromaColor)effect.Key[i]).Max(c);
             }
 
-            return keyboard;
+            return effect;
         }
 
-        public static CustomKeyboardEffect MaxAt(this CustomKeyboardEffect keyboard, int row, int column, Color c)
+        public static IKeyGridEffect MaxAt(this IKeyGridEffect effect, int row, int column, ChromaColor c)
         {
-            Key key = GetKeyAt(row, column);
-            keyboard[key] = keyboard[key].Max(c);
+            _ = effect ?? throw new ArgumentNullException(nameof(effect));
 
-            return keyboard;
+            effect.Key[row, column] = ((ChromaColor)effect.Key[row, column]).Max(c);
+
+            return effect;
         }
 
-        public static CustomMouseEffect Combine(this CustomMouseEffect mouse, Color c, double cPct = 0.5)
+        public static ILedGridEffect Combine(this ILedGridEffect effect, ChromaColor c, double cPct = 0.5)
         {
-            for (int i = 0; i < MouseConstants.MaxLeds; i++)
+            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+
+            for (int i = 0; i < effect.Color.Count; i++)
             {
-                mouse[i] = mouse[i].Combine(c, cPct);
+                effect.Color[i] = effect.Color[i].Combine(c, cPct);
             }
 
-            return mouse;
+            return effect;
         }
 
-        public static CustomMouseEffect Max(this CustomMouseEffect mouse, Color c)
+        public static ILedGridEffect Max(this ILedGridEffect effect, ChromaColor c)
         {
-            for (int i = 0; i < MouseConstants.MaxLeds; i++)
+            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+
+            for (int i = 0; i < effect.Color.Count; i++)
             {
-                mouse[i] = mouse[i].Max(c);
+                effect.Color[i] = effect.Color[i].Max(c);
             }
 
-            return mouse;
+            return effect;
         }
 
-        public static CustomMousepadEffect Combine(this CustomMousepadEffect mousepad, Color c, double cPct = 0.5)
+        public static ILedArrayEffect Combine(this ILedArrayEffect effect, ChromaColor c, double cPct = 0.5)
         {
-            for (int i = 0; i < MousepadConstants.MaxLeds; i++)
+            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+
+            for (int i = 0; i < effect.Color.Count; i++)
             {
-                mousepad[i] = mousepad[i].Combine(c, cPct);
+                effect.Color[i] = effect.Color[i].Combine(c, cPct);
             }
 
-            return mousepad;
+            return effect;
         }
 
-        public static CustomMousepadEffect Max(this CustomMousepadEffect mousepad, Color c)
+        public static ILedArrayEffect Max(this ILedArrayEffect effect, ChromaColor c)
         {
-            for (int i = 0; i < MousepadConstants.MaxLeds; i++)
+            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+
+            for (int i = 0; i < effect.Color.Count; i++)
             {
-                mousepad[i] = mousepad[i].Max(c);
+                effect.Color[i] = effect.Color[i].Max(c);
             }
 
-            return mousepad;
-        }
-
-        public static CustomKeypadEffect Combine(this CustomKeypadEffect keypad, Color c, double cPct = 0.5)
-        {
-            for (int i = 0; i < KeypadConstants.MaxKeys; i++)
-            {
-                keypad[i] = keypad[i].Combine(c, cPct);
-            }
-
-            return keypad;
-        }
-
-        public static CustomKeypadEffect Max(this CustomKeypadEffect keypad, Color c)
-        {
-            for (int i = 0; i < KeypadConstants.MaxKeys; i++)
-            {
-                keypad[i] = keypad[i].Max(c);
-            }
-
-            return keypad;
-        }
-
-        public static CustomHeadsetEffect Combine(this CustomHeadsetEffect headset, Color c, double cPct = 0.5)
-        {
-            for (int i = 0; i < HeadsetConstants.MaxLeds; i++)
-            {
-                headset[i] = headset[i].Combine(c, cPct);
-            }
-
-            return headset;
-        }
-
-        public static CustomHeadsetEffect Max(this CustomHeadsetEffect headset, Color c)
-        {
-            for (int i = 0; i < HeadsetConstants.MaxLeds; i++)
-            {
-                headset[i] = headset[i].Max(c);
-            }
-
-            return headset;
-        }
-
-        public static CustomChromaLinkEffect Combine(this CustomChromaLinkEffect chromaLink, Color c, double cPct = 0.5)
-        {
-            for (int i = 0; i < ChromaLinkConstants.MaxLeds; i++)
-            {
-                chromaLink[i] = chromaLink[i].Combine(c, cPct);
-            }
-
-            return chromaLink;
-        }
-
-        public static CustomChromaLinkEffect Max(this CustomChromaLinkEffect chromaLink, Color c)
-        {
-            for (int i = 0; i < ChromaLinkConstants.MaxLeds; i++)
-            {
-                chromaLink[i] = chromaLink[i].Max(c);
-            }
-
-            return chromaLink;
-        }
-
-        // We will be using this as an alternative to call keyboard[int index].
-        // Since keyboard[Key key] sets KeyboardConstants.KeyFlag while keyboard[int index]
-        // does not, wrong key colors get read when reading by index.
-        private static Key[] GetAllKeys()
-        {
-            var res = new Key[KeyboardConstants.MaxRows * KeyboardConstants.MaxColumns];
-
-            int i = 0;
-            for (int row = 0; row < KeyboardConstants.MaxRows; row++)
-            {
-                for (int col = 0; col < KeyboardConstants.MaxColumns; col++)
-                {
-                    res[i++] = GetKeyAt(row, col);
-                }
-            }
-
-            return res;
-        }
-
-        private static Key GetKeyAt(int row, int column)
-        {
-            return (Key)((row << 8) + column);
+            return effect;
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Colore.Effects.Keyboard;
+using ChromaWrapper.Keyboard;
 using EliteChroma.Core.Tests.Internal;
 using EliteFiles.Bindings.Devices;
 using Xunit;
@@ -34,9 +34,9 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
-        public void AllDirectKeyMappingsToColoreKeysHaveBeenDeclared()
+        public void AllDirectKeyMappingsToChromaKeysHaveBeenDeclared()
         {
-            var keys = GetDirectColoreKeyMapping().Keys;
+            var keys = GetDirectChromaKeyMapping().Keys;
             var expected = GetKeyboardKeys(KeyTypes.Common | KeyTypes.Character).Keys;
 
             AssertEqualSet(expected, keys, _comparer);
@@ -52,12 +52,12 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
-        public void AllDefinedDirectKeyMappingsToColoreKeysAreUnique()
+        public void AllDefinedDirectKeyMappingsToChromaKeysAreUnique()
         {
-            var values = GetDirectColoreKeyMapping().Values.Where(x => x != 0);
+            var values = GetDirectChromaKeyMapping().Values.Where(x => x != 0);
             var unique = values.Distinct();
 
-            AssertEqualSet(unique, values, EqualityComparer<Key>.Default);
+            AssertEqualSet(unique, values, EqualityComparer<KeyboardKey>.Default);
         }
 
         [Theory]
@@ -76,14 +76,14 @@ namespace EliteChroma.Core.Tests
         }
 
         [Theory]
-        [InlineData("Key_Escape", "en-US", true, Key.Escape)]
-        [InlineData("Key_ß", "de-DE", true, Key.OemMinus)]
-        [InlineData("Key_¤", "en-US", false, (Key)0)]
-        [InlineData("Key_º", "es-ES", true, Key.OemTilde)]
-        [InlineData("Key_INVALID_KEY_NAME", "en-US", false, (Key)0)]
-        [InlineData("Key_Escape", null, true, Key.Escape)]
-        [InlineData("Key_Slash", null, true, Key.OemSlash)]
-        public void TryGetChromaKeyReturnsExpectedValues(string keyName, string keyboardLayout, bool expectedOk, Key expectedKey)
+        [InlineData("Key_Escape", "en-US", true, KeyboardKey.Esc)]
+        [InlineData("Key_ß", "de-DE", true, KeyboardKey.Oem2)]
+        [InlineData("Key_¤", "en-US", false, (KeyboardKey)0)]
+        [InlineData("Key_º", "es-ES", true, KeyboardKey.Oem1)]
+        [InlineData("Key_INVALID_KEY_NAME", "en-US", false, (KeyboardKey)0)]
+        [InlineData("Key_Escape", null, true, KeyboardKey.Esc)]
+        [InlineData("Key_Slash", null, true, KeyboardKey.Oem11)]
+        public void TryGetChromaKeyReturnsExpectedValues(string keyName, string keyboardLayout, bool expectedOk, KeyboardKey expectedKey)
         {
             bool ok = Core.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, false, out var chromaKey, NativeMethodsKeyboardMock.Instance);
 
@@ -103,9 +103,9 @@ namespace EliteChroma.Core.Tests
         }
 
         [Theory]
-        [InlineData("Key_Grave", "es-ES", true, Key.OemTilde)]
-        [InlineData("Key_Slash", null, true, Key.OemSlash)]
-        public void TryGetChromaKeyReturnsEnUSOverrides(string keyName, string keyboardLayout, bool expectedOk, Key expectedKey)
+        [InlineData("Key_Grave", "es-ES", true, KeyboardKey.Oem1)]
+        [InlineData("Key_Slash", null, true, KeyboardKey.Oem11)]
+        public void TryGetChromaKeyReturnsEnUSOverrides(string keyName, string keyboardLayout, bool expectedOk, KeyboardKey expectedKey)
         {
             bool ok = Core.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, true, out var chromaKey, NativeMethodsKeyboardMock.Instance);
 
@@ -119,10 +119,10 @@ namespace EliteChroma.Core.Tests
                 .GetPrivateStaticField<IReadOnlyDictionary<string, VirtualKey>>("_keys")!;
         }
 
-        private static IReadOnlyDictionary<string, Key> GetDirectColoreKeyMapping()
+        private static IReadOnlyDictionary<string, KeyboardKey> GetDirectChromaKeyMapping()
         {
             return typeof(Core.Internal.KeyMappings)
-                .GetPrivateStaticField<IReadOnlyDictionary<string, Key>>("_keys")!;
+                .GetPrivateStaticField<IReadOnlyDictionary<string, KeyboardKey>>("_keys")!;
         }
 
         private static Dictionary<string, KeyTypes> GetKeyboardKeys(KeyTypes types)

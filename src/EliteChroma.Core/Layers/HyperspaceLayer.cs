@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Chroma;
 using EliteChroma.Elite;
 using EliteFiles.Bindings.Binds;
@@ -95,25 +95,26 @@ namespace EliteChroma.Core.Layers
 
         private static HazardLevel GetHazardLevel(string? starClass)
         {
-            switch (StarClass.GetKind(starClass, out _))
+            return StarClass.GetKind(starClass, out _) switch
             {
-                case StarClass.Kind.MainSequence:
-                    return HazardLevel.Low;
+                StarClass.Kind.MainSequence
+                => HazardLevel.Low,
 
-                case StarClass.Kind.Neutron:
-                case StarClass.Kind.WhiteDwarf:
-                case StarClass.Kind.BlackHole:
-                    return HazardLevel.High;
+                StarClass.Kind.Neutron or
+                StarClass.Kind.WhiteDwarf or
+                StarClass.Kind.BlackHole
+                => HazardLevel.High,
 
-                case StarClass.Kind.Unknown:
-                case StarClass.Kind.BrownDwarf:
-                case StarClass.Kind.Protostar:
-                case StarClass.Kind.Carbon:
-                case StarClass.Kind.WolfRayet:
-                case StarClass.Kind.Other:
-                default:
-                    return HazardLevel.Medium;
-            }
+                StarClass.Kind.Unknown or
+                StarClass.Kind.BrownDwarf or
+                StarClass.Kind.Protostar or
+                StarClass.Kind.Carbon or
+                StarClass.Kind.WolfRayet or
+                StarClass.Kind.Other
+                => HazardLevel.Medium,
+
+                _ => HazardLevel.Medium,
+            };
         }
 
         private JumpPhase GetJumpPhase()
@@ -135,7 +136,7 @@ namespace EliteChroma.Core.Layers
 
         private void RenderHazardLevel(ChromaCanvas canvas)
         {
-            Color hazardColor;
+            ChromaColor hazardColor;
             TimeSpan period;
             PulseColorType pulseType;
 
@@ -161,7 +162,7 @@ namespace EliteChroma.Core.Layers
                     break;
             }
 
-            Color color = PulseColor(Color.Black, hazardColor, period, pulseType);
+            ChromaColor color = PulseColor(ChromaColor.Black, hazardColor, period, pulseType);
             ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.HyperSuperCombination, color);
             ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.Hyperspace, color);
         }

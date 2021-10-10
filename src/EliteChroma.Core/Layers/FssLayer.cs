@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Effects.Keyboard;
+using ChromaWrapper.Keyboard;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 using EliteFiles.Status;
@@ -41,8 +41,7 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            CustomKeyboardEffect k = canvas.Keyboard;
-            k[Key.Escape] = Colors.InterfaceMode;
+            canvas.Keyboard.Key[KeyboardKey.Esc] = Colors.InterfaceMode;
 
             ApplyColorToBinding(canvas.Keyboard, FssCamera, Colors.FssCamera);
             ApplyColorToBinding(canvas.Keyboard, FssZoom, Colors.FssZoom);

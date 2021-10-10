@@ -88,24 +88,26 @@ namespace EliteChroma.Elite
                     return false;
                 }
 
-                switch (Status.GuiFocus ?? default)
+                return (Status.GuiFocus ?? default) switch
                 {
-                    case GuiFocus.None:
-                    case GuiFocus.InternalPanel:
-                    case GuiFocus.ExternalPanel:
-                    case GuiFocus.CommsPanel:
-                    case GuiFocus.RolePanel:
-                    case GuiFocus.StationServices:
-                        return !InGalacticPowers && !InSquadronsView;
-                    case GuiFocus.GalaxyMap:
-                    case GuiFocus.SystemMap:
-                    case GuiFocus.Orrery:
-                    case GuiFocus.FssMode:
-                    case GuiFocus.SaaMode:
-                    case GuiFocus.Codex:
-                    default:
-                        return false;
-                }
+                    GuiFocus.None or
+                    GuiFocus.InternalPanel or
+                    GuiFocus.ExternalPanel or
+                    GuiFocus.CommsPanel or
+                    GuiFocus.RolePanel or
+                    GuiFocus.StationServices
+                    => !InGalacticPowers && !InSquadronsView,
+
+                    GuiFocus.GalaxyMap or
+                    GuiFocus.SystemMap or
+                    GuiFocus.Orrery or
+                    GuiFocus.FssMode or
+                    GuiFocus.SaaMode or
+                    GuiFocus.Codex
+                    => false,
+
+                    _ => false,
+                };
             }
         }
 

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Colore;
+﻿using System;
+using System.Collections.Generic;
+using ChromaWrapper.Sdk;
 
 namespace EliteChroma.Chroma
 {
@@ -9,6 +9,9 @@ namespace EliteChroma.Chroma
         private static readonly LayerComparer _comparer = new LayerComparer();
 
         private readonly List<EffectLayer> _layers = new List<EffectLayer>();
+        private readonly ChromaCanvas _canvas = new ChromaCanvas();
+
+        private IReadOnlyCollection<Guid> _activeEffectIds = Array.Empty<Guid>();
 
         public IReadOnlyList<EffectLayer> Layers => _layers;
 
@@ -35,25 +38,41 @@ namespace EliteChroma.Chroma
             return _layers.Remove(layer);
         }
 
-        public async Task Render(IChroma chroma, object state)
+        public void Render(IChromaSdk chroma, object state)
         {
-            var canvas = new ChromaCanvas();
+            _canvas.ClearCanvas();
 
             for (int i = 0; i < _layers.Count; i++)
             {
-                _layers[i].Render(canvas, state);
+                _layers[i].Render(_canvas, state);
             }
 
-            await canvas.SetEffect(chroma).ConfigureAwait(false);
+            IReadOnlyCollection<Guid> oldEffectIds = _activeEffectIds;
+            _activeEffectIds = _canvas.SetEffect(chroma);
+
+            foreach (Guid effectId in oldEffectIds)
+            {
+                chroma.DeleteEffect(effectId);
+            }
         }
 
         private sealed class LayerComparer : Comparer<EffectLayer>
         {
-            public override int Compare(EffectLayer x, EffectLayer y)
+            public override int Compare(EffectLayer? x, EffectLayer? y)
             {
                 if (x == y)
                 {
                     return 0;
+                }
+
+                if (x == null)
+                {
+                    return -1;
+                }
+
+                if (y == null)
+                {
+                    return 1;
                 }
 
                 int ord = x.Order.CompareTo(y.Order);

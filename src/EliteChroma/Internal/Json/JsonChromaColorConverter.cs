@@ -1,39 +1,39 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Colore.Data;
+using ChromaWrapper;
 using Newtonsoft.Json;
 
 namespace EliteChroma.Internal.Json
 {
-    internal sealed class JsonColoreColorConverter : JsonConverter<Color>
+    internal sealed class JsonChromaColorConverter : JsonConverter<ChromaColor>
     {
-        public static bool TryParseRgbString(string? str, out Color color)
+        public static bool TryParseRgbString(string? str, out ChromaColor color)
         {
-            if (!uint.TryParse(str, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint rgb))
+            if (!int.TryParse(str, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int rgb))
             {
                 color = default;
                 return false;
             }
 
-            color = Color.FromRgb(rgb);
+            color = ChromaColor.FromRgb(rgb);
             return true;
         }
 
-        public static string ToRgbString(Color color)
+        public static string ToRgbString(ChromaColor color)
         {
             int rgb = (color.R << 16) | (color.G << 8) | color.B;
             return rgb.ToString("X6", CultureInfo.InvariantCulture);
         }
 
-        public override Color ReadJson(JsonReader reader, Type objectType, [AllowNull] Color existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override ChromaColor ReadJson(JsonReader reader, Type objectType, [AllowNull] ChromaColor existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             if (reader.TokenType != JsonToken.String)
             {
                 return existingValue;
             }
 
-            if (!TryParseRgbString((string?)reader.Value, out Color color))
+            if (!TryParseRgbString((string?)reader.Value, out ChromaColor color))
             {
                 return existingValue;
             }
@@ -41,7 +41,7 @@ namespace EliteChroma.Internal.Json
             return color;
         }
 
-        public override void WriteJson(JsonWriter writer, [AllowNull] Color value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, [AllowNull] ChromaColor value, JsonSerializer serializer)
         {
             writer.WriteValue(ToRgbString(value));
         }

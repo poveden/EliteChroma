@@ -50,7 +50,7 @@ namespace EliteChroma.Core.Internal
         {
             keyboardLayout ??= KeyboardLayoutMap.GetCurrentLayout(nativeMethods);
 
-            if (!_layoutCache.TryGetValue(keyboardLayout, out IReadOnlyDictionary<char, VirtualKey> map))
+            if (!_layoutCache.TryGetValue(keyboardLayout, out IReadOnlyDictionary<char, VirtualKey>? map))
             {
                 map = BuildMap(keyboardLayout, nativeMethods);
                 _layoutCache[keyboardLayout] = map;

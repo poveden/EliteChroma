@@ -149,21 +149,21 @@ namespace EliteChroma.Elite
             _disposed = true;
         }
 
-        private void JournalWatcher_Started(object sender, EventArgs e)
+        private void JournalWatcher_Started(object? sender, EventArgs e)
         {
             OnChanged(ChangeType.JournalDrain);
         }
 
-        private void JournalWatcher_EntryAdded(object sender, JournalEntry e)
+        private void JournalWatcher_EntryAdded(object? sender, JournalEntry e)
         {
             switch (e)
             {
-                case FileHeader _ when !DetectForegroundProcess:
+                case FileHeader when !DetectForegroundProcess:
                     _gameState.ProcessState = GameProcessState.InForeground;
                     _gameState.GameMode = LoadGame.PlayMode.None;
                     break;
 
-                case Shutdown _ when !DetectForegroundProcess:
+                case Shutdown when !DetectForegroundProcess:
                     _gameState.ProcessState = GameProcessState.NotRunning;
                     _gameState.GameMode = LoadGame.PlayMode.None;
                     break;
@@ -216,13 +216,13 @@ namespace EliteChroma.Elite
             OnChanged(ChangeType.JournalEntry);
         }
 
-        private void StatusWatcher_Changed(object sender, StatusEntry e)
+        private void StatusWatcher_Changed(object? sender, StatusEntry e)
         {
             _gameState.Status = e;
             OnChanged(ChangeType.StatusEntry);
         }
 
-        private void BindingsWatcher_Changed(object sender, BindingPreset e)
+        private void BindingsWatcher_Changed(object? sender, BindingPreset e)
         {
             var gb = new GameBindings(e);
             _gameState.Bindings = gb;
@@ -230,19 +230,19 @@ namespace EliteChroma.Elite
             OnChanged(ChangeType.BindingPreset);
         }
 
-        private void GraphicsConfig_Changed(object sender, GraphicsConfig e)
+        private void GraphicsConfig_Changed(object? sender, GraphicsConfig e)
         {
             _gameState.GuiColour = e.GuiColour?.Default ?? GuiColourMatrix.Default;
             OnChanged(ChangeType.GraphicsConfig);
         }
 
-        private void ModifierKeysWatcher_Changed(object sender, DeviceKeySet e)
+        private void ModifierKeysWatcher_Changed(object? sender, DeviceKeySet e)
         {
             _gameState.PressedModifiers = e;
             OnChanged(ChangeType.DeviceKeySet);
         }
 
-        private void GameProcessWatcher_Changed(object sender, GameProcessState e)
+        private void GameProcessWatcher_Changed(object? sender, GameProcessState e)
         {
             _gameState.ProcessState = e;
             OnChanged(ChangeType.GameProcessState);

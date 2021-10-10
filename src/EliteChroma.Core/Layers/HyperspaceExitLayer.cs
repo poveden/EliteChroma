@@ -1,5 +1,5 @@
 ﻿using System;
-using Colore.Data;
+using ChromaWrapper;
 using EliteChroma.Chroma;
 using EliteChroma.Elite;
 using static EliteFiles.Journal.Events.StartJump;
@@ -11,7 +11,7 @@ namespace EliteChroma.Core.Layers
         private static readonly TimeSpan _flashTotalLength = TimeSpan.FromSeconds(2);
 
         private bool _enteredHyperspace;
-        private Color _starClassColor;
+        private ChromaColor _starClassColor;
 
         public override int Order => 700;
 
@@ -46,8 +46,8 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            Color cKey = PulseColor(Game.Colors.Hud.Transform(Colors.KeyboardDimBrightness), _starClassColor, _flashTotalLength);
-            Color cDev = PulseColor(Game.Colors.Hud.Transform(Colors.DeviceDimBrightness), _starClassColor, _flashTotalLength);
+            ChromaColor cKey = PulseColor(Game.Colors.Hud.Transform(Colors.KeyboardDimBrightness), _starClassColor, _flashTotalLength);
+            ChromaColor cDev = PulseColor(Game.Colors.Hud.Transform(Colors.DeviceDimBrightness), _starClassColor, _flashTotalLength);
 
             _ = canvas.Keyboard.Max(cKey);
             _ = canvas.Mouse.Max(cDev);

@@ -4,12 +4,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
+using ChromaWrapper;
 using EliteChroma.Controls;
 
 namespace EliteChroma.Internal.UI
 {
     [ExcludeFromCodeCoverage]
-    internal sealed class ColoreColorEditor : UITypeEditor
+    internal sealed class ChromaColorEditor : UITypeEditor
     {
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
@@ -32,29 +33,19 @@ namespace EliteChroma.Internal.UI
 
             using var cp = new RgbPicker
             {
-                Color = FromColoreColor((Colore.Data.Color)value),
+                Color = ((ChromaColor)value).ToColor(),
             };
 
             wfes.DropDownControl(cp);
 
-            return ToColoreColor(cp.Color);
+            return ChromaColor.FromColor(cp.Color);
         }
 
         public override void PaintValue(PaintValueEventArgs e)
         {
-            Color c = FromColoreColor((Colore.Data.Color)e.Value);
+            var c = ((ChromaColor)e.Value).ToColor();
             using var b = new SolidBrush(c);
             e.Graphics.FillRectangle(b, e.Bounds);
-        }
-
-        private static Colore.Data.Color ToColoreColor(Color color)
-        {
-            return new Colore.Data.Color(color.R, color.G, color.B);
-        }
-
-        private static Color FromColoreColor(Colore.Data.Color color)
-        {
-            return Color.FromArgb(color.R, color.G, color.B);
         }
     }
 }

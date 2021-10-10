@@ -25,7 +25,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EliteChroma.Core.Windows\EliteChroma.Core.Windows.csproj" />
     <ProjectReference Include="..\EliteChroma.Core\EliteChroma.Core.csproj" />
     <ProjectReference Include="..\EliteFiles\EliteFiles.csproj" />
   </ItemGroup>

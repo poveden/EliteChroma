@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Colore;
-using Colore.Data;
-using Colore.Effects.Keyboard;
+using ChromaWrapper;
+using ChromaWrapper.Keyboard;
 using EliteChroma.Chroma;
 using EliteChroma.Core.Internal;
 using EliteChroma.Core.Layers;
@@ -53,6 +51,9 @@ namespace EliteChroma.Core.Tests
 
             Assert.Equal(h1.CompareTo(h2), comparer.Compare(l1.Object, l2.Object));
             Assert.Equal(h2.CompareTo(h1), comparer.Compare(l2.Object, l1.Object));
+
+            Assert.Equal(-1, comparer.Compare(null, l1.Object));
+            Assert.Equal(1, comparer.Compare(l1.Object, null));
         }
 
         [Fact]
@@ -76,23 +77,23 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
-        public async Task LayerBaseThrowsOnInvalidGameState()
+        public void LayerBaseThrowsOnInvalidGameState()
         {
             var le = new LayeredEffect();
             le.Add(new DummyLayer(new NativeMethodsStub()));
 
-            var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
+            var chroma = ChromaMockFactory.Create();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => le.Render(chroma.Object, null!)).ConfigureAwait(false);
+            Assert.Throws<ArgumentNullException>(() => le.Render(chroma.Object, null!));
         }
 
         [Theory]
         [InlineData(StarClass.O, 0.25, new[] { 0x000000, 0x007F00, 0x00FF00, 0x007F00, 0x000000 })]
         [InlineData(StarClass.HerbigAeBe, 0.25, new[] { 0xFFFF00, 0xFFFF00, 0x000000, 0x000000 })]
         [InlineData(StarClass.Neutron, 0.1675, new[] { 0xFF0000, 0x000000, 0x000000, 0xFF0000 })]
-        public async Task HyperspaceLayerPulsesJumpKeyBasedOnHazardLevel(string starClass, double stepSeconds, int[] rgbColors)
+        public void HyperspaceLayerPulsesJumpKeyBasedOnHazardLevel(string starClass, double stepSeconds, int[] rgbColors)
         {
-            var colors = rgbColors.Select(x => Color.FromRgb((uint)x)).ToList();
+            var colors = rgbColors.Select(x => ChromaColor.FromRgb(x)).ToList();
 
             var binds = BindingPreset.FromFile(Path.Combine(_gif.FullName, _mainFile))!;
             var hyperJumpKey = GetKey(binds, FlightMiscellaneous.HyperSuperCombination);
@@ -101,12 +102,12 @@ namespace EliteChroma.Core.Tests
             var le = new LayeredEffect();
             le.Add(hyperspaceLayer);
 
-            var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
+            var chroma = ChromaMockFactory.Create();
 
-            CustomKeyboardEffect? keyboard = null;
-            Mock.Get(chroma.Object.Keyboard)
-                .Setup(x => x.SetCustomAsync(It.IsAny<CustomKeyboardEffect>()))
-                .Callback((CustomKeyboardEffect c) => keyboard = c);
+            CustomKeyKeyboardEffect? keyboard = null;
+            Mock.Get(chroma.Object)
+                .Setup(x => x.CreateEffect(It.IsAny<IKeyboardEffect>()))
+                .Callback((IKeyboardEffect c) => keyboard = (CustomKeyKeyboardEffect)c);
 
             var game = new GameState
             {
@@ -120,23 +121,23 @@ namespace EliteChroma.Core.Tests
             var state = new LayerRenderState(game, new ChromaColors());
 
             game.Now = DateTimeOffset.UtcNow;
-            await le.Render(chroma.Object, state).ConfigureAwait(false);
+            le.Render(chroma.Object, state);
             Assert.False(game.InWitchSpace);
 
             game.Now += GameState.JumpCountdownDelay;
-            await le.Render(chroma.Object, state).ConfigureAwait(false);
+            le.Render(chroma.Object, state);
             Assert.True(game.InWitchSpace);
 #pragma warning disable CA1508
-            Assert.Equal(colors[0], keyboard?[hyperJumpKey]);
+            Assert.Equal(colors[0], keyboard?.Key[hyperJumpKey]);
 #pragma warning restore CA1508
 
             foreach (var color in colors.Skip(1))
             {
                 keyboard = null;
                 game.Now += TimeSpan.FromSeconds(stepSeconds);
-                await le.Render(chroma.Object, state).ConfigureAwait(false);
+                le.Render(chroma.Object, state);
 #pragma warning disable CA1508
-                Assert.Equal(color, keyboard?[hyperJumpKey]);
+                Assert.Equal(color, keyboard?.Key[hyperJumpKey]);
 #pragma warning restore CA1508
             }
         }
@@ -147,12 +148,12 @@ namespace EliteChroma.Core.Tests
         [InlineData(false, GameProcessState.NotRunning, null, null)]
         [InlineData(true, GameProcessState.NotRunning, null, null)]
         [InlineData(true, GameProcessState.InForeground, 0xFF8800, null)]
-        public async Task GameInBackgroundLayerSetsAColorPerGameProcessState(bool wasInBackground, GameProcessState processState, int? startRgbColor, int? endRgbColor)
+        public void GameInBackgroundLayerSetsAColorPerGameProcessState(bool wasInBackground, GameProcessState processState, int? startRgbColor, int? endRgbColor)
         {
             const double fadeDurationSeconds = 1;
 
-            var expectedStartColor = startRgbColor.HasValue ? Color.FromRgb((uint)startRgbColor.Value) : (Color?)null;
-            var expectedEndColor = endRgbColor.HasValue ? Color.FromRgb((uint)endRgbColor.Value) : (Color?)null;
+            var expectedStartColor = startRgbColor.HasValue ? ChromaColor.FromRgb(startRgbColor.Value) : (ChromaColor?)null;
+            var expectedEndColor = endRgbColor.HasValue ? ChromaColor.FromRgb(endRgbColor.Value) : (ChromaColor?)null;
 
             var graphicsConfig = GraphicsConfig.FromFile(_gif.GraphicsConfiguration.FullName)!;
 
@@ -162,12 +163,12 @@ namespace EliteChroma.Core.Tests
             var le = new LayeredEffect();
             le.Add(bl);
 
-            var chroma = new Mock<IChroma> { DefaultValue = DefaultValue.Mock };
+            var chroma = ChromaMockFactory.Create();
 
-            CustomKeyboardEffect? keyboard = null;
-            Mock.Get(chroma.Object.Keyboard)
-                .Setup(x => x.SetCustomAsync(It.IsAny<CustomKeyboardEffect>()))
-                .Callback((CustomKeyboardEffect c) => keyboard = c);
+            CustomKeyKeyboardEffect? keyboard = null;
+            Mock.Get(chroma.Object)
+                .Setup(x => x.CreateEffect(It.IsAny<IKeyboardEffect>()))
+                .Callback((IKeyboardEffect c) => keyboard = (CustomKeyKeyboardEffect)c);
 
             var game = new GameState
             {
@@ -178,20 +179,20 @@ namespace EliteChroma.Core.Tests
             var state = new LayerRenderState(game, new ChromaColors());
 
             game.Now = DateTimeOffset.UtcNow;
-            await le.Render(chroma.Object, state).ConfigureAwait(false);
+            le.Render(chroma.Object, state);
 #pragma warning disable CA1508
-            Assert.Equal(expectedStartColor, keyboard?[(Key)0]);
+            Assert.Equal(expectedStartColor, keyboard?.Key[0]);
 #pragma warning restore CA1508
 
             keyboard = null;
             game.Now += TimeSpan.FromSeconds(fadeDurationSeconds);
-            await le.Render(chroma.Object, state).ConfigureAwait(false);
+            le.Render(chroma.Object, state);
 #pragma warning disable CA1508
-            Assert.Equal(expectedEndColor, keyboard?[(Key)0]);
+            Assert.Equal(expectedEndColor, keyboard?.Key[0]);
 #pragma warning restore CA1508
         }
 
-        private static Key GetKey(BindingPreset binds, string binding)
+        private static KeyboardKey GetKey(BindingPreset binds, string binding)
         {
             var bps = binds.Bindings[binding].Primary;
             return KeyMappings.TryGetKey(bps.Key!, "en-US", false, out var key, new NativeMethodsStub()) ? key : 0;

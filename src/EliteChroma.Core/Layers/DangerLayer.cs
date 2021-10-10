@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
-using Colore.Effects.Keyboard;
+using ChromaWrapper;
+using ChromaWrapper.Keyboard;
 using EliteChroma.Chroma;
 using EliteChroma.Elite;
 using EliteFiles.Journal.Events;
@@ -43,11 +43,9 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            CustomKeyboardEffect k = canvas.Keyboard;
-
             if (underAttack || otherDanger)
             {
-                double flarePct = PulseColor(Color.Black, Color.White, _fastPulse).R / 255.0;
+                double flarePct = PulseColor(ChromaColor.Black, ChromaColor.White, _fastPulse).R / 255.0;
 
                 if (!otherDanger)
                 {
@@ -55,11 +53,11 @@ namespace EliteChroma.Core.Layers
                     flarePct = flarePct * fade * fade;
                 }
 
-                Color c = GameColors.RedAlert.Transform(flarePct);
+                ChromaColor c = GameColors.RedAlert.Transform(flarePct);
 
-                Color cLogo = k[Key.Logo];
+                var cLogo = (ChromaColor)canvas.Keyboard.Key[KeyboardKey.Logo];
                 _ = canvas.Keyboard.Max(c);
-                k[Key.Logo] = cLogo;
+                canvas.Keyboard.Key[KeyboardKey.Logo] = cLogo;
 
                 _ = canvas.Mouse.Combine(GameColors.RedAlert, flarePct);
                 _ = canvas.Mousepad.Combine(GameColors.RedAlert, flarePct);
@@ -70,7 +68,7 @@ namespace EliteChroma.Core.Layers
 
             if (inDanger)
             {
-                k[Key.Logo] = PulseColor(k[Key.Logo], GameColors.RedAlert, _slowPulse);
+                canvas.Keyboard.Key[KeyboardKey.Logo] = PulseColor((ChromaColor)canvas.Keyboard.Key[KeyboardKey.Logo], GameColors.RedAlert, _slowPulse);
             }
         }
     }

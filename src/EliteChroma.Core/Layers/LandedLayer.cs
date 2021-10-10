@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Colore.Data;
-using Colore.Effects.Keyboard;
+using ChromaWrapper;
+using ChromaWrapper.Keyboard;
 using EliteChroma.Chroma;
 using EliteFiles.Bindings.Binds;
 using EliteFiles.Status;
@@ -21,10 +21,9 @@ namespace EliteChroma.Core.Layers
 
             _ = StartAnimation();
 
-            CustomKeyboardEffect k = canvas.Keyboard;
-            k[Key.Escape] = Colors.InterfaceMode;
+            canvas.Keyboard.Key[KeyboardKey.Esc] = Colors.InterfaceMode;
 
-            Color c = PulseColor(Color.Black, Colors.VehicleThrust, TimeSpan.FromSeconds(1));
+            ChromaColor c = PulseColor(ChromaColor.Black, Colors.VehicleThrust, TimeSpan.FromSeconds(1));
             ApplyColorToBinding(canvas.Keyboard, FlightThrust.Up, c);
         }
     }
