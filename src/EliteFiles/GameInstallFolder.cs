@@ -50,9 +50,9 @@ namespace EliteFiles
         public GameInstallFolder(string path)
         {
             _di = new DirectoryInfo(path);
-            MainExecutable = new FileInfo(Path.Combine(path, MainExecutableFileName));
-            GraphicsConfiguration = new FileInfo(Path.Combine(path, GraphicsConfigMainFileName));
-            ControlSchemes = new DirectoryInfo(Path.Combine(path, ControlSchemesFolderName));
+            MainExecutable = _di.GetFile(MainExecutableFileName);
+            GraphicsConfiguration = _di.GetFile(GraphicsConfigMainFileName);
+            ControlSchemes = _di.GetDirectory(ControlSchemesFolderName);
 
             IsValid = _di.Exists
                 && MainExecutable.Exists

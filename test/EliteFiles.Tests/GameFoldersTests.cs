@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using EliteFiles.Tests.Internal;
@@ -70,6 +71,45 @@ namespace EliteFiles.Tests
             string folder = JournalFolder.DefaultPath;
 
             Assert.EndsWith(@"\Saved Games\Frontier Developments\Elite Dangerous", folder, StringComparison.Ordinal);
+        }
+
+        [Fact]
+        public void GetsGameInstallFolderInfo()
+        {
+            const string templateFolder = @"TestFiles\GameRoot";
+
+            var gif = new GameInstallFolder(templateFolder);
+
+            Assert.True(gif.IsValid);
+            Assert.Equal(Path.Combine(gif.FullName, "EliteDangerous64.exe"), gif.MainExecutable.FullName, true);
+            Assert.Equal(Path.Combine(gif.FullName, "GraphicsConfiguration.xml"), gif.GraphicsConfiguration.FullName, true);
+            Assert.Equal(Path.Combine(gif.FullName, "ControlSchemes"), gif.ControlSchemes.FullName, true);
+        }
+
+        [Fact]
+        public void GetsGameOptionsFolderInfo()
+        {
+            const string templateFolder = @"TestFiles\GameOptions";
+
+            var gof = new GameOptionsFolder(templateFolder);
+
+            Assert.True(gof.IsValid);
+            Assert.Equal(Path.Combine(gof.FullName, "Bindings"), gof.Bindings.FullName, true);
+            Assert.Equal(Path.Combine(gof.FullName, @"Bindings\StartPreset.start"), gof.BindingsStartPreset.FullName, true);
+            Assert.Equal(Path.Combine(gof.FullName, "Graphics"), gof.Graphics.FullName, true);
+            Assert.Equal(Path.Combine(gof.FullName, @"Graphics\GraphicsConfigurationOverride.xml"), gof.GraphicsConfigurationOverride.FullName, true);
+        }
+
+        [Fact]
+        public void GetsJournalFolderInfo()
+        {
+            const string templateFolder = @"TestFiles\Journal";
+
+            var jf = new JournalFolder(templateFolder);
+
+            Assert.True(jf.IsValid);
+            Assert.Equal(Path.Combine(jf.FullName, "Status.json"), jf.Status.FullName, true);
+            Assert.True(File.Exists(Path.Combine(jf.FullName, "Journal.190101020000.01.log")));
         }
 
         [Fact]

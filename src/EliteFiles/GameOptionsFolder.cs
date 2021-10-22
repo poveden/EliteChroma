@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using EliteFiles.Internal;
 
 namespace EliteFiles
 {
@@ -36,10 +37,10 @@ namespace EliteFiles
         public GameOptionsFolder(string path)
         {
             _di = new DirectoryInfo(path);
-            Bindings = new DirectoryInfo(Path.Combine(path, BindingsFolderName));
-            BindingsStartPreset = new FileInfo(Path.Combine(Bindings.FullName, BindingsStartPresetFileName));
-            Graphics = new DirectoryInfo(Path.Combine(path, GraphicsFolderName));
-            GraphicsConfigurationOverride = new FileInfo(Path.Combine(Graphics.FullName, GraphicsConfigOverrideFileName));
+            Bindings = _di.GetDirectory(BindingsFolderName);
+            BindingsStartPreset = Bindings.GetFile(BindingsStartPresetFileName);
+            Graphics = _di.GetDirectory(GraphicsFolderName);
+            GraphicsConfigurationOverride = Graphics.GetFile(GraphicsConfigOverrideFileName);
 
             IsValid = _di.Exists
                 && Bindings.Exists
