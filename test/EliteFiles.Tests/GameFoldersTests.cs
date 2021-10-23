@@ -94,10 +94,19 @@ namespace EliteFiles.Tests
             var gof = new GameOptionsFolder(templateFolder);
 
             Assert.True(gof.IsValid);
+            Assert.Equal(Path.Combine(gof.FullName, "Audio"), gof.Audio.FullName, true);
+            Assert.Equal(Path.Combine(gof.FullName, @"Audio\StartPreset.start"), gof.AudioStartPreset.FullName, true);
             Assert.Equal(Path.Combine(gof.FullName, "Bindings"), gof.Bindings.FullName, true);
             Assert.Equal(Path.Combine(gof.FullName, @"Bindings\StartPreset.start"), gof.BindingsStartPreset.FullName, true);
+            Assert.Equal(Path.Combine(gof.FullName, "Development"), gof.Development.FullName, true);
+            Assert.Equal(Path.Combine(gof.FullName, @"Development\StartPreset.start"), gof.DevelopmentStartPreset.FullName, true);
             Assert.Equal(Path.Combine(gof.FullName, "Graphics"), gof.Graphics.FullName, true);
             Assert.Equal(Path.Combine(gof.FullName, @"Graphics\GraphicsConfigurationOverride.xml"), gof.GraphicsConfigurationOverride.FullName, true);
+            Assert.Equal(Path.Combine(gof.FullName, @"Graphics\StartPreset.start"), gof.GraphicsStartPreset.FullName, true);
+            Assert.Equal(Path.Combine(gof.FullName, "Player"), gof.Player.FullName, true);
+            Assert.Equal(Path.Combine(gof.FullName, @"Player\StartPreset.start"), gof.PlayerStartPreset.FullName, true);
+            Assert.Equal(Path.Combine(gof.FullName, "Startup"), gof.Startup.FullName, true);
+            Assert.Equal(Path.Combine(gof.FullName, @"Startup\Settings.xml"), gof.StartupSettings.FullName, true);
         }
 
         [Fact]
@@ -148,11 +157,26 @@ namespace EliteFiles.Tests
             Assert.False(IsValidFolder("Non-Existing-Path"));
             Assert.False(IsValidFolder("TestFiles"));
 
-            DeleteFolderAndAssertFalse(templateFolder, "Bindings", IsValidFolder);
-            DeleteFileAndAssertFalse(templateFolder, @"Bindings\StartPreset.start", IsValidFolder);
+            DeleteFolderAndAssertFalse(templateFolder, "Audio", IsValidFolder);
+            DeleteFileAndAssertFalse(templateFolder, @"Audio\StartPreset.start", IsValidFolder);
+
+            /* Exception: Odyssey does not create the Bindings folder by default. */
+            DeleteFolderAndAssertTrue(templateFolder, "Bindings", IsValidFolder);
+            DeleteFileAndAssertTrue(templateFolder, @"Bindings\StartPreset.start", IsValidFolder);
+
+            DeleteFolderAndAssertFalse(templateFolder, "Development", IsValidFolder);
+            DeleteFileAndAssertFalse(templateFolder, @"Development\StartPreset.start", IsValidFolder);
 
             DeleteFolderAndAssertFalse(templateFolder, "Graphics", IsValidFolder);
+            DeleteFileAndAssertFalse(templateFolder, @"Graphics\StartPreset.start", IsValidFolder);
+            /* Exception: GraphicsConfigurationOverride is not required to be present. */
             DeleteFileAndAssertTrue(templateFolder, @"Graphics\GraphicsConfigurationOverride.xml", IsValidFolder);
+
+            DeleteFolderAndAssertFalse(templateFolder, "Player", IsValidFolder);
+            DeleteFileAndAssertFalse(templateFolder, @"Player\StartPreset.start", IsValidFolder);
+
+            DeleteFolderAndAssertFalse(templateFolder, "Startup", IsValidFolder);
+            DeleteFileAndAssertFalse(templateFolder, @"Startup\Settings.xml", IsValidFolder);
         }
 
         [Fact]
@@ -193,6 +217,13 @@ namespace EliteFiles.Tests
             using var dir = new TestFolder(templatePath);
             dir.DeleteFolder(folderToDelete);
             Assert.False(testFunc(dir.Name));
+        }
+
+        private static void DeleteFolderAndAssertTrue(string templatePath, string folderToDelete, Func<string, bool> testFunc)
+        {
+            using var dir = new TestFolder(templatePath);
+            dir.DeleteFolder(folderToDelete);
+            Assert.True(testFunc(dir.Name));
         }
 
         private static IReadOnlyList<string> SteamLibraryFoldersFromFile(string path)
