@@ -140,7 +140,7 @@ namespace EliteFiles.Tests
             DeleteFileAndAssertFalse(templateFolder, "GraphicsConfiguration.xml", IsValidFolder);
 
             DeleteFolderAndAssertFalse(templateFolder, "ControlSchemes", IsValidFolder);
-            DeleteFileAndAssertFalse(templateFolder, @"ControlSchemes\Keyboard.binds", IsValidFolder);
+            DeleteFileAndAssertFalse(templateFolder, @"ControlSchemes\KeyboardMouseOnly.binds", IsValidFolder);
         }
 
         [Fact]

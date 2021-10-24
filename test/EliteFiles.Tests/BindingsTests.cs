@@ -17,7 +17,7 @@ namespace EliteFiles.Tests
         private const string _gameOptionsFolder = @"TestFiles\GameOptions";
 
         private const string _startPresetFile = @"Bindings\StartPreset.start";
-        private const string _mainFile = @"ControlSchemes\Keyboard.binds";
+        private const string _mainFile = @"ControlSchemes\KeyboardMouseOnly.binds";
         private const string _customFile = @"Bindings\Custom.3.0.binds";
 
         private const int _bindingCategories = 4;
@@ -65,7 +65,7 @@ namespace EliteFiles.Tests
             var binds = BindingPreset.FromFile(Path.Combine(_gif.FullName, _mainFile))!;
 
             Assert.NotNull(binds);
-            Assert.Equal("Keyboard", binds.PresetName);
+            Assert.Equal("KeyboardMouseOnly", binds.PresetName);
             Assert.Null(binds.Version);
             Assert.Null(binds.KeyboardLayout);
 
@@ -146,7 +146,7 @@ namespace EliteFiles.Tests
         public void SupportsMultilineStartPresets()
         {
             using var dirOpts = new TestFolder(_gof.FullName);
-            dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2\nMalformed\nKeyboard");
+            dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2\nMalformed\nKeyboardMouseOnly");
 
             var gof = new GameOptionsFolder(dirOpts.Name);
             Assert.True(gof.IsValid);
@@ -159,7 +159,7 @@ namespace EliteFiles.Tests
                 [BindingCategory.GeneralControls] = dirOpts.Resolve(@"Bindings\Custom.3.0.binds"),
                 [BindingCategory.ShipControls] = dirOpts.Resolve(@"Bindings\Custom2.3.0.binds"),
                 [BindingCategory.SrvControls] = dirOpts.Resolve(@"Bindings\Malformed.3.0.binds"),
-                [BindingCategory.OnFootControls] = Path.Combine(_gif.FullName, @"ControlSchemes\Keyboard.binds"),
+                [BindingCategory.OnFootControls] = Path.Combine(_gif.FullName, @"ControlSchemes\KeyboardMouseOnly.binds"),
             };
 
             foreach (var category in expected.Keys)
@@ -172,7 +172,7 @@ namespace EliteFiles.Tests
         public void FindActivePresetFilesReturnsNullWhenAPresetFileIsMissing()
         {
             using var dirOpts = new TestFolder(_gof.FullName);
-            dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2\nMISSING_PRESET\nKeyboard");
+            dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2\nMISSING_PRESET\nKeyboardMouseOnly");
 
             var gof = new GameOptionsFolder(dirOpts.Name);
             Assert.True(gof.IsValid);
@@ -198,7 +198,7 @@ namespace EliteFiles.Tests
         public void FindActivePresetFilesIncludesUnknownCategories()
         {
             using var dirOpts = new TestFolder(_gof.FullName);
-            dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2\nKeyboard\nCustom\nCustom2");
+            dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2\nKeyboardMouseOnly\nCustom\nCustom2");
 
             var gof = new GameOptionsFolder(dirOpts.Name);
             Assert.True(gof.IsValid);
@@ -210,7 +210,7 @@ namespace EliteFiles.Tests
             {
                 [BindingCategory.GeneralControls] = dirOpts.Resolve(@"Bindings\Custom.3.0.binds"),
                 [BindingCategory.ShipControls] = dirOpts.Resolve(@"Bindings\Custom2.3.0.binds"),
-                [BindingCategory.SrvControls] = Path.Combine(_gif.FullName, @"ControlSchemes\Keyboard.binds"),
+                [BindingCategory.SrvControls] = Path.Combine(_gif.FullName, @"ControlSchemes\KeyboardMouseOnly.binds"),
                 [BindingCategory.OnFootControls] = dirOpts.Resolve(@"Bindings\Custom.3.0.binds"),
                 [(BindingCategory)4] = dirOpts.Resolve(@"Bindings\Custom2.3.0.binds"),
             };
@@ -266,7 +266,7 @@ namespace EliteFiles.Tests
             binds = await evs.WaitAsync(() => dirOpts.WriteText(_customFile, bindsCustom)).ConfigureAwait(false);
             Assert.NotNull(binds);
 
-            binds = await evs.WaitAsync(() => dirOpts.WriteText(_startPresetFile, "Keyboard")).ConfigureAwait(false);
+            binds = await evs.WaitAsync(() => dirOpts.WriteText(_startPresetFile, "KeyboardMouseOnly")).ConfigureAwait(false);
             Assert.NotNull(binds);
         }
 
