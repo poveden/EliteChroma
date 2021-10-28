@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased](https://github.com/poveden/EliteChroma/compare/v1.14.0...HEAD)
 
+### Added
+
+- Add tolerance for missing `Bindings` folder on Odyssey's clean install
+
 ### Changed
 
 - Replace [Colore](https://www.nuget.org/packages/Colore/) with [ChromaWrapper](https://www.nuget.org/packages/ChromaWrapper/)

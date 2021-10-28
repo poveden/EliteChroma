@@ -356,6 +356,27 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
+        public async Task WatcherToleratesMissingBindingsFolder()
+        {
+            using var dirOpts = new TestFolder(_gameOptionsFolder);
+            dirOpts.DeleteFolder("Bindings");
+
+            var gof = new GameOptionsFolder(dirOpts.Name);
+            using var bw = new BindingsWatcher(_gif, gof);
+
+            var ecs = new EventCollector<BindingPreset>(h => bw.Changed += h, h => bw.Changed -= h, nameof(WatcherToleratesMissingBindingsFolder));
+
+            var preset = await ecs.WaitAsync(() =>
+            {
+                bw.Start();
+                bw.Stop();
+            }).ConfigureAwait(false);
+
+            Assert.NotNull(preset);
+            Assert.Equal("KeyboardMouseOnly", preset!.PresetName);
+        }
+
+        [Fact]
         public void StartAndStopAreNotReentrant()
         {
             using var watcher = new BindingsWatcher(_gif, _gof);

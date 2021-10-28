@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -130,6 +131,41 @@ namespace EliteChroma.Core.Tests
             Assert.True(watcher.ForceEnUSKeyboardLayout);
             Assert.True(watcher.GetPrivateField<GameState>("_gameState")!.ForceEnUSKeyboardLayout);
             Assert.True(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
+        }
+
+        [Theory]
+        [InlineData("EliteDangerous64.exe")]
+        [InlineData("GraphicsConfiguration.xml")]
+        [InlineData(@"ControlSchemes\*.binds")]
+        public void DoesNotTolerateMissingFilesInTheGameRootFolder(string missingFilesPattern)
+        {
+            using var dirRoot = new TestFolder(_gameRootFolder);
+            Assert.NotEqual(0, dirRoot.DeleteFiles(missingFilesPattern));
+
+            Assert.Throws<ArgumentException>("gameInstallFolder", () => { using var gsw = new GameStateWatcher(dirRoot.Name, _gameOptionsFolder, _journalFolder); });
+        }
+
+        [Theory]
+        [InlineData(@"Bindings\*.binds")]
+        [InlineData(@"Bindings\StartPreset.start")]
+        [InlineData(@"Graphics\GraphicsConfigurationOverride.xml")]
+        public void ToleratesMissingFilesInTheGameOptionsFolder(string missingFilesPattern)
+        {
+            using var dirOpts = new TestFolder(_gameOptionsFolder);
+            Assert.NotEqual(0, dirOpts.DeleteFiles(missingFilesPattern));
+
+            using var gsw = new GameStateWatcher(_gameRootFolder, dirOpts.Name, _journalFolder);
+        }
+
+        [Theory]
+        [InlineData("Status.json")]
+        [InlineData("Journal.*.log")]
+        public void DoesNotTolerateMissingFilesInTheJournalFolder(string missingFilesPattern)
+        {
+            using var dirJournal = new TestFolder(_journalFolder);
+            Assert.NotEqual(0, dirJournal.DeleteFiles(missingFilesPattern));
+
+            Assert.Throws<ArgumentException>("journalFolder", () => { using var gsw = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, dirJournal.Name); });
         }
     }
 }
