@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Add tolerance for missing `Bindings` folder on Odyssey's clean install
+- Add "game must be run at least once" guidance
 
 ### Changed
 

@@ -42,6 +42,9 @@
             this.txtGameOptions = new System.Windows.Forms.TextBox();
             this.txtJournal = new System.Windows.Forms.TextBox();
             this.grpEDFolders = new System.Windows.Forms.GroupBox();
+            this.pbWarning = new System.Windows.Forms.PictureBox();
+            this.pbInformation = new System.Windows.Forms.PictureBox();
+            this.lblPreRunWarning = new System.Windows.Forms.Label();
             this.btnJournal = new System.Windows.Forms.Button();
             this.lblJournal = new System.Windows.Forms.Label();
             this.btnGameOptions = new System.Windows.Forms.Button();
@@ -63,6 +66,8 @@
             this.chDetectGameProcess = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.grpEDFolders.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbWarning)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbInformation)).BeginInit();
             this.ctxGameInstall.SuspendLayout();
             this.pnlKeyboard.SuspendLayout();
             this.pnlColors.SuspendLayout();
@@ -149,6 +154,9 @@
             this.grpEDFolders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpEDFolders.Controls.Add(this.pbWarning);
+            this.grpEDFolders.Controls.Add(this.pbInformation);
+            this.grpEDFolders.Controls.Add(this.lblPreRunWarning);
             this.grpEDFolders.Controls.Add(this.btnJournal);
             this.grpEDFolders.Controls.Add(this.txtJournal);
             this.grpEDFolders.Controls.Add(this.lblJournal);
@@ -167,6 +175,38 @@
             this.grpEDFolders.TabIndex = 1;
             this.grpEDFolders.TabStop = false;
             this.grpEDFolders.Text = "Elite:Dangerous folders";
+            // 
+            // pbWarning
+            // 
+            this.pbWarning.Location = new System.Drawing.Point(9, 195);
+            this.pbWarning.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.pbWarning.Name = "pbWarning";
+            this.pbWarning.Size = new System.Drawing.Size(16, 16);
+            this.pbWarning.TabIndex = 15;
+            this.pbWarning.TabStop = false;
+            // 
+            // pbInformation
+            // 
+            this.pbInformation.Location = new System.Drawing.Point(9, 173);
+            this.pbInformation.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.pbInformation.Name = "pbInformation";
+            this.pbInformation.Size = new System.Drawing.Size(16, 16);
+            this.pbInformation.TabIndex = 14;
+            this.pbInformation.TabStop = false;
+            // 
+            // lblPreRunWarning
+            // 
+            this.lblPreRunWarning.AutoSize = true;
+            this.lblPreRunWarning.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.lblPreRunWarning.Location = new System.Drawing.Point(28, 195);
+            this.lblPreRunWarning.Margin = new System.Windows.Forms.Padding(3);
+            this.lblPreRunWarning.MinimumSize = new System.Drawing.Size(0, 16);
+            this.lblPreRunWarning.Name = "lblPreRunWarning";
+            this.lblPreRunWarning.Padding = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.lblPreRunWarning.Size = new System.Drawing.Size(349, 16);
+            this.lblPreRunWarning.TabIndex = 13;
+            this.lblPreRunWarning.Text = "The game must have been run at least once for all folders to exist";
+            this.lblPreRunWarning.UseMnemonic = false;
             // 
             // btnJournal
             // 
@@ -258,10 +298,13 @@
             // linkGameFolders
             // 
             this.linkGameFolders.AutoSize = true;
+            this.linkGameFolders.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
             this.linkGameFolders.LinkColor = System.Drawing.Color.Blue;
-            this.linkGameFolders.Location = new System.Drawing.Point(9, 173);
+            this.linkGameFolders.Location = new System.Drawing.Point(28, 173);
+            this.linkGameFolders.Margin = new System.Windows.Forms.Padding(3);
+            this.linkGameFolders.MinimumSize = new System.Drawing.Size(0, 16);
             this.linkGameFolders.Name = "linkGameFolders";
-            this.linkGameFolders.Size = new System.Drawing.Size(296, 15);
+            this.linkGameFolders.Size = new System.Drawing.Size(296, 16);
             this.linkGameFolders.TabIndex = 12;
             this.linkGameFolders.TabStop = true;
             this.linkGameFolders.Text = "Default {game install}, {options} and {journal} locations";
@@ -412,6 +455,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.grpEDFolders.ResumeLayout(false);
             this.grpEDFolders.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbWarning)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbInformation)).EndInit();
             this.ctxGameInstall.ResumeLayout(false);
             this.pnlKeyboard.ResumeLayout(false);
             this.pnlKeyboard.PerformLayout();
@@ -451,5 +496,8 @@
         private System.Windows.Forms.Panel pnlGeneral;
         private System.Windows.Forms.CheckBox chDetectGameProcess;
         private System.Windows.Forms.Label lblDetectGameProcess;
+        private System.Windows.Forms.Label lblPreRunWarning;
+        private System.Windows.Forms.PictureBox pbInformation;
+        private System.Windows.Forms.PictureBox pbWarning;
     }
 }
