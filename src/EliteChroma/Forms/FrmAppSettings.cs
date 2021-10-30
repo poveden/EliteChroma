@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -47,6 +48,8 @@ namespace EliteChroma.Forms
             };
 
             ApplyLinks(linkGameFolders, urls);
+            ApplyIcon(pbInformation, SystemIcons.Information);
+            ApplyIcon(pbWarning, SystemIcons.Warning);
         }
 
         public string GameInstallFolder
@@ -114,6 +117,16 @@ namespace EliteChroma.Forms
             _ = finalTxt.Append(template, j + 1, template.Length - j - 1);
 
             linkLabel.Text = finalTxt.ToString();
+        }
+
+        private static void ApplyIcon(PictureBox pictureBox, Icon icon)
+        {
+            pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
+
+            using var g = Graphics.FromImage(pictureBox.Image);
+
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            g.DrawImage(Bitmap.FromHicon(icon.Handle), pictureBox.DisplayRectangle);
         }
 
         private List<ToolStripMenuItem> CreateGameInstallFolderMenuItems()

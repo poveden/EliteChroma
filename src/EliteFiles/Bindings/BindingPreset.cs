@@ -15,6 +15,8 @@ namespace EliteFiles.Bindings
     /// </summary>
     public sealed class BindingPreset
     {
+        private const string _defaultBindingPresetFileName = "KeyboardMouseOnly.binds";
+
         private static readonly int _numBindingCategories = Enum.GetValues(typeof(BindingCategory)).Length;
         private static readonly IReadOnlyDictionary<string, BindingCategory> _bindNameCategories = BuildBindNameCategoryMap();
 
@@ -151,6 +153,11 @@ namespace EliteFiles.Bindings
             _ = GameInstallFolder.AssertValid(gameInstallFolder);
             _ = GameOptionsFolder.AssertValid(gameOptionsFolder);
 
+            if (!gameOptionsFolder.BindingsStartPreset.Exists)
+            {
+                return GetDefaultPresetFiles(gameInstallFolder);
+            }
+
             var bindsFiles = new Dictionary<BindingCategory, string>(_numBindingCategories);
 
             using (FileStream fs = gameOptionsFolder.BindingsStartPreset.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -160,7 +167,7 @@ namespace EliteFiles.Bindings
                 string bindsName;
                 for (int i = 0; (bindsName = sr.ReadLine()) != null; i++)
                 {
-                    string bindsFile =
+                    string? bindsFile =
                         TryGetBindingsFilePath(gameOptionsFolder.Bindings, bindsName)
                         ?? TryGetBindingsFilePath(gameInstallFolder.ControlSchemes, bindsName);
 
@@ -192,7 +199,7 @@ namespace EliteFiles.Bindings
             return null;
         }
 
-        private static string TryGetBindingsFilePath(DirectoryInfo path, string bindsName)
+        private static string? TryGetBindingsFilePath(DirectoryInfo path, string bindsName)
         {
             IEnumerable<string> matches =
                 from file in path.EnumerateFiles($"{bindsName}.*")
@@ -221,6 +228,25 @@ namespace EliteFiles.Bindings
                 {
                     res.Add(name, category);
                 }
+            }
+
+            return res;
+        }
+
+        private static Dictionary<BindingCategory, string>? GetDefaultPresetFiles(GameInstallFolder gameInstallFolder)
+        {
+            FileInfo? bindsFile = gameInstallFolder.ControlSchemes.EnumerateFiles(_defaultBindingPresetFileName, SearchOption.TopDirectoryOnly).FirstOrDefault();
+
+            if (bindsFile == null || !bindsFile.Exists)
+            {
+                return null;
+            }
+
+            var res = new Dictionary<BindingCategory, string>(_numBindingCategories);
+
+            foreach (BindingCategory bindingCategory in Enum.GetValues(typeof(BindingCategory)))
+            {
+                res[bindingCategory] = bindsFile.FullName;
             }
 
             return res;

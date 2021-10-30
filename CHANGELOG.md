@@ -6,9 +6,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased](https://github.com/poveden/EliteChroma/compare/v1.14.0...HEAD)
 
+### Added
+
+- Add tolerance for missing `Bindings` folder on Odyssey's clean install
+- Add "game must be run at least once" guidance
+
 ### Changed
 
 - Replace [Colore](https://www.nuget.org/packages/Colore/) with [ChromaWrapper](https://www.nuget.org/packages/ChromaWrapper/)
+- Update game options folder validation rules
+- Update Frontier support links
+- Improve tray icon usability when a dialog form is already open
 
 ## [1.14.0](https://github.com/poveden/EliteChroma/compare/v1.13.1...v1.14.0) — 2021-08-19
 

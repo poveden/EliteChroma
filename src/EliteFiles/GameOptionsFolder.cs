@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using EliteFiles.Internal;
 
 namespace EliteFiles
 {
@@ -8,17 +9,32 @@ namespace EliteFiles
     /// </summary>
     public sealed class GameOptionsFolder
     {
+        /// <summary>«GameOptionsFolder»\«SubFolder»\StartPreset.start.</summary>
+        private const string StartPresetFileName = "StartPreset.start";
+
+        /// <summary>«GameOptionsFolder»\Audio.</summary>
+        private const string AudioFolderName = "Audio";
+
         /// <summary>«GameOptionsFolder»\Bindings.</summary>
         private const string BindingsFolderName = "Bindings";
 
-        /// <summary>«GameOptionsFolder»\Bindings\StartPreset.start.</summary>
-        private const string BindingsStartPresetFileName = "StartPreset.start";
+        /// <summary>«GameOptionsFolder»\Development.</summary>
+        private const string DevelopmentFolderName = "Development";
 
         /// <summary>«GameOptionsFolder»\Graphics.</summary>
         private const string GraphicsFolderName = "Graphics";
 
         /// <summary>«GameOptionsFolder»\Graphics\GraphicsConfigurationOverride.xml.</summary>
         private const string GraphicsConfigOverrideFileName = "GraphicsConfigurationOverride.xml";
+
+        /// <summary>«GameOptionsFolder»\Player.</summary>
+        private const string PlayerFolderName = "Player";
+
+        /// <summary>«GameOptionsFolder»\Startup.</summary>
+        private const string StartupFolderName = "Startup";
+
+        /// <summary>«GameOptionsFolder»\Startup\Startup.xml.</summary>
+        private const string StartupSettingsFileName = "Settings.xml";
 
         private static readonly Lazy<string> _defaultPath = new Lazy<string>(() =>
         {
@@ -36,15 +52,32 @@ namespace EliteFiles
         public GameOptionsFolder(string path)
         {
             _di = new DirectoryInfo(path);
-            Bindings = new DirectoryInfo(Path.Combine(path, BindingsFolderName));
-            BindingsStartPreset = new FileInfo(Path.Combine(Bindings.FullName, BindingsStartPresetFileName));
-            Graphics = new DirectoryInfo(Path.Combine(path, GraphicsFolderName));
-            GraphicsConfigurationOverride = new FileInfo(Path.Combine(Graphics.FullName, GraphicsConfigOverrideFileName));
+
+            Audio = _di.GetDirectory(AudioFolderName);
+            AudioStartPreset = Audio.GetFile(StartPresetFileName);
+
+            Bindings = _di.GetDirectory(BindingsFolderName);
+            BindingsStartPreset = Bindings.GetFile(StartPresetFileName);
+
+            Development = _di.GetDirectory(DevelopmentFolderName);
+            DevelopmentStartPreset = Development.GetFile(StartPresetFileName);
+
+            Graphics = _di.GetDirectory(GraphicsFolderName);
+            GraphicsConfigurationOverride = Graphics.GetFile(GraphicsConfigOverrideFileName);
+            GraphicsStartPreset = Graphics.GetFile(StartPresetFileName);
+
+            Player = _di.GetDirectory(PlayerFolderName);
+            PlayerStartPreset = Player.GetFile(StartPresetFileName);
+
+            Startup = _di.GetDirectory(StartupFolderName);
+            StartupSettings = Startup.GetFile(StartupSettingsFileName);
 
             IsValid = _di.Exists
-                && Bindings.Exists
-                && BindingsStartPreset.Exists
-                && Graphics.Exists;
+                && AudioStartPreset.Exists
+                && DevelopmentStartPreset.Exists
+                && GraphicsStartPreset.Exists
+                && PlayerStartPreset.Exists
+                && StartupSettings.Exists;
         }
 
         /// <summary>
@@ -64,6 +97,16 @@ namespace EliteFiles
         public string FullName => _di.FullName;
 
         /// <summary>
+        /// Gets the directory information for the <c>Audio</c> folder.
+        /// </summary>
+        public DirectoryInfo Audio { get; }
+
+        /// <summary>
+        /// Gets the file information for the <c>Audio\StartPreset.start</c> file.
+        /// </summary>
+        public FileInfo AudioStartPreset { get; }
+
+        /// <summary>
         /// Gets the directory information for the <c>Bindings</c> folder.
         /// </summary>
         public DirectoryInfo Bindings { get; }
@@ -74,6 +117,16 @@ namespace EliteFiles
         public FileInfo BindingsStartPreset { get; }
 
         /// <summary>
+        /// Gets the directory information for the <c>Development</c> folder.
+        /// </summary>
+        public DirectoryInfo Development { get; }
+
+        /// <summary>
+        /// Gets the file information for the <c>Development\StartPreset.start</c> file.
+        /// </summary>
+        public FileInfo DevelopmentStartPreset { get; }
+
+        /// <summary>
         /// Gets the directory information for the <c>Graphics</c> folder.
         /// </summary>
         public DirectoryInfo Graphics { get; }
@@ -82,6 +135,31 @@ namespace EliteFiles
         /// Gets the file information for the <c>Graphics\GraphicsConfigurationOverride.xml</c> file.
         /// </summary>
         public FileInfo GraphicsConfigurationOverride { get; }
+
+        /// <summary>
+        /// Gets the file information for the <c>Graphics\StartPreset.start</c> file.
+        /// </summary>
+        public FileInfo GraphicsStartPreset { get; }
+
+        /// <summary>
+        /// Gets the directory information for the <c>Player</c> folder.
+        /// </summary>
+        public DirectoryInfo Player { get; }
+
+        /// <summary>
+        /// Gets the file information for the <c>Player\StartPreset.start</c> file.
+        /// </summary>
+        public FileInfo PlayerStartPreset { get; }
+
+        /// <summary>
+        /// Gets the directory information for the <c>Startup</c> folder.
+        /// </summary>
+        public DirectoryInfo Startup { get; }
+
+        /// <summary>
+        /// Gets the file information for the <c>Startup\Settings.xml</c> file.
+        /// </summary>
+        public FileInfo StartupSettings { get; }
 
         /// <summary>
         /// Asserts that the provided folder is a valid Elite:Dangerous game options folder.

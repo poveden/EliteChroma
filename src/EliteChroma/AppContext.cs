@@ -29,6 +29,7 @@ namespace EliteChroma
             _ = ContextMenu.Items.Add("-");
             _ = ContextMenu.Items.Add("E&xit", null, Exit_Click);
 #pragma warning restore IDISP004
+            ContextMenu.Opening += ContextMenu_Opening;
         }
 
         public bool Start()
@@ -72,6 +73,38 @@ namespace EliteChroma
             if (disposing)
             {
                 _cc?.Dispose();
+            }
+        }
+
+        protected override void OnTrayIconClick(MouseEventArgs e)
+        {
+            _ = BringToFrontAnyOpenModalForm();
+        }
+
+        protected override void OnTrayIconDoubleClick(MouseEventArgs e)
+        {
+            _ = BringToFrontAnyOpenModalForm();
+        }
+
+        private static bool BringToFrontAnyOpenModalForm()
+        {
+            foreach (Form frm in Application.OpenForms)
+            {
+                if (frm.Modal)
+                {
+                    frm.BringToFront();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void ContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (BringToFrontAnyOpenModalForm())
+            {
+                e.Cancel = true;
             }
         }
 

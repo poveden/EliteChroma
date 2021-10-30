@@ -143,13 +143,13 @@ The application will now exit.</value>
 Please choose the right folders in the following window.</value>
   </data>
   <data name="Url_GameInstallFoldersHelp" xml:space="preserve">
-    <value>https://support.frontier.co.uk/kb/faq.php?id=108</value>
+    <value>https://customersupport.frontier.co.uk/hc/en-us/articles/4405700513298-Game-installation-and-file-locations-Netlog-AppConfig-Client-Log-Update-Log-Game-Folder-</value>
   </data>
   <data name="Url_GameOptionsFolderHelp" xml:space="preserve">
-    <value>https://support.frontier.co.uk/kb/faq.php?id=424</value>
+    <value>https://customersupport.frontier.co.uk/hc/en-us/articles/4405348381714-Odyssey-and-Horizons-compatibility-#:~:text=Local%20options%20storage</value>
   </data>
   <data name="Url_JournalFolderHelp" xml:space="preserve">
-    <value>https://support.frontier.co.uk/kb/faq.php?id=372</value>
+    <value>https://customersupport.frontier.co.uk/hc/en-us/articles/4404788337938-Where-can-I-find-the-player-journal-</value>
   </data>
   <data name="Colors_Category_Brightness" xml:space="preserve">
     <value>Brightness Levels</value>

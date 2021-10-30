@@ -50,9 +50,9 @@ namespace EliteFiles
         public GameInstallFolder(string path)
         {
             _di = new DirectoryInfo(path);
-            MainExecutable = new FileInfo(Path.Combine(path, MainExecutableFileName));
-            GraphicsConfiguration = new FileInfo(Path.Combine(path, GraphicsConfigMainFileName));
-            ControlSchemes = new DirectoryInfo(Path.Combine(path, ControlSchemesFolderName));
+            MainExecutable = _di.GetFile(MainExecutableFileName);
+            GraphicsConfiguration = _di.GetFile(GraphicsConfigMainFileName);
+            ControlSchemes = _di.GetDirectory(ControlSchemesFolderName);
 
             IsValid = _di.Exists
                 && MainExecutable.Exists
@@ -65,7 +65,7 @@ namespace EliteFiles
         /// Gets the set of default folder paths where Elite:Dangerous may be installed.
         /// </summary>
         /// <remarks>
-        /// Reference: <a href="https://support.frontier.co.uk/kb/faq.php?id=108">Frontier Support: Game Installation and File Locations</a>.
+        /// Reference: <a href="https://customersupport.frontier.co.uk/hc/en-us/articles/4405700513298-Game-installation-and-file-locations-Netlog-AppConfig-Client-Log-Update-Log-Game-Folder-">Frontier Support: Game Installation and File Locations</a>.
         /// </remarks>
         public static IReadOnlyCollection<string> DefaultPaths => _defaultPaths.Value;
 

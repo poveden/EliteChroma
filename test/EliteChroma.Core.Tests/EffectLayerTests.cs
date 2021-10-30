@@ -24,7 +24,7 @@ namespace EliteChroma.Core.Tests
     {
         private const string _gameRootFolder = @"TestFiles\GameRoot";
 
-        private const string _mainFile = @"ControlSchemes\Keyboard.binds";
+        private const string _mainFile = @"ControlSchemes\KeyboardMouseOnly.binds";
 
         private readonly GameInstallFolder _gif;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using EliteFiles.Internal;
 
 namespace EliteFiles
 {
@@ -34,7 +35,7 @@ namespace EliteFiles
         public JournalFolder(string path)
         {
             _di = new DirectoryInfo(path);
-            Status = new FileInfo(Path.Combine(path, StatusFileName));
+            Status = _di.GetFile(StatusFileName);
 
             IsValid = Status.Exists
                 && _di.Exists

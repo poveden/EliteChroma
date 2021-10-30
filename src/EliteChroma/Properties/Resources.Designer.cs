@@ -612,7 +612,7 @@ namespace EliteChroma.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://support.frontier.co.uk/kb/faq.php?id=108.
+        ///   Looks up a localized string similar to https://customersupport.frontier.co.uk/hc/en-us/articles/4405700513298-Game-installation-and-file-locations-Netlog-AppConfig-Client-Log-Update-Log-Game-Folder-.
         /// </summary>
         internal static string Url_GameInstallFoldersHelp {
             get {
@@ -621,7 +621,7 @@ namespace EliteChroma.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://support.frontier.co.uk/kb/faq.php?id=424.
+        ///   Looks up a localized string similar to https://customersupport.frontier.co.uk/hc/en-us/articles/4405348381714-Odyssey-and-Horizons-compatibility-#:~:text=Local%20options%20storage.
         /// </summary>
         internal static string Url_GameOptionsFolderHelp {
             get {
@@ -630,7 +630,7 @@ namespace EliteChroma.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://support.frontier.co.uk/kb/faq.php?id=372.
+        ///   Looks up a localized string similar to https://customersupport.frontier.co.uk/hc/en-us/articles/4404788337938-Where-can-I-find-the-player-journal-.
         /// </summary>
         internal static string Url_JournalFolderHelp {
             get {
