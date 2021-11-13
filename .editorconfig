@@ -14,6 +14,9 @@ dotnet_analyzer_diagnostic.severity = warning
 # Use generic event handler instances (https://docs.microsoft.com/en-us/dotnet/csharp/modern-events)
 dotnet_diagnostic.CA1003.severity = none
 
+# Empty "case" clauses that fall through to the "default" should be omitted
+dotnet_diagnostic.S3458.severity = none
+
 # Prefix local calls with this
 dotnet_diagnostic.SA1101.severity = none
 

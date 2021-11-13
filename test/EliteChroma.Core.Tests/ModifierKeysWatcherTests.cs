@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml.Linq;
 using EliteChroma.Core.Tests.Internal;
@@ -64,14 +65,20 @@ namespace EliteChroma.Core.Tests
             Assert.False(IsRunning());
         }
 
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP016:Don't use disposed instance.", Justification = "IDisposable test")]
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP017:Prefer using.", Justification = "IDisposable test")]
+        [SuppressMessage("Major Code Smell", "S3966:Objects should not be disposed more than once", Justification = "IDisposable test")]
         [Fact]
         public void DoesNotThrowWhenDisposingTwice()
         {
             var mkw = new ModifierKeysWatcher(new NativeMethodsMock());
-#pragma warning disable IDISP016, IDISP017
+            Assert.False(mkw.GetPrivateField<bool>("_disposed"));
+
             mkw.Dispose();
+            Assert.True(mkw.GetPrivateField<bool>("_disposed"));
+
             mkw.Dispose();
-#pragma warning restore IDISP016, IDISP017
+            Assert.True(mkw.GetPrivateField<bool>("_disposed"));
         }
 
         private static T FromXml<T>(string xml)

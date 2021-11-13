@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using EliteFiles.Status;
 using EliteFiles.Tests.Internal;
@@ -158,14 +159,20 @@ namespace EliteFiles.Tests
             Assert.False(IsRunning());
         }
 
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP016:Don't use disposed instance.", Justification = "IDisposable test")]
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP017:Prefer using.", Justification = "IDisposable test")]
+        [SuppressMessage("Major Code Smell", "S3966:Objects should not be disposed more than once", Justification = "IDisposable test")]
         [Fact]
         public void WatcherDoesNotThrowWhenDisposingTwice()
         {
             var watcher = new StatusWatcher(_jf);
-#pragma warning disable IDISP016, IDISP017
+            Assert.False(watcher.GetPrivateField<bool>("_disposed"));
+
             watcher.Dispose();
+            Assert.True(watcher.GetPrivateField<bool>("_disposed"));
+
             watcher.Dispose();
-#pragma warning restore IDISP016, IDISP017
+            Assert.True(watcher.GetPrivateField<bool>("_disposed"));
         }
     }
 }

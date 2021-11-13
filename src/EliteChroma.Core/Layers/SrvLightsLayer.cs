@@ -18,9 +18,20 @@ namespace EliteChroma.Core.Layers
                 return;
             }
 
-            ChromaColor lColor = Game.Status.HasFlag(Flags.LightsOn)
-                ? (Game.Status.HasFlag(Flags.SrvHighBeam) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsMidBeam)
-                : Colors.VehicleLightsOff;
+            ChromaColor lColor;
+            if (!Game.Status.HasFlag(Flags.LightsOn))
+            {
+                lColor = Colors.VehicleLightsOff;
+            }
+            else if (Game.Status.HasFlag(Flags.SrvHighBeam))
+            {
+                lColor = Colors.VehicleLightsHighBeam;
+            }
+            else
+            {
+                lColor = Colors.VehicleLightsMidBeam;
+            }
+
             ApplyColorToBinding(canvas.Keyboard, Driving.Headlights, lColor);
 
             ChromaColor nColor = Game.Status.HasFlag(Flags.NightVision) ? Colors.VehicleLightsHighBeam : Colors.VehicleLightsOff;

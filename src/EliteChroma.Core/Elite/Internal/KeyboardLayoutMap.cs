@@ -52,6 +52,7 @@ namespace EliteChroma.Elite.Internal
             }
             catch (CultureNotFoundException)
             {
+                // Fall back to the current keyboard layout.
             }
 
             return nativeMethods.GetKeyboardLayout(0);

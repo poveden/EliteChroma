@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -71,14 +72,20 @@ namespace EliteChroma.Core.Tests
             Assert.False(IsRunning());
         }
 
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP016:Don't use disposed instance.", Justification = "IDisposable test")]
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP017:Prefer using.", Justification = "IDisposable test")]
+        [SuppressMessage("Major Code Smell", "S3966:Objects should not be disposed more than once", Justification = "IDisposable test")]
         [Fact]
         public void WatcherDoesNotThrowWhenDisposingTwice()
         {
             var watcher = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, _journalFolder);
-#pragma warning disable IDISP016, IDISP017
+            Assert.False(watcher.GetPrivateField<bool>("_disposed"));
+
             watcher.Dispose();
+            Assert.True(watcher.GetPrivateField<bool>("_disposed"));
+
             watcher.Dispose();
-#pragma warning restore IDISP016, IDISP017
+            Assert.True(watcher.GetPrivateField<bool>("_disposed"));
         }
 
         [Fact]

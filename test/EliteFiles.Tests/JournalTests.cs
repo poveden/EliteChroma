@@ -264,25 +264,37 @@ namespace EliteFiles.Tests
             Assert.Contains("' is not a valid Elite:Dangerous journal folder.", ex.Message, StringComparison.Ordinal);
         }
 
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP016:Don't use disposed instance.", Justification = "IDisposable test")]
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP017:Prefer using.", Justification = "IDisposable test")]
+        [SuppressMessage("Major Code Smell", "S3966:Objects should not be disposed more than once", Justification = "IDisposable test")]
         [Fact]
         public void WatcherDoesNotThrowWhenDisposingTwice()
         {
             var watcher = new JournalWatcher(_jf);
-#pragma warning disable IDISP016, IDISP017
+            Assert.False(watcher.GetPrivateField<bool>("_disposed"));
+
             watcher.Dispose();
+            Assert.True(watcher.GetPrivateField<bool>("_disposed"));
+
             watcher.Dispose();
-#pragma warning restore IDISP016, IDISP017
+            Assert.True(watcher.GetPrivateField<bool>("_disposed"));
         }
 
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP016:Don't use disposed instance.", Justification = "IDisposable test")]
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP017:Prefer using.", Justification = "IDisposable test")]
+        [SuppressMessage("Major Code Smell", "S3966:Objects should not be disposed more than once", Justification = "IDisposable test")]
         [Fact]
         public void JournalReaderDoesNotThrowWhenDisposingTwice()
         {
             using var tf = new TestFolder(_journalFolder);
             var jr = new JournalReader(tf.Resolve(_journalFile1));
-#pragma warning disable IDISP016, IDISP017
+            Assert.False(jr.GetPrivateField<bool>("_disposed"));
+
             jr.Dispose();
+            Assert.True(jr.GetPrivateField<bool>("_disposed"));
+
             jr.Dispose();
-#pragma warning restore IDISP016, IDISP017
+            Assert.True(jr.GetPrivateField<bool>("_disposed"));
         }
 
         private class TestEntry : JournalEntry

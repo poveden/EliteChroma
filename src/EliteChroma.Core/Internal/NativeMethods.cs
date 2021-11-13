@@ -18,7 +18,7 @@ namespace EliteChroma.Core.Internal
 
         // Reference: https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
         [SuppressMessage("Design", "CA1069:Enums should not have duplicate values", Justification = "Duplicates defined in Windows SDK.")]
-        public enum VirtualKey : int
+        public enum VirtualKey
         {
             VK_LBUTTON = 0x01,
             VK_RBUTTON = 0x02,
@@ -225,6 +225,7 @@ namespace EliteChroma.Core.Internal
         }
 
         // Reference: https://docs.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights
+        [Flags]
         public enum ProcessAccess
         {
             VM_READ = 0x00000010,

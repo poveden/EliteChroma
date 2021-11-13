@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -19,6 +20,7 @@ namespace EliteFiles.Bindings
 
         private static readonly int _numBindingCategories = Enum.GetValues(typeof(BindingCategory)).Length;
         private static readonly IReadOnlyDictionary<string, BindingCategory> _bindNameCategories = BuildBindNameCategoryMap();
+        private static readonly IReadOnlyDictionary<BindingCategory, string> _noPresetFiles = new ReadOnlyDictionary<BindingCategory, string>(new Dictionary<BindingCategory, string>());
 
         private readonly Dictionary<string, Binding> _dict = new Dictionary<string, Binding>(StringComparer.Ordinal);
 
@@ -147,8 +149,8 @@ namespace EliteFiles.Bindings
         /// </summary>
         /// <param name="gameInstallFolder">The path to the game installation folder.</param>
         /// <param name="gameOptionsFolder">The path to the game options folder.</param>
-        /// <returns>The path to the file, or <c>null</c> if no active preset could be found.</returns>
-        public static IReadOnlyDictionary<BindingCategory, string>? FindActivePresetFiles(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder)
+        /// <returns>The paths to the files, or an empty set if no active preset could be found.</returns>
+        public static IReadOnlyDictionary<BindingCategory, string> FindActivePresetFiles(GameInstallFolder gameInstallFolder, GameOptionsFolder gameOptionsFolder)
         {
             _ = GameInstallFolder.AssertValid(gameInstallFolder);
             _ = GameOptionsFolder.AssertValid(gameOptionsFolder);
@@ -173,7 +175,7 @@ namespace EliteFiles.Bindings
 
                     if (bindsFile == null)
                     {
-                        return null;
+                        return _noPresetFiles;
                     }
 
                     bindsFiles.Add((BindingCategory)i, bindsFile);
@@ -196,7 +198,7 @@ namespace EliteFiles.Bindings
                 return bindsFiles;
             }
 
-            return null;
+            return _noPresetFiles;
         }
 
         private static string? TryGetBindingsFilePath(DirectoryInfo path, string bindsName)
@@ -233,13 +235,13 @@ namespace EliteFiles.Bindings
             return res;
         }
 
-        private static Dictionary<BindingCategory, string>? GetDefaultPresetFiles(GameInstallFolder gameInstallFolder)
+        private static IReadOnlyDictionary<BindingCategory, string> GetDefaultPresetFiles(GameInstallFolder gameInstallFolder)
         {
             FileInfo? bindsFile = gameInstallFolder.ControlSchemes.EnumerateFiles(_defaultBindingPresetFileName, SearchOption.TopDirectoryOnly).FirstOrDefault();
 
             if (bindsFile == null || !bindsFile.Exists)
             {
-                return null;
+                return _noPresetFiles;
             }
 
             var res = new Dictionary<BindingCategory, string>(_numBindingCategories);

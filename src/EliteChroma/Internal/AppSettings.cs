@@ -40,9 +40,11 @@ namespace EliteChroma.Internal
             }
             catch (IOException)
             {
+                // Skip if the file cannot be read.
             }
             catch (JsonException)
             {
+                // Skip if the file contains malformed JSON.
             }
 
             return BuildDefaultSettings();

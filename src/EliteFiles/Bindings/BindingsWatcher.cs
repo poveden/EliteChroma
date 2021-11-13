@@ -105,11 +105,12 @@ namespace EliteFiles.Bindings
 
         private void Reload()
         {
-            IReadOnlyDictionary<BindingCategory, string>? bindsFiles = FileOperations.RetryIfNull(
+            IReadOnlyDictionary<BindingCategory, string> bindsFiles = FileOperations.RetryIfFailed(
                 () => BindingPreset.FindActivePresetFiles(_gameInstallFolder, _gameOptionsFolder),
+                x => x.Count != 0,
                 _reloadRetries);
 
-            if (bindsFiles == null)
+            if (bindsFiles.Count == 0)
             {
                 return;
             }

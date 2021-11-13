@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EliteFiles.Tests.Internal;
 using Xunit;
@@ -7,6 +8,9 @@ namespace EliteFiles.Tests
 {
     public class EliteFileSystemWatcherTests
     {
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP016:Don't use disposed instance.", Justification = "IDisposable test")]
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP017:Prefer using.", Justification = "IDisposable test")]
+        [SuppressMessage("Major Code Smell", "S3966:Objects should not be disposed more than once", Justification = "IDisposable test")]
         [Fact]
         public void DoesNotThrowWhenDisposingTwice()
         {
@@ -18,11 +22,13 @@ namespace EliteFiles.Tests
             var ci = ti.GetConstructor(new[] { typeof(string) })!;
 
             var fsw = (IDisposable)ci.Invoke(new object[] { tf.Name });
+            Assert.False(fsw.GetPrivateField<bool>("_disposed"));
 
-#pragma warning disable IDISP016, IDISP017
             fsw.Dispose();
+            Assert.True(fsw.GetPrivateField<bool>("_disposed"));
+
             fsw.Dispose();
-#pragma warning restore IDISP016, IDISP017
+            Assert.True(fsw.GetPrivateField<bool>("_disposed"));
         }
     }
 }

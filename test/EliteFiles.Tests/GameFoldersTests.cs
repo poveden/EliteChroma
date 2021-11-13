@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using EliteFiles.Status.Internal;
 using EliteFiles.Tests.Internal;
 using Xunit;
 
@@ -23,9 +24,21 @@ namespace EliteFiles.Tests
         [Fact]
         public void GetsTheListOfAlternateGameInstallFolders()
         {
-            var paths = GameInstallFolder.GetAlternatePaths().ToList();
+            var mockRegistry = new MockWindowsRegistry();
 
-            Assert.True(paths.Count >= 0);
+            var paths = GameInstallFolder.GetAlternatePaths(mockRegistry, @"TestFiles\libraryfolders.vdf").ToList();
+
+            string[] expectedPaths = new[]
+            {
+                @"INSTALLPATH\Products\elite-dangerous-64",
+                @"INSTALLPATH\Products\elite-dangerous-odyssey-64",
+                @"C:\Games\Path1\steamapps\common\Elite Dangerous\Products\elite-dangerous-64",
+                @"C:\Games\Path1\steamapps\common\Elite Dangerous\Products\elite-dangerous-odyssey-64",
+                @"D:\steamapps\common\Elite Dangerous\Products\elite-dangerous-64",
+                @"D:\steamapps\common\Elite Dangerous\Products\elite-dangerous-odyssey-64",
+            };
+
+            Assert.Equal(expectedPaths, paths);
         }
 
         [Theory]
@@ -34,7 +47,7 @@ namespace EliteFiles.Tests
         [InlineData("\"UnrecognizedHeader\"\n{\n}\n")]
         [InlineData("\"LibraryFolders\"")]
         [InlineData("\"LibraryFolders\"\n{ \"1\" \"Path\" }\n")]
-        public void SteamLibraryFoldersFromFileReturnsNullOnMissingOrInvalidFile(string contents)
+        public void SteamLibraryFoldersFromFileReturnsEmptyOnMissingOrInvalidFile(string contents)
         {
             using var tf = new TestFolder();
             string filename = $"libraryfolders.vdf";
@@ -44,7 +57,7 @@ namespace EliteFiles.Tests
                 tf.WriteText(filename, contents);
             }
 
-            Assert.Null(SteamLibraryFoldersFromFile(tf.Resolve(filename)));
+            Assert.Empty(SteamLibraryFoldersFromFile(tf.Resolve(filename)));
         }
 
         [Fact]
@@ -234,6 +247,20 @@ namespace EliteFiles.Tests
             var mi = ti.GetMethod("FromFile", BindingFlags.Public | BindingFlags.Static)!;
 
             return (IReadOnlyList<string>)mi.Invoke(null, new object[] { path })!;
+        }
+
+        private sealed class MockWindowsRegistry : IWindowsRegistry
+        {
+            public object? GetValue(string keyName, string? valueName, object? defaultValue)
+            {
+                if (keyName == @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{696F8871-C91D-4CB1-825D-36BE18065575}_is1"
+                    && valueName == "InstallLocation")
+                {
+                    return "INSTALLPATH";
+                }
+
+                return defaultValue;
+            }
         }
     }
 }
