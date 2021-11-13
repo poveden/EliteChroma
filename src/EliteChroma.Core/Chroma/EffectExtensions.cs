@@ -51,18 +51,6 @@ namespace EliteChroma.Chroma
             return effect;
         }
 
-        public static ILedGridEffect Max(this ILedGridEffect effect, ChromaColor c)
-        {
-            _ = effect ?? throw new ArgumentNullException(nameof(effect));
-
-            for (int i = 0; i < effect.Color.Count; i++)
-            {
-                effect.Color[i] = effect.Color[i].Max(c);
-            }
-
-            return effect;
-        }
-
         public static ILedArrayEffect Combine(this ILedArrayEffect effect, ChromaColor c, double cPct = 0.5)
         {
             _ = effect ?? throw new ArgumentNullException(nameof(effect));
@@ -70,6 +58,18 @@ namespace EliteChroma.Chroma
             for (int i = 0; i < effect.Color.Count; i++)
             {
                 effect.Color[i] = effect.Color[i].Combine(c, cPct);
+            }
+
+            return effect;
+        }
+
+        public static ILedGridEffect Max(this ILedGridEffect effect, ChromaColor c)
+        {
+            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+
+            for (int i = 0; i < effect.Color.Count; i++)
+            {
+                effect.Color[i] = effect.Color[i].Max(c);
             }
 
             return effect;

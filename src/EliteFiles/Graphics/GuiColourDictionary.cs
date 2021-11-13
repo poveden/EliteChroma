@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Xml.Linq;
 
 namespace EliteFiles.Graphics
@@ -7,10 +8,16 @@ namespace EliteFiles.Graphics
     /// <summary>
     /// Represents a collection of <see cref="GuiColourMatrix"/> entries.
     /// </summary>
+    [Serializable]
     public sealed class GuiColourDictionary : Dictionary<string, GuiColourMatrix>
     {
         internal GuiColourDictionary()
             : base(StringComparer.Ordinal)
+        {
+        }
+
+        private GuiColourDictionary(SerializationInfo serializationInfo, StreamingContext streamingContext)
+            : base(serializationInfo, streamingContext)
         {
         }
 

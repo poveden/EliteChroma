@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -135,7 +136,7 @@ namespace EliteFiles.Tests
             var gof = new GameOptionsFolder(dirOpts.Name);
             Assert.True(gof.IsValid);
 
-            var files = BindingPreset.FindActivePresetFiles(_gif, gof)!;
+            var files = BindingPreset.FindActivePresetFiles(_gif, gof);
             Assert.Equal(_bindingCategories, files.Count);
 
             string expectedFile = dirOpts.Resolve(@"Bindings\Custom.3.0.binds");
@@ -151,7 +152,7 @@ namespace EliteFiles.Tests
             var gof = new GameOptionsFolder(dirOpts.Name);
             Assert.True(gof.IsValid);
 
-            var files = BindingPreset.FindActivePresetFiles(_gif, gof)!;
+            var files = BindingPreset.FindActivePresetFiles(_gif, gof);
             Assert.Equal(_bindingCategories, files.Count);
 
             var expected = new Dictionary<BindingCategory, string>
@@ -169,7 +170,7 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
-        public void FindActivePresetFilesReturnsNullWhenAPresetFileIsMissing()
+        public void FindActivePresetFilesReturnsEmptyWhenAPresetFileIsMissing()
         {
             using var dirOpts = new TestFolder(_gof.FullName);
             dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2\nMISSING_PRESET\nKeyboardMouseOnly");
@@ -178,11 +179,11 @@ namespace EliteFiles.Tests
             Assert.True(gof.IsValid);
 
             var files = BindingPreset.FindActivePresetFiles(_gif, gof);
-            Assert.Null(files);
+            Assert.Empty(files);
         }
 
         [Fact]
-        public void FindActivePresetFilesReturnsNullWhenNeither1Or4PresetFilesAreDefined()
+        public void FindActivePresetFilesReturnsEmptyWhenNeither1Or4PresetFilesAreDefined()
         {
             using var dirOpts = new TestFolder(_gof.FullName);
             dirOpts.WriteText(@"Bindings\StartPreset.start", "Custom\nCustom2");
@@ -191,7 +192,7 @@ namespace EliteFiles.Tests
             Assert.True(gof.IsValid);
 
             var files = BindingPreset.FindActivePresetFiles(_gif, gof);
-            Assert.Null(files);
+            Assert.Empty(files);
         }
 
         [Fact]
@@ -203,7 +204,7 @@ namespace EliteFiles.Tests
             var gof = new GameOptionsFolder(dirOpts.Name);
             Assert.True(gof.IsValid);
 
-            var files = BindingPreset.FindActivePresetFiles(_gif, gof)!;
+            var files = BindingPreset.FindActivePresetFiles(_gif, gof);
             Assert.Equal(_bindingCategories + 1, files.Count);
 
             var expected = new Dictionary<BindingCategory, string>
@@ -401,14 +402,20 @@ namespace EliteFiles.Tests
             Assert.False(IsRunning());
         }
 
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP016:Don't use disposed instance.", Justification = "IDisposable test")]
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP017:Prefer using.", Justification = "IDisposable test")]
+        [SuppressMessage("Major Code Smell", "S3966:Objects should not be disposed more than once", Justification = "IDisposable test")]
         [Fact]
         public void WatcherDoesNotThrowWhenDisposingTwice()
         {
             var watcher = new BindingsWatcher(_gif, _gof);
-#pragma warning disable IDISP016, IDISP017
+            Assert.False(watcher.GetPrivateField<bool>("_disposed"));
+
             watcher.Dispose();
+            Assert.True(watcher.GetPrivateField<bool>("_disposed"));
+
             watcher.Dispose();
-#pragma warning restore IDISP016, IDISP017
+            Assert.True(watcher.GetPrivateField<bool>("_disposed"));
         }
 
         [Fact]

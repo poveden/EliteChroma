@@ -68,7 +68,7 @@ namespace EliteChroma.Core
                 _fps = value;
                 if (_fps > 0)
                 {
-                    _animation.Interval = 1000 / _fps;
+                    _animation.Interval = 1000.0 / _fps;
                 }
             }
         }

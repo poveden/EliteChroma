@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using EliteFiles.Internal;
-using Microsoft.Win32;
+using EliteFiles.Status.Internal;
 
 namespace EliteFiles
 {
@@ -105,28 +105,7 @@ namespace EliteFiles
         /// </remarks>
         public static IEnumerable<string> GetAlternatePaths()
         {
-            // Reference: https://github.com/Bemoliph/Elite-Dangerous-Downloader/blob/master/downloader.py
-            string? launcherPath = (string?)Registry.GetValue(
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{696F8871-C91D-4CB1-825D-36BE18065575}_is1",
-                "InstallLocation",
-                null);
-
-            if (launcherPath != null)
-            {
-                yield return Path.Combine(launcherPath, @"Products\elite-dangerous-64");
-                yield return Path.Combine(launcherPath, @"Products\elite-dangerous-odyssey-64");
-            }
-
-            var steamLibraryFolders = SteamLibraryFolders.FromFile(SteamLibraryFolders.DefaultPath);
-
-            if (steamLibraryFolders != null)
-            {
-                foreach (string folder in steamLibraryFolders)
-                {
-                    yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-64");
-                    yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-odyssey-64");
-                }
-            }
+            return GetAlternatePaths(WindowsRegistry.Instance, SteamLibraryFolders.DefaultPath);
         }
 
         /// <summary>
@@ -149,6 +128,29 @@ namespace EliteFiles
             }
 
             return gameInstallFolder;
+        }
+
+        internal static IEnumerable<string> GetAlternatePaths(IWindowsRegistry windowsRegistry, string steamLibraryPath)
+        {
+            // Reference: https://github.com/Bemoliph/Elite-Dangerous-Downloader/blob/master/downloader.py
+            string? launcherPath = (string?)windowsRegistry.GetValue(
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{696F8871-C91D-4CB1-825D-36BE18065575}_is1",
+                "InstallLocation",
+                null);
+
+            if (launcherPath != null)
+            {
+                yield return Path.Combine(launcherPath, @"Products\elite-dangerous-64");
+                yield return Path.Combine(launcherPath, @"Products\elite-dangerous-odyssey-64");
+            }
+
+            var steamLibraryFolders = SteamLibraryFolders.FromFile(steamLibraryPath);
+
+            foreach (string folder in steamLibraryFolders)
+            {
+                yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-64");
+                yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-odyssey-64");
+            }
         }
     }
 }

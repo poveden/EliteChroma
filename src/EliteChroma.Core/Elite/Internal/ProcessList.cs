@@ -35,8 +35,9 @@ namespace EliteChroma.Elite.Internal
         {
             int i = 0;
             int j = 0;
+            bool exhausted = false;
 
-            while (i < _n && j < other._n)
+            while (i < _n && j < other._n && !exhausted)
             {
                 int pi = _buf[i];
                 int pj = other._buf[j];
@@ -48,32 +49,32 @@ namespace EliteChroma.Elite.Internal
                     continue;
                 }
 
-                while (pj < pi)
+                while (pj < pi && !exhausted)
                 {
                     yield return (pj, false);
 
                     if (++j == other._n)
                     {
-                        goto exhausted;
+                        exhausted = true;
+                        break;
                     }
 
                     pj = other._buf[j];
                 }
 
-                while (pi < pj)
+                while (pi < pj && !exhausted)
                 {
                     yield return (pi, true);
 
                     if (++i == _n)
                     {
-                        goto exhausted;
+                        exhausted = true;
+                        break;
                     }
 
                     pi = _buf[i];
                 }
             }
-
-        exhausted:
 
             while (i < _n)
             {

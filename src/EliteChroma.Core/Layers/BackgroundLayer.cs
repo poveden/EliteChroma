@@ -15,7 +15,6 @@ namespace EliteChroma.Core.Layers
 
         private (bool HardpointsDeployed, VehicleMode Mode) _lastState;
         private AmbientColors _animC1;
-        private AmbientColors _animC2;
 
         private enum VehicleMode
         {
@@ -58,15 +57,15 @@ namespace EliteChroma.Core.Layers
                 _ = StopAnimation();
             }
 
-            _animC2 = GetAmbientColors(hardpointsDeployed, mode);
+            AmbientColors animC2 = GetAmbientColors(hardpointsDeployed, mode);
 
-            AmbientColors c = _animC2;
+            AmbientColors c = animC2;
 
             if (Animated)
             {
-                c.Keyboard = PulseColor(_animC1.Keyboard, _animC2.Keyboard, _fadeDuration, PulseColorType.Sawtooth);
-                c.Device = PulseColor(_animC1.Device, _animC2.Device, _fadeDuration, PulseColorType.Sawtooth);
-                c.Logo = PulseColor(_animC1.Logo, _animC2.Logo, _fadeDuration, PulseColorType.Sawtooth);
+                c.Keyboard = PulseColor(_animC1.Keyboard, animC2.Keyboard, _fadeDuration, PulseColorType.Sawtooth);
+                c.Device = PulseColor(_animC1.Device, animC2.Device, _fadeDuration, PulseColorType.Sawtooth);
+                c.Logo = PulseColor(_animC1.Logo, animC2.Logo, _fadeDuration, PulseColorType.Sawtooth);
             }
 
             canvas.Keyboard.Color.Fill(c.Keyboard);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using static EliteChroma.Core.Internal.NativeMethods;
@@ -41,6 +42,7 @@ namespace EliteChroma.Core.Tests.Internal
             return new SafeProcessHandle(new IntPtr(dwProcessId), false);
         }
 
+        [SuppressMessage("Blocker Bug", "S3869:\"SafeHandle.DangerousGetHandle\" should not be called", Justification = "Mock handles")]
         public override bool EnumProcessModules(SafeProcessHandle hProcess, IntPtr[] lphModule, int cb, out int lpcbNeeded)
         {
             if (EnumProcessModulesFailure)
@@ -62,6 +64,7 @@ namespace EliteChroma.Core.Tests.Internal
             return true;
         }
 
+        [SuppressMessage("Blocker Bug", "S3869:\"SafeHandle.DangerousGetHandle\" should not be called", Justification = "Mock handles")]
         public override int GetModuleFileNameEx(SafeProcessHandle hProcess, IntPtr hModule, char[] lpFilename, int nSize)
         {
             if (GetModuleFileNameExFailure)

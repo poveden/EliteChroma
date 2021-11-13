@@ -30,7 +30,7 @@ namespace EliteFiles.Bindings
         /// </summary>
         /// <param name="other">The device key to compare against this instance.</param>
         /// <returns><c>true</c> if <paramref name="other"/> represents the same device key as this instance; otherwise, <c>false</c>.</returns>
-        public bool Equals(DeviceKeyBase? other)
+        public virtual bool Equals(DeviceKeyBase? other)
         {
             return other != null
                 && Device == other.Device

@@ -13,7 +13,6 @@ namespace EliteChroma.Elite.Internal
         private const int _processCheckInterval = 2000;
         private const int _processCheckWaitCycles = _processCheckInterval / _gameForegroundCheckInterval;
 
-        private readonly string _mainExePath;
         private readonly Timer _timer;
         private readonly GameProcessTracker _gameProcessTracker;
 
@@ -26,8 +25,8 @@ namespace EliteChroma.Elite.Internal
         public GameProcessWatcher(GameInstallFolder gameInstallFolder, INativeMethods nativeMethods)
             : base(nativeMethods)
         {
-            _mainExePath = gameInstallFolder.MainExecutable.FullName;
-            _gameProcessTracker = new GameProcessTracker(_mainExePath, nativeMethods);
+            string mainExePath = gameInstallFolder.MainExecutable.FullName;
+            _gameProcessTracker = new GameProcessTracker(mainExePath, nativeMethods);
 
             _timer = new Timer
             {

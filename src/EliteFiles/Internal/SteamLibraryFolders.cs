@@ -9,6 +9,7 @@ namespace EliteFiles.Internal
     internal sealed class SteamLibraryFolders : ReadOnlyCollection<string>
     {
         private static readonly Regex _rxKeyValue = new Regex(@"^""[0-9]+""\s+""(.*?)""$");
+        private static readonly SteamLibraryFolders _empty = new SteamLibraryFolders(Array.Empty<string>());
 
         // Reference: https://stackoverflow.com/questions/39557722/where-does-steam-store-library-directories/39557723#39557723
         private static readonly Lazy<string> _defaultPath = new Lazy<string>(() =>
@@ -25,23 +26,23 @@ namespace EliteFiles.Internal
 
         public static string DefaultPath => _defaultPath.Value;
 
-        public static SteamLibraryFolders? FromFile(string path)
+        public static SteamLibraryFolders FromFile(string path)
         {
             if (!File.Exists(path))
             {
-                return null;
+                return _empty;
             }
 
             using var sr = new StreamReader(path);
 
             if (sr.ReadLine()?.Trim() != "\"LibraryFolders\"")
             {
-                return null;
+                return _empty;
             }
 
             if (sr.ReadLine()?.Trim() != "{")
             {
-                return null;
+                return _empty;
             }
 
             var folders = new List<string>();

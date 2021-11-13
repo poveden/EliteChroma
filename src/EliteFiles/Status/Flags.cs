@@ -7,6 +7,7 @@ namespace EliteFiles.Status
     /// Represents the various game status flags.
     /// </summary>
     [SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "Respect Elite:Dangerous naming convention.")]
+    [SuppressMessage("Minor Code Smell", "S2344:Enumeration type names should not have \"Flags\" or \"Enum\" suffixes", Justification = "Respect Elite:Dangerous naming convention.")]
     [Flags]
     public enum Flags : long
     {

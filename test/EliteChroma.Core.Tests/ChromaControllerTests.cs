@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -133,14 +134,20 @@ namespace EliteChroma.Core.Tests
             Assert.False(IsRunning());
         }
 
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP016:Don't use disposed instance.", Justification = "IDisposable test")]
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP017:Prefer using.", Justification = "IDisposable test")]
+        [SuppressMessage("Major Code Smell", "S3966:Objects should not be disposed more than once", Justification = "IDisposable test")]
         [Fact]
         public void DoesNotThrowWhenDisposingTwice()
         {
             var watcher = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
-#pragma warning disable IDISP016, IDISP017
+            Assert.False(watcher.GetPrivateField<bool>("_disposed"));
+
             watcher.Dispose();
+            Assert.True(watcher.GetPrivateField<bool>("_disposed"));
+
             watcher.Dispose();
-#pragma warning restore IDISP016, IDISP017
+            Assert.True(watcher.GetPrivateField<bool>("_disposed"));
         }
 
         [Fact]
@@ -257,6 +264,7 @@ namespace EliteChroma.Core.Tests
                 _events.Add(new Event(eventName == "Status", json, changesGameState));
             }
 
+            [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "Used implicitly in BuidEventSequence")]
             public void Add(Flags flags, GuiFocus guiFocus = GuiFocus.None)
             {
 #pragma warning disable IDE0050
