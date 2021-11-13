@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using EliteFiles.Bindings;
-using EliteFiles.Tests.Internal;
+using TestUtils;
 using Xunit;
 
 namespace EliteFiles.Tests

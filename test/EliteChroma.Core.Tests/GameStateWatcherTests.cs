@@ -3,8 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite;
+using TestUtils;
 using Xunit;
 using static EliteChroma.Elite.GameStateWatcher;
 

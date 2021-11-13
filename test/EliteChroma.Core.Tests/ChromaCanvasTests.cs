@@ -10,6 +10,7 @@ using ChromaWrapper.Mousepad;
 using EliteChroma.Chroma;
 using EliteChroma.Core.Tests.Internal;
 using Moq;
+using TestUtils;
 using Xunit;
 
 namespace EliteChroma.Core.Tests

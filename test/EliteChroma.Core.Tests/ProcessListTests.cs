@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite.Internal;
+using TestUtils;
 using Xunit;
 
 namespace EliteChroma.Core.Tests

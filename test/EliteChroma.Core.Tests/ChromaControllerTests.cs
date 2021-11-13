@@ -14,6 +14,7 @@ using EliteFiles.Status;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
+using TestUtils;
 using Xunit;
 
 namespace EliteChroma.Core.Tests

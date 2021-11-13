@@ -1,8 +1,10 @@
-﻿using System;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace EliteFiles.Tests.Internal
+namespace TestUtils
 {
+    [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Shared test code.")]
     internal static class ReflectionExtensions
     {
         public static T? GetPrivateField<T>(this object obj, string name)
@@ -10,6 +12,13 @@ namespace EliteFiles.Tests.Internal
             return (T?)obj.GetType()
                 .GetField(name, BindingFlags.NonPublic | BindingFlags.Instance)!
                 .GetValue(obj);
+        }
+
+        public static void SetPrivateField<T>(this object obj, string name, T value)
+        {
+            obj.GetType()
+                .GetField(name, BindingFlags.NonPublic | BindingFlags.Instance)!
+                .SetValue(obj, value);
         }
 
         public static T? GetPrivateStaticField<T>(this Type type, string name)

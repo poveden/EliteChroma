@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using EliteFiles.Journal;
 using EliteFiles.Journal.Events;
-using EliteFiles.Tests.Internal;
 using Newtonsoft.Json;
+using TestUtils;
 using Xunit;
 
 namespace EliteFiles.Tests

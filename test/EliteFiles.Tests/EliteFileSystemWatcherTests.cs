@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using EliteFiles.Tests.Internal;
+using TestUtils;
 using Xunit;
 
 namespace EliteFiles.Tests

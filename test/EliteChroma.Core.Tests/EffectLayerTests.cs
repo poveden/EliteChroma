@@ -16,6 +16,7 @@ using EliteFiles.Graphics;
 using EliteFiles.Journal;
 using EliteFiles.Journal.Events;
 using Moq;
+using TestUtils;
 using Xunit;
 
 namespace EliteChroma.Core.Tests

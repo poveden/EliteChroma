@@ -4,10 +4,10 @@ using System.IO;
 using ChromaWrapper;
 using EliteChroma.Core;
 using EliteChroma.Internal;
-using EliteChroma.Tests.Internal;
 using EliteFiles;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TestUtils;
 using Xunit;
 
 namespace EliteChroma.Tests

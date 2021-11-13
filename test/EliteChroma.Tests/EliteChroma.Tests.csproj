@@ -36,6 +36,9 @@
     <None Include="..\Common\TestFiles\**" CopyToOutputDirectory="PreserveNewest">
       <Link>TestFiles\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </None>
+    <Compile Include="..\Common\TestUtils\**" CopyToOutputDirectory="Never">
+      <Link>TestUtils\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
