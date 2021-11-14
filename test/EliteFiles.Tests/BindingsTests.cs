@@ -250,14 +250,14 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
-        public async Task WatchesForChangesInTheBidingsFiles()
+        public async Task WatchesForChangesInTheBindingsFiles()
         {
             using var dirMain = new TestFolder(_gif.FullName);
             using var dirOpts = new TestFolder(_gof.FullName);
             using var watcher = new BindingsWatcher(new GameInstallFolder(dirMain.Name), new GameOptionsFolder(dirOpts.Name));
             watcher.Start();
 
-            var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatchesForChangesInTheBidingsFiles));
+            var evs = new EventCollector<BindingPreset>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatchesForChangesInTheBindingsFiles));
 
             string bindsCustom = dirOpts.ReadText(_customFile);
 

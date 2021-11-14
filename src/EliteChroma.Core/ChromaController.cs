@@ -91,6 +91,7 @@ namespace EliteChroma.Core
             set => _colors = value ?? throw new ArgumentNullException(nameof(value));
         }
 
+        [ExcludeFromCodeCoverage]
         public static bool IsChromaSdkAvailable()
         {
             return IsChromaSdkAvailable(NativeMethods.Instance);

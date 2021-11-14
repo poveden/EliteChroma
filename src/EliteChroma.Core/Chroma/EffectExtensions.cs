@@ -18,18 +18,6 @@ namespace EliteChroma.Chroma
             return effect;
         }
 
-        public static IKeyGridEffect MaxKey(this IKeyGridEffect effect, ChromaColor c)
-        {
-            _ = effect ?? throw new ArgumentNullException(nameof(effect));
-
-            for (int i = 0; i < effect.Key.Count; i++)
-            {
-                effect.Key[i] = ((ChromaColor)effect.Key[i]).Max(c);
-            }
-
-            return effect;
-        }
-
         public static IKeyGridEffect MaxAt(this IKeyGridEffect effect, int row, int column, ChromaColor c)
         {
             _ = effect ?? throw new ArgumentNullException(nameof(effect));

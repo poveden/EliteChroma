@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
 using System.Drawing.Design;
 using ChromaWrapper;
 using EliteChroma.Core;
@@ -187,22 +186,22 @@ namespace EliteChroma.Internal.UI
         [Category(_onFootCategory)]
         [TypeConverter(typeof(ChromaColorConverter))]
         [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
-        public ChromaColor OnFootHeadlook { get; set; } = ChromaColor.White;
+        public ChromaColor OnFootHeadlook { get; set; }
 
         [Category(_onFootCategory)]
         [TypeConverter(typeof(ChromaColorConverter))]
         [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
-        public ChromaColor OnFootMovement { get; set; } = ChromaColor.FromColor(Color.Orange);
+        public ChromaColor OnFootMovement { get; set; }
 
         [Category(_onFootCategory)]
         [TypeConverter(typeof(ChromaColorConverter))]
         [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
-        public ChromaColor OnFootModeSwitches { get; set; } = ChromaColor.Green;
+        public ChromaColor OnFootModeSwitches { get; set; }
 
         [Category(_onFootCategory)]
         [TypeConverter(typeof(ChromaColorConverter))]
         [Editor(typeof(ChromaColorEditor), typeof(UITypeEditor))]
-        public ChromaColor OnFootLightsToggle { get; set; } = ChromaColor.Blue;
+        public ChromaColor OnFootLightsToggle { get; set; }
 
         [Category(_onFootCategory)]
         [TypeConverter(typeof(ChromaColorConverter))]
@@ -215,7 +214,7 @@ namespace EliteChroma.Internal.UI
         public ChromaColor OnFootInteract { get; set; }
 
         [Browsable(false)]
-        public IReadOnlyList<ChromaColor> PowerDistributorScale { get; } = Array.Empty<ChromaColor>();
+        public IReadOnlyList<ChromaColor>? PowerDistributorScale { get; }
 
         public static void InitTypeDescriptionProvider()
         {

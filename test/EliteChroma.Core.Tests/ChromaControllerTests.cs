@@ -105,6 +105,26 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
+        public void ColorsObjectCanBeUpdated()
+        {
+            using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
+
+            Assert.NotNull(cc.Colors);
+
+            var newColors = new ChromaColors();
+            cc.Colors = newColors;
+            Assert.Same(newColors, cc.Colors);
+        }
+
+        [Fact]
+        public void ColorsCannotBeSetToNull()
+        {
+            using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
+
+            Assert.Throws<ArgumentNullException>(() => cc.Colors = null!);
+        }
+
+        [Fact]
         public void StartAndStopAreNotReentrant()
         {
             using var watcher = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
@@ -192,6 +212,54 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
+        public void RefreshTriggersRender()
+        {
+            using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder)
+            {
+                ChromaFactory = new ChromaMockFactory(),
+                DetectGameInForeground = false,
+            };
+
+            using var mreDrain = new ManualResetEventSlim();
+
+            var watcher = cc.GetPrivateField<GameStateWatcher>("_watcher")!;
+            watcher.Changed += (sender, e) =>
+            {
+                if (e == GameStateWatcher.ChangeType.JournalDrain)
+                {
+                    mreDrain.Set();
+                }
+            };
+
+            var game = watcher.GetPrivateField<GameState>("_gameState")!;
+
+            var effect = cc.GetPrivateField<LayeredEffect>("_effect")!;
+
+            using var mre = new ManualResetEventSlim();
+
+            var layer = new Mock<EffectLayer>();
+
+            layer.Protected()
+                .Setup("OnRender", ItExpr.IsAny<ChromaCanvas>(), ItExpr.IsAny<object>())
+                .Callback(() =>
+                {
+                    mre.Set();
+                });
+
+            effect.Clear();
+            effect.Add(layer.Object);
+
+            cc.Start();
+            Assert.True(mreDrain.Wait(1000));
+            SpinWait.SpinUntil(() => cc.GetPrivateField<int>("_rendering") == 0);
+
+            game.ProcessState = GameProcessState.InForeground;
+            cc.Refresh();
+
+            Assert.True(mre.Wait(1000));
+        }
+
+        [Fact]
         public void RefreshThrowsWhenControllerIsStopped()
         {
             using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder)
@@ -210,7 +278,7 @@ namespace EliteChroma.Core.Tests
                 { Flags.Docked | Flags.FsdMassLocked | Flags.InMainShip | Flags.LandingGearDeployed | Flags.ShieldsUp },
                 { "Undocked", new { StationType = "Coriolis" }, false },
                 { Flags.InMainShip | Flags.ShieldsUp },
-                { Flags.InMainShip | Flags.ShieldsUp, GuiFocus.GalaxyMap },
+                { Flags.InMainShip | Flags.ShieldsUp, Flags2.None, null, GuiFocus.GalaxyMap },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.HudInAnalysisMode },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.ScoopingFuel },
                 { Flags.InMainShip | Flags.ShieldsUp },
@@ -222,7 +290,7 @@ namespace EliteChroma.Core.Tests
                 { Flags.FsdJump | Flags.InMainShip | Flags.ShieldsUp },
                 { "FSDJump", new { StarSystem = "Wolf 1301" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
-                { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise, GuiFocus.FssMode },
+                { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise, Flags2.None, null, GuiFocus.FssMode },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
                 { "SupercruiseExit", new { BodyType = "Station" }, false },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LightsOn | Flags.NightVision | Flags.CargoScoopDeployed | Flags.HardpointsDeployed | Flags.LandingGearDeployed },
@@ -236,6 +304,12 @@ namespace EliteChroma.Core.Tests
                 { Flags.InSrv | Flags.ShieldsUp | Flags.SrvTurretRetracted | Flags.LightsOn },
                 { Flags.InSrv | Flags.ShieldsUp | Flags.HudInAnalysisMode | Flags.SrvUsingTurretView | Flags.LightsOn | Flags.SrvHighBeam },
                 { Flags.InSrv | Flags.ShieldsUp | Flags.NightVision | Flags.CargoScoopDeployed },
+                { Flags.Landed | Flags.LandingGearDeployed, Flags2.OnFoot | Flags2.OnFootExterior },
+                { Flags.Landed | Flags.LandingGearDeployed, Flags2.OnFoot | Flags2.OnFootExterior, OnFootWeapon.Energylink },
+                { Flags.Landed | Flags.LandingGearDeployed, Flags2.OnFoot | Flags2.OnFootExterior, OnFootWeapon.GeneticSampler },
+                { Flags.Landed | Flags.LandingGearDeployed, Flags2.OnFoot | Flags2.OnFootExterior, OnFootWeapon.ManticoreExecutioner },
+                { Flags.Landed | Flags.LandingGearDeployed, Flags2.OnFoot | Flags2.OnFootInHangar },
+                { Flags.InMainShip | Flags.Landed, Flags2.InTaxi },
             };
         }
 

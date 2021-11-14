@@ -17,7 +17,7 @@ namespace EliteChroma.Internal.UI
         public LocalizedPropertyDescriptor(PropertyDescriptor baseDescriptor, string resourceNamePrefix)
             : base(baseDescriptor)
         {
-            _descriptor = baseDescriptor ?? throw new ArgumentNullException(nameof(baseDescriptor));
+            _descriptor = baseDescriptor;
             ResourceManager rm = Resources.ResourceManager;
             CultureInfo ci = Resources.Culture;
 

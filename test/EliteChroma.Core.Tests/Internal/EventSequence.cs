@@ -36,14 +36,16 @@ namespace EliteChroma.Core.Tests.Internal
             _events.Add(new Event(eventName == "Status", json, changesGameState));
         }
 
-        public void Add(Flags flags, GuiFocus guiFocus = GuiFocus.None)
+        public void Add(Flags flags, Flags2 flags2 = Flags2.None, string? selectedWeapon = null, GuiFocus guiFocus = GuiFocus.None)
         {
             var data = new
             {
                 Flags = flags,
+                Flags2 = flags2,
                 Pips = new[] { 4, 4, 4 },
                 FireGroup = 0,
                 GuiFocus = guiFocus,
+                SelectedWeapon = selectedWeapon,
             };
 
             Add("Status", data, true);

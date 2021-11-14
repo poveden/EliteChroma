@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using EliteFiles.Internal;
 using EliteFiles.Status.Internal;
 using TestUtils;
 using Xunit;
@@ -39,6 +40,13 @@ namespace EliteFiles.Tests
             };
 
             Assert.Equal(expectedPaths, paths);
+        }
+
+        [Fact]
+        public void GetsTheSteamLibraryDefaultPath()
+        {
+            string path = SteamLibraryFolders.DefaultPath;
+            Assert.EndsWith(@"Steam\steamapps\libraryfolders.vdf", path, StringComparison.OrdinalIgnoreCase);
         }
 
         [Theory]

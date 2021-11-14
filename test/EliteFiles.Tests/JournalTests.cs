@@ -94,6 +94,7 @@ namespace EliteFiles.Tests
             var fh = Assert.IsType<FileHeader>(entries.Dequeue());
             Assert.Equal(1, fh.Part);
             Assert.Equal("English\\UK", fh.Language);
+            Assert.True(fh.Odyssey);
             Assert.Equal("4.0.0.701", fh.GameVersion);
             Assert.Equal("r273365/r0 ", fh.Build);
 
