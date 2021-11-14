@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ChromaWrapper.Keyboard;
@@ -13,7 +10,6 @@ using EliteChroma.Elite;
 using EliteFiles.Status;
 using Moq;
 using Moq.Protected;
-using Newtonsoft.Json;
 using TestUtils;
 using Xunit;
 
@@ -52,9 +48,7 @@ namespace EliteChroma.Core.Tests
                 dirJournal = new TestFolder();
 
             dirJournal.WriteText(statusFile, EventSequence.BuildEvent("Status", new { Flags = 0 }));
-#pragma warning disable IDE0050
             dirJournal.WriteText(journalFile, EventSequence.BuildEvent("Fileheader", new { part = 1, language = @"English\UK", gameversion = "3.5.0.200 EDH", build = "r210198/r0 " }));
-#pragma warning restore IDE0050
 
             using var cc = new ChromaController(dirRoot.Name, dirOpts.Name, dirJournal.Name)
             {
@@ -224,9 +218,7 @@ namespace EliteChroma.Core.Tests
                 { "UnderAttack", new { Target = "You" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp },
                 { Flags.FsdCharging | Flags.InMainShip | Flags.ShieldsUp },
-#pragma warning disable IDE0050
                 { "StartJump", new { JumpType = "Hyperspace", StarClass = "G" }, true },
-#pragma warning restore IDE0050
                 { Flags.FsdJump | Flags.InMainShip | Flags.ShieldsUp },
                 { "FSDJump", new { StarSystem = "Wolf 1301" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
@@ -245,109 +237,6 @@ namespace EliteChroma.Core.Tests
                 { Flags.InSrv | Flags.ShieldsUp | Flags.HudInAnalysisMode | Flags.SrvUsingTurretView | Flags.LightsOn | Flags.SrvHighBeam },
                 { Flags.InSrv | Flags.ShieldsUp | Flags.NightVision | Flags.CargoScoopDeployed },
             };
-        }
-
-        private sealed class EventSequence : IReadOnlyCollection<Event>
-        {
-            private readonly List<Event> _events = new List<Event>();
-
-            public int Count => _events.Count;
-
-            public static string BuildEvent(string eventName, object data)
-            {
-#pragma warning disable IDE0050
-                string tsJson = JsonConvert.SerializeObject(new
-                {
-                    timestamp = DateTimeOffset.UtcNow,
-                    @event = eventName,
-                });
-#pragma warning restore IDE0050
-
-                string entryJson = JsonConvert.SerializeObject(data);
-
-                string json = $"{tsJson[0..^1]},{entryJson[1..]}";
-
-                return $"{json}\r\n";
-            }
-
-            public void Add(string eventName, object data, bool changesGameState)
-            {
-                string json = BuildEvent(eventName, data);
-                _events.Add(new Event(eventName == "Status", json, changesGameState));
-            }
-
-            [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "Used implicitly in BuidEventSequence")]
-            public void Add(Flags flags, GuiFocus guiFocus = GuiFocus.None)
-            {
-#pragma warning disable IDE0050
-                var data = new
-                {
-                    Flags = flags,
-                    Pips = new[] { 4, 4, 4 },
-                    FireGroup = 0,
-                    GuiFocus = guiFocus,
-                };
-#pragma warning restore IDE0050
-
-                Add("Status", data, true);
-            }
-
-            public void Play(TestFolder journalFolder, string journalFile, string statusFile)
-            {
-                var journalBuf = new StringBuilder();
-
-                foreach (var e in this)
-                {
-                    if (!e.IsStatus)
-                    {
-                        journalBuf.Append(e.Json);
-                        continue;
-                    }
-
-                    if (journalBuf.Length != 0)
-                    {
-                        journalFolder.WriteText(journalFile, journalBuf.ToString(), true);
-                        journalBuf.Clear();
-                        Thread.Sleep(100);
-                    }
-
-                    journalFolder.WriteText(statusFile, e.Json, false);
-                    Thread.Sleep(100);
-                }
-
-                if (journalBuf.Length != 0)
-                {
-                    journalFolder.WriteText(journalFile, journalBuf.ToString(), true);
-                    journalBuf.Clear();
-                    Thread.Sleep(100);
-                }
-            }
-
-            public IEnumerator<Event> GetEnumerator()
-            {
-                return _events.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-        }
-
-        private sealed class Event
-        {
-            public Event(bool isStatus, string json, bool changesGameState)
-            {
-                IsStatus = isStatus;
-                Json = json;
-                ChangesGameState = changesGameState;
-            }
-
-            public bool IsStatus { get; }
-
-            public string Json { get; }
-
-            public bool ChangesGameState { get; }
         }
 
         private sealed class NativeMethodsMock : NativeMethodsStub
