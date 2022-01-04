@@ -121,6 +121,11 @@ namespace EliteChroma.Core
 
         public void Refresh()
         {
+            if (!_running)
+            {
+                throw new InvalidOperationException("Controller is currently stopped.");
+            }
+
             _animation.Enabled = true;
         }
 
