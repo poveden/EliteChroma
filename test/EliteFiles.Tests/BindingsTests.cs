@@ -269,6 +269,9 @@ namespace EliteFiles.Tests
 
             binds = await evs.WaitAsync(() => dirOpts.WriteText(_startPresetFile, "KeyboardMouseOnly")).ConfigureAwait(false);
             Assert.NotNull(binds);
+
+            binds = await evs.WaitAsync(() => { }, 100).ConfigureAwait(false);
+            Assert.Null(binds);
         }
 
         [Fact]
