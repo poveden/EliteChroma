@@ -196,6 +196,17 @@ namespace EliteChroma.Core.Tests
             Assert.Equal(1, nRenderCalls);
         }
 
+        [Fact]
+        public void RefreshThrowsWhenControllerIsStopped()
+        {
+            using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder)
+            {
+                ChromaFactory = new ChromaMockFactory(),
+            };
+
+            Assert.Throws<InvalidOperationException>(() => cc.Refresh());
+        }
+
         private static EventSequence BuildEventSequence()
         {
             return new EventSequence

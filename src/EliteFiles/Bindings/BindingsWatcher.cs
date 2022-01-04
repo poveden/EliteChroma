@@ -16,7 +16,6 @@ namespace EliteFiles.Bindings
         private readonly GameInstallFolder _gameInstallFolder;
         private readonly GameOptionsFolder _gameOptionsFolder;
 
-        private readonly EliteFileSystemWatcher? _startPresetWatcher;
         private readonly EliteFileSystemWatcher? _customBindsWatcher;
 
         private bool _running;
@@ -40,9 +39,6 @@ namespace EliteFiles.Bindings
 
             string customBindingsPath = gameOptionsFolder.Bindings.FullName;
 
-            _startPresetWatcher = new EliteFileSystemWatcher(customBindingsPath, gameOptionsFolder.BindingsStartPreset.Name);
-            _startPresetWatcher.Changed += Bindings_Changed;
-
             _customBindsWatcher = new EliteFileSystemWatcher(customBindingsPath);
             _customBindsWatcher.Changed += Bindings_Changed;
         }
@@ -63,7 +59,6 @@ namespace EliteFiles.Bindings
             }
 
             Reload();
-            _startPresetWatcher?.Start();
             _customBindsWatcher?.Start();
             _running = true;
         }
@@ -78,7 +73,6 @@ namespace EliteFiles.Bindings
                 return;
             }
 
-            _startPresetWatcher?.Stop();
             _customBindsWatcher?.Stop();
             _running = false;
         }
@@ -93,7 +87,6 @@ namespace EliteFiles.Bindings
                 return;
             }
 
-            _startPresetWatcher?.Dispose();
             _customBindsWatcher?.Dispose();
             _disposed = true;
         }
