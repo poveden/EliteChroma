@@ -236,7 +236,7 @@ namespace EliteChroma.Core.Tests
                 { Flags.FsdCharging | Flags.InMainShip | Flags.ShieldsUp },
                 { "StartJump", new { JumpType = "Supercruise" }, true },
                 { Flags.FsdJump | Flags.InMainShip | Flags.ShieldsUp },
-                { "SupercruiseExit", new { BodyType = "Planet" }, false },
+                { "SupercruiseExit", new { BodyType = "Planet" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LandingGearDeployed },
                 { "Touchdown", new { PlayerControlled = true }, false },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LandingGearDeployed | Flags.Landed },
