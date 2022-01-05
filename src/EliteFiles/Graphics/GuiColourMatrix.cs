@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace EliteFiles.Graphics
 {
@@ -8,6 +9,9 @@ namespace EliteFiles.Graphics
     public sealed class GuiColourMatrix : IRgbTransformMatrix
     {
         private readonly GuiColourMatrixEntry[] _v = new GuiColourMatrixEntry[3];
+        private readonly bool _readOnly;
+
+        private string? _localizationName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GuiColourMatrix"/> class.
@@ -19,25 +23,35 @@ namespace EliteFiles.Graphics
             _v[2] = new GuiColourMatrixEntry();
         }
 
-        private GuiColourMatrix(GuiColourMatrixEntry r, GuiColourMatrixEntry g, GuiColourMatrixEntry b)
+        private GuiColourMatrix(GuiColourMatrixEntry r, GuiColourMatrixEntry g, GuiColourMatrixEntry b, bool readOnly)
         {
             _v[0] = r;
             _v[1] = g;
             _v[2] = b;
+            _readOnly = readOnly;
         }
 
         /// <summary>
         /// Gets the default GUI colour transformation matrix.
         /// </summary>
         public static GuiColourMatrix Default { get; } = new GuiColourMatrix(
-            new GuiColourMatrixEntry { Red = 1, Green = 0, Blue = 0 },
-            new GuiColourMatrixEntry { Red = 0, Green = 1, Blue = 0 },
-            new GuiColourMatrixEntry { Red = 0, Green = 0, Blue = 1 });
+            new GuiColourMatrixEntry(1, 0, 0, true),
+            new GuiColourMatrixEntry(0, 1, 0, true),
+            new GuiColourMatrixEntry(0, 0, 1, true),
+            true);
 
         /// <summary>
         /// Gets or sets the localisation name.
         /// </summary>
-        public string? LocalisationName { get; set; }
+        public string? LocalisationName
+        {
+            get => _localizationName;
+            set
+            {
+                ThrowIfReadOnly();
+                _localizationName = value;
+            }
+        }
 
         /// <summary>
         /// Gets the red matrix component.
@@ -72,10 +86,18 @@ namespace EliteFiles.Graphics
             var g = GuiColourMatrixEntry.FromXml(xml.Element("MatrixGreen"));
             var b = GuiColourMatrixEntry.FromXml(xml.Element("MatrixBlue"));
 
-            return new GuiColourMatrix(r, g, b)
+            return new GuiColourMatrix(r, g, b, false)
             {
                 LocalisationName = xml.Element("LocalisationName")?.Value,
             };
+        }
+
+        private void ThrowIfReadOnly()
+        {
+            if (_readOnly)
+            {
+                throw new InvalidOperationException("Property is read-only.");
+            }
         }
     }
 }
