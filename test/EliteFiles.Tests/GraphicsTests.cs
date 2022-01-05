@@ -282,5 +282,25 @@ namespace EliteFiles.Tests
             entry = new GuiColourMatrixEntry { Red = 0.5, Green = 0.6, Blue = value };
             Assert.Equal(expected, entry.Blue);
         }
+
+        [Fact]
+
+        public void DefaultGuiColourMatrixIsAReadOnlyIdentityMatrix()
+        {
+            var i = GuiColourMatrix.Default;
+
+            for (int row = 0; row < 3; row++)
+            {
+                for (int col = 0; col < 3; col++)
+                {
+                    double v = row == col ? 1 : 0;
+                    Assert.Equal(v, i[row, col]);
+
+                    Assert.Throws<InvalidOperationException>(() => i[row, col] = v);
+                }
+            }
+
+            Assert.Throws<InvalidOperationException>(() => i.LocalisationName = "en-US");
+        }
     }
 }
