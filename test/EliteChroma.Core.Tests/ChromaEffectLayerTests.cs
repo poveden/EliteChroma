@@ -21,7 +21,7 @@ using Xunit;
 
 namespace EliteChroma.Core.Tests
 {
-    public class EffectLayerTests
+    public class ChromaEffectLayerTests
     {
         private const string _gameRootFolder = @"TestFiles\GameRoot";
 
@@ -29,7 +29,7 @@ namespace EliteChroma.Core.Tests
 
         private readonly GameInstallFolder _gif;
 
-        public EffectLayerTests()
+        public ChromaEffectLayerTests()
         {
             _gif = new GameInstallFolder(_gameRootFolder);
         }
@@ -37,12 +37,12 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void LayerComparerComparesCorrectly()
         {
-            var comparer = typeof(LayeredEffect).GetPrivateStaticField<IComparer<EffectLayer>>("_comparer")!;
+            var comparer = typeof(ChromaEffect<object>).GetPrivateStaticField<IComparer<ChromaEffectLayer<object>>>("_comparer")!;
 
-            var l1 = new Mock<EffectLayer>();
+            var l1 = new Mock<ChromaEffectLayer<object>>();
             l1.Setup(x => x.Order).Returns(500);
 
-            var l2 = new Mock<EffectLayer>();
+            var l2 = new Mock<ChromaEffectLayer<object>>();
             l2.Setup(x => x.Order).Returns(500);
 
             Assert.Equal(0, comparer.Compare(l1.Object, l1.Object));
@@ -60,7 +60,7 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void DuplicatedLayerObjectsAreNotAddedToTheCollection()
         {
-            var le = new LayeredEffect();
+            var le = new ChromaEffect<LayerRenderState>();
             var layer = new InterfaceModeLayer();
 
             Assert.True(le.Add(layer));
@@ -80,7 +80,7 @@ namespace EliteChroma.Core.Tests
         [Fact]
         public void LayerBaseThrowsOnInvalidGameState()
         {
-            var le = new LayeredEffect();
+            var le = new ChromaEffect<LayerRenderState>();
             le.Add(new DummyLayer(new NativeMethodsStub()));
 
             var chroma = ChromaMockFactory.Create();
@@ -100,7 +100,7 @@ namespace EliteChroma.Core.Tests
             var hyperJumpKey = GetKey(binds, FlightMiscellaneous.HyperSuperCombination);
 
             var hyperspaceLayer = new HyperspaceLayer() { NativeMethods = new NativeMethodsStub() };
-            var le = new LayeredEffect();
+            var le = new ChromaEffect<LayerRenderState>();
             le.Add(hyperspaceLayer);
 
             var chroma = ChromaMockFactory.Create();
@@ -161,7 +161,7 @@ namespace EliteChroma.Core.Tests
             var bl = new GameInBackroundLayer();
             bl.SetPrivateField("_inBackground", wasInBackground);
 
-            var le = new LayeredEffect();
+            var le = new ChromaEffect<LayerRenderState>();
             le.Add(bl);
 
             var chroma = ChromaMockFactory.Create();

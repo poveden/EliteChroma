@@ -176,15 +176,15 @@ namespace EliteChroma.Core.Tests
             var game = cc.GetPrivateField<GameStateWatcher>("_watcher")!
                 .GetPrivateField<GameState>("_gameState")!;
 
-            var effect = cc.GetPrivateField<LayeredEffect>("_effect")!;
+            var effect = cc.GetPrivateField<ChromaEffect<LayerRenderState>>("_effect")!;
 
             int nRenderCalls = 0;
             using var mre = new ManualResetEventSlim();
 
-            var layer = new Mock<EffectLayer>();
+            var layer = new Mock<ChromaEffectLayer<LayerRenderState>>();
 
             layer.Protected()
-                .Setup("OnRender", ItExpr.IsAny<ChromaCanvas>(), ItExpr.IsAny<object>())
+                .Setup("OnRender", ItExpr.IsAny<ChromaCanvas>(), ItExpr.IsAny<LayerRenderState>())
                 .Callback(() =>
                 {
                     Interlocked.Increment(ref nRenderCalls);
@@ -233,14 +233,14 @@ namespace EliteChroma.Core.Tests
 
             var game = watcher.GetPrivateField<GameState>("_gameState")!;
 
-            var effect = cc.GetPrivateField<LayeredEffect>("_effect")!;
+            var effect = cc.GetPrivateField<ChromaEffect<LayerRenderState>>("_effect")!;
 
             using var mre = new ManualResetEventSlim();
 
-            var layer = new Mock<EffectLayer>();
+            var layer = new Mock<ChromaEffectLayer<LayerRenderState>>();
 
             layer.Protected()
-                .Setup("OnRender", ItExpr.IsAny<ChromaCanvas>(), ItExpr.IsAny<object>())
+                .Setup("OnRender", ItExpr.IsAny<ChromaCanvas>(), ItExpr.IsAny<LayerRenderState>())
                 .Callback(() =>
                 {
                     mre.Set();

@@ -4,18 +4,18 @@ using ChromaWrapper.Sdk;
 
 namespace EliteChroma.Chroma
 {
-    public sealed class LayeredEffect
+    public class ChromaEffect<TState>
     {
-        private static readonly LayerComparer _comparer = new LayerComparer();
+        private static readonly Comparer<ChromaEffectLayer<TState>> _comparer = new LayerComparer();
 
-        private readonly List<EffectLayer> _layers = new List<EffectLayer>();
+        private readonly List<ChromaEffectLayer<TState>> _layers = new List<ChromaEffectLayer<TState>>();
         private readonly ChromaCanvas _canvas = new ChromaCanvas();
 
         private IReadOnlyCollection<Guid> _activeEffectIds = Array.Empty<Guid>();
 
-        public IReadOnlyList<EffectLayer> Layers => _layers;
+        public IReadOnlyList<ChromaEffectLayer<TState>> Layers => _layers;
 
-        public bool Add(EffectLayer layer)
+        public bool Add(ChromaEffectLayer<TState> layer)
         {
             int i = _layers.BinarySearch(layer, _comparer);
 
@@ -33,12 +33,12 @@ namespace EliteChroma.Chroma
             _layers.Clear();
         }
 
-        public bool Remove(EffectLayer layer)
+        public bool Remove(ChromaEffectLayer<TState> layer)
         {
             return _layers.Remove(layer);
         }
 
-        public void Render(IChromaSdk chroma, object state)
+        public void Render(IChromaSdk chroma, TState state)
         {
             _canvas.ClearCanvas();
 
@@ -56,9 +56,9 @@ namespace EliteChroma.Chroma
             }
         }
 
-        private sealed class LayerComparer : Comparer<EffectLayer>
+        private sealed class LayerComparer : Comparer<ChromaEffectLayer<TState>>
         {
-            public override int Compare(EffectLayer? x, EffectLayer? y)
+            public override int Compare(ChromaEffectLayer<TState>? x, ChromaEffectLayer<TState>? y)
             {
                 if (x == y)
                 {

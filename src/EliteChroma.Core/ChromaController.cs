@@ -17,7 +17,7 @@ namespace EliteChroma.Core
         private const int _defaultFps = 30; // Confirmed at Razer DevCon 2021.
 
         private readonly GameStateWatcher _watcher;
-        private readonly LayeredEffect _effect;
+        private readonly ChromaEffect<LayerRenderState> _effect;
         private readonly System.Timers.Timer _animation;
         private readonly SemaphoreSlim _chromaLock = new SemaphoreSlim(1, 1);
 
@@ -160,14 +160,14 @@ namespace EliteChroma.Core
             return false;
         }
 
-        private static LayeredEffect InitChromaEffect()
+        private static ChromaEffect<LayerRenderState> InitChromaEffect()
         {
             IEnumerable<LayerBase> layers =
                 from type in typeof(LayerBase).Assembly.GetTypes()
                 where type.IsSubclassOf(typeof(LayerBase)) && !type.IsAbstract
                 select (LayerBase)Activator.CreateInstance(type)!;
 
-            var res = new LayeredEffect();
+            var res = new ChromaEffect<LayerRenderState>();
 
             foreach (LayerBase layer in layers)
             {
