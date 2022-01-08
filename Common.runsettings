@@ -3,6 +3,11 @@
 
   <LoggerRunSettings>
     <Loggers>
+      <Logger friendlyName="console" enabled="True">
+        <Configuration>
+          <Verbosity>detailed</Verbosity>
+        </Configuration>
+      </Logger>
       <Logger friendlyName="trx" enabled="True">
         <Configuration>
           <LogFileName>TestResults.xml</LogFileName>

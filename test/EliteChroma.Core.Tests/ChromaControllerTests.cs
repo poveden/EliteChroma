@@ -12,6 +12,7 @@ using Moq;
 using Moq.Protected;
 using TestUtils;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace EliteChroma.Core.Tests
 {
@@ -20,6 +21,13 @@ namespace EliteChroma.Core.Tests
         private const string _gameRootFolder = @"TestFiles\GameRoot";
         private const string _gameOptionsFolder = @"TestFiles\GameOptions";
         private const string _journalFolder = @"TestFiles\Journal";
+
+        private readonly ITestOutputHelper _output;
+
+        public ChromaControllerTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
 
         [Theory]
         [InlineData(true)]
@@ -60,7 +68,11 @@ namespace EliteChroma.Core.Tests
             Assert.False(cc.DetectGameInForeground);
 
             using var ceCKEA = new CountdownEvent(1);
-            mockCKEA.Callback(() => ceCKEA.Signal());
+            mockCKEA.Callback(() =>
+            {
+                _output.WriteLine("> CreateEffect");
+                ceCKEA.Signal();
+            });
 
             cc.Start();
 
@@ -270,9 +282,9 @@ namespace EliteChroma.Core.Tests
             Assert.Throws<InvalidOperationException>(() => cc.Refresh());
         }
 
-        private static EventSequence BuildEventSequence()
+        private EventSequence BuildEventSequence()
         {
-            return new EventSequence
+            return new EventSequence(_output)
             {
                 { "Music", new { MusicTrack = "MainMenu" }, true },
                 { Flags.Docked | Flags.FsdMassLocked | Flags.InMainShip | Flags.LandingGearDeployed | Flags.ShieldsUp },

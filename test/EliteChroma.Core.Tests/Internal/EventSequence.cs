@@ -6,12 +6,19 @@ using System.Threading;
 using EliteFiles.Status;
 using Newtonsoft.Json;
 using TestUtils;
+using Xunit.Abstractions;
 
 namespace EliteChroma.Core.Tests.Internal
 {
     internal sealed class EventSequence : IReadOnlyCollection<Event>
     {
         private readonly List<Event> _events = new List<Event>();
+        private readonly ITestOutputHelper _output;
+
+        public EventSequence(ITestOutputHelper output)
+        {
+            _output = output;
+        }
 
         public int Count => _events.Count;
 
@@ -54,28 +61,37 @@ namespace EliteChroma.Core.Tests.Internal
         public void Play(TestFolder journalFolder, string journalFile, string statusFile)
         {
             var journalBuf = new StringBuilder();
+            int gameStateChanges = 0;
 
             foreach (var e in this)
             {
                 if (!e.IsStatus)
                 {
+                    gameStateChanges += e.ChangesGameState ? 1 : 0;
                     journalBuf.Append(e.Json);
                     continue;
                 }
 
                 if (journalBuf.Length != 0)
                 {
+                    _output.WriteLine("\r\n[Journal] {0}", journalBuf.ToString()[..^2]);
+                    _output.WriteLine("({0} game state changes should follow)", gameStateChanges);
                     journalFolder.WriteText(journalFile, journalBuf.ToString(), true);
                     journalBuf.Clear();
+                    gameStateChanges = 0;
                     Thread.Sleep(100);
                 }
 
+                _output.WriteLine("\r\n[Status]  {0}", e.Json[..^2]);
+                _output.WriteLine("({0} game state changes should follow)", e.ChangesGameState ? 1 : 0);
                 journalFolder.WriteText(statusFile, e.Json, false);
                 Thread.Sleep(100);
             }
 
             if (journalBuf.Length != 0)
             {
+                _output.WriteLine("\r\n[Journal] {0}", journalBuf.ToString()[..^2]);
+                _output.WriteLine("({0} game state changes should follow)", gameStateChanges);
                 journalFolder.WriteText(journalFile, journalBuf.ToString(), true);
                 journalBuf.Clear();
                 Thread.Sleep(100);
