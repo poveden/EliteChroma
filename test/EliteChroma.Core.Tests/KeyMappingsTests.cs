@@ -5,6 +5,7 @@ using System.Reflection;
 using ChromaWrapper.Keyboard;
 using EliteChroma.Core.Tests.Internal;
 using EliteFiles.Bindings.Devices;
+using TestUtils;
 using Xunit;
 using static EliteChroma.Core.Internal.NativeMethods;
 

@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ChromaWrapper.Keyboard;
@@ -13,8 +10,9 @@ using EliteChroma.Elite;
 using EliteFiles.Status;
 using Moq;
 using Moq.Protected;
-using Newtonsoft.Json;
+using TestUtils;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace EliteChroma.Core.Tests
 {
@@ -23,6 +21,13 @@ namespace EliteChroma.Core.Tests
         private const string _gameRootFolder = @"TestFiles\GameRoot";
         private const string _gameOptionsFolder = @"TestFiles\GameOptions";
         private const string _journalFolder = @"TestFiles\Journal";
+
+        private readonly ITestOutputHelper _output;
+
+        public ChromaControllerTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
 
         [Theory]
         [InlineData(true)]
@@ -51,9 +56,7 @@ namespace EliteChroma.Core.Tests
                 dirJournal = new TestFolder();
 
             dirJournal.WriteText(statusFile, EventSequence.BuildEvent("Status", new { Flags = 0 }));
-#pragma warning disable IDE0050
             dirJournal.WriteText(journalFile, EventSequence.BuildEvent("Fileheader", new { part = 1, language = @"English\UK", gameversion = "3.5.0.200 EDH", build = "r210198/r0 " }));
-#pragma warning restore IDE0050
 
             using var cc = new ChromaController(dirRoot.Name, dirOpts.Name, dirJournal.Name)
             {
@@ -65,7 +68,11 @@ namespace EliteChroma.Core.Tests
             Assert.False(cc.DetectGameInForeground);
 
             using var ceCKEA = new CountdownEvent(1);
-            mockCKEA.Callback(() => ceCKEA.Signal());
+            mockCKEA.Callback(() =>
+            {
+                _output.WriteLine("> CreateEffect");
+                ceCKEA.Signal();
+            });
 
             cc.Start();
 
@@ -107,6 +114,26 @@ namespace EliteChroma.Core.Tests
             cc.ForceEnUSKeyboardLayout = true;
             Assert.True(cc.ForceEnUSKeyboardLayout);
             Assert.True(watcher.GetGameStateSnapshot().ForceEnUSKeyboardLayout);
+        }
+
+        [Fact]
+        public void ColorsObjectCanBeUpdated()
+        {
+            using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
+
+            Assert.NotNull(cc.Colors);
+
+            var newColors = new ChromaColors();
+            cc.Colors = newColors;
+            Assert.Same(newColors, cc.Colors);
+        }
+
+        [Fact]
+        public void ColorsCannotBeSetToNull()
+        {
+            using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder);
+
+            Assert.Throws<ArgumentNullException>(() => cc.Colors = null!);
         }
 
         [Fact]
@@ -161,15 +188,15 @@ namespace EliteChroma.Core.Tests
             var game = cc.GetPrivateField<GameStateWatcher>("_watcher")!
                 .GetPrivateField<GameState>("_gameState")!;
 
-            var effect = cc.GetPrivateField<LayeredEffect>("_effect")!;
+            var effect = cc.GetPrivateField<ChromaEffect<LayerRenderState>>("_effect")!;
 
             int nRenderCalls = 0;
             using var mre = new ManualResetEventSlim();
 
-            var layer = new Mock<EffectLayer>();
+            var layer = new Mock<ChromaEffectLayer<LayerRenderState>>();
 
             layer.Protected()
-                .Setup("OnRender", ItExpr.IsAny<ChromaCanvas>(), ItExpr.IsAny<object>())
+                .Setup("OnRender", ItExpr.IsAny<ChromaCanvas>(), ItExpr.IsAny<LayerRenderState>())
                 .Callback(() =>
                 {
                     Interlocked.Increment(ref nRenderCalls);
@@ -197,6 +224,54 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
+        public void RefreshTriggersRender()
+        {
+            using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder)
+            {
+                ChromaFactory = new ChromaMockFactory(),
+                DetectGameInForeground = false,
+            };
+
+            using var mreDrain = new ManualResetEventSlim();
+
+            var watcher = cc.GetPrivateField<GameStateWatcher>("_watcher")!;
+            watcher.Changed += (sender, e) =>
+            {
+                if (e == GameStateWatcher.ChangeType.JournalDrain)
+                {
+                    mreDrain.Set();
+                }
+            };
+
+            var game = watcher.GetPrivateField<GameState>("_gameState")!;
+
+            var effect = cc.GetPrivateField<ChromaEffect<LayerRenderState>>("_effect")!;
+
+            using var mre = new ManualResetEventSlim();
+
+            var layer = new Mock<ChromaEffectLayer<LayerRenderState>>();
+
+            layer.Protected()
+                .Setup("OnRender", ItExpr.IsAny<ChromaCanvas>(), ItExpr.IsAny<LayerRenderState>())
+                .Callback(() =>
+                {
+                    mre.Set();
+                });
+
+            effect.Clear();
+            effect.Add(layer.Object);
+
+            cc.Start();
+            Assert.True(mreDrain.Wait(1000));
+            SpinWait.SpinUntil(() => cc.GetPrivateField<int>("_rendering") == 0);
+
+            game.ProcessState = GameProcessState.InForeground;
+            cc.Refresh();
+
+            Assert.True(mre.Wait(1000));
+        }
+
+        [Fact]
         public void RefreshThrowsWhenControllerIsStopped()
         {
             using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder)
@@ -207,15 +282,15 @@ namespace EliteChroma.Core.Tests
             Assert.Throws<InvalidOperationException>(() => cc.Refresh());
         }
 
-        private static EventSequence BuildEventSequence()
+        private EventSequence BuildEventSequence()
         {
-            return new EventSequence
+            return new EventSequence(_output)
             {
                 { "Music", new { MusicTrack = "MainMenu" }, true },
                 { Flags.Docked | Flags.FsdMassLocked | Flags.InMainShip | Flags.LandingGearDeployed | Flags.ShieldsUp },
                 { "Undocked", new { StationType = "Coriolis" }, false },
                 { Flags.InMainShip | Flags.ShieldsUp },
-                { Flags.InMainShip | Flags.ShieldsUp, GuiFocus.GalaxyMap },
+                { Flags.InMainShip | Flags.ShieldsUp, Flags2.None, null, GuiFocus.GalaxyMap },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.HudInAnalysisMode },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.ScoopingFuel },
                 { Flags.InMainShip | Flags.ShieldsUp },
@@ -223,15 +298,13 @@ namespace EliteChroma.Core.Tests
                 { "UnderAttack", new { Target = "You" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp },
                 { Flags.FsdCharging | Flags.InMainShip | Flags.ShieldsUp },
-#pragma warning disable IDE0050
                 { "StartJump", new { JumpType = "Hyperspace", StarClass = "G" }, true },
-#pragma warning restore IDE0050
                 { Flags.FsdJump | Flags.InMainShip | Flags.ShieldsUp },
                 { "FSDJump", new { StarSystem = "Wolf 1301" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
-                { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise, GuiFocus.FssMode },
+                { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise, Flags2.None, null, GuiFocus.FssMode },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
-                { "SupercruiseExit", new { BodyType = "Station" }, false },
+                { "SupercruiseExit", new { BodyType = "Station" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LightsOn | Flags.NightVision | Flags.CargoScoopDeployed | Flags.HardpointsDeployed | Flags.LandingGearDeployed },
                 { Flags.FsdCharging | Flags.InMainShip | Flags.ShieldsUp },
                 { "StartJump", new { JumpType = "Supercruise" }, true },
@@ -243,110 +316,13 @@ namespace EliteChroma.Core.Tests
                 { Flags.InSrv | Flags.ShieldsUp | Flags.SrvTurretRetracted | Flags.LightsOn },
                 { Flags.InSrv | Flags.ShieldsUp | Flags.HudInAnalysisMode | Flags.SrvUsingTurretView | Flags.LightsOn | Flags.SrvHighBeam },
                 { Flags.InSrv | Flags.ShieldsUp | Flags.NightVision | Flags.CargoScoopDeployed },
+                { Flags.Landed | Flags.LandingGearDeployed, Flags2.OnFoot | Flags2.OnFootExterior },
+                { Flags.Landed | Flags.LandingGearDeployed, Flags2.OnFoot | Flags2.OnFootExterior, OnFootWeapon.Energylink },
+                { Flags.Landed | Flags.LandingGearDeployed, Flags2.OnFoot | Flags2.OnFootExterior, OnFootWeapon.GeneticSampler },
+                { Flags.Landed | Flags.LandingGearDeployed, Flags2.OnFoot | Flags2.OnFootExterior, OnFootWeapon.ManticoreExecutioner },
+                { Flags.Landed | Flags.LandingGearDeployed, Flags2.OnFoot | Flags2.OnFootInHangar },
+                { Flags.InMainShip | Flags.Landed, Flags2.InTaxi },
             };
-        }
-
-        private sealed class EventSequence : IReadOnlyCollection<Event>
-        {
-            private readonly List<Event> _events = new List<Event>();
-
-            public int Count => _events.Count;
-
-            public static string BuildEvent(string eventName, object data)
-            {
-#pragma warning disable IDE0050
-                string tsJson = JsonConvert.SerializeObject(new
-                {
-                    timestamp = DateTimeOffset.UtcNow,
-                    @event = eventName,
-                });
-#pragma warning restore IDE0050
-
-                string entryJson = JsonConvert.SerializeObject(data);
-
-                string json = $"{tsJson[0..^1]},{entryJson[1..]}";
-
-                return $"{json}\r\n";
-            }
-
-            public void Add(string eventName, object data, bool changesGameState)
-            {
-                string json = BuildEvent(eventName, data);
-                _events.Add(new Event(eventName == "Status", json, changesGameState));
-            }
-
-            [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "Used implicitly in BuidEventSequence")]
-            public void Add(Flags flags, GuiFocus guiFocus = GuiFocus.None)
-            {
-#pragma warning disable IDE0050
-                var data = new
-                {
-                    Flags = flags,
-                    Pips = new[] { 4, 4, 4 },
-                    FireGroup = 0,
-                    GuiFocus = guiFocus,
-                };
-#pragma warning restore IDE0050
-
-                Add("Status", data, true);
-            }
-
-            public void Play(TestFolder journalFolder, string journalFile, string statusFile)
-            {
-                var journalBuf = new StringBuilder();
-
-                foreach (var e in this)
-                {
-                    if (!e.IsStatus)
-                    {
-                        journalBuf.Append(e.Json);
-                        continue;
-                    }
-
-                    if (journalBuf.Length != 0)
-                    {
-                        journalFolder.WriteText(journalFile, journalBuf.ToString(), true);
-                        journalBuf.Clear();
-                        Thread.Sleep(100);
-                    }
-
-                    journalFolder.WriteText(statusFile, e.Json, false);
-                    Thread.Sleep(100);
-                }
-
-                if (journalBuf.Length != 0)
-                {
-                    journalFolder.WriteText(journalFile, journalBuf.ToString(), true);
-                    journalBuf.Clear();
-                    Thread.Sleep(100);
-                }
-            }
-
-            public IEnumerator<Event> GetEnumerator()
-            {
-                return _events.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-        }
-
-        private sealed class Event
-        {
-            public Event(bool isStatus, string json, bool changesGameState)
-            {
-                IsStatus = isStatus;
-                Json = json;
-                ChangesGameState = changesGameState;
-            }
-
-            public bool IsStatus { get; }
-
-            public string Json { get; }
-
-            public bool ChangesGameState { get; }
         }
 
         private sealed class NativeMethodsMock : NativeMethodsStub

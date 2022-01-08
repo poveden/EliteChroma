@@ -12,7 +12,7 @@ using EliteFiles.Bindings.Devices;
 
 namespace EliteChroma.Core
 {
-    public abstract class LayerBase : EffectLayer
+    public abstract class LayerBase : ChromaEffectLayer<LayerRenderState>
     {
         private GameState? _game;
         private ChromaColors? _colors;
@@ -41,11 +41,11 @@ namespace EliteChroma.Core
 
         protected TimeSpan AnimationElapsed => Now - AnimationStart;
 
-        protected override void OnRender(ChromaCanvas canvas, object state)
+        protected sealed override void OnRender(ChromaCanvas canvas, LayerRenderState state)
         {
-            LayerRenderState rs = (LayerRenderState)state ?? throw new ArgumentNullException(nameof(state));
-            _game = rs.GameState;
-            _colors = rs.Colors;
+            _ = state ?? throw new ArgumentNullException(nameof(state));
+            _game = state.GameState;
+            _colors = state.Colors;
 
             try
             {

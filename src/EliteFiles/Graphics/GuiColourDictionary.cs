@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
 
@@ -16,6 +17,7 @@ namespace EliteFiles.Graphics
         {
         }
 
+        [ExcludeFromCodeCoverage]
         private GuiColourDictionary(SerializationInfo serializationInfo, StreamingContext streamingContext)
             : base(serializationInfo, streamingContext)
         {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using EliteFiles.Tests.Internal;
+using TestUtils;
 using Xunit;
 
 namespace EliteFiles.Tests
@@ -10,7 +10,6 @@ namespace EliteFiles.Tests
     {
         [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP016:Don't use disposed instance.", Justification = "IDisposable test")]
         [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP017:Prefer using.", Justification = "IDisposable test")]
-        [SuppressMessage("Major Code Smell", "S3966:Objects should not be disposed more than once", Justification = "IDisposable test")]
         [Fact]
         public void DoesNotThrowWhenDisposingTwice()
         {

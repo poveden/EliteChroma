@@ -1,4 +1,4 @@
-{ "timestamp":"2019-01-01T00:00:00Z", "event":"Fileheader", "part":1, "language":"English\\UK", "gameversion":"4.0.0.701", "build":"r273365/r0 " }
+{ "timestamp":"2019-01-01T00:00:00Z", "event":"Fileheader", "part":1, "language":"English\\UK", "Odyssey":true, "gameversion":"4.0.0.701", "build":"r273365/r0 " }
 { "timestamp":"2019-01-01T00:00:00Z", "event":"LoadGame", "FID":"F123456", "Commander":"Jameson", "Horizons":true, "Odyssey":true, "Ship":"Krait_Light", "Ship_Localised":"Krait Phantom", "ShipID":1, "ShipName":"Nameless", "ShipIdent":"ASD-FG", "FuelLevel":31.370001, "FuelCapacity":32.000000, "StartLanded":true, "GameMode":"Group", "Group":"FleetComm", "Credits":1234567890, "Loan":0, "language":"English/UK", "gameversion":"4.0.0.701", "build":"r273365/r0 " }
 { "timestamp":"2019-01-01T00:00:00Z", "event":"Music", "MusicTrack":"NoTrack" }
 { "timestamp":"2019-01-01T00:04:00Z", "event":"UnderAttack", "Target":"You" }

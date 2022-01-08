@@ -1,8 +1,10 @@
-﻿using System;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-namespace EliteChroma.Tests.Internal
+namespace TestUtils
 {
+    [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Shared test code.")]
     internal sealed class TestFolder : IDisposable
     {
         private readonly DirectoryInfo _di;
@@ -33,6 +35,11 @@ namespace EliteChroma.Tests.Internal
             return Path.Combine(Name, relativePath);
         }
 
+        public string[] ResolveFiles(string searchPattern)
+        {
+            return Directory.GetFiles(Name, searchPattern, SearchOption.AllDirectories);
+        }
+
         public string ReadText(string path)
         {
             return File.ReadAllText(Resolve(path));
@@ -47,6 +54,18 @@ namespace EliteChroma.Tests.Internal
         public void DeleteFile(string path)
         {
             File.Delete(Resolve(path));
+        }
+
+        public int DeleteFiles(string searchPattern)
+        {
+            string[] files = ResolveFiles(searchPattern);
+
+            foreach (string file in files)
+            {
+                File.Delete(file);
+            }
+
+            return files.Length;
         }
 
         public void DeleteFolder(string path)

@@ -8,6 +8,7 @@ using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite;
 using EliteChroma.Elite.Internal;
 using EliteFiles;
+using TestUtils;
 using Xunit;
 
 namespace EliteChroma.Core.Tests

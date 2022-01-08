@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using EliteFiles.Graphics;
-using EliteFiles.Tests.Internal;
+using TestUtils;
 using Xunit;
 
 namespace EliteFiles.Tests

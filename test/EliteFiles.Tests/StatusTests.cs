@@ -2,8 +2,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using EliteFiles.Status;
-using EliteFiles.Tests.Internal;
 using Newtonsoft.Json;
+using TestUtils;
 using Xunit;
 
 namespace EliteFiles.Tests
