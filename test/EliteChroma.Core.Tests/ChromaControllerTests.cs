@@ -304,7 +304,7 @@ namespace EliteChroma.Core.Tests
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise, Flags2.None, null, GuiFocus.FssMode },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.FsdCooldown | Flags.Supercruise },
-                { "SupercruiseExit", new { BodyType = "Station" }, false },
+                { "SupercruiseExit", new { BodyType = "Station" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LightsOn | Flags.NightVision | Flags.CargoScoopDeployed | Flags.HardpointsDeployed | Flags.LandingGearDeployed },
                 { Flags.FsdCharging | Flags.InMainShip | Flags.ShieldsUp },
                 { "StartJump", new { JumpType = "Supercruise" }, true },
