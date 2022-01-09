@@ -18,6 +18,7 @@ namespace EliteChroma.Elite
         private readonly BindingsWatcher _bindingsWatcher;
         private readonly GraphicsConfigWatcher _graphicsConfig;
         private readonly GameProcessWatcher _gameProcessWatcher;
+        private readonly EdhmConfigWatcher _edhmConfigWatcher;
 
         private readonly ModifierKeysWatcher _modifierKeysWatcher;
 
@@ -58,6 +59,9 @@ namespace EliteChroma.Elite
             _gameProcessWatcher = new GameProcessWatcher(gif, nativeMethods);
             _gameProcessWatcher.Changed += GameProcessWatcher_Changed;
 
+            _edhmConfigWatcher = new EdhmConfigWatcher(gif);
+            _edhmConfigWatcher.Changed += EdhmConfigWatcher_Changed;
+
             _gameState = new GameState();
         }
 
@@ -72,6 +76,7 @@ namespace EliteChroma.Elite
             GraphicsConfig,
             DeviceKeySet,
             GameProcessState,
+            EdhmConfig,
         }
 
         public bool DetectForegroundProcess { get; set; } = true;
@@ -94,6 +99,7 @@ namespace EliteChroma.Elite
             _running = true;
 
             _graphicsConfig.Start();
+            _edhmConfigWatcher.Start();
             _bindingsWatcher.Start();
             _statusWatcher.Start();
             _modifierKeysWatcher.Start();
@@ -119,6 +125,7 @@ namespace EliteChroma.Elite
             _statusWatcher.Stop();
             _bindingsWatcher.Stop();
             _graphicsConfig.Stop();
+            _edhmConfigWatcher.Stop();
             _gameProcessWatcher.Stop();
         }
 
@@ -145,6 +152,7 @@ namespace EliteChroma.Elite
             _graphicsConfig.Dispose();
             _modifierKeysWatcher.Dispose();
             _gameProcessWatcher.Dispose();
+            _edhmConfigWatcher.Dispose();
 
             _disposed = true;
         }
@@ -252,6 +260,12 @@ namespace EliteChroma.Elite
         {
             _gameState.ProcessState = e;
             OnChanged(ChangeType.GameProcessState);
+        }
+
+        private void EdhmConfigWatcher_Changed(object? sender, EdhmConfig e)
+        {
+            _gameState.EdhmConfig = e;
+            OnChanged(ChangeType.EdhmConfig);
         }
 
         private void OnChanged(ChangeType changeType)

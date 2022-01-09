@@ -24,6 +24,7 @@ namespace EliteChroma.Core.Tests
                 ChangeType.StatusEntry,
                 ChangeType.BindingPreset,
                 ChangeType.GraphicsConfig,
+                ChangeType.EdhmConfig,
                 ChangeType.DeviceKeySet,
                 ChangeType.GameProcessState,
                 ChangeType.JournalEntry,

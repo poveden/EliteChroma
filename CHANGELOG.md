@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fix FSD status tracking when entering or exiting supercruise
 
+### Added
+
+- Add basic support for [EDHM](https://github.com/psychicEgg/EDHM)
+
 ## [1.15.0](https://github.com/poveden/EliteChroma/compare/v1.14.0...v1.15.0) — 2021-10-30
 
 ### Added

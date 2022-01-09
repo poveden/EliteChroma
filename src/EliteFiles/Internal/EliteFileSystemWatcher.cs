@@ -42,6 +42,18 @@ namespace EliteFiles.Internal
             set => _watcher.Filter = value;
         }
 
+        public bool IncludeSubdirectories
+        {
+            get => _watcher.IncludeSubdirectories;
+            set => _watcher.IncludeSubdirectories = value;
+        }
+
+        public string Path
+        {
+            get => _watcher.Path;
+            set => _watcher.Path = value;
+        }
+
         public void Start()
         {
             if (_started)
