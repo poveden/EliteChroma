@@ -76,8 +76,8 @@ namespace EliteFiles.Graphics
         /// <returns>The matrix value.</returns>
         public double this[int row, int col]
         {
-            get => _v[col][row];
-            set => _v[col][row] = value;
+            get => _v[row][col];
+            set => _v[row][col] = value;
         }
 
         internal static GuiColourMatrix FromXml(XElement xml)

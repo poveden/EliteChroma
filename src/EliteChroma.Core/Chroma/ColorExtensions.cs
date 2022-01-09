@@ -46,19 +46,19 @@ namespace EliteChroma.Chroma
             double c2 = color.B / 255.0;
 
             double r =
-                (transform[0, 0] * c0) +
-                (transform[0, 1] * c1) +
-                (transform[0, 2] * c2);
+                (c0 * transform[0, 0]) +
+                (c1 * transform[1, 0]) +
+                (c2 * transform[2, 0]);
 
             double g =
-                (transform[1, 0] * c0) +
-                (transform[1, 1] * c1) +
-                (transform[1, 2] * c2);
+                (c0 * transform[0, 1]) +
+                (c1 * transform[1, 1]) +
+                (c2 * transform[2, 1]);
 
             double b =
-                (transform[2, 0] * c0) +
-                (transform[2, 1] * c1) +
-                (transform[2, 2] * c2);
+                (c0 * transform[0, 2]) +
+                (c1 * transform[1, 2]) +
+                (c2 * transform[2, 2]);
 
             r = Math.Clamp(r, 0, 1);
             g = Math.Clamp(g, 0, 1);
