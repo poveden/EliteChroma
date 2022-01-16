@@ -11,6 +11,7 @@ namespace EliteChroma.Elite
         public static readonly TimeSpan JumpCountdownDelay = TimeSpan.FromSeconds(5);
 
         private GuiColourMatrix _guiColour;
+        private EdhmConfig? _edhmConfig;
 
         internal GameState()
         {
@@ -37,7 +38,17 @@ namespace EliteChroma.Elite
             internal set
             {
                 _guiColour = value;
-                Colors = new GameColors(_guiColour);
+                Colors = new GameColors(_edhmConfig?.GetColourMatrix() ?? _guiColour);
+            }
+        }
+
+        public EdhmConfig? EdhmConfig
+        {
+            get => _edhmConfig;
+            internal set
+            {
+                _edhmConfig = value;
+                Colors = new GameColors(_edhmConfig?.GetColourMatrix() ?? _guiColour);
             }
         }
 

@@ -105,6 +105,7 @@ namespace EliteFiles.Tests
             Assert.Equal(Path.Combine(gif.FullName, "EliteDangerous64.exe"), gif.MainExecutable.FullName, true);
             Assert.Equal(Path.Combine(gif.FullName, "GraphicsConfiguration.xml"), gif.GraphicsConfiguration.FullName, true);
             Assert.Equal(Path.Combine(gif.FullName, "ControlSchemes"), gif.ControlSchemes.FullName, true);
+            Assert.Equal(Path.Combine(gif.FullName, "d3dx.ini"), gif.D3DXIni.FullName, true);
         }
 
         [Fact]
@@ -162,6 +163,8 @@ namespace EliteFiles.Tests
 
             DeleteFolderAndAssertFalse(templateFolder, "ControlSchemes", IsValidFolder);
             DeleteFileAndAssertFalse(templateFolder, @"ControlSchemes\KeyboardMouseOnly.binds", IsValidFolder);
+
+            DeleteFileAndAssertTrue(templateFolder, @"d3dx.ini", IsValidFolder);
         }
 
         [Fact]

@@ -21,6 +21,9 @@ namespace EliteFiles
         /// <summary>«GameInstallFolder»\ControlSchemes.</summary>
         private const string ControlSchemesFolderName = "ControlSchemes";
 
+        /// <summary>«GameInstallFolder»\d3dx.ini.</summary>
+        private const string D3DXIniFileName = "d3dx.ini";
+
         private static readonly Lazy<string[]> _defaultPaths = new Lazy<string[]>(() =>
         {
             string programFilesFolder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
@@ -53,6 +56,7 @@ namespace EliteFiles
             MainExecutable = _di.GetFile(MainExecutableFileName);
             GraphicsConfiguration = _di.GetFile(GraphicsConfigMainFileName);
             ControlSchemes = _di.GetDirectory(ControlSchemesFolderName);
+            D3DXIni = _di.GetFile(D3DXIniFileName);
 
             IsValid = _di.Exists
                 && MainExecutable.Exists
@@ -94,6 +98,11 @@ namespace EliteFiles
         /// Gets the directory information for the <c>ControlSchemes</c> folder.
         /// </summary>
         public DirectoryInfo ControlSchemes { get; }
+
+        /// <summary>
+        /// Gets the file information for <see href="https://github.com/psychicEgg/EDHM">EDHM</see>'s <c>d3dx.ini</c> file.
+        /// </summary>
+        public FileInfo D3DXIni { get; }
 
         /// <summary>
         /// Gets the set of non-default folder paths where Elite:Dangerous may be installed.
