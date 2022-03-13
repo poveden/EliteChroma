@@ -22,6 +22,13 @@ namespace EliteChroma.Core.Layers
                 Miscellaneous.LandingGearToggle,
             }).ToList().AsReadOnly();
 
+        private static readonly IReadOnlyCollection<string> SupercruiseFlightMiscellaneous =
+            FlightMiscellaneous.All.Except(new[]
+            {
+                FlightMiscellaneous.ToggleFlightAssist,
+                FlightMiscellaneous.UseBoostJuice,
+            }).ToList().AsReadOnly();
+
         protected override void OnRender(ChromaCanvas canvas)
         {
             if (!Game.InCockpit || Game.DockedOrLanded || Game.FsdJumpType != FsdJumpType.None)
@@ -37,21 +44,22 @@ namespace EliteChroma.Core.Layers
             }
 
             ApplyColorToBinding(canvas.Keyboard, FlightRotation.All, Colors.VehicleRotation);
-            ApplyColorToBinding(canvas.Keyboard, FlightThrust.All, Colors.VehicleThrust);
-            ApplyColorToBinding(canvas.Keyboard, AlternateFlightControls.All, Colors.VehicleAlternate);
             ApplyColorToBinding(canvas.Keyboard, FlightThrottle.All, Colors.VehicleThrottle);
-            ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.All, Colors.VehicleMiscellaneous);
             ApplyColorToBinding(canvas.Keyboard, Targeting.All, Colors.VehicleTargeting);
             ApplyColorToBinding(canvas.Keyboard, Weapons.All, Colors.VehicleWeapons);
             ApplyColorToBinding(canvas.Keyboard, Cooling.All, Colors.VehicleCooling);
 
             if (Game.Status.HasFlag(Flags.Supercruise))
             {
+                ApplyColorToBinding(canvas.Keyboard, SupercruiseFlightMiscellaneous, Colors.VehicleMiscellaneous);
                 ApplyColorToBinding(canvas.Keyboard, SupercruiseMiscellaneous, Colors.Miscellaneous);
                 ApplyColorToBinding(canvas.Keyboard, ModeSwitches.ExplorationFssEnter, Colors.FullSpectrumSystemScanner);
             }
             else
             {
+                ApplyColorToBinding(canvas.Keyboard, FlightThrust.All, Colors.VehicleThrust);
+                ApplyColorToBinding(canvas.Keyboard, AlternateFlightControls.All, Colors.VehicleAlternate);
+                ApplyColorToBinding(canvas.Keyboard, FlightMiscellaneous.All, Colors.VehicleMiscellaneous);
                 ApplyColorToBinding(canvas.Keyboard, Miscellaneous.All, Colors.Miscellaneous);
             }
 
