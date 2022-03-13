@@ -206,14 +206,9 @@ namespace EliteChroma.Elite
                 default:
                     switch (e.Event)
                     {
-                        case "FSDJump": // Happens when entering a new system from hyperspace.
-                        case "SupercruiseEntry": // Happens when entering supercruise
-                            _gameState.FsdJumpType = StartJump.FsdJumpType.Supercruise;
-                            _gameState.FsdJumpStarClass = null;
-                            _gameState.FsdJumpChange = DateTimeOffset.UtcNow;
-                            break;
-
-                        case "SupercruiseExit": // Happens when exiting supercruise
+                        case "FSDJump": // Happens when a new system has been entered from hyperspace.
+                        case "SupercruiseEntry": // Happens when supercruise has been entered.
+                        case "SupercruiseExit": // Happens when supercruise hass been exited.
                             _gameState.FsdJumpType = StartJump.FsdJumpType.None;
                             _gameState.FsdJumpStarClass = null;
                             _gameState.FsdJumpChange = DateTimeOffset.UtcNow;
