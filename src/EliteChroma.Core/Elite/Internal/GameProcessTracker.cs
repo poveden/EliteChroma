@@ -96,9 +96,7 @@ namespace EliteChroma.Elite.Internal
 
         private void UpdateProcessIndex()
         {
-            ProcessList swap = _plPrev;
-            _plPrev = _plCurr;
-            _plCurr = swap;
+            (_plPrev, _plCurr) = (_plCurr, _plPrev);
 
             _plCurr.Refresh();
 

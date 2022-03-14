@@ -309,6 +309,8 @@ namespace EliteChroma.Core.Tests
                 { Flags.FsdCharging | Flags.InMainShip | Flags.ShieldsUp },
                 { "StartJump", new { JumpType = "Supercruise" }, true },
                 { Flags.FsdJump | Flags.InMainShip | Flags.ShieldsUp },
+                { "SupercruiseEntry", new { StarSystem = "Wolf 1301" }, true },
+                { Flags.InMainShip | Flags.ShieldsUp | Flags.Supercruise },
                 { "SupercruiseExit", new { BodyType = "Planet" }, true },
                 { Flags.InMainShip | Flags.ShieldsUp | Flags.LandingGearDeployed },
                 { "Touchdown", new { PlayerControlled = true }, false },
