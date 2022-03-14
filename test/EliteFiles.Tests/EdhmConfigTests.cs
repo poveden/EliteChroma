@@ -134,6 +134,19 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
+        public void IgnoresDuplicateConfigEntries()
+        {
+            using var dir = new TestFolder();
+            dir.WriteText("DuplicateKeysProfile.ini", "[Constants]\r\nKey=1\r\nKey=2\r\n");
+
+            var config = EdhmConfig.FromFile(dir.Resolve("DuplicateKeysProfile.ini"))!;
+            Assert.NotNull(config);
+
+            Assert.NotEmpty(config.Constants);
+            Assert.Equal(1, config.Constants["Key"]);
+        }
+
+        [Fact]
         public async Task WatcherRaisesTheChangedEventOnStart()
         {
             using var watcher = new EdhmConfigWatcher(_gif);
