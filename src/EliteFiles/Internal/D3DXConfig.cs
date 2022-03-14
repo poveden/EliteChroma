@@ -79,7 +79,11 @@ namespace EliteFiles.Internal
 
                     foreach (D3DXConfigEntry entry in entries)
                     {
-                        section.Add(entry);
+                        // We mimic what 3dmigoto does (see https://github.com/bo3b/3Dmigoto/blob/master/DirectX11/IniHandler.cpp)
+                        if (!section.Contains(entry.Name))
+                        {
+                            section.Add(entry);
+                        }
                     }
                 }
             }
