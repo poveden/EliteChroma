@@ -305,7 +305,7 @@ namespace EliteChroma.Forms
                 Verb = "open",
             };
 
-            _ = Process.Start(ps);
+            Process.Start(ps)?.Dispose();
         }
 
         private void TvSections_AfterSelect(object sender, TreeViewEventArgs e)
