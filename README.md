@@ -46,7 +46,7 @@ Once installed, just run EliteChroma from the start menu. You may then control t
 
 ## Application development requirements
 
-- [Visual Studio Community 2019](https://visualstudio.microsoft.com/vs/) with the _.NET desktop development workload_ installed
+- [Visual Studio Community 2022](https://visualstudio.microsoft.com/vs/) with the _.NET desktop development workload_ installed
 - [Razer Synapse 3](https://www.razer.com/synapse-3) or the [Razer Chroma SDK](https://developer.razer.com/works-with-chroma/download/)
 - A Razer Chroma device or the [Razer Chroma Emulator](https://developer.razer.com/works-with-chroma/download/#emulator)
 

@@ -31,7 +31,7 @@ namespace EliteChroma.Forms
                 Verb = "open",
             };
 
-            _ = Process.Start(ps);
+            Process.Start(ps)?.Dispose();
         }
     }
 }
