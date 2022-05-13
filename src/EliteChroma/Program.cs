@@ -18,29 +18,36 @@ namespace EliteChroma
         {
             using var mutex = new Mutex(true, $"{nameof(EliteChroma)}-SingleInstance-Mutex");
 
-            if (!mutex.WaitOne(0, true))
+            bool isSingleInstance = mutex.WaitOne(0, true);
+
+            try
             {
-                _ = MessageBox.Show(
-                    Resources.MsgBox_AppAlreadyRunning,
-                    new AssemblyInfo().Title,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
+                if (!isSingleInstance)
+                {
+                    _ = MessageBox.Show(
+                        Resources.MsgBox_AppAlreadyRunning,
+                        new AssemblyInfo().Title,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation);
 
-                return;
+                    return;
+                }
+
+                _ = Application.SetHighDpiMode(HighDpiMode.SystemAware);
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
+                using var appContext = new AppContext();
+
+                if (appContext.Start())
+                {
+                    Application.Run(appContext);
+                }
             }
-
-            _ = Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            using var appContext = new AppContext();
-
-            if (appContext.Start())
+            finally
             {
-                Application.Run(appContext);
+                mutex.ReleaseMutex();
             }
-
-            mutex.ReleaseMutex();
         }
     }
 }
