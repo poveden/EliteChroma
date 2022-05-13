@@ -188,7 +188,7 @@ namespace EliteFiles.Tests
         {
             using var dir = new TestFolder();
             string file = "Journal.entry-too-big.log";
-            string body = $"{{ \"event\":\"One\" }}\r\n{{ \"event\":\"{new string('A', 33000)}\" }}\r\n";
+            string body = $"{{ \"event\":\"One\" }}\r\n{{ \"event\":\"{new string('A', 132000)}\" }}\r\n";
             dir.WriteText(file, body);
 
             using var jr = new JournalReader(dir.Resolve(file));
@@ -196,7 +196,7 @@ namespace EliteFiles.Tests
             Assert.Equal("One", entry.Event);
 
             var ex = Assert.Throws<InvalidDataException>(() => jr.ReadEntry());
-            Assert.Equal("Entry too large found in journal 'Journal.entry-too-big.log' at position 19.", ex.Message);
+            Assert.Equal("Entry too large (greater than 131072 bytes) found in journal 'Journal.entry-too-big.log' at position 19.", ex.Message);
         }
 
         [Fact]

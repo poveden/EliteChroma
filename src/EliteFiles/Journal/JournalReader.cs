@@ -11,7 +11,7 @@ namespace EliteFiles.Journal
     /// <seealso cref="JournalEntry"/>
     public sealed class JournalReader : IDisposable
     {
-        private const int _bufferSize = 32768;
+        private const int _bufferSize = 131072;
 
         private readonly FileStream _fs;
         private readonly byte[] _buf;
@@ -62,7 +62,7 @@ namespace EliteFiles.Journal
                 return null;
             }
 
-            throw new InvalidDataException($"Entry too large found in journal '{Path.GetFileName(_fs.Name)}' at position {_fs.Position - _bufN}.");
+            throw new InvalidDataException($"Entry too large (greater than {_bufferSize} bytes) found in journal '{Path.GetFileName(_fs.Name)}' at position {_fs.Position - _bufN}.");
         }
 
         /// <summary>
