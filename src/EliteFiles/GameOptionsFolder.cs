@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using EliteFiles.Internal;
+﻿using EliteFiles.Internal;
 
 namespace EliteFiles
 {
@@ -170,10 +168,7 @@ namespace EliteFiles
         /// <exception cref="ArgumentException"><paramref name="gameOptionsFolder"/> is not a valid game options folder.</exception>
         public static GameOptionsFolder AssertValid(GameOptionsFolder gameOptionsFolder)
         {
-            if (gameOptionsFolder == null)
-            {
-                throw new ArgumentNullException(nameof(gameOptionsFolder));
-            }
+            ArgumentNullException.ThrowIfNull(gameOptionsFolder);
 
             if (!gameOptionsFolder.IsValid)
             {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using EliteChroma.Core.Internal;
+﻿using EliteChroma.Core.Internal;
 using Microsoft.Win32.SafeHandles;
 using static EliteChroma.Core.Internal.NativeMethods;
 

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Windows.Forms;
 
 namespace EliteChroma.Internal
 {
@@ -13,7 +12,7 @@ namespace EliteChroma.Internal
 
             while (gi.GridItemType != GridItemType.Root)
             {
-                gi = gi.Parent;
+                gi = gi.Parent!;
             }
 
             return gi.GridItems;

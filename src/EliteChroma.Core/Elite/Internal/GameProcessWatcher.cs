@@ -1,9 +1,8 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Timers;
 using EliteChroma.Core.Internal;
 using EliteFiles;
+using Timer = System.Timers.Timer;
 
 namespace EliteChroma.Elite.Internal
 {
@@ -110,9 +109,9 @@ namespace EliteChroma.Elite.Internal
         }
 
         [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Will rethrow exceptions into calling thread")]
-        private async void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            if (System.Threading.Interlocked.Exchange(ref _checking, 1) == 1)
+            if (Interlocked.Exchange(ref _checking, 1) == 1)
             {
                 return;
             }
@@ -137,7 +136,7 @@ namespace EliteChroma.Elite.Internal
             }
             finally
             {
-                _ = System.Threading.Interlocked.Exchange(ref _checking, 0);
+                _ = Interlocked.Exchange(ref _checking, 0);
             }
         }
     }

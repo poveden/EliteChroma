@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ChromaWrapper.ChromaLink;
+﻿using ChromaWrapper.ChromaLink;
 using ChromaWrapper.Headset;
 using ChromaWrapper.Keyboard;
 using ChromaWrapper.Keypad;
@@ -82,10 +80,7 @@ namespace EliteChroma.Chroma
 
         public IReadOnlyCollection<Guid> SetEffect(IChromaSdk chroma)
         {
-            if (chroma == null)
-            {
-                throw new ArgumentNullException(nameof(chroma));
-            }
+            ArgumentNullException.ThrowIfNull(chroma);
 
             List<Guid> effectIds = CreateAccessedEffects(chroma);
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -28,7 +25,7 @@ namespace EliteFiles.Journal.Internal
 
             string? eventName = item["event"]?.Value<string>();
 
-            if (string.IsNullOrEmpty(eventName) || !_eventMap.TryGetValue(eventName, out Type type))
+            if (string.IsNullOrEmpty(eventName) || !_eventMap.TryGetValue(eventName, out Type? type))
             {
                 type = typeof(JournalEntry);
             }

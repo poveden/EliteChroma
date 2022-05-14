@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.Linq;
 
 namespace EliteFiles.Graphics
@@ -61,7 +60,7 @@ namespace EliteFiles.Graphics
                 }
             }
 
-            var guiColour = GuiColourDictionary.FromXml(xml.Root.Element("GUIColour"));
+            var guiColour = GuiColourDictionary.FromXml(xml.Root!.Element("GUIColour"));
 
             return new GraphicsConfig(guiColour);
         }

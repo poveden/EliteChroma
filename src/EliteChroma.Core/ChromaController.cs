@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 using ChromaWrapper.Sdk;
 using EliteChroma.Chroma;
 using EliteChroma.Core.Internal;
@@ -88,7 +83,11 @@ namespace EliteChroma.Core
         public ChromaColors Colors
         {
             get => _colors;
-            set => _colors = value ?? throw new ArgumentNullException(nameof(value));
+            set
+            {
+                ArgumentNullException.ThrowIfNull(value);
+                _colors = value;
+            }
         }
 
         [ExcludeFromCodeCoverage]

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using ChromaWrapper.Events;
 using ChromaWrapper.Sdk;
 using EliteChroma.Core.Internal;

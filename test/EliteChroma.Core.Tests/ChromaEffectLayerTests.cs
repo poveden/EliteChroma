@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using ChromaWrapper;
+﻿using ChromaWrapper;
 using ChromaWrapper.Keyboard;
 using ChromaWrapper.Sdk;
 using EliteChroma.Chroma;

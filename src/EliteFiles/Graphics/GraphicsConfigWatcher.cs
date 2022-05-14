@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using EliteFiles.Internal;
+﻿using EliteFiles.Internal;
 
 namespace EliteFiles.Graphics
 {
@@ -93,7 +91,7 @@ namespace EliteFiles.Graphics
             _disposed = true;
         }
 
-        private void GraphicsConfig_Changed(object sender, FileSystemEventArgs e)
+        private void GraphicsConfig_Changed(object? sender, FileSystemEventArgs e)
         {
             Reload();
         }

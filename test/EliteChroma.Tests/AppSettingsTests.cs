@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using ChromaWrapper;
+﻿using ChromaWrapper;
 using EliteChroma.Core;
 using EliteChroma.Internal;
 using EliteFiles;

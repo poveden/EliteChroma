@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using ChromaWrapper;
+﻿using ChromaWrapper;
 using Xunit;
 
 namespace EliteChroma.Core.Tests

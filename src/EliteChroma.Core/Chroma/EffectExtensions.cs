@@ -1,5 +1,4 @@
-﻿using System;
-using ChromaWrapper;
+﻿using ChromaWrapper;
 using ChromaWrapper.Sdk;
 
 namespace EliteChroma.Chroma
@@ -8,7 +7,7 @@ namespace EliteChroma.Chroma
     {
         public static IKeyGridEffect CombineKey(this IKeyGridEffect effect, ChromaColor c, double cPct = 0.5)
         {
-            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+            ArgumentNullException.ThrowIfNull(effect);
 
             for (int i = 0; i < effect.Key.Count; i++)
             {
@@ -20,7 +19,7 @@ namespace EliteChroma.Chroma
 
         public static IKeyGridEffect MaxAt(this IKeyGridEffect effect, int row, int column, ChromaColor c)
         {
-            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+            ArgumentNullException.ThrowIfNull(effect);
 
             effect.Key[row, column] = ((ChromaColor)effect.Key[row, column]).Max(c);
 
@@ -29,7 +28,7 @@ namespace EliteChroma.Chroma
 
         public static ILedGridEffect Combine(this ILedGridEffect effect, ChromaColor c, double cPct = 0.5)
         {
-            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+            ArgumentNullException.ThrowIfNull(effect);
 
             for (int i = 0; i < effect.Color.Count; i++)
             {
@@ -41,7 +40,7 @@ namespace EliteChroma.Chroma
 
         public static ILedArrayEffect Combine(this ILedArrayEffect effect, ChromaColor c, double cPct = 0.5)
         {
-            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+            ArgumentNullException.ThrowIfNull(effect);
 
             for (int i = 0; i < effect.Color.Count; i++)
             {
@@ -53,7 +52,7 @@ namespace EliteChroma.Chroma
 
         public static ILedGridEffect Max(this ILedGridEffect effect, ChromaColor c)
         {
-            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+            ArgumentNullException.ThrowIfNull(effect);
 
             for (int i = 0; i < effect.Color.Count; i++)
             {
@@ -65,7 +64,7 @@ namespace EliteChroma.Chroma
 
         public static ILedArrayEffect Max(this ILedArrayEffect effect, ChromaColor c)
         {
-            _ = effect ?? throw new ArgumentNullException(nameof(effect));
+            ArgumentNullException.ThrowIfNull(effect);
 
             for (int i = 0; i < effect.Color.Count; i++)
             {

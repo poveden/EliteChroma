@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ChromaWrapper.Keyboard;
+﻿using ChromaWrapper.Keyboard;
 using EliteChroma.Elite.Internal;
 using EliteFiles.Bindings.Devices;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using ChromaWrapper;
 using EliteChroma.Core;
 using EliteChroma.Internal.UI;
@@ -20,7 +19,7 @@ namespace EliteChroma.Tests
         [Fact]
         public void PropertyDescriptorRetrievesLocalizationStrings()
         {
-            var pd = GetPropertyDescriptor("KeyboardDimBrightness");
+            var pd = GetPropertyDescriptor("KeyboardDimBrightness")!;
 
             Assert.Equal("Brightness Levels", pd.Category);
             Assert.Equal(string.Empty, pd.Description);
@@ -30,24 +29,24 @@ namespace EliteChroma.Tests
         [Fact]
         public void PerformsConversionsBetweenStringAndColor()
         {
-            var pd = GetPropertyDescriptor("HardpointsToggle");
+            var pd = GetPropertyDescriptor("HardpointsToggle")!;
 
             var tc = pd.Converter;
             Assert.True(tc.CanConvertFrom(typeof(string)));
             Assert.False(tc.CanConvertFrom(typeof(object)));
             Assert.True(tc.CanConvertTo(typeof(string)));
 
-            var c = (ChromaColor)tc.ConvertFromString("AABBCC");
+            var c = (ChromaColor)tc.ConvertFromString("AABBCC")!;
             Assert.Equal(ChromaColor.FromRgb(0xAABBCC), c);
 
-            string s = tc.ConvertToString(ChromaColor.FromRgb(0x445566));
+            string s = tc.ConvertToString(ChromaColor.FromRgb(0x445566))!;
             Assert.Equal("445566", s);
         }
 
         [Fact]
         public void ThrowsWhenTryingToConvertAnInvalidColorString()
         {
-            var pd = GetPropertyDescriptor("HardpointsToggle");
+            var pd = GetPropertyDescriptor("HardpointsToggle")!;
 
             var ex = Assert.Throws<FormatException>(() => pd.Converter.ConvertFromString("NOT-A-COLOR"));
             Assert.StartsWith("Colors must be in the form 'RRGGBB',", ex.Message, StringComparison.Ordinal);
@@ -56,24 +55,24 @@ namespace EliteChroma.Tests
         [Fact]
         public void PerformsConversionsBetweenBrightnessPercentStringAndDouble()
         {
-            var pd = GetPropertyDescriptor("KeyboardDimBrightness");
+            var pd = GetPropertyDescriptor("KeyboardDimBrightness")!;
 
             var tc = pd.Converter;
             Assert.True(tc.CanConvertFrom(typeof(string)));
             Assert.False(tc.CanConvertFrom(typeof(object)));
             Assert.True(tc.CanConvertTo(typeof(string)));
 
-            double v = (double)tc.ConvertFromString("25 %");
+            double v = (double)tc.ConvertFromString("25 %")!;
             Assert.Equal(0.25, v);
 
-            string s = tc.ConvertToString(0.78);
+            string s = tc.ConvertToString(0.78)!;
             Assert.Equal("78 %", s);
         }
 
         [Fact]
         public void ThrowsWhenTryingToConvertAnInvalidBrightnessPercentString()
         {
-            var pd = GetPropertyDescriptor("KeyboardDimBrightness");
+            var pd = GetPropertyDescriptor("KeyboardDimBrightness")!;
 
             var ex = Assert.Throws<FormatException>(() => pd.Converter.ConvertFromString("NOT-A-PERCENT"));
             Assert.StartsWith("Brightness must be a percentage value in the range 0-100.", ex.Message, StringComparison.Ordinal);
@@ -84,9 +83,9 @@ namespace EliteChroma.Tests
             TypeDescriptor.RemoveProvider(_provider, typeof(ChromaColors));
         }
 
-        private PropertyDescriptor GetPropertyDescriptor(string name)
+        private PropertyDescriptor? GetPropertyDescriptor(string name)
         {
-            var pdc = _provider.GetTypeDescriptor(typeof(ChromaColors))
+            var pdc = _provider.GetTypeDescriptor(typeof(ChromaColors))!
                 .GetProperties(new Attribute[] { BrowsableAttribute.Yes });
 
             return pdc[name];

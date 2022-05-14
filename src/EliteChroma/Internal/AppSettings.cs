@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using EliteChroma.Core;
+﻿using EliteChroma.Core;
 using EliteChroma.Internal.Json;
 using Newtonsoft.Json;
 

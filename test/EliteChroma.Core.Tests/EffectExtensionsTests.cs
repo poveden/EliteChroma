@@ -1,5 +1,4 @@
-﻿using System;
-using ChromaWrapper.Sdk;
+﻿using ChromaWrapper.Sdk;
 using EliteChroma.Chroma;
 using Xunit;
 

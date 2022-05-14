@@ -1,5 +1,4 @@
-﻿using System;
-using ChromaWrapper;
+﻿using ChromaWrapper;
 using EliteChroma.Chroma;
 using EliteChroma.Elite;
 using static EliteFiles.Journal.Events.StartJump;

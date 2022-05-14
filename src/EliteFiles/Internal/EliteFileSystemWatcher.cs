@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace EliteFiles.Internal
 {
@@ -18,7 +16,7 @@ namespace EliteFiles.Internal
         }
 
         public EliteFileSystemWatcher(FileInfo file)
-            : this(file.DirectoryName, file.Name)
+            : this(file.DirectoryName!, file.Name)
         {
         }
 

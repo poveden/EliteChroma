@@ -1,8 +1,5 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
 using EliteChroma.Core.Tests.Internal;
 using EliteChroma.Elite;
@@ -19,7 +16,7 @@ namespace EliteChroma.Core.Tests
 
         private static readonly GameInstallFolder _gif = new GameInstallFolder(_gameRootFolder);
 
-        private static readonly ConstructorInfo _ciElapsedEventArgs = typeof(ElapsedEventArgs).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(long) }, null)!;
+        private static readonly ConstructorInfo _ciElapsedEventArgs = typeof(ElapsedEventArgs).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(DateTime) }, null)!;
 
         [Fact]
         public void WatchesForGameProcessChanges()
@@ -136,8 +133,8 @@ namespace EliteChroma.Core.Tests
 
         private static void InvokeTimerElapsed(GameProcessWatcher instance)
         {
-            // HACK: Hopefully will no longer be needed when .NET 6.0 arrives (https://github.com/dotnet/runtime/issues/31204)
-            var e = (ElapsedEventArgs)_ciElapsedEventArgs.Invoke(new object[] { DateTime.Now.ToFileTime() });
+            // HACK: Hopefully will no longer be needed when .NET (Future) arrives (https://github.com/dotnet/runtime/issues/31204)
+            var e = (ElapsedEventArgs)_ciElapsedEventArgs.Invoke(new object[] { DateTime.Now });
 
             instance.InvokePrivateMethod<object>("Timer_Elapsed", instance, e);
         }

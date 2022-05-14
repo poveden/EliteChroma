@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace EliteFiles.Graphics
 {
@@ -80,11 +79,16 @@ namespace EliteFiles.Graphics
             set => _v[row][col] = value;
         }
 
-        internal static GuiColourMatrix FromXml(XElement xml)
+        internal static GuiColourMatrix? FromXml(XElement xml)
         {
             var r = GuiColourMatrixEntry.FromXml(xml.Element("MatrixRed"));
             var g = GuiColourMatrixEntry.FromXml(xml.Element("MatrixGreen"));
             var b = GuiColourMatrixEntry.FromXml(xml.Element("MatrixBlue"));
+
+            if (r == null || g == null || b == null)
+            {
+                return null;
+            }
 
             return new GuiColourMatrix(r, g, b, false)
             {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EliteFiles.Bindings
+﻿namespace EliteFiles.Bindings
 {
     /// <summary>
     /// Represents a device key.

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using ChromaWrapper;
+﻿using ChromaWrapper;
 using ChromaWrapper.Data;
 using ChromaWrapper.Events;
 using ChromaWrapper.Sdk;

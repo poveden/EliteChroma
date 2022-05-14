@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ChromaWrapper;
+﻿using ChromaWrapper;
 using EliteChroma.Chroma;
 using EliteFiles.Graphics;
 using EliteFiles.Journal;

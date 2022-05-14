@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using EliteFiles.Journal.Internal;
+﻿using EliteFiles.Journal.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

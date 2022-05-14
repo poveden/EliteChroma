@@ -1,5 +1,4 @@
-﻿using System;
-using EliteChroma.Elite;
+﻿using EliteChroma.Elite;
 
 namespace EliteChroma.Core
 {
@@ -7,8 +6,11 @@ namespace EliteChroma.Core
     {
         public LayerRenderState(GameState gameState, ChromaColors colors)
         {
-            GameState = gameState ?? throw new ArgumentNullException(nameof(gameState));
-            Colors = colors ?? throw new ArgumentNullException(nameof(colors));
+            ArgumentNullException.ThrowIfNull(gameState);
+            ArgumentNullException.ThrowIfNull(colors);
+
+            GameState = gameState;
+            Colors = colors;
         }
 
         public GameState GameState { get; }

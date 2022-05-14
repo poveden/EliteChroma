@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Xml.Linq;
 
 namespace EliteFiles.Graphics
@@ -76,15 +75,27 @@ namespace EliteFiles.Graphics
             }
         }
 
-        internal static GuiColourMatrixEntry FromXml(XElement xml)
+        internal static GuiColourMatrixEntry? FromXml(XElement? xml)
         {
-            string[] values = xml.Value.Split(',');
+            string[]? values = xml?.Value.Split(',');
+
+            if (values == null || values.Length != 3)
+            {
+                return null;
+            }
+
+            if (!double.TryParse(values[0], NumberStyles.Float, CultureInfo.InvariantCulture, out double r)
+                || !double.TryParse(values[1], NumberStyles.Float, CultureInfo.InvariantCulture, out double g)
+                || !double.TryParse(values[2], NumberStyles.Float, CultureInfo.InvariantCulture, out double b))
+            {
+                return null;
+            }
 
             return new GuiColourMatrixEntry
             {
-                Red = double.Parse(values[0], CultureInfo.InvariantCulture),
-                Green = double.Parse(values[1], CultureInfo.InvariantCulture),
-                Blue = double.Parse(values[2], CultureInfo.InvariantCulture),
+                Red = r,
+                Green = g,
+                Blue = b,
             };
         }
 

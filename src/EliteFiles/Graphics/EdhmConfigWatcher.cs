@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using EliteFiles.Internal;
+﻿using EliteFiles.Internal;
 
 namespace EliteFiles.Graphics
 {
@@ -102,12 +98,12 @@ namespace EliteFiles.Graphics
             _disposed = true;
         }
 
-        private void D3DXIniWatcher_Changed(object sender, FileSystemEventArgs e)
+        private void D3DXIniWatcher_Changed(object? sender, FileSystemEventArgs e)
         {
             Reload(true);
         }
 
-        private void IncludesWatcher_Changed(object sender, FileSystemEventArgs e)
+        private void IncludesWatcher_Changed(object? sender, FileSystemEventArgs e)
         {
             if (!_files.Contains(e.FullPath))
             {
@@ -162,12 +158,12 @@ namespace EliteFiles.Graphics
             /*
              * Here we will examine the path of all included files, in the hope that
              * all of them are within a single folder so we can watch it.
-             * If this is not the case (e.g. 2 or more subfolder, no subfolder at all),
+             * If this is not the case (e.g. 2 or more subfolders, no subfolder at all),
              * we will default to watch the folder where the root .ini file is.
              **/
 
             _includesWatcher.Path = _files
-                .Select(Path.GetDirectoryName)
+                .Select(path => Path.GetDirectoryName(path)!)
                 .Aggregate((shortest, path) =>
                 {
                     if (path.StartsWith(shortest, StringComparison.OrdinalIgnoreCase))
@@ -180,7 +176,7 @@ namespace EliteFiles.Graphics
                         return path;
                     }
 
-                    return _d3dxIniFile.DirectoryName;
+                    return _d3dxIniFile.DirectoryName!;
                 });
 
             if (_running)

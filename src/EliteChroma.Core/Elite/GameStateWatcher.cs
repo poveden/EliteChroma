@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using EliteChroma.Core.Internal;
+﻿using EliteChroma.Core.Internal;
 using EliteChroma.Elite.Internal;
 using EliteFiles;
 using EliteFiles.Bindings;

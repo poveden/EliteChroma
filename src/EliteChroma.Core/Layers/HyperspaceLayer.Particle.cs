@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using ChromaWrapper;
 using ChromaWrapper.ChromaLink;
 using ChromaWrapper.Headset;

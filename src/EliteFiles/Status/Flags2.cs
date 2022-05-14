@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EliteFiles.Status
+﻿namespace EliteFiles.Status
 {
     /// <summary>
     /// Represents additional game status flags.

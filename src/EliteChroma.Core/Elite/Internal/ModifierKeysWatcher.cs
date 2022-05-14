@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Timers;
 using EliteChroma.Core.Internal;
 using EliteFiles.Bindings;
 using EliteFiles.Bindings.Devices;
 using static EliteChroma.Core.Internal.NativeMethods;
+using Timer = System.Timers.Timer;
 
 namespace EliteChroma.Elite.Internal
 {
@@ -83,7 +80,7 @@ namespace EliteChroma.Elite.Internal
         }
 
         [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Will rethrow exceptions into calling thread")]
-        private async void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             try
             {

@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace EliteFiles.Internal
+﻿namespace EliteFiles.Internal
 {
     internal static class FileInfoExtensions
     {

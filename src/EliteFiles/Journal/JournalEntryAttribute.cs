@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EliteFiles.Journal
+﻿namespace EliteFiles.Journal
 {
     /// <summary>
     /// Used to mark a <see cref="JournalEntry"/> subclass as a journal entry of the given event name.

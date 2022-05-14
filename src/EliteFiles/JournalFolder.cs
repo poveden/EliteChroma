@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using EliteFiles.Internal;
+﻿using EliteFiles.Internal;
 
 namespace EliteFiles
 {
@@ -72,10 +68,7 @@ namespace EliteFiles
         /// <exception cref="ArgumentException"><paramref name="journalFolder"/> is not a valid journal folder.</exception>
         public static JournalFolder AssertValid(JournalFolder journalFolder)
         {
-            if (journalFolder == null)
-            {
-                throw new ArgumentNullException(nameof(journalFolder));
-            }
+            ArgumentNullException.ThrowIfNull(journalFolder);
 
             if (!journalFolder.IsValid)
             {

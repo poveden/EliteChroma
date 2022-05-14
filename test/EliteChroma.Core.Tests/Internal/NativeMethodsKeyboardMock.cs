@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using static EliteChroma.Core.Internal.NativeMethods;
+﻿using static EliteChroma.Core.Internal.NativeMethods;
 
 namespace EliteChroma.Core.Tests.Internal
 {

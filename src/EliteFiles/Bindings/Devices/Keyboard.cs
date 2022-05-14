@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace EliteFiles.Bindings.Devices
+﻿namespace EliteFiles.Bindings.Devices
 {
     /// <summary>
     /// Defines keyboard key names.
@@ -206,10 +202,7 @@ namespace EliteFiles.Bindings.Devices
         /// <returns><c>true</c> if <paramref name="keyName"/> is a character key name; otherwise, <c>false</c>.</returns>
         public static bool TryGetKeyChar(string keyName, out char c)
         {
-            if (keyName == null)
-            {
-                throw new ArgumentNullException(nameof(keyName));
-            }
+            ArgumentNullException.ThrowIfNull(keyName);
 
             if (!keyName.StartsWith(_keyNamePrefix, StringComparison.Ordinal))
             {

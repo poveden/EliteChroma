@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using EliteChroma.Core;
 using EliteChroma.Internal;
 using EliteChroma.Internal.UI;
@@ -36,6 +30,7 @@ namespace EliteChroma.Forms
         public FrmAppSettings()
         {
             InitializeComponent();
+            InitializeComponentInternal();
 
             _gameInstallFolders = CreateGameInstallFolderMenuItems();
             tsmiGameInstallBrowse.Click += TsmiGameInstallBrowse_Click;
@@ -153,15 +148,18 @@ namespace EliteChroma.Forms
             return res;
         }
 
-        private void AppSettings_Load(object? sender, EventArgs e)
+        private void InitializeComponentInternal()
         {
             tvSections.DrawMode = TreeViewDrawMode.OwnerDrawText;
             tvSections.Nodes[_gameFoldersSection].Tag = grpEDFolders;
             tvSections.Nodes[_generalSection].Tag = pnlGeneral;
             tvSections.Nodes[_keyboardSection].Tag = pnlKeyboard;
             tvSections.Nodes[_colorsSection].Tag = pnlColors;
+        }
 
-            tvSections.SelectedNode = tvSections.Nodes[_gameFoldersSection];
+        private void AppSettings_Load(object? sender, EventArgs e)
+        {
+            tvSections.SelectedNode = tvSections.Nodes[0];
 
             pgColors.SelectedGridItem = pgColors.GetGridItems()[0];
 
@@ -310,7 +308,7 @@ namespace EliteChroma.Forms
 
         private void TvSections_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            ((Control)e.Node.Tag).Visible = true;
+            ((Control)e.Node!.Tag).Visible = true;
 
             foreach (TreeNode node in tvSections.Nodes)
             {
@@ -326,7 +324,7 @@ namespace EliteChroma.Forms
         private void TvSections_DrawNode(object sender, DrawTreeNodeEventArgs e)
         {
             Brush b = e.State.HasFlag(TreeNodeStates.Focused) ? SystemBrushes.HighlightText : SystemBrushes.ControlText;
-            e.Graphics.DrawString(e.Node.Text, tvSections.Font, b, e.Bounds);
+            e.Graphics.DrawString(e.Node!.Text, tvSections.Font, b, e.Bounds);
 
             if (!_sectionErrors.Contains(e.Node.Name))
             {

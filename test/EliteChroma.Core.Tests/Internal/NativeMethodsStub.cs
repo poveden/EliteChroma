@@ -1,5 +1,4 @@
-﻿using System;
-using EliteChroma.Core.Internal;
+﻿using EliteChroma.Core.Internal;
 using Microsoft.Win32.SafeHandles;
 
 namespace EliteChroma.Core.Tests.Internal

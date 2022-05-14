@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using ChromaWrapper;
 using EliteChroma.Core;
 using Newtonsoft.Json;

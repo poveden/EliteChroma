@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using EliteFiles.Internal;
 
 namespace EliteFiles.Journal
@@ -81,7 +76,12 @@ namespace EliteFiles.Journal
                 return;
             }
 
-            OpenJournal(GetLatestJournalFile());
+            string? latestJournal = GetLatestJournalFile();
+
+            if (latestJournal != null)
+            {
+                OpenJournal(latestJournal);
+            }
 
             _watching = true;
             _starting = true;
@@ -124,7 +124,7 @@ namespace EliteFiles.Journal
             _disposed = true;
         }
 
-        private void JournalFilesWatcher_Changed(object sender, FileSystemEventArgs e)
+        private void JournalFilesWatcher_Changed(object? sender, FileSystemEventArgs e)
         {
             OpenJournal(e.FullPath);
 
@@ -132,7 +132,7 @@ namespace EliteFiles.Journal
         }
 
         [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Will rethrow exceptions into calling thread")]
-        private async void JournalReadTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private async void JournalReadTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             try
             {
@@ -194,7 +194,7 @@ namespace EliteFiles.Journal
             }
         }
 
-        private string GetLatestJournalFile()
+        private string? GetLatestJournalFile()
         {
             IEnumerable<string> matches =
                 from file in _journalFolder.EnumerateFiles(_journalFilesWatcher.Filter)

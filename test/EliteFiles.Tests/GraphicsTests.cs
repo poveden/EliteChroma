@@ -1,6 +1,5 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml.Linq;
 using EliteFiles.Graphics;
 using TestUtils;
 using Xunit;
@@ -204,6 +203,17 @@ namespace EliteFiles.Tests
             }).ConfigureAwait(false);
 
             Assert.Equal("Standard", config!.GuiColour!.Default!.LocalisationName);
+        }
+
+        [Theory]
+        [InlineData("<SomeMatrix><MatrixRed></MatrixRed><MatrixGreen>0</MatrixGreen><MatrixBlue>NOT,RGB,VALUES</MatrixBlue></SomeMatrix>")]
+        [InlineData("<SomeMatrix><MatrixRed>1,0,0</MatrixRed></SomeMatrix>")]
+        public void GuiColourMatrixIgnoresMalformedEntries(string xml)
+        {
+            var entry = XElement.Parse(xml);
+            var matrix = GuiColourMatrix.FromXml(entry);
+
+            Assert.Null(matrix);
         }
 
         [Fact]

@@ -1,5 +1,4 @@
-﻿using System;
-using EliteFiles.Bindings;
+﻿using EliteFiles.Bindings;
 using EliteFiles.Graphics;
 using EliteFiles.Journal.Events;
 using EliteFiles.Status;

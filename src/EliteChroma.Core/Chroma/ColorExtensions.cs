@@ -1,5 +1,4 @@
-﻿using System;
-using ChromaWrapper;
+﻿using ChromaWrapper;
 using EliteFiles.Graphics;
 
 namespace EliteChroma.Chroma
@@ -36,10 +35,7 @@ namespace EliteChroma.Chroma
 
         public static ChromaColor Transform(this ChromaColor color, IRgbTransformMatrix transform)
         {
-            if (transform == null)
-            {
-                throw new ArgumentNullException(nameof(transform));
-            }
+            ArgumentNullException.ThrowIfNull(transform);
 
             double c0 = color.R / 255.0;
             double c1 = color.G / 255.0;

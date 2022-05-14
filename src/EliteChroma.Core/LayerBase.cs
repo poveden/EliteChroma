@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using ChromaWrapper;
 using ChromaWrapper.Keyboard;
 using ChromaWrapper.Sdk;
@@ -43,7 +41,7 @@ namespace EliteChroma.Core
 
         protected sealed override void OnRender(ChromaCanvas canvas, LayerRenderState state)
         {
-            _ = state ?? throw new ArgumentNullException(nameof(state));
+            ArgumentNullException.ThrowIfNull(state);
             _game = state.GameState;
             _colors = state.Colors;
 
@@ -106,10 +104,7 @@ namespace EliteChroma.Core
 
         protected void ApplyColorToBinding(IKeyGridEffect grid, IEnumerable<string> bindingNames, ChromaColor color)
         {
-            if (bindingNames == null)
-            {
-                throw new ArgumentNullException(nameof(bindingNames));
-            }
+            ArgumentNullException.ThrowIfNull(bindingNames);
 
             foreach (string bindingName in bindingNames)
             {
@@ -119,10 +114,7 @@ namespace EliteChroma.Core
 
         protected void ApplyColorToBinding(IKeyGridEffect grid, string bindingName, ChromaColor color)
         {
-            if (grid == null)
-            {
-                throw new ArgumentNullException(nameof(grid));
-            }
+            ArgumentNullException.ThrowIfNull(grid);
 
             GameBindings? gameBindings = Game.Bindings;
 

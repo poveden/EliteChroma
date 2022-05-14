@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using EliteFiles.Internal;
+﻿using EliteFiles.Internal;
 
 namespace EliteFiles.Status
 {
@@ -79,7 +77,7 @@ namespace EliteFiles.Status
             _disposed = true;
         }
 
-        private void StatusWatcher_Changed(object sender, FileSystemEventArgs e)
+        private void StatusWatcher_Changed(object? sender, FileSystemEventArgs e)
         {
             Reload();
         }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using EliteFiles.Internal;
+﻿using EliteFiles.Internal;
 
 namespace EliteFiles.Bindings
 {
@@ -91,7 +87,7 @@ namespace EliteFiles.Bindings
             _disposed = true;
         }
 
-        private void Bindings_Changed(object sender, FileSystemEventArgs e)
+        private void Bindings_Changed(object? sender, FileSystemEventArgs e)
         {
             Reload();
         }
