@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased](https://github.com/poveden/EliteChroma/compare/v1.16.3...HEAD)
 
+### Fixed
+
+- Fix About dialog box's aspect ratio
+
 ### Changed
 
 - Update solution to .NET 6.0
