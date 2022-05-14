@@ -6,7 +6,7 @@ using EliteFiles.Bindings.Devices;
 using static EliteChroma.Core.Internal.NativeMethods;
 using Timer = System.Timers.Timer;
 
-namespace EliteChroma.Elite.Internal
+namespace EliteChroma.Core.Elite.Internal
 {
     internal sealed class ModifierKeysWatcher : NativeMethodsAccessor, IDisposable
     {

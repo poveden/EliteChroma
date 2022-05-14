@@ -1,4 +1,4 @@
-﻿using EliteChroma.Elite;
+﻿using EliteChroma.Core.Elite;
 
 namespace EliteChroma.Core
 {

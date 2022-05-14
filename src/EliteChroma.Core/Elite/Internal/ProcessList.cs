@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using EliteChroma.Core.Internal;
 
-namespace EliteChroma.Elite.Internal
+namespace EliteChroma.Core.Elite.Internal
 {
     internal sealed class ProcessList : NativeMethodsAccessor
     {

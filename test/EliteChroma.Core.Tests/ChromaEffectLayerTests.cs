@@ -1,11 +1,11 @@
 ﻿using ChromaWrapper;
 using ChromaWrapper.Keyboard;
 using ChromaWrapper.Sdk;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
+using EliteChroma.Core.Elite;
 using EliteChroma.Core.Internal;
 using EliteChroma.Core.Layers;
 using EliteChroma.Core.Tests.Internal;
-using EliteChroma.Elite;
 using EliteFiles;
 using EliteFiles.Bindings;
 using EliteFiles.Bindings.Binds;

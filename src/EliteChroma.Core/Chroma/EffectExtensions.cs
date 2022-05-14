@@ -1,7 +1,7 @@
 ﻿using ChromaWrapper;
 using ChromaWrapper.Sdk;
 
-namespace EliteChroma.Chroma
+namespace EliteChroma.Core.Chroma
 {
     public static class EffectExtensions
     {

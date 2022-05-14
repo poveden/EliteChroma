@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using ChromaWrapper;
 using ChromaWrapper.Keyboard;
-using EliteChroma.Chroma;
-using EliteChroma.Elite;
+using EliteChroma.Core.Chroma;
+using EliteChroma.Core.Elite;
 using EliteFiles.Journal.Events;
 using EliteFiles.Status;
 

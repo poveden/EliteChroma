@@ -2,7 +2,7 @@
 using Microsoft.Win32.SafeHandles;
 using static EliteChroma.Core.Internal.NativeMethods;
 
-namespace EliteChroma.Elite.Internal
+namespace EliteChroma.Core.Elite.Internal
 {
     internal sealed class GameProcessTracker : NativeMethodsAccessor
     {

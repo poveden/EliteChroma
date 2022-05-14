@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using EliteChroma.Core.Elite.Internal;
 using EliteChroma.Core.Tests.Internal;
-using EliteChroma.Elite.Internal;
 using TestUtils;
 using Xunit;
 

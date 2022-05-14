@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Timers;
+using EliteChroma.Core.Elite;
+using EliteChroma.Core.Elite.Internal;
 using EliteChroma.Core.Tests.Internal;
-using EliteChroma.Elite;
-using EliteChroma.Elite.Internal;
 using EliteFiles;
 using TestUtils;
 using Xunit;

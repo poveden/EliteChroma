@@ -1,5 +1,5 @@
-﻿using EliteChroma.Core.Internal;
-using EliteChroma.Elite.Internal;
+﻿using EliteChroma.Core.Elite.Internal;
+using EliteChroma.Core.Internal;
 using EliteFiles;
 using EliteFiles.Bindings;
 using EliteFiles.Graphics;
@@ -7,7 +7,7 @@ using EliteFiles.Journal;
 using EliteFiles.Journal.Events;
 using EliteFiles.Status;
 
-namespace EliteChroma.Elite
+namespace EliteChroma.Core.Elite
 {
     public sealed class GameStateWatcher : IDisposable
     {

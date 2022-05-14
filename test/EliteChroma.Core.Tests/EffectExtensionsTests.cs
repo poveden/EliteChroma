@@ -1,5 +1,5 @@
 ﻿using ChromaWrapper.Sdk;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
 using Xunit;
 
 namespace EliteChroma.Core.Tests

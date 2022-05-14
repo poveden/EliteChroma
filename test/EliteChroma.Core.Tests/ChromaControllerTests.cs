@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using ChromaWrapper.Keyboard;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
+using EliteChroma.Core.Elite;
 using EliteChroma.Core.Tests.Internal;
-using EliteChroma.Elite;
 using EliteFiles.Status;
 using Moq;
 using Moq.Protected;

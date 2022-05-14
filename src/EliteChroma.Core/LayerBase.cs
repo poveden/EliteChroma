@@ -2,9 +2,9 @@
 using ChromaWrapper;
 using ChromaWrapper.Keyboard;
 using ChromaWrapper.Sdk;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
+using EliteChroma.Core.Elite;
 using EliteChroma.Core.Internal;
-using EliteChroma.Elite;
 using EliteFiles.Bindings;
 using EliteFiles.Bindings.Devices;
 

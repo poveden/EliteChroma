@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using EliteFiles.Status;
 using Newtonsoft.Json;
 
-namespace EliteFiles.Journal.Internal
+namespace EliteFiles.Status.Internal
 {
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Used in JsonConverterAttribute for PowerDistributor.")]
     internal sealed class PowerDistributorConverter : JsonConverter<PowerDistributor>

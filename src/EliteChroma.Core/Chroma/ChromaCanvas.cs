@@ -6,7 +6,7 @@ using ChromaWrapper.Mouse;
 using ChromaWrapper.Mousepad;
 using ChromaWrapper.Sdk;
 
-namespace EliteChroma.Chroma
+namespace EliteChroma.Core.Chroma
 {
     public sealed class ChromaCanvas
     {

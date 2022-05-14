@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using EliteChroma.Core.Internal;
 
-namespace EliteChroma.Elite.Internal
+namespace EliteChroma.Core.Elite.Internal
 {
     internal static class KeyboardLayoutMap
     {

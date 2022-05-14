@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using ChromaWrapper;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
 
 namespace EliteChroma.Core.Layers
 {

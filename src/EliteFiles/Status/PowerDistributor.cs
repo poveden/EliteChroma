@@ -1,4 +1,4 @@
-﻿using EliteFiles.Journal.Internal;
+﻿using EliteFiles.Status.Internal;
 using Newtonsoft.Json;
 
 namespace EliteFiles.Status

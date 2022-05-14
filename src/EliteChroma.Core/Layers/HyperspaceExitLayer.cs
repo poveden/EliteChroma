@@ -1,6 +1,6 @@
 ﻿using ChromaWrapper;
-using EliteChroma.Chroma;
-using EliteChroma.Elite;
+using EliteChroma.Core.Chroma;
+using EliteChroma.Core.Elite;
 using static EliteFiles.Journal.Events.StartJump;
 
 namespace EliteChroma.Core.Layers

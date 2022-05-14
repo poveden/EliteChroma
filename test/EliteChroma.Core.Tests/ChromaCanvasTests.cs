@@ -6,7 +6,7 @@ using ChromaWrapper.Keyboard;
 using ChromaWrapper.Keypad;
 using ChromaWrapper.Mouse;
 using ChromaWrapper.Mousepad;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
 using EliteChroma.Core.Tests.Internal;
 using Moq;
 using TestUtils;

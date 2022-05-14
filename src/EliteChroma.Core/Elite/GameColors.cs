@@ -1,9 +1,9 @@
 ﻿using ChromaWrapper;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
 using EliteFiles.Graphics;
 using EliteFiles.Journal;
 
-namespace EliteChroma.Elite
+namespace EliteChroma.Core.Elite
 {
     public sealed class GameColors
     {

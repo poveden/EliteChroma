@@ -1,7 +1,7 @@
 ﻿using ChromaWrapper;
 using EliteFiles.Graphics;
 
-namespace EliteChroma.Chroma
+namespace EliteChroma.Core.Chroma
 {
     public static class ColorExtensions
     {

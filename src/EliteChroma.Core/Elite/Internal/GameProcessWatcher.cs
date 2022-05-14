@@ -4,7 +4,7 @@ using EliteChroma.Core.Internal;
 using EliteFiles;
 using Timer = System.Timers.Timer;
 
-namespace EliteChroma.Elite.Internal
+namespace EliteChroma.Core.Elite.Internal
 {
     internal sealed class GameProcessWatcher : NativeMethodsAccessor, IDisposable
     {

@@ -1,4 +1,4 @@
-﻿using EliteChroma.Elite.Internal;
+﻿using EliteChroma.Core.Elite.Internal;
 using static EliteChroma.Core.Internal.NativeMethods;
 
 namespace EliteChroma.Core.Internal

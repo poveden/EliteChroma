@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
-using EliteChroma.Elite;
+using EliteChroma.Core.Elite;
 using TestUtils;
 using Xunit;
-using static EliteChroma.Elite.GameStateWatcher;
+using static EliteChroma.Core.Elite.GameStateWatcher;
 
 namespace EliteChroma.Core.Tests
 {

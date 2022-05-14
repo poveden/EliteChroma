@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using ChromaWrapper.Sdk;
 
-namespace EliteChroma.Chroma
+namespace EliteChroma.Core.Chroma
 {
     public class ChromaEffect<TState>
     {

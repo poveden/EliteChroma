@@ -1,5 +1,5 @@
 ﻿using ChromaWrapper.Keyboard;
-using EliteChroma.Elite.Internal;
+using EliteChroma.Core.Elite.Internal;
 using EliteFiles.Bindings.Devices;
 
 namespace EliteChroma.Core.Internal

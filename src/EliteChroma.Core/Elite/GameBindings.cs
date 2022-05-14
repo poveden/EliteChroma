@@ -1,7 +1,7 @@
 ﻿using EliteFiles.Bindings;
 using EliteFiles.Bindings.Devices;
 
-namespace EliteChroma.Elite
+namespace EliteChroma.Core.Elite
 {
     public sealed class GameBindings
     {

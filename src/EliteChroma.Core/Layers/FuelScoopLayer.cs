@@ -2,7 +2,7 @@
 using ChromaWrapper;
 using ChromaWrapper.Keyboard;
 using ChromaWrapper.Keypad;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
 using EliteFiles.Status;
 
 namespace EliteChroma.Core.Layers
