@@ -26,7 +26,8 @@
       SuppressRegistry="True"
       SuppressFragments="true"
       SuppressRootDirectory="true"
-      Transforms="DotNetPublish.xsl" />
+      Transforms="DotNetPublish.xsl"
+      RunAsSeparateProcess="$(RunWixToolsOutOfProc)" />
 
     <ItemGroup>
       <Compile Include="obj\$(Configuration)\%(ProjectReference.Name).wxs" Condition="'%(ProjectReference.IsDotnetSDKProject)' == 'True'" />
