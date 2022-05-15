@@ -111,7 +111,7 @@
             this.btnGameInstall.Name = "btnGameInstall";
             this.btnGameInstall.Size = new System.Drawing.Size(75, 24);
             this.btnGameInstall.TabIndex = 3;
-            this.btnGameInstall.Text = "Select... ";
+            this.btnGameInstall.Text = "Select";
             this.btnGameInstall.UseVisualStyleBackColor = true;
             // 
             // ctxGameInstall
