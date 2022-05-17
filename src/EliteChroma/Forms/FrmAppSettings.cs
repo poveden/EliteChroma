@@ -171,7 +171,7 @@ namespace EliteChroma.Forms
             _ = ValidateChildren();
         }
 
-        private void CtxGameInstall_Opening(object sender, CancelEventArgs e)
+        private void CtxGameInstall_Opening(object? sender, CancelEventArgs e)
         {
             foreach (ToolStripMenuItem item in _gameInstallFolders)
             {
@@ -243,7 +243,7 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void TxtGameInstall_Validating(object sender, CancelEventArgs e)
+        private void TxtGameInstall_Validating(object? sender, CancelEventArgs e)
         {
             if (!new GameInstallFolder(txtGameInstall.Text).IsValid)
             {
@@ -257,7 +257,7 @@ namespace EliteChroma.Forms
             SetError(_gameFoldersSection, txtGameInstall, string.Empty);
         }
 
-        private void TxtGameOptions_Validating(object sender, CancelEventArgs e)
+        private void TxtGameOptions_Validating(object? sender, CancelEventArgs e)
         {
             if (!new GameOptionsFolder(txtGameOptions.Text).IsValid)
             {
@@ -271,7 +271,7 @@ namespace EliteChroma.Forms
             SetError(_gameFoldersSection, txtGameOptions, string.Empty);
         }
 
-        private void TxtJournal_Validating(object sender, CancelEventArgs e)
+        private void TxtJournal_Validating(object? sender, CancelEventArgs e)
         {
             if (!new JournalFolder(txtJournal.Text).IsValid)
             {
@@ -294,7 +294,7 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void LinkGameFolders_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkGameFolders_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             // Reference: https://stackoverflow.com/a/53245993/400347
             var ps = new ProcessStartInfo((string)e.Link.LinkData)
@@ -306,7 +306,7 @@ namespace EliteChroma.Forms
             Process.Start(ps)?.Dispose();
         }
 
-        private void TvSections_AfterSelect(object sender, TreeViewEventArgs e)
+        private void TvSections_AfterSelect(object? sender, TreeViewEventArgs e)
         {
             ((Control)e.Node!.Tag).Visible = true;
 
@@ -321,7 +321,7 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void TvSections_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        private void TvSections_DrawNode(object? sender, DrawTreeNodeEventArgs e)
         {
             Brush b = e.State.HasFlag(TreeNodeStates.Focused) ? SystemBrushes.HighlightText : SystemBrushes.ControlText;
             e.Graphics.DrawString(e.Node!.Text, tvSections.Font, b, e.Bounds);

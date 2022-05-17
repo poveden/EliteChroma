@@ -92,7 +92,7 @@ namespace EliteFiles.Internal
             _disposed = true;
         }
 
-        private void Watcher_Changed(object sender, FileSystemEventArgs e)
+        private void Watcher_Changed(object? sender, FileSystemEventArgs e)
         {
             // Reference: https://stackoverflow.com/questions/12940516/why-does-filesystemwatcher-fire-twice/12940774#12940774
             lock (_lock)

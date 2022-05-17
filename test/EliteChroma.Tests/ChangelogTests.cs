@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using TestUtils;
 using Xunit;
 
 namespace EliteChroma.Tests
@@ -21,7 +22,7 @@ namespace EliteChroma.Tests
             const string EliteChromaXPath = "/Project/PropertyGroup/Version";
             const string VersionExpr = @"^\d+\.\d+\.\d+$";
 
-            string solutionDir = MetaTests.GetSolutionDirectory();
+            string solutionDir = MetaTestsCommon.GetSolutionDirectory();
 
             string eliteChromaPath = Path.Combine(solutionDir, EliteChromaProjectPath);
             var eliteChromaProject = XDocument.Load(eliteChromaPath);
@@ -178,7 +179,7 @@ namespace EliteChroma.Tests
         {
             const string ChangelogPath = "CHANGELOG.md";
 
-            string solutionDir = MetaTests.GetSolutionDirectory();
+            string solutionDir = MetaTestsCommon.GetSolutionDirectory();
             string changelogPath = Path.Combine(solutionDir, ChangelogPath);
 
             using var fs = File.OpenText(changelogPath);

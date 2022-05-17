@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using TestUtils;
 using Xunit;
 
 namespace EliteChroma.Tests
@@ -55,7 +56,7 @@ namespace EliteChroma.Tests
 
             const string ExpectedTargetFramework = "net6.0-windows";
 
-            string solutionDir = GetSolutionDirectory();
+            string solutionDir = MetaTestsCommon.GetSolutionDirectory();
 
             string? eliteChromaPath = Path.Combine(solutionDir, EliteChromaProjectPath);
             var eliteChromaProject = XDocument.Load(eliteChromaPath);
@@ -72,21 +73,16 @@ namespace EliteChroma.Tests
             Assert.Equal(ExpectedTargetFramework, wixTargetFramework!.Value);
         }
 
-        internal static string GetSolutionDirectory()
+        [Theory]
+        [MemberData(nameof(GetAllEventHandlers))]
+        public void EventHandlersDeclareSenderParameterAsNullable(MethodInfo eventHandler)
         {
-            const string SolutionFilename = "EliteChroma.sln";
+            MetaTestsCommon.AssertSenderParameterIsNullable(eventHandler);
+        }
 
-            var fi = new FileInfo(typeof(MetaTests).Assembly.Location);
-
-            for (var di = fi.Directory; di != null; di = di.Parent)
-            {
-                if (di.GetFiles(SolutionFilename, SearchOption.TopDirectoryOnly).Length != 0)
-                {
-                    return di.FullName;
-                }
-            }
-
-            throw new InvalidOperationException("Solution directory could not be found.");
+        private static IEnumerable<object[]> GetAllEventHandlers()
+        {
+            return MetaTestsCommon.GetAllEventHandlers(typeof(Program).Assembly);
         }
     }
 }
