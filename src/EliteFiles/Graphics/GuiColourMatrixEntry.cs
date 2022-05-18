@@ -9,7 +9,6 @@ namespace EliteFiles.Graphics
     public sealed class GuiColourMatrixEntry
     {
         private readonly double[] _v = new double[3];
-        private readonly bool _readOnly;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GuiColourMatrixEntry"/> class.
@@ -18,62 +17,41 @@ namespace EliteFiles.Graphics
         {
         }
 
-        internal GuiColourMatrixEntry(double r, double g, double b, bool readOnly)
+        internal GuiColourMatrixEntry(double r, double g, double b)
         {
             Red = r;
             Green = g;
             Blue = b;
-            _readOnly = readOnly;
         }
 
         /// <summary>
-        /// Gets or sets the red component value.
+        /// Gets the red component value.
         /// </summary>
         public double Red
         {
             get => _v[0];
-            set
-            {
-                ThrowIfReadOnly();
-                _v[0] = Math.Clamp(value, -1, 1);
-            }
+            init => _v[0] = Math.Clamp(value, -1, 1);
         }
 
         /// <summary>
-        /// Gets or sets the green component value.
+        /// Gets the green component value.
         /// </summary>
         public double Green
         {
             get => _v[1];
-            set
-            {
-                ThrowIfReadOnly();
-                _v[1] = Math.Clamp(value, -1, 1);
-            }
+            init => _v[1] = Math.Clamp(value, -1, 1);
         }
 
         /// <summary>
-        /// Gets or sets the blue component value.
+        /// Gets the blue component value.
         /// </summary>
         public double Blue
         {
             get => _v[2];
-            set
-            {
-                ThrowIfReadOnly();
-                _v[2] = Math.Clamp(value, -1, 1);
-            }
+            init => _v[2] = Math.Clamp(value, -1, 1);
         }
 
-        internal double this[int index]
-        {
-            get => _v[index];
-            set
-            {
-                ThrowIfReadOnly();
-                _v[index] = Math.Clamp(value, -1, 1);
-            }
-        }
+        internal double this[int index] => _v[index];
 
         internal static GuiColourMatrixEntry? FromXml(XElement? xml)
         {
@@ -97,14 +75,6 @@ namespace EliteFiles.Graphics
                 Green = g,
                 Blue = b,
             };
-        }
-
-        private void ThrowIfReadOnly()
-        {
-            if (_readOnly)
-            {
-                throw new InvalidOperationException("Property is read-only.");
-            }
         }
     }
 }

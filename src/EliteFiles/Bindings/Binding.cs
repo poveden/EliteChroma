@@ -26,17 +26,17 @@ namespace EliteFiles.Bindings
         /// Gets the name of the binding.
         /// </summary>
         /// <seealso cref="Binds"/>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the primary device key combination that triggers this binding.
         /// </summary>
-        public DeviceKeyCombination Primary { get; private set; }
+        public DeviceKeyCombination Primary { get; }
 
         /// <summary>
         /// Gets the secondary device key combination that triggers this binding.
         /// </summary>
-        public DeviceKeyCombination Secondary { get; private set; }
+        public DeviceKeyCombination Secondary { get; }
 
         internal static Binding? FromXml(XElement xml)
         {

@@ -8,9 +8,6 @@ namespace EliteFiles.Graphics
     public sealed class GuiColourMatrix : IRgbTransformMatrix
     {
         private readonly GuiColourMatrixEntry[] _v = new GuiColourMatrixEntry[3];
-        private readonly bool _readOnly;
-
-        private string? _localizationName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GuiColourMatrix"/> class.
@@ -22,50 +19,52 @@ namespace EliteFiles.Graphics
             _v[2] = new GuiColourMatrixEntry();
         }
 
-        private GuiColourMatrix(GuiColourMatrixEntry r, GuiColourMatrixEntry g, GuiColourMatrixEntry b, bool readOnly)
+        private GuiColourMatrix(GuiColourMatrixEntry r, GuiColourMatrixEntry g, GuiColourMatrixEntry b)
         {
             _v[0] = r;
             _v[1] = g;
             _v[2] = b;
-            _readOnly = readOnly;
         }
 
         /// <summary>
         /// Gets the default GUI colour transformation matrix.
         /// </summary>
         public static GuiColourMatrix Default { get; } = new GuiColourMatrix(
-            new GuiColourMatrixEntry(1, 0, 0, true),
-            new GuiColourMatrixEntry(0, 1, 0, true),
-            new GuiColourMatrixEntry(0, 0, 1, true),
-            true);
+            new GuiColourMatrixEntry(1, 0, 0),
+            new GuiColourMatrixEntry(0, 1, 0),
+            new GuiColourMatrixEntry(0, 0, 1));
 
         /// <summary>
-        /// Gets or sets the localisation name.
+        /// Gets the localisation name.
         /// </summary>
-        public string? LocalisationName
-        {
-            get => _localizationName;
-            set
-            {
-                ThrowIfReadOnly();
-                _localizationName = value;
-            }
-        }
+        public string? LocalisationName { get; init; }
 
         /// <summary>
         /// Gets the red matrix component.
         /// </summary>
-        public GuiColourMatrixEntry MatrixRed => _v[0];
+        public GuiColourMatrixEntry MatrixRed
+        {
+            get => _v[0];
+            init => _v[0] = value;
+        }
 
         /// <summary>
         /// Gets the green matrix component.
         /// </summary>
-        public GuiColourMatrixEntry MatrixGreen => _v[1];
+        public GuiColourMatrixEntry MatrixGreen
+        {
+            get => _v[1];
+            init => _v[1] = value;
+        }
 
         /// <summary>
         /// Gets the blue matrix component.
         /// </summary>
-        public GuiColourMatrixEntry MatrixBlue => _v[2];
+        public GuiColourMatrixEntry MatrixBlue
+        {
+            get => _v[2];
+            init => _v[2] = value;
+        }
 
         /// <summary>
         /// Gets the matrix value at the given row and column.
@@ -73,11 +72,7 @@ namespace EliteFiles.Graphics
         /// <param name="row">The matrix row.</param>
         /// <param name="col">The matrix column.</param>
         /// <returns>The matrix value.</returns>
-        public double this[int row, int col]
-        {
-            get => _v[row][col];
-            set => _v[row][col] = value;
-        }
+        public double this[int row, int col] => _v[row][col];
 
         internal static GuiColourMatrix? FromXml(XElement xml)
         {
@@ -90,18 +85,10 @@ namespace EliteFiles.Graphics
                 return null;
             }
 
-            return new GuiColourMatrix(r, g, b, false)
+            return new GuiColourMatrix(r, g, b)
             {
                 LocalisationName = xml.Element("LocalisationName")?.Value,
             };
-        }
-
-        private void ThrowIfReadOnly()
-        {
-            if (_readOnly)
-            {
-                throw new InvalidOperationException("Property is read-only.");
-            }
         }
     }
 }

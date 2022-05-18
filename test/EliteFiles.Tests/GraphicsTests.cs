@@ -35,20 +35,19 @@ namespace EliteFiles.Tests
                     ["Default"] = new GuiColourMatrix
                     {
                         LocalisationName = "Standard",
-                        MatrixRed = { Red = 1, Green = 0, Blue = 0, },
-                        MatrixGreen = { Red = 0, Green = 1, Blue = 0, },
-                        MatrixBlue = { Red = 0, Green = 0, Blue = 1, },
+                        MatrixRed = new GuiColourMatrixEntry { Red = 1, Green = 0, Blue = 0, },
+                        MatrixGreen = new GuiColourMatrixEntry { Red = 0, Green = 1, Blue = 0, },
+                        MatrixBlue = new GuiColourMatrixEntry { Red = 0, Green = 0, Blue = 1, },
                     },
                     ["Other"] = new GuiColourMatrix
                     {
                         LocalisationName = "Other",
-                        [2, 0] = 1,
                     },
                 },
             };
 
             Assert.Equal(1, config.GuiColour.Default![0, 0]);
-            Assert.Equal(1, config.GuiColour["Other"][2, 0]);
+            Assert.Equal(0, config.GuiColour["Other"][2, 0]);
         }
 
         [Fact]
@@ -294,8 +293,7 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
-
-        public void DefaultGuiColourMatrixIsAReadOnlyIdentityMatrix()
+        public void DefaultGuiColourMatrixIsTheIdentityMatrix()
         {
             var i = GuiColourMatrix.Default;
 
@@ -305,12 +303,8 @@ namespace EliteFiles.Tests
                 {
                     double v = row == col ? 1 : 0;
                     Assert.Equal(v, i[row, col]);
-
-                    Assert.Throws<InvalidOperationException>(() => i[row, col] = v);
                 }
             }
-
-            Assert.Throws<InvalidOperationException>(() => i.LocalisationName = "en-US");
         }
     }
 }
