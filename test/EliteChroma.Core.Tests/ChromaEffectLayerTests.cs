@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using ChromaWrapper;
 using ChromaWrapper.Keyboard;
+using ChromaWrapper.Sdk;
 using EliteChroma.Chroma;
 using EliteChroma.Core.Internal;
 using EliteChroma.Core.Layers;
@@ -16,6 +17,7 @@ using EliteFiles.Graphics;
 using EliteFiles.Journal;
 using EliteFiles.Journal.Events;
 using Moq;
+using Moq.Protected;
 using TestUtils;
 using Xunit;
 
@@ -86,6 +88,73 @@ namespace EliteChroma.Core.Tests
             var chroma = ChromaMockFactory.Create();
 
             Assert.Throws<ArgumentNullException>(() => le.Render(chroma.Object, null!));
+        }
+
+        [Fact]
+        public void ChromaEffectTracksActiveEffectsPerChromaSdkInstance()
+        {
+            var ce = new ChromaEffect<object>();
+
+            var layerMock = new Mock<ChromaEffectLayer<object>>();
+            layerMock.Protected()
+                .Setup("OnRender", ItExpr.IsAny<ChromaCanvas>(), ItExpr.IsAny<object>())
+                .Callback((ChromaCanvas cc, object o) =>
+                {
+                    cc.Keyboard.Key[0] = ChromaColor.Blue;
+                });
+
+            ce.Add(layerMock.Object);
+
+            Mock<IChromaSdk> CreateMockSdk(List<Guid> created, Action<Guid> setDeleted)
+            {
+                var chroma = new Mock<IChromaSdk>();
+                chroma
+                    .Setup(x => x.CreateEffect(It.IsAny<IKeyboardEffect>()))
+                    .Returns(() =>
+                    {
+                        var id = Guid.NewGuid();
+                        created.Add(id);
+                        return id;
+                    });
+                chroma
+                    .Setup(x => x.DeleteEffect(It.IsAny<Guid>()))
+                    .Callback((Guid id) => setDeleted(id));
+
+                return chroma;
+            }
+
+            var idsCreated1 = new List<Guid>();
+            var idsCreated2 = new List<Guid>();
+            var idDeleted1 = Guid.Empty;
+            var idDeleted2 = Guid.Empty;
+
+            var chroma1 = CreateMockSdk(idsCreated1, x => idDeleted1 = x);
+            var chroma2 = CreateMockSdk(idsCreated2, x => idDeleted2 = x);
+
+            ce.Render(chroma1.Object, new object());
+            Assert.Single(idsCreated1);
+            Assert.Empty(idsCreated2);
+            Assert.Equal(Guid.Empty, idDeleted1);
+            Assert.Equal(Guid.Empty, idDeleted2);
+
+            ce.Render(chroma2.Object, new object());
+            Assert.Single(idsCreated1);
+            Assert.Single(idsCreated2);
+            Assert.NotEqual(idsCreated1[0], idsCreated2[0]);
+            Assert.Equal(Guid.Empty, idDeleted1);
+            Assert.Equal(Guid.Empty, idDeleted2);
+
+            ce.Render(chroma1.Object, new object());
+            Assert.Equal(2, idsCreated1.Count);
+            Assert.Single(idsCreated2);
+            Assert.Equal(idsCreated1[0], idDeleted1);
+            Assert.Equal(Guid.Empty, idDeleted2);
+
+            ce.Render(chroma2.Object, new object());
+            Assert.Equal(2, idsCreated1.Count);
+            Assert.Equal(2, idsCreated2.Count);
+            Assert.Equal(idsCreated1[0], idDeleted1);
+            Assert.Equal(idsCreated2[0], idDeleted2);
         }
 
         [Theory]

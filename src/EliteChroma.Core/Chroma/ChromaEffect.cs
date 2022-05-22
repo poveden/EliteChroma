@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using ChromaWrapper.Sdk;
 
 namespace EliteChroma.Chroma
@@ -11,7 +12,7 @@ namespace EliteChroma.Chroma
         private readonly List<ChromaEffectLayer<TState>> _layers = new List<ChromaEffectLayer<TState>>();
         private readonly ChromaCanvas _canvas = new ChromaCanvas();
 
-        private IReadOnlyCollection<Guid> _activeEffectIds = Array.Empty<Guid>();
+        private readonly ConditionalWeakTable<IChromaSdk, IReadOnlyCollection<Guid>> _activeEffectIds = new ConditionalWeakTable<IChromaSdk, IReadOnlyCollection<Guid>>();
 
         public IReadOnlyList<ChromaEffectLayer<TState>> Layers => _layers;
 
@@ -47,12 +48,15 @@ namespace EliteChroma.Chroma
                 _layers[i].Render(_canvas, state);
             }
 
-            IReadOnlyCollection<Guid> oldEffectIds = _activeEffectIds;
-            _activeEffectIds = _canvas.SetEffect(chroma);
+            _ = _activeEffectIds.TryGetValue(chroma, out IReadOnlyCollection<Guid>? oldEffectIds);
+            _activeEffectIds.AddOrUpdate(chroma, _canvas.SetEffect(chroma));
 
-            foreach (Guid effectId in oldEffectIds)
+            if (oldEffectIds != null)
             {
-                chroma.DeleteEffect(effectId);
+                foreach (Guid effectId in oldEffectIds)
+                {
+                    chroma.DeleteEffect(effectId);
+                }
             }
         }
 
