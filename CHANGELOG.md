@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.16.3](https://github.com/poveden/EliteChroma/compare/v1.16.2...v1.16.3) — 2022-05-22
+
+### Fixed
+
+- Fix crash caused by cleaning up stale effects on new game runs
+
 ## [1.16.2](https://github.com/poveden/EliteChroma/compare/v1.16.1...v1.16.2) — 2022-05-13
 
 ### Fixed
