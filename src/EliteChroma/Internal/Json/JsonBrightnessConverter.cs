@@ -1,25 +1,24 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using Newtonsoft.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace EliteChroma.Internal.Json
 {
     internal sealed class JsonBrightnessConverter : JsonConverter<double>
     {
-        public override double ReadJson(JsonReader reader, Type objectType, [AllowNull] double existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override double Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType != JsonToken.Integer)
+            if (reader.TokenType != JsonTokenType.Number)
             {
-                return existingValue;
+                throw new JsonException();
             }
 
-            double num = Convert.ToDouble(reader.Value, CultureInfo.InvariantCulture);
+            double num = reader.GetDouble();
             return num / 100;
         }
 
-        public override void WriteJson(JsonWriter writer, [AllowNull] double value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, double value, JsonSerializerOptions options)
         {
-            writer.WriteValue((int)(value * 100));
+            writer.WriteNumberValue((int)(value * 100));
         }
     }
 }

@@ -1,24 +1,28 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace EliteFiles.Status.Internal
 {
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Used in JsonConverterAttribute for PowerDistributor.")]
     internal sealed class PowerDistributorConverter : JsonConverter<PowerDistributor>
     {
-        public override PowerDistributor? ReadJson(JsonReader reader, Type objectType, PowerDistributor? existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override PowerDistributor? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            byte sys = (byte)reader.ReadAsInt32()!;
-            byte eng = (byte)reader.ReadAsInt32()!;
-            byte wep = (byte)reader.ReadAsInt32()!;
+            _ = reader.Read(); // JsonTokenType.StartArray
 
-            _ = reader.Read(); // JsonToken.EndArray
+            byte sys = reader.GetByte();
+            _ = reader.Read();
+            byte eng = reader.GetByte();
+            _ = reader.Read();
+            byte wep = reader.GetByte();
+            _ = reader.Read();
 
             return new PowerDistributor(sys, eng, wep);
         }
 
         [ExcludeFromCodeCoverage]
-        public override void WriteJson(JsonWriter writer, PowerDistributor? value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, PowerDistributor value, JsonSerializerOptions options)
         {
             throw new NotSupportedException();
         }

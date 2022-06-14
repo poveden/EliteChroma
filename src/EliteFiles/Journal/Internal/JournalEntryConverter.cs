@@ -1,40 +1,38 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using EliteFiles.Internal;
 
 namespace EliteFiles.Journal.Internal
 {
     [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Used in JsonConverterAttribute for JournalEntry.")]
-    internal sealed class JournalEntryConverter : JsonConverter
+    internal sealed class JournalEntryConverter : JsonConverter<JournalEntry>
     {
-        private static readonly JsonSerializer _journalEntrySerializer =
-            new JsonSerializer { ContractResolver = new JournalEntryContractResolver() };
-
         private static readonly Dictionary<string, Type> _eventMap = BuildJournayEntryEventMap();
+        private static readonly EliteFilesSerializerContext _serializerContext = new EliteFilesSerializerContext();
 
         [ExcludeFromCodeCoverage]
-        public override bool CanConvert(Type objectType)
+        public override bool CanConvert(Type typeToConvert)
         {
-            throw new NotSupportedException();
+            return typeof(JournalEntry).IsAssignableFrom(typeToConvert);
         }
 
-        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+        public override JournalEntry? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var item = JObject.Load(reader);
+            using var item = JsonDocument.ParseValue(ref reader);
 
-            string? eventName = item["event"]?.Value<string>();
+            string? eventName = item.RootElement.TryGetProperty("event", out JsonElement pEvent) ? pEvent.GetString() : null;
 
             if (string.IsNullOrEmpty(eventName) || !_eventMap.TryGetValue(eventName, out Type? type))
             {
                 type = typeof(JournalEntry);
             }
 
-            return item.ToObject(type, _journalEntrySerializer);
+            return (JournalEntry?)item.Deserialize(type, _serializerContext);
         }
 
         [ExcludeFromCodeCoverage]
-        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, JournalEntry value, JsonSerializerOptions options)
         {
             throw new NotSupportedException();
         }
@@ -48,20 +46,6 @@ namespace EliteFiles.Journal.Internal
                 select (attr.EventName, type);
 
             return journalEventTypes.ToDictionary(x => x.EventName, x => x.Type, StringComparer.Ordinal);
-        }
-
-        // Reference: https://stackoverflow.com/questions/20995865/deserializing-json-to-abstract-class/30579193#30579193
-        private sealed class JournalEntryContractResolver : DefaultContractResolver
-        {
-            protected override JsonConverter? ResolveContractConverter(Type objectType)
-            {
-                if (typeof(JournalEntry).IsAssignableFrom(objectType))
-                {
-                    return null;
-                }
-
-                return base.ResolveContractConverter(objectType);
-            }
         }
     }
 }

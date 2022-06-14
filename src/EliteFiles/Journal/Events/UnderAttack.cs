@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace EliteFiles.Journal.Events
 {
@@ -29,7 +29,8 @@ namespace EliteFiles.Journal.Events
         /// <summary>
         /// Gets or sets the target of the attack.
         /// </summary>
-        [JsonProperty("Target")]
+        [JsonPropertyName("Target")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public AttackTarget Target { get; set; }
     }
 }

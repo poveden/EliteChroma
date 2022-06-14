@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+﻿using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ChromaWrapper;
-using Newtonsoft.Json;
 
 namespace EliteChroma.Internal.Json
 {
@@ -25,24 +25,24 @@ namespace EliteChroma.Internal.Json
             return rgb.ToString("X6", CultureInfo.InvariantCulture);
         }
 
-        public override ChromaColor ReadJson(JsonReader reader, Type objectType, [AllowNull] ChromaColor existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override ChromaColor Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType != JsonToken.String)
+            if (reader.TokenType != JsonTokenType.String)
             {
-                return existingValue;
+                throw new JsonException();
             }
 
-            if (!TryParseRgbString((string?)reader.Value, out ChromaColor color))
+            if (!TryParseRgbString(reader.GetString(), out ChromaColor color))
             {
-                return existingValue;
+                throw new JsonException();
             }
 
             return color;
         }
 
-        public override void WriteJson(JsonWriter writer, [AllowNull] ChromaColor value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, ChromaColor value, JsonSerializerOptions options)
         {
-            writer.WriteValue(ToRgbString(value));
+            writer.WriteStringValue(ToRgbString(value));
         }
     }
 }

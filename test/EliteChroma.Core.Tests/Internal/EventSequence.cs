@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Text;
+using System.Text.Json;
 using EliteFiles.Status;
-using Newtonsoft.Json;
 using TestUtils;
 using Xunit.Abstractions;
 
@@ -21,13 +21,13 @@ namespace EliteChroma.Core.Tests.Internal
 
         public static string BuildEvent(string eventName, object data)
         {
-            string tsJson = JsonConvert.SerializeObject(new
+            string tsJson = JsonSerializer.Serialize(new
             {
                 timestamp = DateTimeOffset.UtcNow,
                 @event = eventName,
             });
 
-            string entryJson = JsonConvert.SerializeObject(data);
+            string entryJson = JsonSerializer.Serialize(data);
 
             string json = $"{tsJson[0..^1]},{entryJson[1..]}";
 

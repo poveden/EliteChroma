@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace EliteFiles.Status
 {
@@ -10,13 +10,13 @@ namespace EliteFiles.Status
         /// <summary>
         /// Gets or sets the main fuel level in tons.
         /// </summary>
-        [JsonProperty("FuelMain")]
+        [JsonPropertyName("FuelMain")]
         public double FuelMain { get; set; }
 
         /// <summary>
         /// Gets or sets the reservoir fuel level in tons.
         /// </summary>
-        [JsonProperty("FuelReservoir")]
+        [JsonPropertyName("FuelReservoir")]
         public double FuelReservoir { get; set; }
     }
 }

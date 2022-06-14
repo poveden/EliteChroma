@@ -1,5 +1,6 @@
-﻿using System.Text;
-using Newtonsoft.Json;
+﻿using System.Text.Json;
+using EliteFiles.Internal;
+using EliteFiles.Journal.Internal;
 
 namespace EliteFiles.Journal
 {
@@ -13,6 +14,7 @@ namespace EliteFiles.Journal
 
         private readonly FileStream _fs;
         private readonly byte[] _buf;
+        private readonly EliteFilesSerializerContext _serializerContext;
 
         private int _bufI;
         private int _bufN;
@@ -28,6 +30,13 @@ namespace EliteFiles.Journal
         {
             _fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             _buf = new byte[_bufferSize];
+            _serializerContext = new EliteFilesSerializerContext(new JsonSerializerOptions
+            {
+                Converters =
+                {
+                    new JournalEntryConverter(),
+                },
+            });
         }
 
         /// <summary>
@@ -79,20 +88,18 @@ namespace EliteFiles.Journal
 
         private bool TryReadEntryFromBuffer(out JournalEntry? entry)
         {
-            entry = null;
-
-            int i = Array.IndexOf(_buf, (byte)'\n', _bufI, _bufN - _bufI);
+            Span<byte> buf = _buf.AsSpan(_bufI, _bufN - _bufI);
+            int i = buf.IndexOf((byte)'\n');
 
             if (i == -1)
             {
+                entry = null;
                 return false;
             }
 
-            int n = i + 1 - _bufI;
-            string str = Encoding.UTF8.GetString(_buf, _bufI, n);
+            int n = i + 1;
+            entry = JsonSerializer.Deserialize(buf[..n], _serializerContext.JournalEntry);
             _bufI += n;
-
-            entry = JsonConvert.DeserializeObject<JournalEntry>(str);
             return true;
         }
 

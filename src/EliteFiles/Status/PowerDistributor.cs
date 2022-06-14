@@ -1,5 +1,5 @@
-﻿using EliteFiles.Status.Internal;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using EliteFiles.Status.Internal;
 
 namespace EliteFiles.Status
 {

@@ -1,9 +1,9 @@
-﻿using ChromaWrapper;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
+using ChromaWrapper;
 using EliteChroma.Core;
 using EliteChroma.Internal;
 using EliteFiles;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using TestUtils;
 using Xunit;
 
@@ -34,7 +34,7 @@ namespace EliteChroma.Tests
         public void ReturnsDefaultSettingsWhenTheFileIsCorrupt()
         {
             using var tf = new TestFolder();
-            tf.WriteText("Malformed.json", "{ \"text\": ");
+            tf.WriteText("Malformed.json", "{ \"Colors\": { \"text\": ");
 
             var settings = AppSettings.Load(tf.Resolve("Malformed.json"));
 
@@ -122,9 +122,9 @@ namespace EliteChroma.Tests
             using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
             string settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
-            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile))!;
+            var jo = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(settingsFile))!;
             jo.Remove("Colors");
-            File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
+            File.WriteAllText(settingsFile, JsonSerializer.Serialize(jo));
 
             var settings = AppSettings.Load(settingsFile);
 
@@ -139,9 +139,9 @@ namespace EliteChroma.Tests
             using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
             string settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
-            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile))!;
+            var jo = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(settingsFile))!;
             jo["Colors"]!["DeviceDimBrightness"] = "NOT-A-NUMBER";
-            File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
+            File.WriteAllText(settingsFile, JsonSerializer.Serialize(jo));
 
             var settings = AppSettings.Load(settingsFile);
 
@@ -158,9 +158,9 @@ namespace EliteChroma.Tests
             using var tf = new TestFolder(Path.GetDirectoryName(_appSettingsPath));
             string settingsFile = tf.Resolve(Path.GetFileName(_appSettingsPath));
 
-            var jo = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile))!;
-            jo["Colors"]!["HardpointsToggle"] = JToken.FromObject(faultyValue);
-            File.WriteAllText(settingsFile, JsonConvert.SerializeObject(jo));
+            var jo = JsonSerializer.Deserialize<JsonObject>(File.ReadAllText(settingsFile))!;
+            jo["Colors"]!["HardpointsToggle"] = JsonValue.Create(faultyValue);
+            File.WriteAllText(settingsFile, JsonSerializer.Serialize(jo));
 
             var settings = AppSettings.Load(settingsFile);
 
