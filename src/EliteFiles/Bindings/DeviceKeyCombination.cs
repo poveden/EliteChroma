@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace EliteFiles.Bindings
 {
@@ -29,7 +27,7 @@ namespace EliteFiles.Bindings
         internal static DeviceKeyCombination Undefined { get; } =
             new DeviceKeyCombination(null, null, Enumerable.Empty<DeviceKey>());
 
-        internal static DeviceKeyCombination? FromXml(XElement xml)
+        internal static DeviceKeyCombination? FromXml(XElement? xml)
         {
             if (xml == null)
             {

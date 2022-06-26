@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing.Design;
 using ChromaWrapper;
@@ -228,7 +226,7 @@ namespace EliteChroma.Internal.UI
             {
             }
 
-            public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
+            public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object? instance)
             {
                 ICustomTypeDescriptor baseDescriptor = base.GetTypeDescriptor(objectType, instance);
                 return new LocalizedTypeDescriptor(baseDescriptor, _resourceNamePrefix);

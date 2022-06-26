@@ -1,5 +1,5 @@
-﻿using EliteChroma.Chroma;
-using EliteChroma.Elite;
+﻿using EliteChroma.Core.Chroma;
+using EliteChroma.Core.Elite;
 using EliteFiles.Journal.Events;
 
 namespace EliteChroma.Core.Layers

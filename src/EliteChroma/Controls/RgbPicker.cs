@@ -1,8 +1,5 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
 using EliteChroma.Properties;
 
 namespace EliteChroma.Controls
@@ -36,7 +33,7 @@ namespace EliteChroma.Controls
             pbB.Refresh();
         }
 
-        private void RgbPicker_Load(object sender, EventArgs e)
+        private void RgbPicker_Load(object? sender, EventArgs e)
         {
             _loading = true;
             nudR.Value = Color.R;
@@ -47,14 +44,14 @@ namespace EliteChroma.Controls
             RefreshColors();
         }
 
-        private void PbSlide_MouseDownMove(object sender, MouseEventArgs e)
+        private void PbSlide_MouseDownMove(object? sender, MouseEventArgs e)
         {
             if (!e.Button.HasFlag(MouseButtons.Left))
             {
                 return;
             }
 
-            var pb = (PictureBox)sender;
+            var pb = (PictureBox)sender!;
             var nud = (NumericUpDown)pb.Tag;
 
             int maxX = pb.Width - (_halfPickerWidth * 2) - 1;
@@ -65,7 +62,7 @@ namespace EliteChroma.Controls
             nud.Value = newValue;
         }
 
-        private void Nud_ValueChanged(object sender, EventArgs e)
+        private void Nud_ValueChanged(object? sender, EventArgs e)
         {
             if (_loading)
             {
@@ -76,23 +73,23 @@ namespace EliteChroma.Controls
             RefreshColors();
         }
 
-        private void PbSlide_MouseEnter(object sender, EventArgs e)
+        private void PbSlide_MouseEnter(object? sender, EventArgs e)
         {
-            var pb = (PictureBox)sender;
+            var pb = (PictureBox)sender!;
             _hoverSlide = pb;
             pb.Refresh();
         }
 
-        private void PbSlide_MouseLeave(object sender, EventArgs e)
+        private void PbSlide_MouseLeave(object? sender, EventArgs e)
         {
-            var pb = (PictureBox)sender;
+            var pb = (PictureBox)sender!;
             _hoverSlide = null;
             pb.Refresh();
         }
 
-        private void PbSlide_Paint(object sender, PaintEventArgs e)
+        private void PbSlide_Paint(object? sender, PaintEventArgs e)
         {
-            var pb = (PictureBox)sender;
+            var pb = (PictureBox)sender!;
             var nud = (NumericUpDown)pb.Tag;
 
             using var sb = new SolidBrush(tlpRgb.BackColor);
@@ -119,7 +116,7 @@ namespace EliteChroma.Controls
             e.Graphics.DrawImageUnscaledAndClipped(picker, r);
         }
 
-        private void PbPicked_Paint(object sender, PaintEventArgs e)
+        private void PbPicked_Paint(object? sender, PaintEventArgs e)
         {
             using var b = new SolidBrush(Color);
             e.Graphics.FillRectangle(b, e.ClipRectangle);

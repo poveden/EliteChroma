@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace EliteFiles.Internal
 {
@@ -18,7 +16,7 @@ namespace EliteFiles.Internal
         }
 
         public EliteFileSystemWatcher(FileInfo file)
-            : this(file.DirectoryName, file.Name)
+            : this(file.DirectoryName!, file.Name)
         {
         }
 
@@ -94,7 +92,7 @@ namespace EliteFiles.Internal
             _disposed = true;
         }
 
-        private void Watcher_Changed(object sender, FileSystemEventArgs e)
+        private void Watcher_Changed(object? sender, FileSystemEventArgs e)
         {
             // Reference: https://stackoverflow.com/questions/12940516/why-does-filesystemwatcher-fire-twice/12940774#12940774
             lock (_lock)

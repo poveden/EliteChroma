@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace EliteFiles.Journal.Events
 {
@@ -11,31 +11,31 @@ namespace EliteFiles.Journal.Events
         /// <summary>
         /// Gets or sets the journal file part number.
         /// </summary>
-        [JsonProperty("part")]
+        [JsonPropertyName("part")]
         public int Part { get; set; }
 
         /// <summary>
         /// Gets or sets the journal file language code.
         /// </summary>
-        [JsonProperty("language")]
+        [JsonPropertyName("language")]
         public string? Language { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the current journal is an Odyssey one.
         /// </summary>
-        [JsonProperty("Odyssey")]
+        [JsonPropertyName("Odyssey")]
         public bool Odyssey { get; set; }
 
         /// <summary>
         /// Gets or sets the version of the game that created the journal file.
         /// </summary>
-        [JsonProperty("gameversion")]
+        [JsonPropertyName("gameversion")]
         public string? GameVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the game build number.
         /// </summary>
-        [JsonProperty("build")]
+        [JsonPropertyName("build")]
         public string? Build { get; set; }
     }
 }

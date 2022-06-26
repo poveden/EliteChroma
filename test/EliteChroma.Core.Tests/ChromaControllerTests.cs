@@ -1,12 +1,8 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ChromaWrapper.Keyboard;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
+using EliteChroma.Core.Elite;
 using EliteChroma.Core.Tests.Internal;
-using EliteChroma.Elite;
 using EliteFiles.Status;
 using Moq;
 using Moq.Protected;

@@ -1,4 +1,4 @@
-﻿namespace EliteChroma.Elite
+﻿namespace EliteChroma.Core.Elite
 {
     public enum GameProcessState
     {

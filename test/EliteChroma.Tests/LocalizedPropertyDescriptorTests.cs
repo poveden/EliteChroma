@@ -1,5 +1,4 @@
-﻿using System;
-using EliteChroma.Internal.UI;
+﻿using EliteChroma.Internal.UI;
 using Xunit;
 
 namespace EliteChroma.Tests

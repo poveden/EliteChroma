@@ -1,4 +1,4 @@
-﻿namespace EliteChroma.Chroma
+﻿namespace EliteChroma.Core.Chroma
 {
     public abstract class ChromaEffectLayer<TState>
     {

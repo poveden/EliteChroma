@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Microsoft.Extensions.FileSystemGlobbing;
 
 namespace EliteFiles.Internal
@@ -71,7 +67,7 @@ namespace EliteFiles.Internal
                         continue;
                     }
 
-                    if (!res.Sections.TryGetValue(sectionName, out D3DXConfigSection section))
+                    if (!res.Sections.TryGetValue(sectionName, out D3DXConfigSection? section))
                     {
                         section = new D3DXConfigSection();
                         res.Sections.Add(sectionName, section);
@@ -107,7 +103,7 @@ namespace EliteFiles.Internal
 
             int ifLevel = 0;
 
-            string line;
+            string? line;
             while ((line = reader.ReadLine()) != null)
             {
                 line = line.Trim();
@@ -167,7 +163,7 @@ namespace EliteFiles.Internal
             {
                 if (entry.Name.Equals("include", StringComparison.OrdinalIgnoreCase))
                 {
-                    string file = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(currentFile), entry.Value));
+                    string file = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(currentFile)!, entry.Value));
 
                     if (pendingFiles.Any(x => file.Equals(x, StringComparison.OrdinalIgnoreCase)))
                     {
@@ -185,7 +181,7 @@ namespace EliteFiles.Internal
 
                 if (entry.Name.Equals("include_recursive", StringComparison.OrdinalIgnoreCase))
                 {
-                    string basePath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(currentFile), entry.Value));
+                    string basePath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(currentFile)!, entry.Value));
 
                     if (!Directory.Exists(basePath))
                     {

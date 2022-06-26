@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace EliteChroma.Internal.UI
@@ -16,7 +15,7 @@ namespace EliteChroma.Internal.UI
             _resourceNamePrefix = resourceNamePrefix;
         }
 
-        public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
+        public override PropertyDescriptorCollection GetProperties(Attribute[]? attributes)
         {
             return _map.GetValue(base.GetProperties(attributes), Wrap);
         }

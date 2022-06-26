@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 
 namespace EliteFiles.Bindings
 {
@@ -21,7 +19,8 @@ namespace EliteFiles.Bindings
         /// <param name="modifiers">The collection of device keys.</param>
         public DeviceKeySet(IEnumerable<DeviceKey> modifiers)
         {
-            _modifiers = new HashSet<DeviceKey>(modifiers ?? throw new ArgumentNullException(nameof(modifiers)));
+            ArgumentNullException.ThrowIfNull(modifiers);
+            _modifiers = new HashSet<DeviceKey>(modifiers);
             _hashCode = _setComparer.GetHashCode(_modifiers);
         }
 

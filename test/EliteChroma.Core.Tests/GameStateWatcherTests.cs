@@ -1,12 +1,8 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using EliteChroma.Elite;
+using EliteChroma.Core.Elite;
 using TestUtils;
 using Xunit;
-using static EliteChroma.Elite.GameStateWatcher;
+using static EliteChroma.Core.Elite.GameStateWatcher;
 
 namespace EliteChroma.Core.Tests
 {

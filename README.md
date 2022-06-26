@@ -33,7 +33,7 @@ If a picture is worth a thousand words, then perhaps a video will be better stil
 
 ## Application requirements
 
-- [Microsoft .NET 5.0 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet-core/current/runtime) (_x64_ version)
+- [Microsoft .NET 6.0 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/current/runtime) (_x64_ version)
 - [Razer Synapse 3](https://www.razer.com/synapse-3) or the [Razer Chroma SDK](https://developer.razer.com/works-with-chroma/download/)
 - A Razer Chroma keyboard (tested with Razer Cynosa Chroma)
 - Optional: Any Razer Chroma connected device (tested with LIFX Chroma Connector—thanks [@mcargille](https://github.com/mcargille)!)

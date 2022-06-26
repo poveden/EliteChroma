@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using TestUtils;
 using Xunit;
 
 namespace EliteChroma.Tests
@@ -33,7 +30,7 @@ namespace EliteChroma.Tests
              * the assignment of image resources to PictureBox controls.
              */
 
-            _ = frmType ?? throw new ArgumentNullException(nameof(frmType));
+            ArgumentNullException.ThrowIfNull(frmType);
             using var frm = (Form)frmType.GetConstructor(Type.EmptyTypes)!.Invoke(null);
 
             var pbs = from fld in frmType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
@@ -57,9 +54,9 @@ namespace EliteChroma.Tests
             const string WixInstallerNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
             const string WixInstallerXPath = @"/x:Project/x:ItemGroup/x:ProjectReference[@Include='..\src\EliteChroma\EliteChroma.csproj']/x:TargetFrameworkIdentifier";
 
-            const string ExpectedTargetFramework = "net5.0-windows";
+            const string ExpectedTargetFramework = "net6.0-windows";
 
-            string solutionDir = GetSolutionDirectory();
+            string solutionDir = MetaTestsCommon.GetSolutionDirectory();
 
             string? eliteChromaPath = Path.Combine(solutionDir, EliteChromaProjectPath);
             var eliteChromaProject = XDocument.Load(eliteChromaPath);
@@ -76,21 +73,16 @@ namespace EliteChroma.Tests
             Assert.Equal(ExpectedTargetFramework, wixTargetFramework!.Value);
         }
 
-        internal static string GetSolutionDirectory()
+        [Theory]
+        [MemberData(nameof(GetAllEventHandlers))]
+        public void EventHandlersDeclareSenderParameterAsNullable(MethodInfo eventHandler)
         {
-            const string SolutionFilename = "EliteChroma.sln";
+            MetaTestsCommon.AssertSenderParameterIsNullable(eventHandler);
+        }
 
-            var fi = new FileInfo(typeof(MetaTests).Assembly.Location);
-
-            for (var di = fi.Directory; di != null; di = di.Parent)
-            {
-                if (di.GetFiles(SolutionFilename, SearchOption.TopDirectoryOnly).Length != 0)
-                {
-                    return di.FullName;
-                }
-            }
-
-            throw new InvalidOperationException("Solution directory could not be found.");
+        private static IEnumerable<object[]> GetAllEventHandlers()
+        {
+            return MetaTestsCommon.GetAllEventHandlers(typeof(Program).Assembly);
         }
     }
 }

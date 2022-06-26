@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace EliteFiles.Journal.Events
 {
@@ -26,25 +26,26 @@ namespace EliteFiles.Journal.Events
         /// <summary>
         /// Gets or sets the FSD jump type.
         /// </summary>
-        [JsonProperty("JumpType")]
+        [JsonPropertyName("JumpType")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public FsdJumpType JumpType { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the destination system on hyperspace FSD jumps.
         /// </summary>
-        [JsonProperty("StarSystem")]
+        [JsonPropertyName("StarSystem")]
         public string? StarSystem { get; set; }
 
         /// <summary>
         /// Gets or sets the ID of the destination system on hyperspace FSD jumps.
         /// </summary>
-        [JsonProperty("SystemAddress")]
+        [JsonPropertyName("SystemAddress")]
         public long SystemAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the main star class of the destination system on hyperspace FSD jumps.
         /// </summary>
-        [JsonProperty("StarClass")]
+        [JsonPropertyName("StarClass")]
         public string? StarClass { get; set; }
     }
 }

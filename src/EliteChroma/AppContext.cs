@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Windows.Forms;
+﻿using System.Diagnostics.CodeAnalysis;
 using EliteChroma.Core;
 using EliteChroma.Forms;
 using EliteChroma.Internal;
@@ -100,7 +98,7 @@ namespace EliteChroma
             return false;
         }
 
-        private void ContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void ContextMenu_Opening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             if (BringToFrontAnyOpenModalForm())
             {

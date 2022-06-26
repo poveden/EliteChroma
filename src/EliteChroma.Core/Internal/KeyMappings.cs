@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using ChromaWrapper.Keyboard;
-using EliteChroma.Elite.Internal;
+﻿using ChromaWrapper.Keyboard;
+using EliteChroma.Core.Elite.Internal;
 using EliteFiles.Bindings.Devices;
 
 namespace EliteChroma.Core.Internal

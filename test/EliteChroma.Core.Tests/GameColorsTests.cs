@@ -1,5 +1,5 @@
 ﻿using ChromaWrapper;
-using EliteChroma.Elite;
+using EliteChroma.Core.Elite;
 using EliteFiles.Journal;
 using Xunit;
 

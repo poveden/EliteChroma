@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using EliteChroma.Core.Internal;
+﻿using EliteChroma.Core.Internal;
 using EliteFiles.Bindings.Devices;
 using static EliteChroma.Core.Internal.NativeMethods;
 
-namespace EliteChroma.Elite.Internal
+namespace EliteChroma.Core.Elite.Internal
 {
     // References:
     // - <EliteRoot>\Products\elite-dangerous-64\ControlSchemes\Help.txt

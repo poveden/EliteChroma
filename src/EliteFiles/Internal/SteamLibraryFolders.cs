@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
+﻿using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 
 namespace EliteFiles.Internal
@@ -49,7 +46,7 @@ namespace EliteFiles.Internal
 
             string? line = sr.ReadLine()?.Trim();
 
-            while (line != null && line != "}")
+            while (line is not null and not "}")
             {
                 Match m = _rxKeyValue.Match(line);
 

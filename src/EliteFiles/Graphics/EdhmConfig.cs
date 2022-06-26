@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using EliteFiles.Internal;
 
 namespace EliteFiles.Graphics
@@ -50,7 +48,7 @@ namespace EliteFiles.Graphics
                 res.Files.Add(file);
             }
 
-            if (!config.Sections.TryGetValue("Constants", out D3DXConfigSection constants))
+            if (!config.Sections.TryGetValue("Constants", out D3DXConfigSection? constants))
             {
                 return res;
             }

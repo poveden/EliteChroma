@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -72,14 +68,14 @@ namespace EliteFiles.Bindings
 
             var res = new BindingPreset
             {
-                PresetName = xml.Root.Attribute("PresetName")?.Value,
+                PresetName = xml.Root!.Attribute("PresetName")?.Value,
                 KeyboardLayout = xml.Root.Element("KeyboardLayout")?.Value,
             };
 
             string? majorVersion = xml.Root.Attribute("MajorVersion")?.Value;
             string? minorVersion = xml.Root.Attribute("MinorVersion")?.Value;
 
-            if (Version.TryParse($"{majorVersion}.{minorVersion}", out Version version))
+            if (Version.TryParse($"{majorVersion}.{minorVersion}", out Version? version))
             {
                 res.Version = version;
             }
@@ -111,7 +107,7 @@ namespace EliteFiles.Bindings
         /// </remarks>
         public static BindingPreset MergeFromCategories(IReadOnlyDictionary<BindingCategory, BindingPreset> categoryBindingPresets)
         {
-            _ = categoryBindingPresets ?? throw new ArgumentNullException(nameof(categoryBindingPresets));
+            ArgumentNullException.ThrowIfNull(categoryBindingPresets);
 
             T UniqueOrDefault<T>(Func<BindingPreset, T> selector, IEqualityComparer<T>? comparer = null)
             {
@@ -128,12 +124,12 @@ namespace EliteFiles.Bindings
 
             foreach (KeyValuePair<string, BindingCategory> kv in _bindNameCategories)
             {
-                if (!categoryBindingPresets.TryGetValue(kv.Value, out BindingPreset bindingPreset) || bindingPreset == null)
+                if (!categoryBindingPresets.TryGetValue(kv.Value, out BindingPreset? bindingPreset) || bindingPreset == null)
                 {
                     continue;
                 }
 
-                if (!bindingPreset.Bindings.TryGetValue(kv.Key, out Binding binding))
+                if (!bindingPreset.Bindings.TryGetValue(kv.Key, out Binding? binding))
                 {
                     continue;
                 }
@@ -166,7 +162,7 @@ namespace EliteFiles.Bindings
             {
                 using var sr = new StreamReader(fs);
 
-                string bindsName;
+                string? bindsName;
                 for (int i = 0; (bindsName = sr.ReadLine()) != null; i++)
                 {
                     string? bindsFile =
@@ -220,8 +216,8 @@ namespace EliteFiles.Bindings
             IEnumerable<(BindingCategory, IReadOnlyCollection<string>)> allBinds =
                 from type in typeof(InterfaceMode).Assembly.GetTypes()
                 where type.Namespace == typeof(InterfaceMode).Namespace
-                let category = (BindingCategory)type.GetField(nameof(InterfaceMode.Category), BindingFlags.Public | BindingFlags.Static).GetValue(null)
-                let allNames = (IReadOnlyCollection<string>)type.GetProperty(nameof(InterfaceMode.All), BindingFlags.Public | BindingFlags.Static).GetValue(null)
+                let category = (BindingCategory)type.GetField(nameof(InterfaceMode.Category), BindingFlags.Public | BindingFlags.Static)!.GetValue(null)!
+                let allNames = (IReadOnlyCollection<string>)type.GetProperty(nameof(InterfaceMode.All), BindingFlags.Public | BindingFlags.Static)!.GetValue(null)!
                 select (category, allNames);
 
             foreach ((BindingCategory category, IReadOnlyCollection<string> allNames) in allBinds)

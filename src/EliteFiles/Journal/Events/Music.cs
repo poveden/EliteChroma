@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace EliteFiles.Journal.Events
 {
@@ -11,7 +11,7 @@ namespace EliteFiles.Journal.Events
         /// <summary>
         /// Gets or sets the name of the music track.
         /// </summary>
-        [JsonProperty("MusicTrack")]
+        [JsonPropertyName("MusicTrack")]
         public string? MusicTrack { get; set; }
     }
 }

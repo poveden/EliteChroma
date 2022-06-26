@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using ChromaWrapper.Sdk;
+﻿using ChromaWrapper.Sdk;
 
 namespace EliteChroma.Core
 {

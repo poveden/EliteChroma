@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
 using ChromaWrapper;
 using EliteChroma.Internal.Json;
@@ -9,17 +8,12 @@ namespace EliteChroma.Internal.UI
 {
     internal sealed class ChromaColorConverter : TypeConverter
     {
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
-            if (sourceType == typeof(string))
-            {
-                return true;
-            }
-
-            return false;
+            return sourceType == typeof(string);
         }
 
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
             // String -> Color
             if (!JsonChromaColorConverter.TryParseRgbString((string)value, out ChromaColor color))
@@ -30,10 +24,10 @@ namespace EliteChroma.Internal.UI
             return color;
         }
 
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             // Color -> String
-            return JsonChromaColorConverter.ToRgbString((ChromaColor)value);
+            return JsonChromaColorConverter.ToRgbString((ChromaColor)value!);
         }
     }
 }

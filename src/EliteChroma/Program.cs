@@ -1,7 +1,4 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
-using System.Windows.Forms;
 using EliteChroma.Internal;
 using EliteChroma.Properties;
 
@@ -33,9 +30,7 @@ namespace EliteChroma
                     return;
                 }
 
-                _ = Application.SetHighDpiMode(HighDpiMode.SystemAware);
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
+                ApplicationConfiguration.Initialize();
 
                 using var appContext = new AppContext();
 

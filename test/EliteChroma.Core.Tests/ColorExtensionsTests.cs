@@ -1,7 +1,6 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using ChromaWrapper;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
 using EliteFiles.Graphics;
 using Xunit;
 

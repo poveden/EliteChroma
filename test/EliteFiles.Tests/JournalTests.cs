@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using EliteFiles.Journal;
 using EliteFiles.Journal.Events;
-using Newtonsoft.Json;
 using TestUtils;
 using Xunit;
 
@@ -41,7 +36,7 @@ namespace EliteFiles.Tests
                 Event = "TestEntry",
                 AdditionalFields =
                 {
-                    ["ExtraField"] = "Extra value",
+                    ["ExtraField"] = JsonDocument.Parse("\"Extra value\"").RootElement,
                 },
             };
 
@@ -136,7 +131,7 @@ namespace EliteFiles.Tests
 
             var sd = Assert.IsType<Shutdown>(entries.Dequeue());
             Assert.Equal(new DateTimeOffset(2019, 1, 1, 0, 19, 4, TimeSpan.Zero), sd.Timestamp);
-            Assert.Equal("AdditionalValue1", sd.AdditionalFields["AdditionalField1"]);
+            Assert.Equal("AdditionalValue1", sd.AdditionalFields["AdditionalField1"].GetString());
         }
 
         [Theory]
@@ -175,8 +170,15 @@ namespace EliteFiles.Tests
         [InlineData("StellarRemnantNebula", StarClass.StellarRemnantNebula, StarClass.Kind.Other)]
         public void StarClassIsParsedCorrectly(string starClass, string expectedBaseClass, StarClass.Kind expectedKind)
         {
-            var entry = (StartJump)JsonConvert.DeserializeObject<JournalEntry>($"{{ \"event\":\"StartJump\", \"StarClass\":\"{starClass}\" }}")!;
-            Assert.Equal(starClass, entry.StarClass);
+            using var dir = new TestFolder();
+            string file = "Journal.entry-startjump.log";
+            string body = $"{{ \"event\":\"StartJump\", \"StarClass\":\"{starClass}\" }}\r\n";
+            dir.WriteText(file, body);
+
+            using var jr = new JournalReader(dir.Resolve(file));
+            var entry = jr.ReadEntry() as StartJump;
+            Assert.NotNull(entry);
+            Assert.Equal(starClass, entry!.StarClass);
 
             var kind = StarClass.GetKind(entry.StarClass, out string? baseClass);
             Assert.Equal(expectedBaseClass, baseClass);

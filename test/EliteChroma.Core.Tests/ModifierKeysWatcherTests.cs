@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
+using EliteChroma.Core.Elite.Internal;
 using EliteChroma.Core.Tests.Internal;
-using EliteChroma.Elite.Internal;
 using EliteFiles.Bindings;
 using TestUtils;
 using Xunit;

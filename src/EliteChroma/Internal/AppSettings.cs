@@ -1,23 +1,30 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.Text.Json;
 using EliteChroma.Core;
 using EliteChroma.Internal.Json;
-using Newtonsoft.Json;
 
 namespace EliteChroma.Internal
 {
     internal sealed class AppSettings
     {
-        private static readonly JsonSerializerSettings _settings = new JsonSerializerSettings
+        private static readonly JsonSerializerOptions _writeOptions = new JsonSerializerOptions
         {
-            ContractResolver = new AppSettingsContractResolver(),
-            Formatting = Formatting.Indented,
+            WriteIndented = true,
+            Converters =
+            {
+                new JsonChromaColorConverter(),
+                new JsonBrightnessConverter(),
+            },
         };
 
-        private AppSettings()
+        private static readonly JsonSerializerOptions _readOptions = new JsonSerializerOptions(_writeOptions)
         {
-        }
+            Converters =
+            {
+                new ChromaColorsConverter(),
+            },
+        };
+
+        private ChromaColors _colors = new ChromaColors();
 
         public string? GameInstallFolder { get; set; }
 
@@ -29,14 +36,23 @@ namespace EliteChroma.Internal
 
         public bool ForceEnUSKeyboardLayout { get; set; }
 
-        public ChromaColors Colors { get; } = new ChromaColors();
+        public ChromaColors Colors
+        {
+            get => _colors;
+            set
+            {
+                // Reference: https://github.com/dotnet/runtime/issues/30258
+                ArgumentNullException.ThrowIfNull(value);
+                _colors = value;
+            }
+        }
 
         public static AppSettings Load(string path)
         {
             try
             {
-                string json = File.ReadAllText(path);
-                return JsonConvert.DeserializeObject<AppSettings>(json, _settings) ?? BuildDefaultSettings();
+                using FileStream fs = File.OpenRead(path);
+                return JsonSerializer.Deserialize<AppSettings>(fs, _readOptions) ?? BuildDefaultSettings();
             }
             catch (IOException)
             {
@@ -85,8 +101,8 @@ namespace EliteChroma.Internal
                 _ = Directory.CreateDirectory(dirName);
             }
 
-            string json = JsonConvert.SerializeObject(this, _settings);
-            File.WriteAllText(path, json);
+            using FileStream fs = File.Create(path);
+            JsonSerializer.Serialize(fs, this, _writeOptions);
         }
 
         private static AppSettings BuildDefaultSettings()

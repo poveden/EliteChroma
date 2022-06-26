@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using EliteChroma.Chroma;
+﻿using System.Diagnostics.CodeAnalysis;
+using EliteChroma.Core.Chroma;
 using EliteFiles.Bindings.Binds;
 using EliteFiles.Status;
 using static EliteFiles.Journal.Events.StartJump;

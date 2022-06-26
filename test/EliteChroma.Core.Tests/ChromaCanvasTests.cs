@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using ChromaWrapper;
 using ChromaWrapper.ChromaLink;
 using ChromaWrapper.Headset;
@@ -7,7 +6,7 @@ using ChromaWrapper.Keyboard;
 using ChromaWrapper.Keypad;
 using ChromaWrapper.Mouse;
 using ChromaWrapper.Mousepad;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
 using EliteChroma.Core.Tests.Internal;
 using Moq;
 using TestUtils;

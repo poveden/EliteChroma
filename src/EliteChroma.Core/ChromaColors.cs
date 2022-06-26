@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing;
 using ChromaWrapper;
-using EliteChroma.Chroma;
+using EliteChroma.Core.Chroma;
 
 namespace EliteChroma.Core
 {

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EliteFiles.Bindings;
+﻿using EliteFiles.Bindings;
 using EliteFiles.Bindings.Devices;
 
-namespace EliteChroma.Elite
+namespace EliteChroma.Core.Elite
 {
     public sealed class GameBindings
     {
@@ -28,10 +25,7 @@ namespace EliteChroma.Elite
 
         internal GameBindings(BindingPreset bindingPreset)
         {
-            if (bindingPreset == null)
-            {
-                throw new ArgumentNullException(nameof(bindingPreset));
-            }
+            ArgumentNullException.ThrowIfNull(bindingPreset);
 
             KeyboardLayout = bindingPreset.KeyboardLayout;
 

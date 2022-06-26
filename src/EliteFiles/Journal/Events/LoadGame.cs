@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace EliteFiles.Journal.Events
 {
@@ -29,121 +29,122 @@ namespace EliteFiles.Journal.Events
         /// <summary>
         /// Gets or sets the player ID.
         /// </summary>
-        [JsonProperty("FID")]
+        [JsonPropertyName("FID")]
         public string? FID { get; set; }
 
         /// <summary>
         /// Gets or sets the commander name.
         /// </summary>
-        [JsonProperty("Commander")]
+        [JsonPropertyName("Commander")]
         public string? Commander { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Horizons game features are in place.
         /// </summary>
-        [JsonProperty("Horizons")]
+        [JsonPropertyName("Horizons")]
         public bool Horizons { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Odyssey game features are in place.
         /// </summary>
-        [JsonProperty("Odyssey")]
+        [JsonPropertyName("Odyssey")]
         public bool Odyssey { get; set; }
 
         /// <summary>
         /// Gets or sets the ship's type.
         /// </summary>
-        [JsonProperty("Ship")]
+        [JsonPropertyName("Ship")]
         public string? Ship { get; set; }
 
         /// <summary>
         /// Gets or sets the ship's localized type.
         /// </summary>
-        [JsonProperty("Ship_Localised")]
+        [JsonPropertyName("Ship_Localised")]
         public string? ShipLocalized { get; set; }
 
         /// <summary>
         /// Gets or sets the ship's ID number.
         /// </summary>
-        [JsonProperty("ShipID")]
+        [JsonPropertyName("ShipID")]
         public long ShipID { get; set; }
 
         /// <summary>
         /// Gets or sets the ship's user-defined name.
         /// </summary>
-        [JsonProperty("ShipName")]
+        [JsonPropertyName("ShipName")]
         public string? ShipName { get; set; }
 
         /// <summary>
         /// Gets or sets the ship's user-defined ID.
         /// </summary>
-        [JsonProperty("ShipIdent")]
+        [JsonPropertyName("ShipIdent")]
         public string? ShipIdent { get; set; }
 
         /// <summary>
         /// Gets or sets the ship's fuel level.
         /// </summary>
-        [JsonProperty("FuelLevel")]
+        [JsonPropertyName("FuelLevel")]
         public double FuelLevel { get; set; }
 
         /// <summary>
         /// Gets or sets the ship's size of the main tank.
         /// </summary>
-        [JsonProperty("FuelCapacity")]
+        [JsonPropertyName("FuelCapacity")]
         public double FuelCapacity { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the ship is starting landed.
         /// </summary>
-        [JsonProperty("StartLanded")]
+        [JsonPropertyName("StartLanded")]
         public bool StartLanded { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the player is starting dead.
         /// </summary>
-        [JsonProperty("StartDead")]
+        [JsonPropertyName("StartDead")]
         public bool StartDead { get; set; }
 
         /// <summary>
         /// Gets or sets the game mode.
         /// </summary>
-        [JsonProperty("GameMode")]
+        [JsonPropertyName("GameMode")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public PlayMode GameMode { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the group if <see cref="GameMode"/> is <see cref="PlayMode.Group"/>.
         /// </summary>
-        [JsonProperty("Group")]
+        [JsonPropertyName("Group")]
         public string? Group { get; set; }
 
         /// <summary>
         /// Gets or sets the current credit balance.
         /// </summary>
-        [JsonProperty("Credits")]
+        [JsonPropertyName("Credits")]
         public long Credits { get; set; }
 
         /// <summary>
         /// Gets or sets the current loan balance.
         /// </summary>
-        [JsonProperty("Loan")]
+        [JsonPropertyName("Loan")]
         public long Loan { get; set; }
 
         /// <summary>
         /// Gets or sets the game's language code.
         /// </summary>
-        [JsonProperty("language")]
+        [JsonPropertyName("language")]
         public string? Language { get; set; }
 
         /// <summary>
         /// Gets or sets the game version number.
         /// </summary>
-        [JsonProperty("gameversion")]
+        [JsonPropertyName("gameversion")]
         public string? GameVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the game build number.
         /// </summary>
-        [JsonProperty("build")]
+        [JsonPropertyName("build")]
         public string? Build { get; set; }
     }
 }

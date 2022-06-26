@@ -1,8 +1,6 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using EliteFiles.Status;
-using Newtonsoft.Json;
 using TestUtils;
 using Xunit;
 
@@ -50,8 +48,8 @@ namespace EliteFiles.Tests
             Assert.Equal("Shinrarta Dezhra A 1", status.BodyName);
             Assert.Equal(5635897, status.PlanetRadius);
             Assert.Equal(2, status.AdditionalFields.Count);
-            Assert.Equal("Energylink", status.AdditionalFields["SelectedWeapon_Localised"]);
-            Assert.Equal("AdditionalValue1", status.AdditionalFields["AdditionalField1"]);
+            Assert.Equal("Energylink", status.AdditionalFields["SelectedWeapon_Localised"].ToString());
+            Assert.Equal("AdditionalValue1", status.AdditionalFields["AdditionalField1"].ToString());
         }
 
         [Fact]
@@ -84,7 +82,7 @@ namespace EliteFiles.Tests
 
             string placeholder = $"${weaponName}_name;";
 
-            var entry = JsonConvert.DeserializeObject<StatusEntry>($"{{ \"event\":\"Status\", \"SelectedWeapon\":\"{placeholder}\" }}")!;
+            var entry = JsonSerializer.Deserialize<StatusEntry>($"{{ \"event\":\"Status\", \"SelectedWeapon\":\"{placeholder}\" }}")!;
             Assert.Equal(placeholder, entry.SelectedWeapon);
 
             kind = OnFootWeapon.GetKind(entry.SelectedWeapon);

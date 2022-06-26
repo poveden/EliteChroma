@@ -5,8 +5,11 @@
     /// </summary>
     public enum LegalState
     {
+        /// <summary>Unknown.</summary>
+        Unknown = 0,
+
         /// <summary>Clean.</summary>
-        Clean = 0,
+        Clean,
 
         /// <summary>Illegal cargo.</summary>
         IllegalCargo,

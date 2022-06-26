@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace EliteFiles.Bindings.Binds
+﻿namespace EliteFiles.Bindings.Binds
 {
     /// <summary>
     /// Defines bind names for mode switches.

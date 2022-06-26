@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-
-namespace EliteFiles.Internal
+﻿namespace EliteFiles.Internal
 {
     internal static class FileOperations
     {

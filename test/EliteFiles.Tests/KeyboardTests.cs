@@ -1,5 +1,4 @@
-﻿using System;
-using EliteFiles.Bindings.Devices;
+﻿using EliteFiles.Bindings.Devices;
 using Xunit;
 
 namespace EliteFiles.Tests

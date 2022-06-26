@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Resources;
@@ -50,7 +49,7 @@ namespace EliteChroma.Internal.UI
         }
 
         [ExcludeFromCodeCoverage]
-        public override object GetValue(object component)
+        public override object? GetValue(object? component)
         {
             return _descriptor.GetValue(component);
         }
@@ -62,7 +61,7 @@ namespace EliteChroma.Internal.UI
         }
 
         [ExcludeFromCodeCoverage]
-        public override void SetValue(object component, object value)
+        public override void SetValue(object? component, object? value)
         {
             _descriptor.SetValue(component, value);
         }

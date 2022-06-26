@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using EliteChroma.Core.Internal;
 
-namespace EliteChroma.Elite.Internal
+namespace EliteChroma.Core.Elite.Internal
 {
     internal static class KeyboardLayoutMap
     {
@@ -26,7 +24,7 @@ namespace EliteChroma.Elite.Internal
 
         public static IntPtr GetKeyboardLayout(string keyboardLayout, INativeMethods nativeMethods)
         {
-            _ = keyboardLayout ?? throw new ArgumentNullException(nameof(keyboardLayout));
+            ArgumentNullException.ThrowIfNull(keyboardLayout);
 
             if (_keyboardLayouts.TryGetValue(keyboardLayout, out IntPtr hkl1))
             {

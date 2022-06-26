@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using ChromaWrapper;
-using EliteChroma.Elite;
+﻿using ChromaWrapper;
+using EliteChroma.Core.Elite;
 
 namespace EliteChroma.Core.Layers
 {

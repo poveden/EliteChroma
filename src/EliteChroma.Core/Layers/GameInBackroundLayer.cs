@@ -1,5 +1,4 @@
-﻿using System;
-using EliteChroma.Chroma;
+﻿using EliteChroma.Core.Chroma;
 
 namespace EliteChroma.Core.Layers
 {

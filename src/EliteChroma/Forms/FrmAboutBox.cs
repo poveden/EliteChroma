@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Windows.Forms;
 using EliteChroma.Internal;
 
 namespace EliteChroma.Forms
@@ -22,7 +21,7 @@ namespace EliteChroma.Forms
             textBoxDescription.Text = ai.Description;
         }
 
-        private void LinkCompanyName_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkCompanyName_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             // Reference: https://stackoverflow.com/a/53245993/400347
             var ps = new ProcessStartInfo((string)e.Link.LinkData)

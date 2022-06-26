@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using EliteFiles.Internal;
+﻿using EliteFiles.Internal;
 using EliteFiles.Status.Internal;
 
 namespace EliteFiles
@@ -126,10 +122,7 @@ namespace EliteFiles
         /// <exception cref="ArgumentException"><paramref name="gameInstallFolder"/> is not a valid game install folder.</exception>
         public static GameInstallFolder AssertValid(GameInstallFolder gameInstallFolder)
         {
-            if (gameInstallFolder == null)
-            {
-                throw new ArgumentNullException(nameof(gameInstallFolder));
-            }
+            ArgumentNullException.ThrowIfNull(gameInstallFolder);
 
             if (!gameInstallFolder.IsValid)
             {
