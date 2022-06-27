@@ -1,17 +1,9 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing.Drawing2D;
-using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
 using EliteChroma.Core;
-using EliteChroma.Internal;
-using EliteChroma.Internal.UI;
 using EliteChroma.Properties;
-using EliteFiles;
 
 namespace EliteChroma.Forms
 {
-    [ExcludeFromCodeCoverage]
     internal partial class FrmAppSettings : Form
     {
         private const string _gameFoldersSection = "GameFolders";
@@ -20,67 +12,47 @@ namespace EliteChroma.Forms
         private const string _colorsSection = "Colors";
 
         private readonly HashSet<string> _sectionErrors = new HashSet<string>(StringComparer.Ordinal);
-        private readonly List<ToolStripMenuItem> _gameInstallFolders;
-
-        static FrmAppSettings()
-        {
-            ChromaColorsMetadata.InitTypeDescriptionProvider();
-        }
 
         public FrmAppSettings()
         {
             InitializeComponent();
             InitializeComponentInternal();
-
-            _gameInstallFolders = CreateGameInstallFolderMenuItems();
-            tsmiGameInstallBrowse.Click += TsmiGameInstallBrowse_Click;
-
-            string[] urls = new[]
-            {
-                Resources.Url_GameInstallFoldersHelp,
-                Resources.Url_GameOptionsFolderHelp,
-                Resources.Url_JournalFolderHelp,
-            };
-
-            ApplyLinks(linkGameFolders, urls);
-            ApplyIcon(pbInformation, SystemIcons.Information);
-            ApplyIcon(pbWarning, SystemIcons.Warning);
         }
 
         public string GameInstallFolder
         {
-            get => txtGameInstall.Text;
-            set => txtGameInstall.Text = value;
+            get => pgGameFolders.GameInstallFolder;
+            set => pgGameFolders.GameInstallFolder = value;
         }
 
         public string GameOptionsFolder
         {
-            get => txtGameOptions.Text;
-            set => txtGameOptions.Text = value;
+            get => pgGameFolders.GameOptionsFolder;
+            set => pgGameFolders.GameOptionsFolder = value;
         }
 
         public string JournalFolder
         {
-            get => txtJournal.Text;
-            set => txtJournal.Text = value;
+            get => pgGameFolders.JournalFolder;
+            set => pgGameFolders.JournalFolder = value;
         }
 
         public bool DetectGameInForeground
         {
-            get => chDetectGameProcess.Checked;
-            set => chDetectGameProcess.Checked = value;
+            get => pgGeneral.DetectGameInForeground;
+            set => pgGeneral.DetectGameInForeground = value;
         }
 
         public bool ForceEnUSKeyboardLayout
         {
-            get => chEnUSOverride.Checked;
-            set => chEnUSOverride.Checked = value;
+            get => pgKeyboard.ForceEnUSKeyboardLayout;
+            set => pgKeyboard.ForceEnUSKeyboardLayout = value;
         }
 
         public ChromaColors Colors
         {
-            get => (ChromaColors)pgColors.SelectedObject;
-            set => pgColors.SelectedObject = value;
+            get => pgColors.Colors;
+            set => pgColors.Colors = value;
         }
 
         public override bool ValidateChildren()
@@ -90,201 +62,24 @@ namespace EliteChroma.Forms
             return res;
         }
 
-        private static void ApplyLinks(LinkLabel linkLabel, IEnumerable<string> urls)
-        {
-            string template = linkLabel.Text;
-            var finalTxt = new StringBuilder(template.Length);
-            int j = -1;
-
-            foreach (string url in urls)
-            {
-                int i = template.IndexOf('{', j + 1);
-                _ = finalTxt.Append(template, j + 1, i - j - 1);
-
-                j = template.IndexOf('}', i + 1);
-                int l = j - i - 1;
-                string linkTxt = template.Substring(i + 1, l);
-
-                _ = linkLabel.Links.Add(new LinkLabel.Link(finalTxt.Length, l, url));
-                _ = finalTxt.Append(linkTxt);
-            }
-
-            _ = finalTxt.Append(template, j + 1, template.Length - j - 1);
-
-            linkLabel.Text = finalTxt.ToString();
-        }
-
-        private static void ApplyIcon(PictureBox pictureBox, Icon icon)
-        {
-            pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
-
-            using var g = Graphics.FromImage(pictureBox.Image);
-
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            g.DrawImage(Bitmap.FromHicon(icon.Handle), pictureBox.DisplayRectangle);
-        }
-
-        private List<ToolStripMenuItem> CreateGameInstallFolderMenuItems()
-        {
-            var res = new List<ToolStripMenuItem>();
-
-            IEnumerable<string> allPossibleFolders = EliteFiles.GameInstallFolder.DefaultPaths
-                .Concat(EliteFiles.GameInstallFolder.GetAlternatePaths())
-                .Where(Directory.Exists);
-
-            foreach (string folder in allPossibleFolders)
-            {
-                var mi = new ToolStripMenuItem
-                {
-                    Text = folder.Replace("&", "&&", StringComparison.Ordinal),
-                    Tag = folder,
-                };
-
-                mi.Click += TsmiGameInstallFolder_Click;
-
-                res.Add(mi);
-            }
-
-            return res;
-        }
-
         private void InitializeComponentInternal()
         {
             tvSections.DrawMode = TreeViewDrawMode.OwnerDrawText;
-            tvSections.Nodes[_gameFoldersSection].Tag = grpEDFolders;
-            tvSections.Nodes[_generalSection].Tag = pnlGeneral;
-            tvSections.Nodes[_keyboardSection].Tag = pnlKeyboard;
-            tvSections.Nodes[_colorsSection].Tag = pnlColors;
+            tvSections.Nodes[_gameFoldersSection].Tag = pgGameFolders;
+            tvSections.Nodes[_generalSection].Tag = pgGeneral;
+            tvSections.Nodes[_keyboardSection].Tag = pgKeyboard;
+            tvSections.Nodes[_colorsSection].Tag = pgColors;
         }
 
+        [ExcludeFromCodeCoverage]
         private void AppSettings_Load(object? sender, EventArgs e)
         {
             tvSections.SelectedNode = tvSections.Nodes[0];
 
-            pgColors.SelectedGridItem = pgColors.GetGridItems()[0];
-
-            for (int i = 0; i < _gameInstallFolders.Count; i++)
-            {
-                ctxGameInstall.Items.Insert(i, _gameInstallFolders[i]);
-            }
-
             _ = ValidateChildren();
         }
 
-        private void CtxGameInstall_Opening(object? sender, CancelEventArgs e)
-        {
-            foreach (ToolStripMenuItem item in _gameInstallFolders)
-            {
-                item.Checked = txtGameInstall.Text == (string)item.Tag;
-            }
-        }
-
-        private void TsmiGameInstallFolder_Click(object? sender, EventArgs e)
-        {
-            var item = (ToolStripMenuItem)sender!;
-            txtGameInstall.Text = (string)item.Tag;
-            _ = ValidateChildren();
-        }
-
-        private void TsmiGameInstallBrowse_Click(object? sender, EventArgs e)
-        {
-            folderBrowser.Description = Resources.FolderDialogDescription_GameInstallFolder;
-            folderBrowser.SelectedPath = txtGameInstall.Text;
-
-            if (folderBrowser.ShowDialog() == DialogResult.OK)
-            {
-                string path = folderBrowser.SelectedPath;
-
-                if (!new GameInstallFolder(path).IsValid)
-                {
-                    // Perhaps the user chose the base folder where all E:D variants are installed
-                    foreach (string edPath in new[]
-                    {
-                        @"Products\elite-dangerous-64",
-                        @"Products\elite-dangerous-odyssey-64",
-                    })
-                    {
-                        string ed64SubPath = Path.Combine(path, edPath);
-
-                        if (new GameInstallFolder(ed64SubPath).IsValid)
-                        {
-                            path = ed64SubPath;
-                            break;
-                        }
-                    }
-                }
-
-                txtGameInstall.Text = path;
-                _ = ValidateChildren();
-            }
-        }
-
-        private void BtnGameOptions_Click(object? sender, EventArgs e)
-        {
-            folderBrowser.Description = Resources.FolderDialogDescription_GameOptionsFolder;
-            folderBrowser.SelectedPath = txtGameOptions.Text;
-
-            if (folderBrowser.ShowDialog() == DialogResult.OK)
-            {
-                txtGameOptions.Text = folderBrowser.SelectedPath;
-                _ = ValidateChildren();
-            }
-        }
-
-        private void BtnJournal_Click(object? sender, EventArgs e)
-        {
-            folderBrowser.Description = Resources.FolderDialogDescription_JournalFolder;
-            folderBrowser.SelectedPath = txtJournal.Text;
-
-            if (folderBrowser.ShowDialog() == DialogResult.OK)
-            {
-                txtJournal.Text = folderBrowser.SelectedPath;
-                _ = ValidateChildren();
-            }
-        }
-
-        private void TxtGameInstall_Validating(object? sender, CancelEventArgs e)
-        {
-            if (!new GameInstallFolder(txtGameInstall.Text).IsValid)
-            {
-                e.Cancel = true;
-                SetError(_gameFoldersSection, txtGameInstall, "Invalid game install folder");
-            }
-        }
-
-        private void TxtGameInstall_Validated(object? sender, EventArgs e)
-        {
-            SetError(_gameFoldersSection, txtGameInstall, string.Empty);
-        }
-
-        private void TxtGameOptions_Validating(object? sender, CancelEventArgs e)
-        {
-            if (!new GameOptionsFolder(txtGameOptions.Text).IsValid)
-            {
-                e.Cancel = true;
-                SetError(_gameFoldersSection, txtGameOptions, "Invalid game options folder");
-            }
-        }
-
-        private void TxtGameOptions_Validated(object? sender, EventArgs e)
-        {
-            SetError(_gameFoldersSection, txtGameOptions, string.Empty);
-        }
-
-        private void TxtJournal_Validating(object? sender, CancelEventArgs e)
-        {
-            if (!new JournalFolder(txtJournal.Text).IsValid)
-            {
-                e.Cancel = true;
-                SetError(_gameFoldersSection, txtJournal, "Invalid journal folder");
-            }
-        }
-
-        private void TxtJournal_Validated(object? sender, EventArgs e)
-        {
-            SetError(_gameFoldersSection, txtJournal, string.Empty);
-        }
-
+        [ExcludeFromCodeCoverage]
         private void BtnOK_Click(object? sender, EventArgs e)
         {
             if (ValidateChildren())
@@ -294,18 +89,7 @@ namespace EliteChroma.Forms
             }
         }
 
-        private void LinkGameFolders_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
-        {
-            // Reference: https://stackoverflow.com/a/53245993/400347
-            var ps = new ProcessStartInfo((string)e.Link.LinkData)
-            {
-                UseShellExecute = true,
-                Verb = "open",
-            };
-
-            Process.Start(ps)?.Dispose();
-        }
-
+        [ExcludeFromCodeCoverage]
         private void TvSections_AfterSelect(object? sender, TreeViewEventArgs e)
         {
             ((Control)e.Node!.Tag).Visible = true;
@@ -321,6 +105,7 @@ namespace EliteChroma.Forms
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void TvSections_DrawNode(object? sender, DrawTreeNodeEventArgs e)
         {
             Brush b = e.State.HasFlag(TreeNodeStates.Focused) ? SystemBrushes.HighlightText : SystemBrushes.ControlText;
@@ -337,6 +122,18 @@ namespace EliteChroma.Forms
             e.Graphics.DrawImageUnscaledAndClipped(Resources.RedDot, r);
         }
 
+        private void PgGameFolders_Error(object? sender, string e)
+        {
+            var control = (Control)sender!;
+
+            if (control is TextBox textBox)
+            {
+                errorProvider.SetIconPadding(textBox, -20);
+            }
+
+            SetError(_gameFoldersSection, control, e);
+        }
+
         private void SetError(string sectionKey, Control control, string value)
         {
             errorProvider.SetError(control, value);
@@ -349,6 +146,8 @@ namespace EliteChroma.Forms
             {
                 _ = _sectionErrors.Add(sectionKey);
             }
+
+            tvSections.Refresh();
         }
     }
 }
