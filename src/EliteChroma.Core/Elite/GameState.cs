@@ -53,27 +53,13 @@ namespace EliteChroma.Core.Elite
 
         public GameColors Colors { get; private set; }
 
-        public string? MusicTrack { get; internal set; }
+        public Music.Track MusicTrack { get; internal set; }
 
         public StartJump.FsdJumpType FsdJumpType { get; internal set; }
 
         public string? FsdJumpStarClass { get; internal set; }
 
         public DateTimeOffset FsdJumpChange { get; internal set; }
-
-        public bool InMainMenu => MusicTrack == "MainMenu";
-
-        public bool InGalacticPowers => MusicTrack == "GalacticPowers";
-
-        public bool InSquadronsView => MusicTrack == "Squadrons";
-
-        public bool InGalaxyMap => MusicTrack == "GalaxyMap";
-
-        public bool InSystemMap => MusicTrack == "SystemMap";
-
-        public bool InCodex => MusicTrack == "Codex";
-
-        public bool InFleetCarrierManagement => MusicTrack == "FleetCarrier_Managment";
 
         public UnderAttack.AttackTarget AttackTarget { get; internal set; }
 
@@ -106,7 +92,7 @@ namespace EliteChroma.Core.Elite
                     GuiFocus.CommsPanel or
                     GuiFocus.RolePanel or
                     GuiFocus.StationServices
-                    => !InGalacticPowers && !InSquadronsView,
+                    => MusicTrack is not Music.Track.GalacticPowers and not Music.Track.Squadrons,
 
                     GuiFocus.GalaxyMap or
                     GuiFocus.SystemMap or
@@ -125,7 +111,17 @@ namespace EliteChroma.Core.Elite
         {
             get
             {
-                if (!Status.HasFlag(Flags2.OnFoot) || InGalaxyMap || InSystemMap || InGalacticPowers || InSquadronsView || InCodex || InFleetCarrierManagement)
+                if (!Status.HasFlag(Flags2.OnFoot))
+                {
+                    return false;
+                }
+
+                if (Status.GuiFocus is GuiFocus.GalaxyMap or GuiFocus.SystemMap or GuiFocus.Codex)
+                {
+                    return false;
+                }
+
+                if (MusicTrack is Music.Track.GalacticPowers or Music.Track.Squadrons or Music.Track.FleetCarrierManagment)
                 {
                     return false;
                 }

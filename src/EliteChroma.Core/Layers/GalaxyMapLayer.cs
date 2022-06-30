@@ -11,7 +11,7 @@ namespace EliteChroma.Core.Layers
     {
         protected override void OnRender(ChromaCanvas canvas)
         {
-            if (Game.Status.GuiFocus != GuiFocus.GalaxyMap && !Game.InGalaxyMap)
+            if (Game.Status.GuiFocus != GuiFocus.GalaxyMap)
             {
                 return;
             }
