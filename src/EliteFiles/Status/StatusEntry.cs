@@ -140,6 +140,18 @@ namespace EliteFiles.Status
         public double? PlanetRadius { get; set; }
 
         /// <summary>
+        /// Gets or sets the pilot's balance in credits.
+        /// </summary>
+        [JsonPropertyName("Balance")]
+        public long? Balance { get; set; }
+
+        /// <summary>
+        /// Gets or sets the currently selected destination.
+        /// </summary>
+        [JsonPropertyName("Destination")]
+        public Destination? Destination { get; set; }
+
+        /// <summary>
         /// Gets a collection of additional fields that may be included in the status.
         /// </summary>
         [JsonExtensionData]
