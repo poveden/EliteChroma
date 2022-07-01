@@ -8,9 +8,6 @@ namespace EliteFiles.Status
     /// <summary>
     /// Represents an Elite:Dangerous game status entry.
     /// </summary>
-    /// <remarks>
-    /// Reference: <a href="https://hosting.zaonce.net/community/journal/v31/Journal_Manual_v31.pdf">Elite:Dangerous Player Journal</a>.
-    /// </remarks>
     public sealed class StatusEntry
     {
         private readonly Dictionary<string, JsonElement> _additionalFields = new Dictionary<string, JsonElement>(StringComparer.Ordinal);

@@ -65,5 +65,6 @@ We follow the [Contributor Covenant Code of Conduct](https://github.com/poveden/
 ## Attributions
 
 - [Frontier Developments](https://www.frontier.co.uk/), creators of such a wonderful game.
+- [Elite Dangerous Player Journal](https://hosting.zaonce.net/community/journal/v35/Journal_Manual_v35.pdf) ([Frontier Forums thread](https://forums.frontier.co.uk/threads/journal-docs-for-odyssey-release.575010/))
 - Heavy inspiration from the [EliteAPI .NET library](https://github.com/EliteAPI/EliteAPI).
 - [WiX Toolset](https://wixtoolset.org/) used for creating Windows Installer packages.
