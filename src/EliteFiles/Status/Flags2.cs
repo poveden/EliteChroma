@@ -59,5 +59,11 @@
 
         /// <summary>Breathable atmosphere.</summary>
         BreathableAtmosphere = 1 << 16,
+
+        /// <summary>Telepresence multicrew.</summary>
+        TelepresenceMulticrew = 1 << 17,
+
+        /// <summary>PhysicalMulticrew.</summary>
+        PhysicalMulticrew = 1 << 18,
     }
 }
