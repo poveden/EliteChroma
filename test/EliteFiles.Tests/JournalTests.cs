@@ -11,7 +11,7 @@ namespace EliteFiles.Tests
     {
         private const string _journalFolder = @"TestFiles\Journal";
         private const string _journalFile1 = "Journal.190101020000.01.log";
-        private const int _journalFile1Count = 7;
+        private const int _journalFile1Count = 8;
 
         private readonly JournalFolder _jf;
 
@@ -121,6 +121,12 @@ namespace EliteFiles.Tests
             var ua = Assert.IsType<UnderAttack>(entries.Dequeue());
             Assert.Equal(UnderAttack.AttackTarget.You, ua.Target);
 
+            var ft = Assert.IsType<FsdTarget>(entries.Dequeue());
+            Assert.Equal("Wolf 1301", ft.Name);
+            Assert.Equal(1458242032322, ft.SystemAddress);
+            Assert.Equal("G", ft.StarClass);
+            Assert.Equal(1, ft.RemainingJumpsInRoute);
+
             var sj = Assert.IsType<StartJump>(entries.Dequeue());
             Assert.Equal(StartJump.FsdJumpType.Hyperspace, sj.JumpType);
             Assert.Equal("Wolf 1301", sj.StarSystem);
@@ -227,6 +233,7 @@ namespace EliteFiles.Tests
             Assert.IsType<LoadGame>(entries.Dequeue());
             Assert.IsType<Music>(entries.Dequeue());
             Assert.IsType<UnderAttack>(entries.Dequeue());
+            Assert.IsType<FsdTarget>(entries.Dequeue());
             Assert.IsType<StartJump>(entries.Dequeue());
             Assert.IsType<JournalEntry>(entries.Dequeue());
             Assert.IsType<Shutdown>(entries.Dequeue());
