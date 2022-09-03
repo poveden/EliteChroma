@@ -15,7 +15,9 @@ namespace EliteChroma
         {
             using var mutex = new Mutex(true, $"{nameof(EliteChroma)}-SingleInstance-Mutex");
 
+#pragma warning disable S2222 // False positive
             bool isSingleInstance = mutex.WaitOne(0, true);
+#pragma warning restore S2222
 
             try
             {
