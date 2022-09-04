@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Text.Json.Serialization.Metadata;
 using EliteFiles.Internal;
 using EliteFiles.Journal;
@@ -33,7 +34,8 @@ namespace EliteFiles.Tests
             Assert.ProperSubset(serializerContextTypes, converterTypes);
         }
 
-        private static IEnumerable<object[]> GetAllEventHandlers()
+        [SuppressMessage("OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Theory data")]
+        public static IEnumerable<object[]> GetAllEventHandlers()
         {
             return MetaTestsCommon.GetAllEventHandlers(typeof(JournalFolder).Assembly);
         }
