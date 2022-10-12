@@ -24,6 +24,7 @@ namespace EliteFiles
         {
             "elite-dangerous-64",
             "elite-dangerous-odyssey-64",
+            "FORC-FDEV-DO-38-IN-40",
         };
 
         private static readonly Lazy<string[]> _defaultPaths = new Lazy<string[]>(() =>

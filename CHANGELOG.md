@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fix discovery of Epic- and Oculus-based installation folders
 
+### Added
+
+- Add discovery for Horizons 3.8 to 4.0 side update installation folder
+
 ## [1.17.0](https://github.com/poveden/EliteChroma/compare/v1.16.3...v1.17.0) — 2022-09-03
 
 ### Fixed
