@@ -9,13 +9,26 @@ namespace EliteFiles.Tests
     public sealed class GameFoldersTests
     {
         [Fact]
+        public void GetsTheListOfKnownProductFolderNames()
+        {
+            string[] expected = new[]
+            {
+                "elite-dangerous-64",
+                "elite-dangerous-odyssey-64",
+            };
+
+            Assert.Equal(expected, GameInstallFolder.KnownProductFolderNames);
+        }
+
+        [Fact]
         public void GetsTheListOfDefaultGameInstallFolders()
         {
-            Assert.True(GameInstallFolder.DefaultPaths.Count == 9);
+            Assert.Equal(10, GameInstallFolder.DefaultPaths.Count);
             Assert.All(
                 GameInstallFolder.DefaultPaths,
-                x => Assert.True(x.Contains(@"\Oculus\", StringComparison.Ordinal)
-                ^ (x.EndsWith(@"\Products\elite-dangerous-64", StringComparison.Ordinal) || x.EndsWith(@"\Products\elite-dangerous-odyssey-64", StringComparison.Ordinal))));
+                x => Assert.True(
+                    x.EndsWith(@"\Products\elite-dangerous-64", StringComparison.Ordinal)
+                    || x.EndsWith(@"\Products\elite-dangerous-odyssey-64", StringComparison.Ordinal)));
         }
 
         [Fact]

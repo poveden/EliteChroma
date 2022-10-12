@@ -151,11 +151,7 @@ namespace EliteChroma.Forms.Pages
                 if (!new GameInstallFolder(path).IsValid)
                 {
                     // Perhaps the user chose the base folder where all E:D variants are installed
-                    foreach (string edPath in new[]
-                    {
-                        @"Products\elite-dangerous-64",
-                        @"Products\elite-dangerous-odyssey-64",
-                    })
+                    foreach (string edPath in EliteFiles.GameInstallFolder.KnownProductFolderNames)
                     {
                         string ed64SubPath = Path.Combine(path, edPath);
 
