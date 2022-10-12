@@ -9,13 +9,28 @@ namespace EliteFiles.Tests
     public sealed class GameFoldersTests
     {
         [Fact]
+        public void GetsTheListOfKnownProductFolderNames()
+        {
+            string[] expected = new[]
+            {
+                "elite-dangerous-64",
+                "elite-dangerous-odyssey-64",
+                "FORC-FDEV-DO-38-IN-40",
+            };
+
+            Assert.Equal(expected, GameInstallFolder.KnownProductFolderNames);
+        }
+
+        [Fact]
         public void GetsTheListOfDefaultGameInstallFolders()
         {
-            Assert.True(GameInstallFolder.DefaultPaths.Count == 9);
+            Assert.Equal(15, GameInstallFolder.DefaultPaths.Count);
             Assert.All(
                 GameInstallFolder.DefaultPaths,
-                x => Assert.True(x.Contains(@"\Oculus\", StringComparison.Ordinal)
-                ^ (x.EndsWith(@"\Products\elite-dangerous-64", StringComparison.Ordinal) || x.EndsWith(@"\Products\elite-dangerous-odyssey-64", StringComparison.Ordinal))));
+                x => Assert.True(
+                    x.EndsWith(@"\Products\elite-dangerous-64", StringComparison.Ordinal)
+                    || x.EndsWith(@"\Products\elite-dangerous-odyssey-64", StringComparison.Ordinal)
+                    || x.EndsWith(@"\Products\FORC-FDEV-DO-38-IN-40", StringComparison.Ordinal)));
         }
 
         [Fact]
@@ -29,10 +44,13 @@ namespace EliteFiles.Tests
             {
                 @"INSTALLPATH\Products\elite-dangerous-64",
                 @"INSTALLPATH\Products\elite-dangerous-odyssey-64",
+                @"INSTALLPATH\Products\FORC-FDEV-DO-38-IN-40",
                 @"C:\Games\Path1\steamapps\common\Elite Dangerous\Products\elite-dangerous-64",
                 @"C:\Games\Path1\steamapps\common\Elite Dangerous\Products\elite-dangerous-odyssey-64",
+                @"C:\Games\Path1\steamapps\common\Elite Dangerous\Products\FORC-FDEV-DO-38-IN-40",
                 @"D:\steamapps\common\Elite Dangerous\Products\elite-dangerous-64",
                 @"D:\steamapps\common\Elite Dangerous\Products\elite-dangerous-odyssey-64",
+                @"D:\steamapps\common\Elite Dangerous\Products\FORC-FDEV-DO-38-IN-40",
             };
 
             Assert.Equal(expectedPaths, paths);

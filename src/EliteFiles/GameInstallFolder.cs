@@ -20,23 +20,39 @@ namespace EliteFiles
         /// <summary>«GameInstallFolder»\d3dx.ini.</summary>
         private const string D3DXIniFileName = "d3dx.ini";
 
+        private static readonly string[] _knownProductFolderNames = new[]
+        {
+            "elite-dangerous-64",
+            "elite-dangerous-odyssey-64",
+            "FORC-FDEV-DO-38-IN-40",
+        };
+
         private static readonly Lazy<string[]> _defaultPaths = new Lazy<string[]>(() =>
         {
-            string programFilesFolder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            string programFilesX86Folder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            string programFilesFolder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             string localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-            return new[]
+            string[] folders = new[]
             {
-                Path.Combine(programFilesFolder, @"Frontier\Products\elite-dangerous-64"),
-                Path.Combine(programFilesFolder, @"Frontier\Products\elite-dangerous-odyssey-64"),
-                Path.Combine(programFilesFolder, @"Epic Games\EliteDangerous\Products\elite-dangerous-64"),
-                Path.Combine(programFilesFolder, @"Epic Games\EliteDangerous\Products\elite-dangerous-odyssey-64"),
-                Path.Combine(programFilesFolder, @"Steam\steamapps\common\Elite Dangerous\Products\elite-dangerous-64"),
-                Path.Combine(programFilesFolder, @"Steam\steamapps\common\Elite Dangerous\Products\elite-dangerous-odyssey-64"),
+                Path.Combine(programFilesX86Folder, @"Frontier"),
+                Path.Combine(programFilesFolder, @"Epic Games\EliteDangerous"),
+                Path.Combine(programFilesX86Folder, @"Steam\steamapps\common\Elite Dangerous"),
                 Path.Combine(programFilesFolder, @"Oculus\Software\frontier-developments-plc-elite-dangerous"),
-                Path.Combine(localAppDataFolder, @"Frontier_Developments\Products\elite-dangerous-64"),
-                Path.Combine(localAppDataFolder, @"Frontier_Developments\Products\elite-dangerous-odyssey-64"),
+                Path.Combine(localAppDataFolder, @"Frontier_Developments"),
             };
+
+            var res = new List<string>();
+
+            foreach (string folder in folders)
+            {
+                foreach (string product in _knownProductFolderNames)
+                {
+                    res.Add(Path.Combine(folder, "Products", product));
+                }
+            }
+
+            return res.ToArray();
         });
 
         private readonly DirectoryInfo _di;
@@ -60,6 +76,15 @@ namespace EliteFiles
                 && ControlSchemes.Exists
                 && ControlSchemes.EnumerateFiles("*.binds").Any();
         }
+
+        /// <summary>
+        /// Gets the set of known product folder names where Elite:Dangerous may be installed.
+        /// </summary>
+        /// <remarks>
+        /// Different versions of the game (e.g. Horizons, Odyssey) can be installed alongside each other,
+        /// and they have their own folder under the <c>Products</c> folder in the game install folder.
+        /// </remarks>
+        public static IReadOnlyCollection<string> KnownProductFolderNames => _knownProductFolderNames;
 
         /// <summary>
         /// Gets the set of default folder paths where Elite:Dangerous may be installed.
@@ -142,16 +167,20 @@ namespace EliteFiles
 
             if (launcherPath != null)
             {
-                yield return Path.Combine(launcherPath, @"Products\elite-dangerous-64");
-                yield return Path.Combine(launcherPath, @"Products\elite-dangerous-odyssey-64");
+                foreach (string product in _knownProductFolderNames)
+                {
+                    yield return Path.Combine(launcherPath, "Products", product);
+                }
             }
 
             var steamLibraryFolders = SteamLibraryFolders.FromFile(steamLibraryPath);
 
             foreach (string folder in steamLibraryFolders)
             {
-                yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-64");
-                yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products\elite-dangerous-odyssey-64");
+                foreach (string product in _knownProductFolderNames)
+                {
+                    yield return Path.Combine(folder, @"steamapps\common\Elite Dangerous\Products", product);
+                }
             }
         }
     }
