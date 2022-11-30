@@ -10,9 +10,9 @@ namespace EliteChroma.Core.Elite.Internal
 {
     internal sealed class ModifierKeysWatcher : NativeMethodsAccessor, IDisposable
     {
-        private readonly Dictionary<VirtualKey, DeviceKey> _watch;
         private readonly Timer _timer;
 
+        private Dictionary<VirtualKey, DeviceKey> _watch;
         private DeviceKeySet? _currPressed;
         private bool _running;
         private bool _disposed;
@@ -35,15 +35,17 @@ namespace EliteChroma.Core.Elite.Internal
 
         public void Watch(IEnumerable<DeviceKey> modifiers, string? keyboardLayout, bool enUSOverride)
         {
-            _watch.Clear();
+            var watch = new Dictionary<VirtualKey, DeviceKey>();
 
             foreach (DeviceKey m in modifiers.Where(x => x.Device == Device.Keyboard && x.Key != null))
             {
                 if (KeyMappings.TryGetKey(m.Key!, keyboardLayout, enUSOverride, out VirtualKey key, NativeMethods))
                 {
-                    _watch[key] = m;
+                    watch[key] = m;
                 }
             }
+
+            _watch = watch;
         }
 
         public void Start()
