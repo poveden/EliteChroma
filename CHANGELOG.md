@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Fix discovery of Epic- and Oculus-based installation folders
+- Fix crash when game bindings are reloaded while modifier keys are being scanned
 
 ### Added
 
