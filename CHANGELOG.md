@@ -10,10 +10,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Fix discovery of Epic- and Oculus-based installation folders
 - Fix crash when game bindings are reloaded while modifier keys are being scanned
+- Fix crash when entering Thargoid-controlled space
 
 ### Added
 
 - Add discovery for Horizons 3.8 to 4.0 side update installation folder
+- Add glitch effects while in Thargoid-controlled space
 
 ## [1.17.0](https://github.com/poveden/EliteChroma/compare/v1.16.3...v1.17.0) — 2022-09-03
 

@@ -41,12 +41,18 @@ namespace EliteFiles.Tests
             Assert.Equal(0.63, status.Fuel.FuelReservoir);
             Assert.Equal(0, status.Cargo);
             Assert.Equal(LegalState.Clean, status.LegalState);
+            Assert.Equal(5880918996, status.Balance);
             Assert.Equal(-12.955701, status.Latitude);
             Assert.Equal(6.249895, status.Longitude);
             Assert.Equal(49, status.Heading);
             Assert.Equal(2516467, status.Altitude);
             Assert.Equal("Shinrarta Dezhra A 1", status.BodyName);
             Assert.Equal(5635897, status.PlanetRadius);
+            Assert.NotNull(status.Destination);
+            Assert.Equal(671491302809, status.Destination!.System);
+            Assert.Equal(25, status.Destination.Body);
+            Assert.Equal("RotslerArsenal", status.Destination.Name);
+            Assert.Equal("Rotsler Arsenal", status.Destination.NameLocalized);
             Assert.Equal(2, status.AdditionalFields.Count);
             Assert.Equal("Energylink", status.AdditionalFields["SelectedWeapon_Localised"].ToString());
             Assert.Equal("AdditionalValue1", status.AdditionalFields["AdditionalField1"].ToString());

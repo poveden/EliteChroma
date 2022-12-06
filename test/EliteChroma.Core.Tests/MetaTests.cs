@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using TestUtils;
 using Xunit;
 
@@ -13,7 +14,8 @@ namespace EliteChroma.Core.Tests
             MetaTestsCommon.AssertSenderParameterIsNullable(eventHandler);
         }
 
-        private static IEnumerable<object[]> GetAllEventHandlers()
+        [SuppressMessage("OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Theory data")]
+        public static IEnumerable<object[]> GetAllEventHandlers()
         {
             return MetaTestsCommon.GetAllEventHandlers(typeof(ChromaController).Assembly);
         }

@@ -3,6 +3,7 @@ using ChromaWrapper;
 using ChromaWrapper.Keyboard;
 using EliteChroma.Core.Chroma;
 using EliteChroma.Core.Elite;
+using EliteFiles.Journal.Events;
 using EliteFiles.Status;
 
 namespace EliteChroma.Core.Layers
@@ -91,7 +92,7 @@ namespace EliteChroma.Core.Layers
             {
                 Keyboard = c.Transform(Colors.KeyboardDimBrightness),
                 Device = hardpointsDeployed ? c : c.Transform(Colors.DeviceDimBrightness),
-                Logo = Game.InMainMenu ? GameColors.EliteOrange : c,
+                Logo = Game.MusicTrack == Music.Track.MainMenu ? GameColors.EliteOrange : c,
             };
         }
 

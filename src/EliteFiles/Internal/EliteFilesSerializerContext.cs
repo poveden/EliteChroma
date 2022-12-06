@@ -9,6 +9,7 @@ namespace EliteFiles.Internal
     [JsonSerializable(typeof(StatusEntry))]
     [JsonSerializable(typeof(JournalEntry))]
     [JsonSerializable(typeof(FileHeader))]
+    [JsonSerializable(typeof(FsdTarget))]
     [JsonSerializable(typeof(LoadGame))]
     [JsonSerializable(typeof(Music))]
     [JsonSerializable(typeof(Shutdown))]

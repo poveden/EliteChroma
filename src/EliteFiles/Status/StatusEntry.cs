@@ -8,9 +8,6 @@ namespace EliteFiles.Status
     /// <summary>
     /// Represents an Elite:Dangerous game status entry.
     /// </summary>
-    /// <remarks>
-    /// Reference: <a href="https://hosting.zaonce.net/community/journal/v31/Journal_Manual_v31.pdf">Elite:Dangerous Player Journal</a>.
-    /// </remarks>
     public sealed class StatusEntry
     {
         private readonly Dictionary<string, JsonElement> _additionalFields = new Dictionary<string, JsonElement>(StringComparer.Ordinal);
@@ -141,6 +138,18 @@ namespace EliteFiles.Status
         /// </summary>
         [JsonPropertyName("PlanetRadius")]
         public double? PlanetRadius { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pilot's balance in credits.
+        /// </summary>
+        [JsonPropertyName("Balance")]
+        public long? Balance { get; set; }
+
+        /// <summary>
+        /// Gets or sets the currently selected destination.
+        /// </summary>
+        [JsonPropertyName("Destination")]
+        public Destination? Destination { get; set; }
 
         /// <summary>
         /// Gets a collection of additional fields that may be included in the status.
