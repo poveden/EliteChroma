@@ -28,5 +28,8 @@
 
         /// <summary>Warrant.</summary>
         Warrant,
+
+        /// <summary>Thargoid.</summary>
+        Thargoid,
     }
 }
