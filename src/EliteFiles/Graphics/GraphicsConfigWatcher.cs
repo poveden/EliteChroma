@@ -1,4 +1,5 @@
 ﻿using EliteFiles.Internal;
+using static EliteFiles.Internal.LogEventSource;
 
 namespace EliteFiles.Graphics
 {
@@ -108,11 +109,13 @@ namespace EliteFiles.Graphics
 
             if (gcMain == null)
             {
+                Log.GraphicsFileCannotBeRead(_mainFile.FullName, _reloadRetries);
                 return;
             }
 
             gcMain.OverrideWith(gcOverride);
 
+            Log.GraphicsRaisingChangedEvent();
             Changed?.Invoke(this, gcMain);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using EliteFiles.Internal;
+using static EliteFiles.Internal.LogEventSource;
 
 namespace EliteFiles.Bindings
 {
@@ -101,6 +102,7 @@ namespace EliteFiles.Bindings
 
             if (bindsFiles.Count == 0)
             {
+                Log.BindingsPresetFileResolutionFailed(_reloadRetries);
                 return;
             }
 
@@ -119,6 +121,7 @@ namespace EliteFiles.Bindings
 
                 if (bindingPreset == null)
                 {
+                    Log.BindingsFileCannotBeRead(bindsFile, _reloadRetries);
                     return;
                 }
 
@@ -129,6 +132,7 @@ namespace EliteFiles.Bindings
 
             var merged = BindingPreset.MergeFromCategories(binds);
 
+            Log.BindingsRaisingChangedEvent();
             Changed?.Invoke(this, merged);
         }
     }

@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using EliteFiles.Internal;
+using static EliteFiles.Internal.LogEventSource;
 
 namespace EliteFiles.Journal
 {
@@ -158,6 +159,7 @@ namespace EliteFiles.Journal
 
                 while ((entry = _journalReader?.ReadEntry()) != null)
                 {
+                    Log.JournaDispatchingEntry(_journalReader!.Name);
                     EntryAdded?.Invoke(this, entry);
                 }
 
@@ -180,6 +182,7 @@ namespace EliteFiles.Journal
                     return;
                 }
 
+                Log.JournalOpening(path);
                 _journalReader?.Dispose();
                 _journalReader = new JournalReader(path);
             }
@@ -189,6 +192,7 @@ namespace EliteFiles.Journal
         {
             lock (_journalLock)
             {
+                Log.JournalClosing(_journalReader?.Name);
                 _journalReader?.Dispose();
                 _journalReader = null;
             }

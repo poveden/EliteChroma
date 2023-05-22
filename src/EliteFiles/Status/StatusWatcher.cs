@@ -1,4 +1,5 @@
 ﻿using EliteFiles.Internal;
+using static EliteFiles.Internal.LogEventSource;
 
 namespace EliteFiles.Status
 {
@@ -90,9 +91,11 @@ namespace EliteFiles.Status
 
             if (status == null)
             {
+                Log.StatusFileCannotBeRead(_statusFile.FullName, _reloadRetries);
                 return;
             }
 
+            Log.StatusRaisingChangedEvent();
             Changed?.Invoke(this, status);
         }
     }

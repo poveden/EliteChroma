@@ -1,4 +1,5 @@
 ﻿using EliteFiles.Internal;
+using static EliteFiles.Internal.LogEventSource;
 
 namespace EliteFiles.Graphics
 {
@@ -100,6 +101,7 @@ namespace EliteFiles.Graphics
 
         private void D3DXIniWatcher_Changed(object? sender, FileSystemEventArgs e)
         {
+            Log.EdhmD3DXIniChanged(e.FullPath);
             Reload(true);
         }
 
@@ -107,9 +109,11 @@ namespace EliteFiles.Graphics
         {
             if (!_files.Contains(e.FullPath))
             {
+                Log.EdhmIncludesIgnored(e.FullPath);
                 return;
             }
 
+            Log.EdhmIncludesChanged(e.FullPath);
             Reload(false);
         }
 
@@ -126,9 +130,11 @@ namespace EliteFiles.Graphics
 
             if (edhmConfig == null)
             {
+                Log.EdhmFileCannotBeRead(_d3dxIniFile.FullName, _reloadRetries);
                 return;
             }
 
+            Log.EdhmRaisingChangedEvent();
             Changed?.Invoke(this, edhmConfig);
         }
 
