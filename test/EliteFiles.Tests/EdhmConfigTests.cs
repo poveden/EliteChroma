@@ -58,6 +58,25 @@ namespace EliteFiles.Tests
         }
 
         [Fact]
+        public void ParsesD3DXFiles()
+        {
+            var config = D3DXConfig.FromFile(_gif.D3DXIni.FullName);
+
+            Assert.NotNull(config);
+
+            Assert.Equal(4, config.Files.Count);
+            Assert.Equal(4, config.Sections.Count);
+
+            var section = config.Sections["ShaderOverride-0011223344556677"];
+
+            var entries = section.GetEntries(c => c == "ps-t1 == 100").ToList();
+            Assert.Equal(4, entries.Count);
+
+            var presetEntry = Assert.Single(entries, x => x.Name == "Preset");
+            Assert.Equal("InterdictionON", presetEntry.Value);
+        }
+
+        [Fact]
         public void DeserializesConfigFiles()
         {
             var config = EdhmConfig.FromFile(_gif.D3DXIni.FullName)!;
