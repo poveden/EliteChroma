@@ -111,11 +111,9 @@ namespace EliteChroma.Core.Tests
                 mre.Set();
             }
 
-            Task.WaitAll(new[]
-            {
+            Task.WaitAll(
                 Task.Run(OnChanged),
-                Task.Run(OnChanged),
-            });
+                Task.Run(OnChanged));
 
             watcher.Stop();
 

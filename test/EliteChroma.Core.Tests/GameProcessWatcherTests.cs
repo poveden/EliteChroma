@@ -81,11 +81,9 @@ namespace EliteChroma.Core.Tests
                 mre.Set();
             }
 
-            Task.WaitAll(new[]
-            {
+            Task.WaitAll(
                 Task.Run(() => TimerElapsed(1000)),
-                Task.Run(() => TimerElapsed(2000)),
-            });
+                Task.Run(() => TimerElapsed(2000)));
 
             Assert.Equal(1, nOnChangedCalls);
         }

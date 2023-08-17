@@ -210,11 +210,9 @@ namespace EliteChroma.Core.Tests
                 mre.Set();
             }
 
-            Task.WaitAll(new[]
-            {
+            Task.WaitAll(
                 Task.Run(RenderEffect),
-                Task.Run(RenderEffect),
-            });
+                Task.Run(RenderEffect));
 
             Assert.Equal(1, nRenderCalls);
         }

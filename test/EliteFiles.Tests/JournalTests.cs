@@ -307,6 +307,7 @@ namespace EliteFiles.Tests
             Assert.True(jr.GetPrivateField<bool>("_disposed"));
         }
 
+        [SuppressMessage("Minor Code Smell", "S2094:Classes should not be empty", Justification = "Test class")]
         private class TestEntry : JournalEntry
         {
         }

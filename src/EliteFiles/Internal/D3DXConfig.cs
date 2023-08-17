@@ -165,7 +165,7 @@ namespace EliteFiles.Internal
                 {
                     string file = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(currentFile)!, entry.Value));
 
-                    if (pendingFiles.Any(x => file.Equals(x, StringComparison.OrdinalIgnoreCase)))
+                    if (pendingFiles.Exists(x => file.Equals(x, StringComparison.OrdinalIgnoreCase)))
                     {
                         continue;
                     }
@@ -190,7 +190,7 @@ namespace EliteFiles.Internal
 
                     foreach (string file in Directory.EnumerateFiles(basePath, "*.ini", SearchOption.AllDirectories))
                     {
-                        if (pendingFiles.Any(x => file.Equals(x, StringComparison.OrdinalIgnoreCase)))
+                        if (pendingFiles.Exists(x => file.Equals(x, StringComparison.OrdinalIgnoreCase)))
                         {
                             continue;
                         }
