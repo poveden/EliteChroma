@@ -6,7 +6,7 @@ namespace EliteFiles.Internal
     internal sealed class D3DXConfig
     {
         private static readonly Regex _rxSection = new Regex(@"^\[(.+?)\]\s*$");
-        private static readonly Regex _rxIf = new Regex(@"^if\s+[^=]");
+        private static readonly Regex _rxIf = new Regex(@"^if\s+([^=].*)\s*$");
         private static readonly Regex _rxEndIf = new Regex(@"^endif\s*$");
 
         public D3DXConfig()
@@ -75,11 +75,7 @@ namespace EliteFiles.Internal
 
                     foreach (D3DXConfigEntry entry in entries)
                     {
-                        // We mimic what 3dmigoto does (see https://github.com/bo3b/3Dmigoto/blob/master/DirectX11/IniHandler.cpp)
-                        if (!section.Contains(entry.Name))
-                        {
-                            section.Add(entry);
-                        }
+                        section.Add(entry);
                     }
                 }
             }
@@ -101,7 +97,7 @@ namespace EliteFiles.Internal
 
             List<D3DXConfigEntry>? section = null;
 
-            int ifLevel = 0;
+            var conditions = new Stack<string>();
 
             string? line;
             while ((line = reader.ReadLine()) != null)
@@ -116,34 +112,30 @@ namespace EliteFiles.Internal
                 Match m = _rxSection.Match(line);
                 if (m.Success)
                 {
-                    ifLevel = 0;
+                    conditions.Clear();
                     section = new List<D3DXConfigEntry>();
                     res.Add(m.Groups[1].Value, section);
                     continue;
                 }
 
-                if (_rxIf.IsMatch(line))
+                m = _rxIf.Match(line);
+                if (m.Success)
                 {
-                    ifLevel++;
+                    conditions.Push(m.Groups[1].Value);
                     continue;
                 }
 
                 if (_rxEndIf.IsMatch(line))
                 {
-                    if (ifLevel > 0)
+                    if (conditions.Count > 0)
                     {
-                        ifLevel--;
+                        _ = conditions.Pop();
                     }
 
                     continue;
                 }
 
-                if (ifLevel != 0)
-                {
-                    continue;
-                }
-
-                var entry = D3DXConfigEntry.Parse(line);
+                var entry = D3DXConfigEntry.Parse(line, conditions);
 
                 if (entry != null)
                 {
@@ -165,7 +157,7 @@ namespace EliteFiles.Internal
                 {
                     string file = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(currentFile)!, entry.Value));
 
-                    if (pendingFiles.Any(x => file.Equals(x, StringComparison.OrdinalIgnoreCase)))
+                    if (pendingFiles.Exists(x => file.Equals(x, StringComparison.OrdinalIgnoreCase)))
                     {
                         continue;
                     }
@@ -190,7 +182,7 @@ namespace EliteFiles.Internal
 
                     foreach (string file in Directory.EnumerateFiles(basePath, "*.ini", SearchOption.AllDirectories))
                     {
-                        if (pendingFiles.Any(x => file.Equals(x, StringComparison.OrdinalIgnoreCase)))
+                        if (pendingFiles.Exists(x => file.Equals(x, StringComparison.OrdinalIgnoreCase)))
                         {
                             continue;
                         }

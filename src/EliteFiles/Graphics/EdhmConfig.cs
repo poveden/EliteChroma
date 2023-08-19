@@ -53,7 +53,7 @@ namespace EliteFiles.Graphics
                 return res;
             }
 
-            foreach (D3DXConfigEntry entry in constants)
+            foreach (D3DXConfigEntry entry in constants.GetEntries(x => false))
             {
                 res.Constants.Add(entry.Name, entry.NumericValue);
             }
