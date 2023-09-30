@@ -10,7 +10,7 @@
     <PackageProjectUrl>https://github.com/poveden/EliteChroma</PackageProjectUrl>
     <RepositoryUrl>https://github.com/poveden/EliteChroma</RepositoryUrl>
     <Description>A tool to make Razer Chroma devices react to Elite:Dangerous in-game events.</Description>
-    <Version>1.18.0</Version>
+    <Version>1.18.1</Version>
     <RepositoryType></RepositoryType>
     <Authors>Jorge Poveda Coma</Authors>
     <PackageTags>Elite, Dangerous, Razer, Chroma</PackageTags>
