@@ -119,6 +119,10 @@ namespace EliteFiles.Journal.Events
             /// <summary>Plays when a capital ship enters a combat zone.</summary>
             [JsonStringEnumName("Combat_CapitalShip")]
             CombatCapitalShip,
+
+            /// <summary>Plays while encountering a thargoid titan.</summary>
+            [JsonStringEnumName("Titan_Encounter")]
+            TitanEncounter,
         }
 
         /// <summary>

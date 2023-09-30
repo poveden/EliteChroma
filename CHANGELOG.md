@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Fix error when parsing [EDHM](https://github.com/psychicEgg/EDHM) files with `local` entries
+- Fix crash when entering a thargoid maelstrom
 
 ## [1.18.0](https://github.com/poveden/EliteChroma/compare/v1.17.0...v1.18.0) — 2022-12-06
 
