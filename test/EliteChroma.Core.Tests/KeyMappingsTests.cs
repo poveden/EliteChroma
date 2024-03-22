@@ -65,7 +65,7 @@ namespace EliteChroma.Core.Tests
         [InlineData("Key_INVALID_KEY_NAME", "en-US", false, (VirtualKey)0)]
         [InlineData("Key_Escape", null, true, VirtualKey.VK_ESCAPE)]
         [InlineData("Key_Slash", null, true, VirtualKey.VK_OEM_2)]
-        public void TryGetVirtualKeyReturnsExpectedValues(string keyName, string keyboardLayout, bool expectedOk, Enum expectedKey)
+        public void TryGetVirtualKeyReturnsExpectedValues(string keyName, string? keyboardLayout, bool expectedOk, Enum expectedKey)
         {
             bool ok = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, false, out var virtualKey, NativeMethodsKeyboardMock.Instance);
 
@@ -81,7 +81,7 @@ namespace EliteChroma.Core.Tests
         [InlineData("Key_INVALID_KEY_NAME", "en-US", false, (KeyboardKey)0)]
         [InlineData("Key_Escape", null, true, KeyboardKey.Esc)]
         [InlineData("Key_Slash", null, true, KeyboardKey.Oem11)]
-        public void TryGetChromaKeyReturnsExpectedValues(string keyName, string keyboardLayout, bool expectedOk, KeyboardKey expectedKey)
+        public void TryGetChromaKeyReturnsExpectedValues(string keyName, string? keyboardLayout, bool expectedOk, KeyboardKey expectedKey)
         {
             bool ok = Core.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, false, out var chromaKey, NativeMethodsKeyboardMock.Instance);
 
@@ -92,7 +92,7 @@ namespace EliteChroma.Core.Tests
         [Theory]
         [InlineData("Key_Grave", "es-ES", true, VirtualKey.VK_OEM_5)]
         [InlineData("Key_Slash", null, true, VirtualKey.VK_OEM_2)]
-        public void TryGetVirtualKeyReturnsEnUSOverrides(string keyName, string keyboardLayout, bool expectedOk, Enum expectedKey)
+        public void TryGetVirtualKeyReturnsEnUSOverrides(string keyName, string? keyboardLayout, bool expectedOk, Enum expectedKey)
         {
             bool ok = Elite.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, true, out var virtualKey, NativeMethodsKeyboardMock.Instance);
 
@@ -103,7 +103,7 @@ namespace EliteChroma.Core.Tests
         [Theory]
         [InlineData("Key_Grave", "es-ES", true, KeyboardKey.Oem1)]
         [InlineData("Key_Slash", null, true, KeyboardKey.Oem11)]
-        public void TryGetChromaKeyReturnsEnUSOverrides(string keyName, string keyboardLayout, bool expectedOk, KeyboardKey expectedKey)
+        public void TryGetChromaKeyReturnsEnUSOverrides(string keyName, string? keyboardLayout, bool expectedOk, KeyboardKey expectedKey)
         {
             bool ok = Core.Internal.KeyMappings.TryGetKey(keyName, keyboardLayout, true, out var chromaKey, NativeMethodsKeyboardMock.Instance);
 

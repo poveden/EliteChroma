@@ -116,7 +116,7 @@ namespace EliteFiles.Tests
             {
                 watcher.Start();
                 watcher.Stop();
-            }).ConfigureAwait(false);
+            });
 
             Assert.Null(config!.GuiColour!.Default!.LocalisationName);
         }
@@ -133,16 +133,16 @@ namespace EliteFiles.Tests
 
             string xmlMain = dirMain.ReadText(_mainFile);
 
-            var config = await evs.WaitAsync(() => dirMain.WriteText(_mainFile, string.Empty), 100).ConfigureAwait(false);
+            var config = await evs.WaitAsync(() => dirMain.WriteText(_mainFile, string.Empty), 100);
             Assert.Null(config);
 
-            config = await evs.WaitAsync(() => dirMain.WriteText(_mainFile, xmlMain)).ConfigureAwait(false);
+            config = await evs.WaitAsync(() => dirMain.WriteText(_mainFile, xmlMain));
             Assert.Equal(0, config!.GuiColour!.Default![0, 0]);
 
-            config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, string.Empty), 100).ConfigureAwait(false);
+            config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, string.Empty), 100);
             Assert.Equal(1, config!.GuiColour!.Default![0, 0]);
 
-            config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, _minimalConfig)).ConfigureAwait(false);
+            config = await evs.WaitAsync(() => dirOpts.WriteText(_overrideFile, _minimalConfig));
             Assert.Equal(1, config!.GuiColour!.Default![0, 0]);
         }
 
@@ -163,7 +163,7 @@ namespace EliteFiles.Tests
             {
                 watcher.Start();
                 watcher.Stop();
-            }).ConfigureAwait(false);
+            });
 
             Assert.Equal("Standard", config!.GuiColour!.Default!.LocalisationName);
         }
@@ -181,7 +181,7 @@ namespace EliteFiles.Tests
             {
                 watcher.Start();
                 watcher.Stop();
-            }).ConfigureAwait(false);
+            });
 
             Assert.Equal("Standard", config!.GuiColour!.Default!.LocalisationName);
         }
@@ -199,7 +199,7 @@ namespace EliteFiles.Tests
             {
                 watcher.Start();
                 watcher.Stop();
-            }).ConfigureAwait(false);
+            });
 
             Assert.Equal("Standard", config!.GuiColour!.Default!.LocalisationName);
         }

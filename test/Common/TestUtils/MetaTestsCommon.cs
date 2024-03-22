@@ -32,18 +32,19 @@ namespace TestUtils
             Assert.Equal(NullabilityState.Nullable, ni.WriteState);
         }
 
-        public static IEnumerable<object[]> GetAllEventHandlers(Assembly assembly)
+        public static TheoryData<MethodInfo> GetAllEventHandlers(Assembly assembly)
         {
-            return (from t in assembly.GetTypes()
-                    where !t.FullName!.StartsWith("Coverlet.", StringComparison.Ordinal) // Reference: https://github.com/coverlet-coverage/coverlet/issues/1191
-                    from mi in t.GetMethods(
-                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
-                    let ps = mi.GetParameters()
-                    where mi.ReturnType == typeof(void)
-                    && ps.Length == 2
-                    && ps[0].ParameterType == typeof(object)
-                    && (ps[1].ParameterType.IsAssignableTo(typeof(EventArgs)) || ps[0].Name == "sender")
-                    select new object[] { mi }).ToList();
+            return new TheoryData<MethodInfo>(
+                from t in assembly.GetTypes()
+                where !t.FullName!.StartsWith("Coverlet.", StringComparison.Ordinal) // Reference: https://github.com/coverlet-coverage/coverlet/issues/1191
+                from mi in t.GetMethods(
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
+                let ps = mi.GetParameters()
+                where mi.ReturnType == typeof(void)
+                && ps.Length == 2
+                && ps[0].ParameterType == typeof(object)
+                && (ps[1].ParameterType.IsAssignableTo(typeof(EventArgs)) || ps[0].Name == "sender")
+                select mi);
         }
     }
 }

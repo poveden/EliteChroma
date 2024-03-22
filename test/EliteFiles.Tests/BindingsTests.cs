@@ -227,7 +227,7 @@ namespace EliteFiles.Tests
             {
                 watcher.Start();
                 watcher.Stop();
-            }).ConfigureAwait(false);
+            });
 
             Assert.Null(binds!.PresetName); // "Custom" and "Custom2" get merged to null.
             Assert.Equal(new Version(3, 0), binds.Version);
@@ -256,16 +256,16 @@ namespace EliteFiles.Tests
 
             string bindsCustom = dirOpts.ReadText(_customFile);
 
-            var binds = await evs.WaitAsync(() => dirOpts.WriteText(_customFile, string.Empty), 100).ConfigureAwait(false);
+            var binds = await evs.WaitAsync(() => dirOpts.WriteText(_customFile, string.Empty), 100);
             Assert.Null(binds);
 
-            binds = await evs.WaitAsync(() => dirOpts.WriteText(_customFile, bindsCustom)).ConfigureAwait(false);
+            binds = await evs.WaitAsync(() => dirOpts.WriteText(_customFile, bindsCustom));
             Assert.NotNull(binds);
 
-            binds = await evs.WaitAsync(() => dirOpts.WriteText(_startPresetFile, "KeyboardMouseOnly")).ConfigureAwait(false);
+            binds = await evs.WaitAsync(() => dirOpts.WriteText(_startPresetFile, "KeyboardMouseOnly"));
             Assert.NotNull(binds);
 
-            binds = await evs.WaitAsync(() => { }, 100).ConfigureAwait(false);
+            binds = await evs.WaitAsync(() => { }, 100);
             Assert.Null(binds);
         }
 
@@ -369,7 +369,7 @@ namespace EliteFiles.Tests
             {
                 bw.Start();
                 bw.Stop();
-            }).ConfigureAwait(false);
+            });
 
             Assert.NotNull(preset);
             Assert.Equal("KeyboardMouseOnly", preset!.PresetName);

@@ -96,94 +96,86 @@ namespace EliteChroma.Core.Tests
         }
 
         [SuppressMessage("OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Theory data")]
-        public static IEnumerable<object[]> BuildSequences()
+        public static TheoryData<int[], int[]> BuildSequences()
         {
-            // 1234
-            // 1234
-            yield return new object[]
+            return new TheoryData<int[], int[]>
             {
-                GetSequence(1, 10).ToArray(),
-                GetSequence(1, 10).ToArray(),
-            };
+                // 1234
+                // 1234
+                {
+                    GetSequence(1, 10).ToArray(),
+                    GetSequence(1, 10).ToArray()
+                },
 
-            // ----
-            // 1234
-            yield return new object[]
-            {
-                Array.Empty<int>(),
-                GetSequence(1, 10).ToArray(),
-            };
+                // ----
+                // 1234
+                {
+                    Array.Empty<int>(),
+                    GetSequence(1, 10).ToArray()
+                },
 
-            // 1234
-            // ----
-            yield return new object[]
-            {
-                GetSequence(1, 10).ToArray(),
-                Array.Empty<int>(),
-            };
+                // 1234
+                // ----
+                {
+                    GetSequence(1, 10).ToArray(),
+                    Array.Empty<int>()
+                },
 
-            // 123-
-            // -234
-            yield return new object[]
-            {
-                GetSequence(1, 10).ToArray(),
-                GetSequence(6, 15).ToArray(),
-            };
+                // 123-
+                // -234
+                {
+                    GetSequence(1, 10).ToArray(),
+                    GetSequence(6, 15).ToArray()
+                },
 
-            // 12--
-            // --34
-            yield return new object[]
-            {
-                GetSequence(1, 10).ToArray(),
-                GetSequence(11, 20).ToArray(),
-            };
+                // 12--
+                // --34
+                {
+                    GetSequence(1, 10).ToArray(),
+                    GetSequence(11, 20).ToArray()
+                },
 
-            // -234
-            // 123-
-            yield return new object[]
-            {
-                GetSequence(6, 15).ToArray(),
-                GetSequence(1, 10).ToArray(),
-            };
+                // -234
+                // 123-
+                {
+                    GetSequence(6, 15).ToArray(),
+                    GetSequence(1, 10).ToArray()
+                },
 
-            // --34
-            // 12--
-            yield return new object[]
-            {
-                GetSequence(11, 20).ToArray(),
-                GetSequence(1, 10).ToArray(),
-            };
+                // --34
+                // 12--
+                {
+                    GetSequence(11, 20).ToArray(),
+                    GetSequence(1, 10).ToArray()
+                },
 
-            // -23-
-            // 1234
-            yield return new object[]
-            {
-                GetSequence(6, 15).ToArray(),
-                GetSequence(1, 20).ToArray(),
-            };
+                // -23-
+                // 1234
+                {
+                    GetSequence(6, 15).ToArray(),
+                    GetSequence(1, 20).ToArray()
+                },
 
-            // 1234
-            // -23-
-            yield return new object[]
-            {
-                GetSequence(1, 20).ToArray(),
-                GetSequence(6, 15).ToArray(),
-            };
+                // 1234
+                // -23-
+                {
+                    GetSequence(1, 20).ToArray(),
+                    GetSequence(6, 15).ToArray()
+                },
 
-            // 12-456-
-            // -234-67
-            yield return new object[]
-            {
-                GetSequence(1, 10).Concat(GetSequence(13, 18)).ToArray(),
-                GetSequence(5, 15).Concat(GetSequence(17, 19)).ToArray(),
-            };
+                // 12-456-
+                // -234-67
+                {
+                    GetSequence(1, 10).Concat(GetSequence(13, 18)).ToArray(),
+                    GetSequence(5, 15).Concat(GetSequence(17, 19)).ToArray()
+                },
 
-            // -234-67
-            // 12-456-
-            yield return new object[]
-            {
-                GetSequence(5, 15).Concat(GetSequence(17, 19)).ToArray(),
-                GetSequence(1, 10).Concat(GetSequence(13, 18)).ToArray(),
+                // -234-67
+                // 12-456-
+                {
+                    GetSequence(5, 15).Concat(GetSequence(17, 19)).ToArray(),
+                    GetSequence(1, 10).Concat(GetSequence(13, 18)).ToArray()
+                },
             };
         }
 

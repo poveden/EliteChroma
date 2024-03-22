@@ -20,11 +20,11 @@ namespace EliteFiles.Tests
             _jf = new JournalFolder(_journalFolder);
         }
 
-        public static IEnumerable<object[]> AllJournalEntryTypes()
+        public static TheoryData<Type> AllJournalEntryTypes()
         {
-            return typeof(JournalEntry).Assembly.GetExportedTypes()
-                .Where(x => x.IsSubclassOf(typeof(JournalEntry)))
-                .Select(x => new object[] { x });
+            return new TheoryData<Type>(
+                typeof(JournalEntry).Assembly.GetExportedTypes()
+                .Where(x => x.IsSubclassOf(typeof(JournalEntry))));
         }
 
         [Fact]
@@ -174,7 +174,7 @@ namespace EliteFiles.Tests
         [InlineData("RoguePlanet", StarClass.RoguePlanet, StarClass.Kind.Other)]
         [InlineData("Nebula", StarClass.Nebula, StarClass.Kind.Other)]
         [InlineData("StellarRemnantNebula", StarClass.StellarRemnantNebula, StarClass.Kind.Other)]
-        public void StarClassIsParsedCorrectly(string starClass, string expectedBaseClass, StarClass.Kind expectedKind)
+        public void StarClassIsParsedCorrectly(string starClass, string? expectedBaseClass, StarClass.Kind expectedKind)
         {
             using var dir = new TestFolder();
             string file = "Journal.entry-startjump.log";
@@ -219,9 +219,9 @@ namespace EliteFiles.Tests
             {
                 watcher.Start();
                 Assert.False(watcher.IsWatching);
-            }).ConfigureAwait(false));
+            }));
 
-            var ready = await readyTask.ConfigureAwait(false);
+            var ready = await readyTask;
             Assert.NotNull(ready);
             Assert.True(watcher.IsWatching);
 
@@ -247,18 +247,18 @@ namespace EliteFiles.Tests
             var ecEntries = new EventCollector<JournalEntry>(h => watcher.EntryAdded += h, h => watcher.EntryAdded -= h, nameof(WatcherRaisesEventsForNewJournalEntries));
             var ecReady = new EventCollector<EventArgs>(h => watcher.Started += h, h => watcher.Started -= h, nameof(WatcherRaisesEventsForNewJournalEntries));
 
-            var ev = await ecReady.WaitAsync(watcher.Start).ConfigureAwait(false);
+            var ev = await ecReady.WaitAsync(watcher.Start);
             Assert.NotNull(ev);
             Assert.True(watcher.IsWatching);
 
-            ev = await ecReady.WaitAsync(watcher.Start, 100).ConfigureAwait(false);
+            ev = await ecReady.WaitAsync(watcher.Start, 100);
             Assert.Null(ev);
 
-            var entry = await ecEntries.WaitAsync(() => dir.WriteText(_journalFile1, "{ \"event\":\"One\" }\r\n", true)).ConfigureAwait(false);
+            var entry = await ecEntries.WaitAsync(() => dir.WriteText(_journalFile1, "{ \"event\":\"One\" }\r\n", true));
             Assert.Equal("One", entry!.Event);
 
             string file2 = _journalFile1.Replace(".01.log", ".02.log", StringComparison.Ordinal);
-            entry = await ecEntries.WaitAsync(() => dir.WriteText(file2, "{ \"event\":\"Two\" }\r\n")).ConfigureAwait(false);
+            entry = await ecEntries.WaitAsync(() => dir.WriteText(file2, "{ \"event\":\"Two\" }\r\n"));
             Assert.Equal("Two", entry!.Event);
 
             watcher.Stop();

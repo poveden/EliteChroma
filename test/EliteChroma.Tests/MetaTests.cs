@@ -11,15 +11,15 @@ namespace EliteChroma.Tests
 {
     public class MetaTests
     {
-        public static IEnumerable<object[]> GetAllForms()
+        public static TheoryData<Type> GetAllForms()
         {
             var allForms = (from t in typeof(Program).Assembly.GetTypes()
                             where t.IsSubclassOf(typeof(Form))
-                            select new object[] { t }).ToList();
+                            select t).ToList();
 
             Assert.NotEmpty(allForms);
 
-            return allForms;
+            return new TheoryData<Type>(allForms);
         }
 
         [Theory]
@@ -82,7 +82,7 @@ namespace EliteChroma.Tests
         }
 
         [SuppressMessage("OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Theory data")]
-        public static IEnumerable<object[]> GetAllEventHandlers()
+        public static TheoryData<MethodInfo> GetAllEventHandlers()
         {
             return MetaTestsCommon.GetAllEventHandlers(typeof(Program).Assembly);
         }

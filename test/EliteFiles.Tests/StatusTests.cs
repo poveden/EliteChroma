@@ -105,7 +105,7 @@ namespace EliteFiles.Tests
             {
                 watcher.Start();
                 watcher.Stop();
-            }).ConfigureAwait(false);
+            });
 
             Assert.Equal("Status", status!.Event);
         }
@@ -119,13 +119,13 @@ namespace EliteFiles.Tests
 
             var ec = new EventCollector<StatusEntry>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(WatchesForChangesInTheStatusFile));
 
-            var status = await ec.WaitAsync(() => dir.WriteText("Status.json", "{\"event\":\"One\"}\r\n")).ConfigureAwait(false);
+            var status = await ec.WaitAsync(() => dir.WriteText("Status.json", "{\"event\":\"One\"}\r\n"));
             Assert.Equal("One", status!.Event);
 
-            status = await ec.WaitAsync(() => dir.WriteText("Status.json", string.Empty), 100).ConfigureAwait(false);
+            status = await ec.WaitAsync(() => dir.WriteText("Status.json", string.Empty), 100);
             Assert.Null(status);
 
-            status = await ec.WaitAsync(() => dir.WriteText("Status.json", "{\"event\":\"Two\"}\r\n")).ConfigureAwait(false);
+            status = await ec.WaitAsync(() => dir.WriteText("Status.json", "{\"event\":\"Two\"}\r\n"));
             Assert.Equal("Two", status!.Event);
         }
 

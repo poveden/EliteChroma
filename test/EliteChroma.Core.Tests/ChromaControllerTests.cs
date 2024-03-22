@@ -174,7 +174,7 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
-        public void RenderEffectIsNotReentrant()
+        public async Task RenderEffectIsNotReentrant()
         {
             using var cc = new ChromaController(_gameRootFolder, _gameOptionsFolder, _journalFolder)
             {
@@ -210,7 +210,7 @@ namespace EliteChroma.Core.Tests
                 mre.Set();
             }
 
-            Task.WaitAll(
+            await Task.WhenAll(
                 Task.Run(RenderEffect),
                 Task.Run(RenderEffect));
 
