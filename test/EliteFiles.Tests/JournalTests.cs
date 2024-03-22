@@ -116,7 +116,7 @@ namespace EliteFiles.Tests
             Assert.Equal("r273365/r0 ", lg.Build);
 
             var mu = Assert.IsType<Music>(entries.Dequeue());
-            Assert.Equal(Music.Track.NoTrack, mu.MusicTrack);
+            Assert.Equal(Music.NoTrack, mu.MusicTrack);
 
             var ua = Assert.IsType<UnderAttack>(entries.Dequeue());
             Assert.Equal(UnderAttack.AttackTarget.You, ua.Target);

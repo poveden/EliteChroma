@@ -53,7 +53,7 @@ namespace EliteChroma.Core.Elite
 
         public GameColors Colors { get; private set; }
 
-        public Music.Track MusicTrack { get; internal set; }
+        public string? MusicTrack { get; internal set; }
 
         public StartJump.FsdJumpType FsdJumpType { get; internal set; }
 
@@ -92,7 +92,7 @@ namespace EliteChroma.Core.Elite
                     GuiFocus.CommsPanel or
                     GuiFocus.RolePanel or
                     GuiFocus.StationServices
-                    => MusicTrack is not Music.Track.GalacticPowers and not Music.Track.Squadrons,
+                    => MusicTrack is not Music.GalacticPowers and not Music.Squadrons,
 
                     GuiFocus.GalaxyMap or
                     GuiFocus.SystemMap or
@@ -121,7 +121,7 @@ namespace EliteChroma.Core.Elite
                     return false;
                 }
 
-                if (MusicTrack is Music.Track.GalacticPowers or Music.Track.Squadrons or Music.Track.FleetCarrierManagment)
+                if (MusicTrack is Music.GalacticPowers or Music.Squadrons or Music.FleetCarrierManagment)
                 {
                     return false;
                 }

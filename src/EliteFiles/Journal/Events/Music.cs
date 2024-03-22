@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using EliteFiles.Internal;
 
 namespace EliteFiles.Journal.Events
 {
@@ -9,127 +8,106 @@ namespace EliteFiles.Journal.Events
     [JournalEntry("Music")]
     public sealed class Music : JournalEntry
     {
-        /// <summary>
-        /// Specifies the music track.
-        /// </summary>
-        public enum Track
-        {
-            /// <summary>No music track is being played.</summary>
-            NoTrack = 0,
+        /// <summary>No music track is being played.</summary>
+        public const string NoTrack = "NoTrack";
 
-            /// <summary>Plays while on the game's main menu.</summary>
-            MainMenu,
+        /// <summary>Plays while on the game's main menu.</summary>
+        public const string MainMenu = "MainMenu";
 
-            /// <summary>Plays while on the game's CQC menu.</summary>
-            [JsonStringEnumName("CQCMenu")]
-            CqcMenu,
+        /// <summary>Plays while on the game's CQC menu.</summary>
+        public const string CqcMenu = "CQCMenu";
 
-            /// <summary>Plays while on the system map.</summary>
-            SystemMap,
+        /// <summary>Plays while on the system map.</summary>
+        public const string SystemMap = "SystemMap";
 
-            /// <summary>Plays while on the galaxy map.</summary>
-            GalaxyMap,
+        /// <summary>Plays while on the galaxy map.</summary>
+        public const string GalaxyMap = "GalaxyMap";
 
-            /// <summary>Plays while on the galaxy powers screen.</summary>
-            GalacticPowers,
+        /// <summary>Plays while on the galaxy powers screen.</summary>
+        public const string GalacticPowers = "GalacticPowers";
 
-            /// <summary>Plays while playing a CQC session.</summary>
-            [JsonStringEnumName("CQC")]
-            Cqc,
+        /// <summary>Plays while playing a CQC session.</summary>
+        public const string Cqc = "CQC";
 
-            /// <summary>Plays when entering from hyperspace into supercruise upon reaching the final route destination.</summary>
-            DestinationFromHyperspace,
+        /// <summary>Plays when entering from hyperspace into supercruise upon reaching the final route destination.</summary>
+        public const string DestinationFromHyperspace = "DestinationFromHyperspace";
 
-            /// <summary>Plays when entering from supercruise into realspace upon reaching the final route destination.</summary>
-            DestinationFromSupercruise,
+        /// <summary>Plays when entering from supercruise into realspace upon reaching the final route destination.</summary>
+        public const string DestinationFromSupercruise = "DestinationFromSupercruise";
 
-            /// <summary>Plays while the ship is on supercruise.</summary>
-            Supercruise,
+        /// <summary>Plays while the ship is on supercruise.</summary>
+        public const string Supercruise = "Supercruise";
 
-            /// <summary>Plays while fighting thargoids.</summary>
-            [JsonStringEnumName("Combat_Unknown")]
-            CombatUnknown,
+        /// <summary>Plays while fighting thargoids.</summary>
+        public const string CombatUnknown = "Combat_Unknown";
 
-            /// <summary>Plays while encountering thargoids in a USS.</summary>
-            [JsonStringEnumName("Unknown_Encounter")]
-            UnknownEncounter,
+        /// <summary>Plays while encountering thargoids in a USS.</summary>
+        public const string UnknownEncounter = "Unknown_Encounter";
 
-            /// <summary>Plays while dogfighting.</summary>
-            [JsonStringEnumName("Combat_Dogfight")]
-            CombatDogfight,
+        /// <summary>Plays while dogfighting.</summary>
+        public const string CombatDogfight = "Combat_Dogfight";
 
-            /// <summary>Plays while doing combat in a SRV.</summary>
-            [JsonStringEnumName("Combat_SRV")]
-            CombatSrv,
+        /// <summary>Plays while doing combat in a SRV.</summary>
+        public const string CombatSrv = "Combat_SRV";
 
-            /// <summary>Plays while exploring a thargoid settlement.</summary>
-            [JsonStringEnumName("Unknown_Settlement")]
-            UnknownSettlement,
+        /// <summary>Plays while exploring a thargoid settlement.</summary>
+        public const string UnknownSettlement = "Unknown_Settlement";
 
-            /// <summary>Plays while the docking computer is on.</summary>
-            DockingComputer,
+        /// <summary>Plays while the docking computer is on.</summary>
+        public const string DockingComputer = "DockingComputer";
 
-            /// <summary>Plays while docked on a starport.</summary>
-            Starport,
+        /// <summary>Plays while docked on a starport.</summary>
+        public const string Starport = "Starport";
 
-            /// <summary>Plays while encountering thargoids in a USS.</summary>
-            [JsonStringEnumName("Unknown_Exploration")]
-            UnknownExploration,
+        /// <summary>Plays while encountering thargoids in a USS.</summary>
+        public const string UnknownExploration = "Unknown_Exploration";
 
-            /// <summary>Plays while exploring in realspace.</summary>
-            Exploration,
+        /// <summary>Plays while exploring in realspace.</summary>
+        public const string Exploration = "Exploration";
 
-            /// <summary>Plays while on the FSS screen.</summary>
-            SystemAndSurfaceScanner,
+        /// <summary>Plays while on the FSS screen.</summary>
+        public const string SystemAndSurfaceScanner = "SystemAndSurfaceScanner";
 
-            /// <summary>Plays while on foot.</summary>
-            OnFoot,
+        /// <summary>Plays while on foot.</summary>
+        public const string OnFoot = "OnFoot";
 
-            /// <summary>Plays while on the fleet carrier management screen.</summary>
-            [JsonStringEnumName("FleetCarrier_Managment")]
-            FleetCarrierManagment,
+        /// <summary>Plays while on the fleet carrier management screen.</summary>
+        public const string FleetCarrierManagment = "FleetCarrier_Managment";
 
-            /// <summary>Plays while on the codex screen.</summary>
-            Codex,
+        /// <summary>Plays while on the codex screen.</summary>
+        public const string Codex = "Codex";
 
-            /// <summary>Plays when entering realspace after being interdicted.</summary>
-            Interdiction,
+        /// <summary>Plays when entering realspace after being interdicted.</summary>
+        public const string Interdiction = "Interdiction";
 
-            /// <summary>Plays while dogfighting.</summary>
-            [JsonStringEnumName("Combat_LargeDogFight")]
-            CombatLargeDogFight,
+        /// <summary>Plays while dogfighting.</summary>
+        public const string CombatLargeDogFight = "Combat_LargeDogFight";
 
-            /// <summary>Plays while exploring a guardian site.</summary>
-            GuardianSites,
+        /// <summary>Plays while exploring a guardian site.</summary>
+        public const string GuardianSites = "GuardianSites";
 
-            /// <summary>Plays while on the squadrons screen.</summary>
-            Squadrons,
+        /// <summary>Plays while on the squadrons screen.</summary>
+        public const string Squadrons = "Squadrons";
 
-            /// <summary>Plays while near of, or docked on, a fleet carrier.</summary>
-            NoInGameMusic,
+        /// <summary>Plays while near of, or docked on, a fleet carrier.</summary>
+        public const string NoInGameMusic = "NoInGameMusic";
 
-            /// <summary>Plays while exploring a Lagrange cloud.</summary>
-            [JsonStringEnumName("Lifeform_FogCloud")]
-            LifeformFogCloud,
+        /// <summary>Plays while exploring a Lagrange cloud.</summary>
+        public const string LifeformFogCloud = "Lifeform_FogCloud";
 
-            /// <summary>Plays while near of, or docked on, a damaged starport.</summary>
-            [JsonStringEnumName("Damaged_Starport")]
-            DamagedStarport,
+        /// <summary>Plays while near of, or docked on, a damaged starport.</summary>
+        public const string DamagedStarport = "Damaged_Starport";
 
-            /// <summary>Plays when a capital ship enters a combat zone.</summary>
-            [JsonStringEnumName("Combat_CapitalShip")]
-            CombatCapitalShip,
+        /// <summary>Plays when a capital ship enters a combat zone.</summary>
+        public const string CombatCapitalShip = "Combat_CapitalShip";
 
-            /// <summary>Plays while encountering a thargoid titan.</summary>
-            [JsonStringEnumName("Titan_Encounter")]
-            TitanEncounter,
-        }
+        /// <summary>Plays while encountering a thargoid titan.</summary>
+        public const string TitanEncounter = "Titan_Encounter";
 
         /// <summary>
         /// Gets or sets the name of the music track.
         /// </summary>
         [JsonPropertyName("MusicTrack")]
-        [JsonConverter(typeof(JsonStringEnumNameConverter<Track>))]
-        public Track MusicTrack { get; set; }
+        public string? MusicTrack { get; set; }
     }
 }
