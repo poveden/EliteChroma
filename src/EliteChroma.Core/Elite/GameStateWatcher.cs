@@ -183,7 +183,7 @@ namespace EliteChroma.Core.Elite
                 case Music music:
                     _gameState.MusicTrack = music.MusicTrack;
 
-                    if (_gameState.MusicTrack == Music.Track.MainMenu)
+                    if (_gameState.MusicTrack == Music.MainMenu)
                     {
                         _gameState.GameMode = LoadGame.PlayMode.None;
                     }

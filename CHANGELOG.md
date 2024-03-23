@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.18.2](https://github.com/poveden/EliteChroma/compare/v1.18.1...v1.18.2) — 2024-03-22
+
+### Fixed
+
+- Fix crash when a music track unknown to EliteChroma plays
+
 ## [1.18.1](https://github.com/poveden/EliteChroma/compare/v1.18.0...v1.18.1) — 2023-10-01
 
 ### Fixed

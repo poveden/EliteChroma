@@ -163,7 +163,8 @@ namespace EliteFiles.Bindings
                 using var sr = new StreamReader(fs);
 
                 string? bindsName;
-                for (int i = 0; (bindsName = sr.ReadLine()) != null; i++)
+                int i = 0;
+                while ((bindsName = sr.ReadLine()) != null)
                 {
                     string? bindsFile =
                         TryGetBindingsFilePath(gameOptionsFolder.Bindings, bindsName)
@@ -175,6 +176,7 @@ namespace EliteFiles.Bindings
                     }
 
                     bindsFiles.Add((BindingCategory)i, bindsFile);
+                    i++;
                 }
             }
 

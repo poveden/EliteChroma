@@ -18,7 +18,7 @@ namespace EliteChroma.Core.Tests
 
             var tChroma = cf.CreateAsync();
 
-            using var chroma = await tChroma.ConfigureAwait(false);
+            using var chroma = await tChroma;
             Assert.NotNull(chroma);
         }
 

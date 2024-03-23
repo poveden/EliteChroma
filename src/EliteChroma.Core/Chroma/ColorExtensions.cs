@@ -69,14 +69,14 @@ namespace EliteChroma.Core.Chroma
             double g = color.G / 255.0;
             double b = color.B / 255.0;
 
-            if (multiply != 1.0)
+            if (multiply is < 1.0 or > 1.0)
             {
                 r *= multiply;
                 g *= multiply;
                 b *= multiply;
             }
 
-            if (gamma != 1.0)
+            if (gamma is < 1.0 or > 1.0)
             {
                 r = Math.Pow(r, gamma);
                 g = Math.Pow(g, gamma);

@@ -86,7 +86,7 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
-        public void OnChangedIsNotReentrant()
+        public async Task OnChangedIsNotReentrant()
         {
             using var watcher = new GameStateWatcher(_gameRootFolder, _gameOptionsFolder, _journalFolder)
             {
@@ -94,7 +94,7 @@ namespace EliteChroma.Core.Tests
             };
 
             var evs = new EventCollector<ChangeType>(h => watcher.Changed += h, h => watcher.Changed -= h, nameof(OnChangedIsNotReentrant));
-            evs.Wait(watcher.Start, 5000);
+            await evs.WaitAsync(watcher.Start, 5000);
 
             int nOnChangedCalls = 0;
             using var mre = new ManualResetEventSlim();
@@ -111,7 +111,7 @@ namespace EliteChroma.Core.Tests
                 mre.Set();
             }
 
-            Task.WaitAll(
+            await Task.WhenAll(
                 Task.Run(OnChanged),
                 Task.Run(OnChanged));
 

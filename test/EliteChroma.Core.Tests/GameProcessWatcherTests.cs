@@ -51,7 +51,7 @@ namespace EliteChroma.Core.Tests
         }
 
         [Fact]
-        public void OnChangedIsNotReentrant()
+        public async Task OnChangedIsNotReentrant()
         {
             var nm = new NativeMethodsMock()
             {
@@ -81,7 +81,7 @@ namespace EliteChroma.Core.Tests
                 mre.Set();
             }
 
-            Task.WaitAll(
+            await Task.WhenAll(
                 Task.Run(() => TimerElapsed(1000)),
                 Task.Run(() => TimerElapsed(2000)));
 

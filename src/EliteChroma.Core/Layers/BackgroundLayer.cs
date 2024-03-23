@@ -92,7 +92,7 @@ namespace EliteChroma.Core.Layers
             {
                 Keyboard = c.Transform(Colors.KeyboardDimBrightness),
                 Device = hardpointsDeployed ? c : c.Transform(Colors.DeviceDimBrightness),
-                Logo = Game.MusicTrack == Music.Track.MainMenu ? GameColors.EliteOrange : c,
+                Logo = Game.MusicTrack == Music.MainMenu ? GameColors.EliteOrange : c,
             };
         }
 

@@ -69,7 +69,7 @@ namespace EliteFiles.Tests
         [InlineData("\"UnrecognizedHeader\"\n{\n}\n")]
         [InlineData("\"LibraryFolders\"")]
         [InlineData("\"LibraryFolders\"\n{ \"1\" \"Path\" }\n")]
-        public void SteamLibraryFoldersFromFileReturnsEmptyOnMissingOrInvalidFile(string contents)
+        public void SteamLibraryFoldersFromFileReturnsEmptyOnMissingOrInvalidFile(string? contents)
         {
             using var tf = new TestFolder();
             string filename = $"libraryfolders.vdf";

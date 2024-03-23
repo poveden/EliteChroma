@@ -172,7 +172,7 @@ namespace EliteFiles.Tests
             {
                 watcher.Start();
                 watcher.Stop();
-            }).ConfigureAwait(false);
+            });
 
             Assert.NotNull(config);
         }
@@ -202,21 +202,21 @@ namespace EliteFiles.Tests
 
             string edhmProfile = dirMain.ReadText(_d3dxIniFile);
 
-            var config = await evs.WaitAsync(() => dirMain.WriteText(_d3dxIniFile, string.Empty), 100).ConfigureAwait(false);
+            var config = await evs.WaitAsync(() => dirMain.WriteText(_d3dxIniFile, string.Empty), 100);
             Assert.Null(config);
             Assert.Empty(includedFiles);
 
-            config = await evs.WaitAsync(() => dirMain.WriteText(_d3dxIniFile, "[Constants]"), 100).ConfigureAwait(false);
+            config = await evs.WaitAsync(() => dirMain.WriteText(_d3dxIniFile, "[Constants]"), 100);
             Assert.Null(config!.GetColourMatrix());
             Assert.Empty(includedFiles);
 
-            config = await evs.WaitAsync(() => dirMain.WriteText(_d3dxIniFile, edhmProfile)).ConfigureAwait(false);
+            config = await evs.WaitAsync(() => dirMain.WriteText(_d3dxIniFile, edhmProfile));
             Assert.Equal(0.99, config!.GetColourMatrix()![0, 0]);
 
-            config = await evs.WaitAsync(() => dirMain.WriteText(@"EDHM-ini\UNWATCHED.ini", edhmProfile), 100).ConfigureAwait(false);
+            config = await evs.WaitAsync(() => dirMain.WriteText(@"EDHM-ini\UNWATCHED.ini", edhmProfile), 100);
             Assert.Null(config);
 
-            config = await evs.WaitAsync(() => dirMain.WriteText(@"EDHM-ini\XML-Profile.ini", string.Empty), 100).ConfigureAwait(false);
+            config = await evs.WaitAsync(() => dirMain.WriteText(@"EDHM-ini\XML-Profile.ini", string.Empty), 100);
             Assert.Null(config!.GetColourMatrix());
         }
 

@@ -35,7 +35,7 @@ namespace EliteFiles.Tests
         }
 
         [SuppressMessage("OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Theory data")]
-        public static IEnumerable<object[]> GetAllEventHandlers()
+        public static TheoryData<MethodInfo> GetAllEventHandlers()
         {
             return MetaTestsCommon.GetAllEventHandlers(typeof(JournalFolder).Assembly);
         }
