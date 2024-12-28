@@ -34,5 +34,8 @@
 
         /// <summary>Allied.</summary>
         Allied,
+
+        /// <summary>Contested.</summary>
+        Contested,
     }
 }
