@@ -24,17 +24,23 @@ namespace TestUtils
             throw new InvalidOperationException("Solution directory could not be found.");
         }
 
-        public static void AssertSenderParameterIsNullable(MethodInfo eventHandler)
+        public static void AssertSenderParameterIsNullable(Type type, string eventHandlerName)
         {
-            ArgumentNullException.ThrowIfNull(eventHandler);
+            ArgumentNullException.ThrowIfNull(type);
+            ArgumentNullException.ThrowIfNull(eventHandlerName);
+
+            var eventHandler = type.GetMethod(eventHandlerName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+            Assert.NotNull(eventHandler);
 
             var ni = _context.Create(eventHandler.GetParameters()[0]);
             Assert.Equal(NullabilityState.Nullable, ni.WriteState);
         }
 
-        public static TheoryData<MethodInfo> GetAllEventHandlers(Assembly assembly)
+        public static TheoryData<Type, string> GetAllEventHandlers(Assembly assembly)
         {
-            return new TheoryData<MethodInfo>(
+            var res = new TheoryData<Type, string>();
+
+            var methods =
                 from t in assembly.GetTypes()
                 where !t.FullName!.StartsWith("Coverlet.", StringComparison.Ordinal) // Reference: https://github.com/coverlet-coverage/coverlet/issues/1191
                 from mi in t.GetMethods(
@@ -44,7 +50,14 @@ namespace TestUtils
                 && ps.Length == 2
                 && ps[0].ParameterType == typeof(object)
                 && (ps[1].ParameterType.IsAssignableTo(typeof(EventArgs)) || ps[0].Name == "sender")
-                select mi);
+                select (t, mi.Name);
+
+            foreach (var (type, name) in methods)
+            {
+                res.Add(type, name);
+            }
+
+            return res;
         }
     }
 }

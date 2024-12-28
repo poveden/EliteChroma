@@ -98,7 +98,7 @@ namespace EliteChroma
             return false;
         }
 
-        private void ContextMenu_Opening(object? sender, System.ComponentModel.CancelEventArgs e)
+        private static void ContextMenu_Opening(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             if (BringToFrontAnyOpenModalForm())
             {
