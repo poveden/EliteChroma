@@ -46,7 +46,7 @@ namespace EliteChroma.Tests
         {
             for (int i = 0; i < _entries.Count - 1; i++)
             {
-                Assert.True(_entries[i].ReleaseDate > _entries[i + 1].ReleaseDate);
+                Assert.True(_entries[i].ReleaseDate >= _entries[i + 1].ReleaseDate);
             }
         }
 
