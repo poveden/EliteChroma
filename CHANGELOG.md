@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.18.4](https://github.com/poveden/EliteChroma/compare/v1.18.3...v1.18.4) — 2024-12-28
+
+### Fixed
+
+- Add missing PowerPlay 2.0 `Contested` legal state
+
 ## [1.18.3](https://github.com/poveden/EliteChroma/compare/v1.18.2...v1.18.3) — 2024-12-28
 
 ### Fixed
