@@ -31,5 +31,8 @@
 
         /// <summary>Thargoid.</summary>
         Thargoid,
+
+        /// <summary>Allied.</summary>
+        Allied,
     }
 }
